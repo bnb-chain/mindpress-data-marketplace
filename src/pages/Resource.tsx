@@ -156,7 +156,7 @@ const Resource = () => {
         key: Type.Description,
       },
     ];
-    if (hasOwn && resourceType === '1') {
+    if (resourceType === '1') {
       _navItems.unshift({
         name: 'Data List',
         key: Type.DataList,
@@ -167,12 +167,12 @@ const Resource = () => {
 
   const currentTab = useMemo(() => {
     const tab = p.getAll('tab')[0];
-    return resourceType === '1' && hasOwn
+    return resourceType === '1'
       ? tab
         ? tab
         : Type.Description
       : Type.Description;
-  }, [p, resourceType, hasOwn]);
+  }, [p, resourceType]);
 
   const CreateTime = useMemo(() => {
     let obj;
@@ -398,6 +398,7 @@ const Resource = () => {
           listed={bucketListed}
           bucketName={bucketName}
           bucketInfo={bucketInfo}
+          hasOwn={hasOwn}
         ></List>
       )}
       {open && (

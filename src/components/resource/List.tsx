@@ -33,6 +33,7 @@ const ProfileList = (props: any) => {
     listed: collectionListed,
     status: bucketStatus,
     bucketInfo,
+    hasOwn,
   } = props;
 
   const { list, loading } = useCollectionItems(name, collectionListed);
@@ -268,6 +269,9 @@ const ProfileList = (props: any) => {
       },
     },
   ];
+  if (!hasOwn) {
+    columns.splice(4, 6);
+  }
   return (
     <Container>
       <Box h={10} />
