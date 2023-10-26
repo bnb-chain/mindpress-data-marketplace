@@ -39,12 +39,12 @@ export const useCollectionItems = (
 
               return hasFolder
                 ? object_name.slice(0, -1) +
-                    '__' +
+                    '_%_%_' +
                     id +
-                    '__' +
+                    '_%_%_' +
                     `${isFile ? 'file' : 'folder'}` +
                     '/'
-                : object_name + '__' + id + '__' + 'file';
+                : object_name + '_%_%_' + id + '_%_%_' + 'file';
               // return object_name;
             });
 
@@ -69,13 +69,12 @@ export const useCollectionItems = (
               } else {
                 if (!collectionListed) {
                   const { id } = groupInfo;
-                  const result = await checkListed(id);
-
+                  const { price, status } = await checkListed(id);
                   const t = {
                     ...item,
                     groupId: id,
-                    listed: !!result,
-                    price: result,
+                    listed: status == 'LISTED',
+                    price,
                   };
                   _objInfo[objectId] = t;
                   return t;

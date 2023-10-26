@@ -24,7 +24,7 @@ const Home = () => {
             onClick={() => {
               reportEvent({ name: 'dm.main.banner.build_my_market.click' });
               window.open(
-                'https://github.com/bnb-chain/greenfield-data-marketplace-frontend',
+                'https://github.com/bnb-chain/greenfield-data-marketplace-ui',
                 '_blank',
               );
             }}

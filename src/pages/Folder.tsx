@@ -32,7 +32,7 @@ const Folder = () => {
   const state = useGlobal();
 
   const folder = useMemo(() => {
-    return folderGroup.split('__').slice(-1)[0];
+    return folderGroup.split('_%_%_').slice(-1)[0];
   }, [folderGroup]);
 
   useEffect(() => {

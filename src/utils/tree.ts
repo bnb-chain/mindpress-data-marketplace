@@ -34,7 +34,7 @@ export class Tree {
         .filter((e) => e);
       arr.push(
         ...itemArr.map((e, i) => {
-          const tt = e.split('__');
+          const tt = e.split('_%_%_');
           const name = tt[0];
           const id = tt[1];
           const type = tt[2];
@@ -102,7 +102,7 @@ export class Tree {
   }
 
   getDepItem(str: string) {
-    const aim = str.split('__');
+    const aim = str.split('_%_%_');
     let prevColl = this.root;
     let name = '';
     while ((name = aim.shift() as string) && prevColl.length) {

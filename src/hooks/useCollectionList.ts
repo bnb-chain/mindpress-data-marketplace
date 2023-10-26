@@ -25,32 +25,38 @@ export const useCollectionList = (page: number, pageSize = 10) => {
               .filter((item: any) => !item.removed)
               .slice((page - 1) * pageSize, page * pageSize)
               .map(async (item) => {
-                const {
-                  bucket_info: { bucket_name },
-                } = item;
-                const groupName = generateGroupName(bucket_name);
-                const { groupInfo } = await getGroupInfoByName(
-                  groupName,
-                  address as string,
-                );
-                if (!groupInfo) return item;
-                const { id } = groupInfo;
-                // const result = await checkListed(id);
-                // const { totalSale } = await getItemDetail(id);
-                const [result, { totalSale }] = await Promise.all([
-                  checkListed(id),
-                  getItemDetail(id),
-                ]);
-                return {
-                  ...item,
-                  groupId: id,
-                  listed: !!result,
-                  totalVol: totalSale || '0',
-                };
-              });
+                try {
+                  const {
+                    bucket_info: { bucket_name },
+                  } = item;
+                  const groupName = generateGroupName(bucket_name);
+                  const { groupInfo } = await getGroupInfoByName(
+                    groupName,
+                    address as string,
+                  );
+                  if (!groupInfo) return item;
+                  const { id } = groupInfo;
+                  // const result = await checkListed(id);
+                  // const { totalSale } = await getItemDetail(id);
+                  const [result, { totalSale }] = await Promise.all([
+                    checkListed(id),
+                    getItemDetail(id),
+                  ]);
+                  return {
+                    ...item,
+                    groupId: id,
+                    listed: !!result,
+                    totalVol: totalSale || '0',
+                  };
+                } catch (e) {
+                  console.log(e, item);
+                }
+                return false;
+              })
+              .filter((item) => item);
             const res: any = await Promise.all(t);
             setList(res);
-            setTotal(t.length);
+            setTotal(body.length);
           } else {
             setLoading(false);
           }

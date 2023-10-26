@@ -153,7 +153,7 @@ const List = (props: any) => {
 
                 navigator(
                   `/folder?bid=${bucketId}&address=${ownerAddress}&f=${
-                    folderGroup + '__' + name
+                    folderGroup + '_%_%_' + name
                   }&from=${from}`,
                 );
               }}

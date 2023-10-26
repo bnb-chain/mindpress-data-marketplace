@@ -69,13 +69,21 @@ export const ListModal = (props: ListModalProps) => {
   }, 500);
 
   const onChangePrice = (event: any) => {
-    setWarningPrice(false);
-    _setPrice(event.target.value);
-    setValue(setPrice, event.target.value);
+    let v = event.target.value;
+    v = v.length >= 10 ? v.slice(0, 10) : v;
+    if (!/^(\d+)$|^(\d+\.\d+)$/.test(v)) {
+      setWarningPrice(true);
+    } else {
+      setWarningPrice(false);
+    }
+    _setPrice(v);
+    setValue(setPrice, v);
   };
   const onChangeDesc = (event: any) => {
-    _setDesc(event.target.value);
-    setValue(setDesc, event.target.value);
+    let v = event.target.value;
+    v = v.length >= 300 ? v.slice(0, 300) : v;
+    _setDesc(v);
+    setValue(setDesc, v);
   };
   const onChangeImgUrl = (event: any) => {
     _setImgUrl(event.target.value);
@@ -112,7 +120,7 @@ export const ListModal = (props: ListModalProps) => {
   const { InitiateList, loading, simulateInfo } = useList(listData);
 
   const available = useMemo(() => {
-    return GF_FEE_SUFF && BSC_FEE_SUFF && !loading;
+    return GF_FEE_SUFF && BSC_FEE_SUFF && !loading && !waringPrice;
   }, [GF_FEE_SUFF, BSC_FEE_SUFF, loading]);
 
   return (
@@ -168,6 +176,7 @@ export const ListModal = (props: ListModalProps) => {
             placeholder="Please enter an amount..."
             type="number"
             isInvalid={waringPrice}
+            maxLength={10}
           ></Input>
           <BNBCon gap={10} alignItems={'center'}>
             <img src={Logo} alt="" width="24" height="24" />

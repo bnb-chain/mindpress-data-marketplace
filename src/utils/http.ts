@@ -22,6 +22,6 @@ export const getPurchaseList = (data: any) => {
 
 export const getItemDetail = (groupId: string) => {
   return instance.get(`item_by_group/${groupId}`).then((data) => {
-    return data.data.data.item;
+    return data?.data?.data?.item || {};
   });
 };

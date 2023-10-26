@@ -5,6 +5,7 @@ import {
   multiTx,
   putBucketPolicy,
   putObjectPolicy,
+  updateGroupInfo,
 } from '../utils/gfSDK';
 import {
   ISimulateGasFee,
@@ -182,12 +183,17 @@ export const useList = (props: IList) => {
 
   const List = useCallback(
     async (obj: IList) => {
-      const { groupName } = obj;
+      const { groupName, extra: _extra } = obj;
       const groupResult = await getGroupInfo(groupName, address as string);
       const { groupInfo } = groupResult;
       if (!groupInfo) return;
+
       const { id } = groupInfo;
       let { extra } = groupInfo as any;
+      if (_extra != extra) {
+        await updateGroupInfo(address as string, groupName, extra);
+        extra = _extra;
+      }
       extra = JSON.parse(extra);
       const { price } = extra;
       const result = await MarketPlaceContract()

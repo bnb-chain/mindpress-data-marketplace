@@ -82,7 +82,7 @@ export const BuyModal = (props: any) => {
                 {name}
                 {type === 'Collection' ? (
                   <Tag justifyContent={'center'} alignItems={'center'}>
-                    Data collection
+                    Collection
                   </Tag>
                 ) : null}
               </ResourceNameCon>
