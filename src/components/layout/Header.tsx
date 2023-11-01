@@ -259,6 +259,7 @@ const Header = () => {
                       name: 'dm.account.disconnect.disconnect.click',
                     });
                     await disconnect();
+                    navigate('/');
                   }}
                 >
                   <WithdrawIcon

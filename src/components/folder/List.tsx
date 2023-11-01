@@ -152,9 +152,9 @@ const List = (props: any) => {
                 );
 
                 navigator(
-                  `/folder?bid=${bucketId}&address=${ownerAddress}&f=${
-                    folderGroup + '_%_%_' + name
-                  }&from=${from}`,
+                  `/folder?bid=${bucketId}&address=${ownerAddress}&f=${encodeURIComponent(
+                    folderGroup + '_%_%_' + name,
+                  )}&from=${from}`,
                 );
               }}
             />

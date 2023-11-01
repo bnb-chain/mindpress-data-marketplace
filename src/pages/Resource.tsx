@@ -285,7 +285,7 @@ const Resource = () => {
             <CollInfo gap={8}>
               <ItemNum>{num} Items</ItemNum>
               <Tag alignItems={'center'} justifyContent={'center'}>
-                Data Collection
+                Collection
               </Tag>
             </CollInfo>
           )}

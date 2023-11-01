@@ -89,10 +89,11 @@ const ProfileList = (props: any) => {
               }
 
               const from = encodeURIComponent(JSON.stringify(list));
-
               if (!object_info) {
                 navigator(
-                  `/folder?bid=${bucketId}&f=${name}&address=${ownerAddress}&from=${from}`,
+                  `/folder?bid=${bucketId}&f=${encodeURIComponent(
+                    name,
+                  )}&address=${ownerAddress}&from=${from}`,
                 );
               } else {
                 const { id } = object_info;
