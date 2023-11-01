@@ -209,6 +209,7 @@ const Resource = () => {
         {breadItems.map((item: any, index: number) => {
           return (
             <MyBreadcrumbItem
+              key={index}
               isCurrentPage={index === breadItems.length - 1}
               onClick={() => {
                 state.globalDispatch({
@@ -217,7 +218,7 @@ const Resource = () => {
                 });
               }}
             >
-              <BreadcrumbLink fontSize="16px">
+              <BreadcrumbLink fontSize="16px" as="span">
                 <Link
                   to={`${item.path}` + (item.query ? '?' + item.query : '')}
                 >

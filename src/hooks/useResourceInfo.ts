@@ -123,6 +123,8 @@ export const useResourceInfo = ({
           _promise = Promise.resolve(false);
         }
 
+        // console.log('groupName', groupName);
+
         Promise.all([_promise, getGroupInfoByName(groupName, address)])
           .then(async (result: any) => {
             const [listed, groupResult] = result;
