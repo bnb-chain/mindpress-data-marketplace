@@ -56,6 +56,9 @@ dependencies:
   '@types/react-dom':
     specifier: ^18.2.4
     version: 18.2.4
+  '@types/tiny-slider-react':
+    specifier: ^0.3.6
+    version: 0.3.6
   axios:
     specifier: ^1.4.0
     version: 1.4.0
@@ -215,6 +218,12 @@ dependencies:
   terser-webpack-plugin:
     specifier: ^5.2.5
     version: 5.3.9(webpack@5.87.0)
+  tiny-slider:
+    specifier: ^2.9.4
+    version: 2.9.4
+  tiny-slider-react:
+    specifier: ^0.5.7
+    version: 0.5.7
   typescript:
     specifier: ^4.9.5
     version: 4.9.5
@@ -4259,6 +4268,12 @@ packages:
     resolution: {integrity: sha512-FkHXCb+ikSoUP4Y4rOslzTdX5sqYwMxfefKh1GmZ8ce1GOkEHntSp6b5cGadmNfp5e4BMEWOMx+WSKd5/MqlDA==}
     dependencies:
       '@types/jest': 27.5.2
+    dev: false
+
+  /@types/tiny-slider-react@0.3.6:
+    resolution: {integrity: sha512-scJiME4lCmdreElurEZTGSYa8AYuy/pxsRR0sgmq8GZKnsF30zzDy9OsBzgTOPoubTdvBtiAvo9d1H47HjumnA==}
+    dependencies:
+      '@types/react': 18.2.7
     dev: false
 
   /@types/trusted-types@2.0.3:
@@ -13767,6 +13782,16 @@ packages:
   /timed-out@4.0.1:
     resolution: {integrity: sha512-G7r3AhovYtr5YKOWQkta8RKAPb+J9IsO4uVmzjl8AZwfhs8UcUwTiD6gcJYSgOtzyjvQKrKYn41syHbUWMkafA==}
     engines: {node: '>=0.10.0'}
+    dev: false
+
+  /tiny-slider-react@0.5.7:
+    resolution: {integrity: sha512-YTzPlyY9yI/v+c3h8BQ7dTHmCDtK8ghbaGD20FNqEPAySk1AR0aTaW6Iqhup5U7gJiWiUsfCHO31q8xEeuGsRQ==}
+    dependencies:
+      tiny-slider: 2.9.4
+    dev: false
+
+  /tiny-slider@2.9.4:
+    resolution: {integrity: sha512-LAs2kldWcY+BqCKw4kxd4CMx2RhWrHyEePEsymlOIISTlOVkjfK40sSD7ay73eKXBLg/UkluAZpcfCstimHXew==}
     dev: false
 
   /tmpl@1.0.5:
