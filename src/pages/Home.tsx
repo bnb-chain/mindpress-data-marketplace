@@ -7,11 +7,13 @@ import { DocIcon, FullTeamIcon, LinkArrowIcon } from '@totejs/icons';
 import DiscordIcon from '../components/svgIcon/DiscordIcon';
 import BSCIcon from '../components/svgIcon/BSCIcon';
 import { reportEvent } from '../utils/ga';
+import AllList from '../components/home/All';
+import { Banner } from '../components/home/Banner';
 
 const Home = () => {
   return (
     <Container flexDirection={'column'} alignItems={'center'}>
-      <BannerInfo>
+      {/* <BannerInfo>
         <img src={Bg} alt="" />
         <Info flexDirection={'column'} gap={26}>
           <Title>
@@ -40,8 +42,15 @@ const Home = () => {
             </GithubCon>
           </Box>
         </Info>
-      </BannerInfo>
-      <HomeList></HomeList>
+      </BannerInfo> */}
+
+      <Banner />
+
+      <BoxWithArrow mt="20px">
+        <TableTitle>Lastest</TableTitle>
+        <AllList />
+      </BoxWithArrow>
+
       <WorkInfo flexDirection={'column'} gap={37}>
         <WorkMainTitle>How it works</WorkMainTitle>
         <WorkItem flexDirection={'column'} gap={20}>
@@ -163,9 +172,9 @@ const Home = () => {
 export default Home;
 
 const Container = styled(Flex)`
-  margin-top: -80px;
-  width: 100%;
-  background-color: #1e2026;
+  /* margin-top: -80px; */
+  /* width: 100%; */
+  /* background-color: #1e2026; */
 `;
 
 const BannerInfo = styled.div`
@@ -301,4 +310,22 @@ const CardItemTitle = styled.div`
   font-size: 16px;
   font-weight: 700;
   color: #fff;
+`;
+
+const TableTitle = styled(Box)`
+  font-size: 32px;
+  font-weight: 600;
+  line-height: 40px; /* 125% */
+`;
+
+const BoxWithArrow = styled(Box)`
+  width: 1200px;
+  /* justify-content: center;
+  align-items: center; */
+  padding-top: 50px;
+  padding-bottom: 50px;
+  padding-left: 32px;
+  background: #181a1e;
+  border: 1px solid #1e2026;
+  border-radius: 16px;
 `;

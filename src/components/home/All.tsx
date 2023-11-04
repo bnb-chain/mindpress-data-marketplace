@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
-import { Flex, Table } from '@totejs/uikit';
+import { Box, Flex, Table } from '@totejs/uikit';
 import { usePagination } from '../../hooks/usePagination';
 import { Link, useNavigate } from 'react-router-dom';
+import LinkArrow from '../../images/link_arrow.png';
 import {
   formatDateUTC,
   trimLongStr,
@@ -26,7 +27,14 @@ const AllList = () => {
 
   const columns = [
     {
-      header: 'Data',
+      header: '#',
+      cell: (data: any) => {
+        const { id } = data;
+        return <Box>{id}</Box>;
+      },
+    },
+    {
+      header: 'Data/Collection',
       width: 200,
       cell: (data: any) => {
         const {
@@ -74,7 +82,7 @@ const AllList = () => {
       },
     },
     {
-      header: 'Type',
+      header: 'Category',
       cell: (data: any) => {
         const { type, name } = data;
         return (
@@ -93,16 +101,16 @@ const AllList = () => {
         return <div>{balance} BNB</div>;
       },
     },
+    // {
+    //   header: 'Total Sales Vol',
+    //   width: 160,
+    //   cell: (data: any) => {
+    //     const { listTime } = data;
+    //     return <div>{listTime ? formatDateUTC(listTime * 1000) : '-'}</div>;
+    //   },
+    // },
     {
-      header: 'Data Listed',
-      width: 160,
-      cell: (data: any) => {
-        const { listTime } = data;
-        return <div>{listTime ? formatDateUTC(listTime * 1000) : '-'}</div>;
-      },
-    },
-    {
-      header: 'Total Vol',
+      header: 'Total Sales Vol',
       width: 120,
       cell: (data: any) => {
         const { totalVol } = data;
@@ -137,11 +145,11 @@ const AllList = () => {
   return (
     <Container>
       <Table
-        headerContent={`Latest ${Math.min(
-          20,
-          list.length,
-        )}  Collections (Total of ${total})`}
-        containerStyle={{ padding: '0' }}
+        // headerContent={`Latest ${Math.min(
+        //   20,
+        //   list.length,
+        // )} Collections (Total of ${total})`}
+        containerStyle={{ padding: '0', background: '#181a1e' }}
         pagination={{
           current: page,
           pageSize: 10,
@@ -159,8 +167,10 @@ const AllList = () => {
 
 export default AllList;
 
-const Container = styled.div`
-  width: 1123px;
+const Container = styled(Box)`
+  /* width: 1200px; */
+  /* justify-content: center;
+  align-items: center; */
 `;
 
 const ImgContainer = styled(Flex)`
@@ -177,5 +187,23 @@ const ImgCon = styled.img`
 `;
 
 const MyLink = styled(Link)`
-  color: ${(props: any) => props.theme.colors.scene.primary.normal};
+  /* color: ${(props: any) => props.theme.colors.scene.primary.normal}; */
+  color: #fff;
+  text-decoration: underline;
+
+  &::after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    margin-left: 3px;
+    margin-top: 9px;
+  }
+
+  &:hover {
+    &::after {
+      background: url(${LinkArrow}) no-repeat center center;
+      background-size: contain;
+    }
+  }
 `;

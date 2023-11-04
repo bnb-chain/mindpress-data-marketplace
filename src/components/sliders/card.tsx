@@ -15,18 +15,18 @@ const BORDER_RADIUS = '16px';
 
 export const Card = (props: Props) => {
   return (
-    <Box w="340px">
+    <Box w="340px" pb="80px" pl="32px">
       <Flex
         background="#1E2026"
         h="408px"
         borderRadius={BORDER_RADIUS}
-        overflow="hidden"
+        // overflow="hidden"
         boxShadow="0px 24px 64px 0px rgba(0, 0, 0, 0.48)"
-        padding="8px"
         direction="column"
+        padding="8px"
         justifyContent="space-around"
       >
-        <Box h="240px" overflow="hidden">
+        <Box h="240px" /* overflow="hidden" */>
           <Image url="https://source.unsplash.com/random/400x400" />
         </Box>
         {/* <Box>{props.children}</Box> */}

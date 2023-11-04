@@ -22,7 +22,6 @@ import './base/global.css';
 import * as env from './env';
 
 import RouteGuard from './router/index';
-import Home2 from './pages/Home2';
 
 export interface IRoute {
   children?: Array<IRoute>;
@@ -41,10 +40,6 @@ const routes: Array<IRoute> = [
   {
     path: '/',
     element: <Home></Home>,
-  },
-  {
-    path: '/home2',
-    element: <Home2></Home2>,
   },
   {
     path: '/profile',

@@ -39,13 +39,13 @@ const HomeList = () => {
   }, []);
   return (
     <Container>
-      <NavBar active={currentTab} onChange={handleTabChange} items={navItems} />
-      <Box h={20} />
-      {currentTab === Type.All ? (
+      {/* <NavBar active={currentTab} onChange={handleTabChange} items={navItems} /> */}
+      {/* <Box h={20} /> */}
+      {/* {currentTab === Type.All ? (
         <AllList></AllList>
       ) : (
         <TrendingList></TrendingList>
-      )}
+      )} */}
     </Container>
   );
 };

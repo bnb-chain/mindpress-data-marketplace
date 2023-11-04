@@ -31,6 +31,8 @@ export const ActionCom = (obj: IActionCom) => {
       {status == 1 && (
         <Button
           size={'sm'}
+          background="#665800"
+          color="#FFE900"
           onClick={async () => {
             if (from === 'home')
               reportEvent({ name: 'dm.main.list.buy.click' });
@@ -57,6 +59,10 @@ export const ActionCom = (obj: IActionCom) => {
       {status === -1 && (
         <Button
           size={'sm'}
+          background="#665800"
+          color="#FFE900"
+          fontSize="14px"
+          fontWeight="600"
           onClick={() => {
             if (!isConnected && !isConnecting) handleModalOpen();
           }}

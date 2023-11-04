@@ -7,6 +7,7 @@ import {
   MenuButton,
   useDisclosure,
   useOutsideClick,
+  Box,
 } from '@totejs/uikit';
 import styled from '@emotion/styled';
 import { useWalletModal } from '../../hooks/useWalletModal';
@@ -48,7 +49,7 @@ const CustomMenuButton = forwardRef(
       <Button
         ref={ref}
         w={206}
-        h={34}
+        h={40}
         background={'rgba(255, 255, 255, 0.22);'}
         variant="ghost"
         justifyContent="space-between"
@@ -127,16 +128,22 @@ const Header = () => {
 
       <RightFunCon alignItems={'center'} justifyContent={'center'} gap={18}>
         <>
-          <Button
+          <Box
+            as="button"
+            background="#F1F2F3"
+            color="#181A1E"
+            pl="12px"
+            pr="12px"
+            h="40px"
+            borderRadius="8px"
             onClick={() => {
               reportEvent({ name: 'dm.main.header.list_my_data.click' });
               if (!isConnecting && !isConnected) handleModalOpen();
               navigate('/profile?tab=collections');
             }}
-            variant="text"
           >
-            List My Data
-          </Button>
+            List Item
+          </Box>
         </>
         {address && (
           <Menu placement="bottom-end">
@@ -198,12 +205,12 @@ const Header = () => {
                 ml={3}
                 gap={10}
                 justifyContent={'flex-start'}
-                w={158}
+                // w={158}
               >
                 <Profile>
                   <ProfileImage width={32} height={32} />
                 </Profile>
-                <div>{address ? trimLongStr(address, 10, 6, 4) : ''}</div>
+                {/* <div>{address ? trimLongStr(address, 10, 6, 4) : ''}</div> */}
               </ProfileWrapper>
             </ConnectProfile>
           )}

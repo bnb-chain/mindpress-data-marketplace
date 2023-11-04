@@ -5,6 +5,7 @@ import 'tiny-slider/dist/tiny-slider.css';
 import { Card } from './card';
 import LArrow from './l_arrow.png';
 import RArrow from './r_arrow.png';
+import styled from '@emotion/styled';
 
 const settings = {
   // lazyload: true,
@@ -12,7 +13,7 @@ const settings = {
   mouseDrag: false,
   loop: false,
   items: 3,
-  gutter: 16,
+  // gutter: 16,
   swipeAngle: false,
   fixedWidth: 340,
   speed: 300,
@@ -36,7 +37,7 @@ export const Sliders = () => {
   const ref = useRef() as any;
 
   return (
-    <Box>
+    <Box position="relative">
       <TinySlider
         settings={settings}
         ref={(ts) => {
@@ -56,7 +57,7 @@ export const Sliders = () => {
         ))}
       </TinySlider>
 
-      <Flex justifyContent="flex-end" mt="40px" gap="16px">
+      <ButtonGroup>
         <Box
           as="button"
           title="Previous"
@@ -71,7 +72,18 @@ export const Sliders = () => {
         >
           <img src={RArrow} />
         </Box>
-      </Flex>
+      </ButtonGroup>
     </Box>
   );
 };
+
+const ButtonGroup = styled(Flex)`
+  justify-content: flex-end;
+  padding-bottom: 40px;
+  gap: 16px;
+  margin-right: 30px;
+
+  /* position: absolute;
+  bottom: 0;
+  right: 0; */
+`;
