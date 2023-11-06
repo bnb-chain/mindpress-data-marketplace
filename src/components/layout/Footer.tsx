@@ -9,7 +9,7 @@ const Footer = () => {
       alignItems={'center'}
       justifyContent={'center'}
     >
-      © 2023 BNB Chain. All rights reserved.
+      © 2023 MindPress. All rights reserved.
     </FooterCon>
   );
 };
@@ -19,5 +19,5 @@ export default Footer;
 const FooterCon = styled(Flex)`
   color: #aeafb0;
   height: 48px;
-  background-color: #000000;
+  background-color: #181a1e;
 `;

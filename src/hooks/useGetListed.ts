@@ -117,5 +117,5 @@ export const useGetListed = (realAddress?: string, page = 0, pageSize = 10) => {
   useEffect(() => {
     getList();
   }, [address, page, pageSize]);
-  return { loading, list, total };
+  return { loading, list, total, getList };
 };

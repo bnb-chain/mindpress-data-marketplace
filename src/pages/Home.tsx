@@ -1,14 +1,20 @@
 import styled from '@emotion/styled';
-import HomeList from '../components/home/Index';
+import { DocIcon, FullTeamIcon } from '@totejs/icons';
 import { Box, Flex } from '@totejs/uikit';
-import Bg from '../images/bg.png';
-import GithubIcon from '../components/svgIcon/GithubIcon';
-import { DocIcon, FullTeamIcon, LinkArrowIcon } from '@totejs/icons';
-import DiscordIcon from '../components/svgIcon/DiscordIcon';
-import BSCIcon from '../components/svgIcon/BSCIcon';
-import { reportEvent } from '../utils/ga';
+import { Ad } from '../components/home/Ad';
 import AllList from '../components/home/All';
 import { Banner } from '../components/home/Banner';
+import BSCIcon from '../components/svgIcon/BSCIcon';
+import DiscordIcon from '../components/svgIcon/DiscordIcon';
+import GithubIcon from '../components/svgIcon/GithubIcon';
+import { reportEvent } from '../utils/ga';
+import { BridgeIcon } from '../components/svgIcon/BridgeIcon';
+import { ExplorerIcon } from '../components/svgIcon/ExplorerIcon';
+import { EmailIcon } from '../components/svgIcon/EmailIcon';
+import { TwitterIcon } from '../components/svgIcon/TwitterIcon';
+import { BlogIcon } from '../components/svgIcon/BlogIcon';
+import { DcellarIcon } from '../components/svgIcon/Dcellar';
+import { Popular } from '../components/home/Popular';
 
 const Home = () => {
   return (
@@ -44,75 +50,45 @@ const Home = () => {
         </Info>
       </BannerInfo> */}
 
-      <Banner />
+      <CardBox mt="34px">
+        <Banner />
+      </CardBox>
 
-      <BoxWithArrow mt="20px">
-        <TableTitle>Lastest</TableTitle>
-        <AllList />
-      </BoxWithArrow>
+      <CardBox mt="20px">
+        <BoxWithArrow>
+          <TableTitle>Lastest</TableTitle>
+          <Box>
+            <AllList />
+          </Box>
+        </BoxWithArrow>
+      </CardBox>
 
-      <WorkInfo flexDirection={'column'} gap={37}>
-        <WorkMainTitle>How it works</WorkMainTitle>
-        <WorkItem flexDirection={'column'} gap={20}>
-          <WorkTitle>Backendless Framework </WorkTitle>
-          <WorkDesc>
-            Data-marketplace fully utilizes smart contracts, greenfield APIs,
-            and pre-defined rules to avoid complex backend deployments,
-            simplifying the deployment process to the extreme.
-          </WorkDesc>
-        </WorkItem>
-        <WorkItem flexDirection={'column'} gap={20}>
-          <WorkTitle>Fully Greenfield Hosted Website</WorkTitle>
-          <WorkDesc>
-            The data-marketplace website is hosted by greenfield, no traditional
-            cloud infrastructure，anti-Censorship.
-          </WorkDesc>
-        </WorkItem>
-        <WorkItem flexDirection={'column'} gap={20}>
-          <WorkTitle>Fully EVM Compatible</WorkTitle>
-          <WorkDesc>
-            Data-marketplace has implemented smart contracts using Solidity,
-            which are deployed on the BSC network. Users/developers on any BSC
-            don't even need to be aware of Greenfield's existence, and don't
-            need to hold any tokens on Greenfield in order to purchase and
-            access data.
-          </WorkDesc>
-        </WorkItem>
-        <WorkItem flexDirection={'column'} gap={20}>
-          <WorkTitle>Ultimate Fast Trading Experience</WorkTitle>
-          <WorkDesc>
-            Thanks to the fast blocking time of Greenfield and BSC, users can
-            complete data listing and trading in seconds.
-          </WorkDesc>
-        </WorkItem>
-      </WorkInfo>
+      <CardBox mt="20px">
+        <BoxWithArrow>
+          <TableTitle>Popular</TableTitle>
+          <Box>
+            <Popular />
+          </Box>
+        </BoxWithArrow>
+      </CardBox>
+
+      <CardBox mt="20px" w="100%">
+        <Ad />
+      </CardBox>
+
       <Cards
         alignItems={'center'}
         justifyContent={'center'}
         flexDirection={'column'}
-        gap={50}
+        gap={16}
+        p="60px"
+        mt="20px"
+        mb="20px"
       >
-        <TitleCon flexDirection={'column'} alignItems={'center'} gap={20}>
-          <CardTitle>Build You Own dApps with BNB Greenfield</CardTitle>
-          <CardSubTitle>
-            We’ve prepared all the toolings you need to get started with BNB
-            Greenfield Now!
-          </CardSubTitle>
+        <TitleCon mb="30px">
+          <CardTitle>Wanna to build on BNB Greenfield?</CardTitle>
         </TitleCon>
-        <CardCon gap={18}>
-          <Box
-            onClick={() => {
-              reportEvent({ name: 'dm.main.body.gnfd_website.click' });
-              window.open('https://greenfield.bnbchain.org/en', '_blank');
-            }}
-          >
-            <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
-              <BSCIcon w={32} h={32} className="icon"></BSCIcon>
-              <CardItemTitle className="title">
-                BNB Greenfield<br></br>Website
-              </CardItemTitle>
-            </CardItem>
-          </Box>
+        <CardCon gap={16}>
           <Box
             onClick={() => {
               reportEvent({ name: 'dm.main.body.gnfd_doc.click' });
@@ -124,7 +100,7 @@ const Home = () => {
           >
             <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
               <DocIcon w={32} h={32} className="icon"></DocIcon>
-              <CardItemTitle className="title">Documentations</CardItemTitle>
+              <CardItemTitle className="title">Documentation</CardItemTitle>
             </CardItem>
           </Box>
           <Box
@@ -137,30 +113,81 @@ const Home = () => {
             }}
           >
             <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
-              <GithubIcon w={26} h={26} className="icon"></GithubIcon>
+              <GithubIcon w={32} h={32} className="icon"></GithubIcon>
               <CardItemTitle className="title">Github</CardItemTitle>
             </CardItem>
           </Box>
           <Box
             onClick={() => {
               reportEvent({ name: 'dm.main.body.gnfd_forum.click' });
-              window.open('https://forum.bnbchain.org/', '_blank');
+              window.open(
+                'https://greenfield.bnbchain.org/en/bridge?type=transfer-in',
+                '_blank',
+              );
             }}
           >
             <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
-              <FullTeamIcon w={32} h={32} className="icon"></FullTeamIcon>
-              <CardItemTitle className="title">Forum</CardItemTitle>
+              <BridgeIcon w={32} h={32} className="icon"></BridgeIcon>
+              <CardItemTitle className="title">Bridge</CardItemTitle>
             </CardItem>
           </Box>
           <Box
             onClick={() => {
               reportEvent({ name: 'dm.main.body.gnfd_discord.click' });
-              window.open('https://discord.gg/bnbchain', '_blank');
+              window.open('https://greenfieldscan.com/', '_blank');
             }}
           >
             <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
-              <DiscordIcon w={32} h={32} className="icon"></DiscordIcon>
+              <ExplorerIcon w={32} h={32} className="icon" />
               <CardItemTitle className="title">Discord</CardItemTitle>
+            </CardItem>
+          </Box>
+        </CardCon>
+        <CardCon gap={16}>
+          <Box
+            onClick={() => {
+              reportEvent({ name: 'dm.main.body.contract_me.click' });
+              window.open('', '_blank');
+            }}
+          >
+            <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
+              <EmailIcon w={32} h={32} className="icon"></EmailIcon>
+              <CardItemTitle className="title">Contract Us</CardItemTitle>
+            </CardItem>
+          </Box>
+          <Box
+            onClick={() => {
+              reportEvent({ name: 'dm.main.body.twitter.click' });
+              window.open('', '_blank');
+            }}
+          >
+            <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
+              <TwitterIcon w={32} h={32} className="icon"></TwitterIcon>
+              <CardItemTitle className="title">
+                Twitter(MindPress)
+              </CardItemTitle>
+            </CardItem>
+          </Box>
+          <Box
+            onClick={() => {
+              reportEvent({ name: 'dm.main.body.blog.click' });
+              window.open('', '_blank');
+            }}
+          >
+            <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
+              <BlogIcon w={32} h={32} className="icon"></BlogIcon>
+              <CardItemTitle className="title">MindPress blog</CardItemTitle>
+            </CardItem>
+          </Box>
+          <Box
+            onClick={() => {
+              reportEvent({ name: 'dm.main.body.dcellar.click' });
+              window.open('https://dcellar.io/', '_blank');
+            }}
+          >
+            <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
+              <DcellarIcon w={32} h={32} className="icon" />
+              <CardItemTitle className="title">dCellar</CardItemTitle>
             </CardItem>
           </Box>
         </CardCon>
@@ -257,11 +284,12 @@ const WorkDesc = styled.div`
 `;
 
 const Cards = styled(Flex)`
-  margin: 80px 0 114px;
-  background-color: #272727;
+  /* margin: 80px 0 114px; */
+  background-color: #181a1e;
   width: 1200px;
-  height: 426px;
-  border-radius: 15px;
+  /* height: 426px; */
+  border-radius: 32px;
+  border: 2px solid #1e2026;
 `;
 
 const TitleCon = styled(Flex)``;
@@ -283,22 +311,25 @@ const CardCon = styled(Flex)``;
 const CardItem = styled(Flex)`
   text-align: center;
   width: 190px;
-  height: 140px;
+  /* height: 140px; */
   border-radius: 8px;
   background-color: #1f2026;
   line-height: 28px;
+  padding-top: 24px;
+  padding-bottom: 24px;
   .icon {
-    margin-top: 22.3px;
+    /* margin-top: 22.3px; */
   }
   .title {
     color: #fff;
   }
   &:hover {
     background-color: #fff;
+    cursor: pointer;
 
     .icon {
-      margin-top: 22.3px;
-      color: #aeafb0;
+      /* margin-top: 22.3px; */
+      color: #535458;
     }
     .title {
       color: #535458;
@@ -325,7 +356,16 @@ const BoxWithArrow = styled(Box)`
   padding-top: 50px;
   padding-bottom: 50px;
   padding-left: 32px;
+  padding-right: 32px;
   background: #181a1e;
   border: 1px solid #1e2026;
   border-radius: 16px;
+`;
+
+const CardBox = styled(Box)`
+  border-radius: 32px;
+  border: 1px solid #1e2026;
+  background: #181a1e;
+  box-shadow: 0px 24px 64px 0px rgba(0, 0, 0, 0.48), 0px 4px 0px 0px #ffe900;
+  overflow: hidden;
 `;

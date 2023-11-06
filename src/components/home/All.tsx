@@ -17,6 +17,8 @@ import { useGlobal } from '../../hooks/useGlobal';
 import { CollectionLogo } from '../svgIcon/CollectionLogo';
 import { ActionCom } from '../ActionCom';
 import { reportEvent } from '../../utils/ga';
+import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
+import { CATEGORY_MAP } from '../../utils/category';
 
 const AllList = () => {
   const { handlePageChange, page } = usePagination();
@@ -25,6 +27,8 @@ const AllList = () => {
   const { list, loading, total } = useGetListed(address, page, 10);
   const state = useGlobal();
 
+  const categoryies = useGetCatoriesMap();
+
   const columns = [
     {
       header: '#',
@@ -32,6 +36,7 @@ const AllList = () => {
         const { id } = data;
         return <Box>{id}</Box>;
       },
+      width: 100,
     },
     {
       header: 'Data/Collection',
@@ -84,11 +89,26 @@ const AllList = () => {
     {
       header: 'Category',
       cell: (data: any) => {
-        const { type, name } = data;
+        const { categoryId } = data;
+        const categoryName = categoryies.data?.find(
+          (c) => c.id === categoryId,
+        )?.name;
+        const category = CATEGORY_MAP[categoryId];
         return (
-          <div>
-            {type === 'Collection' ? type : contentTypeToExtension(name, name)}
-          </div>
+          <Flex
+            background={category.bgColor}
+            borderRadius={'40px'}
+            padding="8px 12px"
+            gap="8px"
+            alignItems="center"
+          >
+            <Box w="16px" h="16px">
+              {category.icon({
+                boxSize: '16',
+              })}
+            </Box>
+            <Box>{categoryName}</Box>
+          </Flex>
         );
       },
     },
@@ -113,8 +133,8 @@ const AllList = () => {
       header: 'Total Sales Vol',
       width: 120,
       cell: (data: any) => {
-        const { totalVol } = data;
-        return <div>{totalVol}</div>;
+        const { totalSale } = data;
+        return <div>{totalSale || 0}</div>;
       },
     },
     {

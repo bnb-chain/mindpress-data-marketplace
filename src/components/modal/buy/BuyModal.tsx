@@ -15,14 +15,20 @@ import { defaultImg, divide10Exp, roundFun } from '../../../utils';
 import { useChainBalance } from '../../../hooks/useChainBalance';
 import { BN } from 'bn.js';
 import { useBuy } from '../../../hooks/useBuy';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import { BSC_CHAIN_ID, NETWORK } from '../../../env';
+import { useGetListed } from '../../../hooks/useGetListed';
+import { usePagination } from '../../../hooks/usePagination';
 
 export const BuyModal = (props: any) => {
   const modalData = useModal();
   const { isOpen, handleOpen } = props;
 
   const { buyData }: { buyData: any } = modalData.modalState;
+
+  const { address } = useAccount();
+  const { handlePageChange, page } = usePagination();
+  const { getList } = useGetListed(address, page, 10);
 
   const { name, id, price, type, groupName, ownerAddress } = buyData;
 
@@ -133,6 +139,9 @@ export const BuyModal = (props: any) => {
             width={'50%'}
             onClick={() => {
               buy(id);
+
+              // update list
+              getList();
               modalData.modalDispatch({ type: 'BUYING' });
             }}
             disabled={!BSC_FEE_SUFF}

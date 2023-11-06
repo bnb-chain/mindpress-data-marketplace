@@ -25,3 +25,15 @@ export const getItemDetail = (groupId: string) => {
     return data?.data?.data?.item || {};
   });
 };
+
+interface IItemCategoriesResponse {
+  id: number;
+  name: string;
+}
+export const getCategoryMap = async (): Promise<IItemCategoriesResponse[]> => {
+  const data = await instance.get('item/categories');
+  return data?.data?.data?.categories || [];
+  // .then((data) => {
+  //   return data?.data?.data?.categories || [];
+  // });
+};

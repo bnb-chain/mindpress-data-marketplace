@@ -22,6 +22,7 @@ import './base/global.css';
 import * as env from './env';
 
 import RouteGuard from './router/index';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 export interface IRoute {
   children?: Array<IRoute>;
@@ -78,6 +79,8 @@ const { chains, provider } = configureChains(
   [env.NETWORK === 'Mainnet' ? bsc : bscTestnet, gfChain],
   [publicProvider()],
 );
+
+const queryClient = new QueryClient();
 
 function App() {
   const client = createClient({
@@ -139,27 +142,29 @@ function App() {
   return (
     <WagmiConfig client={client}>
       <ThemeProvider theme={theme}>
-        <GlobalProvider>
-          <ModalProvider>
-            <WalletModalProvider>
-              <HashRouter>
-                <Layout>
-                  <Routes>
-                    {routes.map((item: IRoute) => {
-                      return (
-                        <Route
-                          key={item.path}
-                          path={item.path}
-                          element={<RouteGuard>{item.element}</RouteGuard>}
-                        />
-                      );
-                    })}
-                  </Routes>
-                </Layout>
-              </HashRouter>
-            </WalletModalProvider>
-          </ModalProvider>
-        </GlobalProvider>
+        <QueryClientProvider client={queryClient}>
+          <GlobalProvider>
+            <ModalProvider>
+              <WalletModalProvider>
+                <HashRouter>
+                  <Layout>
+                    <Routes>
+                      {routes.map((item: IRoute) => {
+                        return (
+                          <Route
+                            key={item.path}
+                            path={item.path}
+                            element={<RouteGuard>{item.element}</RouteGuard>}
+                          />
+                        );
+                      })}
+                    </Routes>
+                  </Layout>
+                </HashRouter>
+              </WalletModalProvider>
+            </ModalProvider>
+          </GlobalProvider>
+        </QueryClientProvider>
       </ThemeProvider>
     </WagmiConfig>
   );

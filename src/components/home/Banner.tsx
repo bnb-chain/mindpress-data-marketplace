@@ -5,7 +5,7 @@ import { Sliders } from '../sliders';
 
 export const Banner = () => {
   return (
-    <Box mt="34px">
+    <Box>
       <BannerBox>
         <Box
           pl="32px"
@@ -61,7 +61,7 @@ const B = styled(Flex)`
 `;
 
 const BannerBox = styled(Box)`
-  margin-top: 32px;
+  /* margin-top: 32px; */
   /* padding: 32px; */
   background: #181a1e;
   border-radius: 32px;
