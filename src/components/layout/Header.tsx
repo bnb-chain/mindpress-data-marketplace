@@ -40,6 +40,7 @@ import { BSCLogo } from '../svgIcon/BSCLogo';
 import { BSC_CHAIN_ID, GF_CHAIN_ID } from '../../env';
 import Search from '../../components/Search';
 import { reportEvent } from '../../utils/ga';
+import { MetaMaskAvatar } from 'react-metamask-avatar';
 
 const CustomMenuButton = forwardRef(
   (props: { children: ReactNode }, ref: ForwardedRef<HTMLButtonElement>) => {
@@ -208,7 +209,8 @@ const Header = () => {
                 // w={158}
               >
                 <Profile>
-                  <ProfileImage width={32} height={32} />
+                  {/* <ProfileImage width={32} height={32} /> */}
+                  {address && <MetaMaskAvatar address={address} size={32} />}
                 </Profile>
                 {/* <div>{address ? trimLongStr(address, 10, 6, 4) : ''}</div> */}
               </ProfileWrapper>

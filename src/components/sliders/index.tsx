@@ -2,7 +2,7 @@ import { Box, Flex } from '@totejs/uikit';
 import { useRef } from 'react';
 import TinySlider from 'tiny-slider-react';
 import 'tiny-slider/dist/tiny-slider.css';
-import { Card } from './card';
+import { SliderCard } from './sliderCard';
 import LArrow from './l_arrow.png';
 import RArrow from './r_arrow.png';
 import styled from '@emotion/styled';
@@ -21,19 +21,20 @@ const settings = {
   controls: false,
 };
 
-const imgs = [
-  'https://source.unsplash.com/random/200x400',
-  'https://source.unsplash.com/random/300x400',
-  'https://source.unsplash.com/random/400x400',
-  'https://source.unsplash.com/random/100x400',
-  'https://source.unsplash.com/random/100x400',
-  'https://source.unsplash.com/random/100x400',
-  'https://source.unsplash.com/random/100x400',
-  'https://source.unsplash.com/random/100x400',
-  'https://source.unsplash.com/random/100x400',
-];
+interface Props {
+  data: {
+    imgUrl: string;
+    name: string;
+    address: string;
+    volumn: number;
+    price: string;
+    id: number;
+    groupName: string;
+  }[];
+}
 
-export const Sliders = () => {
+export const Sliders = (props: Props) => {
+  const { data } = props;
   const ref = useRef() as any;
 
   return (
@@ -44,16 +45,17 @@ export const Sliders = () => {
           ref.current = ts;
         }}
       >
-        {imgs.map((el, index) => (
-          <Card key={index}>
-            <div style={{ fontSize: '30px' }}>{index}</div>
-          </Card>
-          //   {/* <img
-          //     className={`tns-lazy-img`}
-          //     src={loadingImage}
-          //     data-src={el}
-          //     alt=""
-          //   /> */}
+        {data.map((item, index) => (
+          <SliderCard
+            key={index}
+            address={item.address}
+            imgUrl={item.imgUrl}
+            name={item.name}
+            price={item.price}
+            volumn={item.volumn}
+            id={item.id}
+            groupName={item.groupName}
+          />
         ))}
       </TinySlider>
 

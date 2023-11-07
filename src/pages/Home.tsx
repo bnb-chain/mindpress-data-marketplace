@@ -1,20 +1,18 @@
 import styled from '@emotion/styled';
-import { DocIcon, FullTeamIcon } from '@totejs/icons';
+import { DocIcon } from '@totejs/icons';
 import { Box, Flex } from '@totejs/uikit';
 import { Ad } from '../components/home/Ad';
 import AllList from '../components/home/All';
 import { Banner } from '../components/home/Banner';
-import BSCIcon from '../components/svgIcon/BSCIcon';
-import DiscordIcon from '../components/svgIcon/DiscordIcon';
-import GithubIcon from '../components/svgIcon/GithubIcon';
-import { reportEvent } from '../utils/ga';
-import { BridgeIcon } from '../components/svgIcon/BridgeIcon';
-import { ExplorerIcon } from '../components/svgIcon/ExplorerIcon';
-import { EmailIcon } from '../components/svgIcon/EmailIcon';
-import { TwitterIcon } from '../components/svgIcon/TwitterIcon';
-import { BlogIcon } from '../components/svgIcon/BlogIcon';
-import { DcellarIcon } from '../components/svgIcon/Dcellar';
 import { Popular } from '../components/home/Popular';
+import { BlogIcon } from '../components/svgIcon/BlogIcon';
+import { BridgeIcon } from '../components/svgIcon/BridgeIcon';
+import { DcellarIcon } from '../components/svgIcon/Dcellar';
+import { EmailIcon } from '../components/svgIcon/EmailIcon';
+import { ExplorerIcon } from '../components/svgIcon/ExplorerIcon';
+import GithubIcon from '../components/svgIcon/GithubIcon';
+import { TwitterIcon } from '../components/svgIcon/TwitterIcon';
+import { reportEvent } from '../utils/ga';
 
 const Home = () => {
   return (
@@ -56,18 +54,22 @@ const Home = () => {
 
       <CardBox mt="20px">
         <BoxWithArrow>
-          <TableTitle>Lastest</TableTitle>
-          <Box>
-            <AllList />
+          <Box p="50px 32px">
+            <TableTitle>Lastest</TableTitle>
+            <Box>
+              <AllList />
+            </Box>
           </Box>
         </BoxWithArrow>
       </CardBox>
 
       <CardBox mt="20px">
         <BoxWithArrow>
-          <TableTitle>Popular</TableTitle>
-          <Box>
-            <Popular />
+          <Box pt="50px" pb="50px">
+            <TableTitle pl="32px">Popular</TableTitle>
+            <Box>
+              <Popular />
+            </Box>
           </Box>
         </BoxWithArrow>
       </CardBox>
@@ -313,27 +315,19 @@ const CardItem = styled(Flex)`
   width: 190px;
   /* height: 140px; */
   border-radius: 8px;
-  background-color: #1f2026;
+  background-color: #1e2026;
   line-height: 28px;
   padding-top: 24px;
   padding-bottom: 24px;
   .icon {
-    /* margin-top: 22.3px; */
+    color: #f7f7f8;
   }
   .title {
-    color: #fff;
+    color: #f7f7f8;
   }
   &:hover {
-    background-color: #fff;
+    background-color: #373943;
     cursor: pointer;
-
-    .icon {
-      /* margin-top: 22.3px; */
-      color: #535458;
-    }
-    .title {
-      color: #535458;
-    }
   }
 `;
 
@@ -353,10 +347,10 @@ const BoxWithArrow = styled(Box)`
   width: 1200px;
   /* justify-content: center;
   align-items: center; */
-  padding-top: 50px;
+  /* padding-top: 50px;
   padding-bottom: 50px;
   padding-left: 32px;
-  padding-right: 32px;
+  padding-right: 32px; */
   background: #181a1e;
   border: 1px solid #1e2026;
   border-radius: 16px;

@@ -3,6 +3,27 @@ import styled from '@emotion/styled';
 import MindPress from '../../images/mindpress.png';
 import { Sliders } from '../sliders';
 
+const SELL_DATA = [
+  {
+    id: 1,
+    imgUrl: 'https://source.unsplash.com/random/200x400',
+    name: 'Hero Kids #1',
+    address: '0x1C893441AB6c1A75E01887087ea508bE8e07AAae',
+    volumn: 1000,
+    price: '20.52',
+    groupName: '11',
+  },
+  {
+    id: 2,
+    imgUrl: 'https://source.unsplash.com/random/400x400',
+    name: 'Hero Kids #1',
+    address: '0x1C893441AB6c1A75E01887087ea508bE8e07AAae',
+    volumn: 1000,
+    price: '20.52',
+    groupName: '11',
+  },
+];
+
 export const Banner = () => {
   return (
     <Box>
@@ -18,8 +39,8 @@ export const Banner = () => {
           <Line mt="32px" />
         </Box>
 
-        <Box mt="50px" maxW="1200px">
-          <Sliders />
+        <Box mt="50px" w="1200px">
+          <Sliders data={SELL_DATA} />
         </Box>
       </BannerBox>
 

@@ -7,12 +7,13 @@ import { Model3DIcon } from '../svgIcon/Model3D';
 import { MovieIcon } from '../svgIcon/MovieIcon';
 import { PhotoIcon } from '../svgIcon/PhototIcon';
 import { SourceCodeIcon } from '../svgIcon/SourceCodeIcon';
+import LinkArrow from '../../images/link_arrow.png';
 
 export const Ad = () => {
   const navigate = useNavigate();
 
   return (
-    <Box
+    <Container
       p="48px 32px"
       cursor="pointer"
       onClick={() => {
@@ -47,9 +48,30 @@ export const Ad = () => {
           Source Code
         </AdItem>
       </AdList>
-    </Box>
+    </Container>
   );
 };
+
+const Container = styled(Box)`
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    display: block;
+    right: 100px;
+    top: 48px;
+  }
+
+  &:hover {
+    &::after {
+      background: url(${LinkArrow}) no-repeat center center;
+      background-size: contain;
+    }
+  }
+`;
 
 const Title = styled.h2`
   color: #fff;
