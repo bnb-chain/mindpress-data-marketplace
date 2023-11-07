@@ -3,13 +3,13 @@ import { useTrendingList } from '../../hooks/useTrendingList';
 import { Sliders } from '../sliders';
 import { defaultImg, divide10Exp } from '../../utils';
 import { BN } from 'bn.js';
+import { Loader } from '../Loader';
 
 export const Popular = () => {
   const { list, loading } = useTrendingList();
-  console.log('list', list);
 
   if (loading) {
-    // ...
+    return <Loader />;
   }
 
   const data = list.map((item: any) => {

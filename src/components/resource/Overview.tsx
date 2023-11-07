@@ -1,11 +1,13 @@
 import styled from '@emotion/styled';
 import { PenIcon, ColoredInfoIcon } from '@totejs/icons';
 import { Box, Flex, Tooltip } from '@totejs/uikit';
-import { Copy } from '../Copy';
+// import { Copy } from '../Copy';
 import { getRandomSp } from '../../utils/gfSDK';
 import { useEffect, useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { ITEM_STATUS } from '../../hooks/useItemStatus';
+import { GetMyData } from './GetMyData';
 
 interface IOverView {
   desc: string;
@@ -15,20 +17,33 @@ interface IOverView {
   bucketName?: string;
   listed?: boolean;
   showEndpoints?: boolean;
+  itemStatus: ITEM_STATUS;
+  baseInfo: any;
 }
 
 const Overview = (props: IOverView) => {
-  const { desc, showEdit, editFun, name, bucketName, listed, showEndpoints } =
-    props;
+  const {
+    desc,
+    showEdit,
+    editFun,
+    name,
+    bucketName,
+    listed,
+    showEndpoints,
+    itemStatus,
+    baseInfo,
+  } = props;
   const [domain, setDomain] = useState('');
 
-  const downloadUrl = useMemo(() => {
-    return `${domain}/download/${bucketName}/${name}`;
-  }, [name, bucketName, domain]);
+  console.log('name', name);
 
-  const previewUrl = useMemo(() => {
-    return `${domain}/view/${bucketName}/${name}`;
-  }, [name, bucketName, domain]);
+  // const downloadUrl = useMemo(() => {
+  //   return `${domain}/download/${bucketName}/${name}`;
+  // }, [name, bucketName, domain]);
+
+  // const previewUrl = useMemo(() => {
+  //   return `${domain}/view/${bucketName}/${name}`;
+  // }, [name, bucketName, domain]);
 
   useEffect(() => {
     getRandomSp().then((result) => {
@@ -49,23 +64,37 @@ const Overview = (props: IOverView) => {
 
   return (
     <Container>
-      <Box h={20}></Box>
-      <DescBox w={996} alignItems={'center'} justifyItems={'center'}>
-        {desc ? (
-          <ReactMarkdown children={desc} remarkPlugins={[remarkGfm]} />
-        ) : (
-          'This is a default description.'
-        )}
-        {showEdit && listed && (
+      <Box>
+        <Title as="h2" mb="30px">
+          Desctiption
+        </Title>
+        <DescBox w={480} alignItems={'center'} justifyItems={'center'}>
+          {desc ? (
+            <ReactMarkdown children={desc} remarkPlugins={[remarkGfm]} />
+          ) : (
+            'This is a default description.'
+          )}
+          {/* {showEdit && listed && (
           <PenCon
             onClick={() => {
               editFun?.();
             }}
             style={{ width: '16px', height: '16px', marginLeft: '4px' }}
           />
-        )}
-      </DescBox>
-      {name && bucketName && name != bucketName && showEndpoints && (
+        )} */}
+        </DescBox>
+      </Box>
+
+      <GetMyDataBox>
+        <GetMyData
+          itemStatus={itemStatus}
+          baseInfo={baseInfo}
+          name={name}
+          bucketName={bucketName}
+        />
+      </GetMyDataBox>
+
+      {/* {name && bucketName && name != bucketName && showEndpoints && (
         <>
           <Box h={65}></Box>
           <Title>Endpoints</Title>
@@ -164,14 +193,16 @@ const Overview = (props: IOverView) => {
             </SupInfoItem>
           </SupInfoCon>
         </>
-      )}
+      )} */}
     </Container>
   );
 };
 
 export default Overview;
 
-const Container = styled.div``;
+const Container = styled(Flex)`
+  gap: 120px;
+`;
 
 const DescBox = styled(Box)`
   border-radius: 8px;
@@ -184,13 +215,10 @@ const PenCon = styled(PenIcon)`
   margin-left: 4px;
   cursor: pointer;
 `;
-const Title = styled.div`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 24px;
-  line-height: 31px;
 
-  color: #ffffff;
+const Title = styled(Box)`
+  color: #fff;
+  font-size: 24px;
 `;
 
 const SupInfoCon = styled(Box)`
@@ -260,4 +288,8 @@ const Url = styled(Flex)`
 
 const LearnMore = styled.a`
   color: #f0b90b;
+`;
+
+const GetMyDataBox = styled(Box)`
+  flex: 1;
 `;

@@ -36,6 +36,9 @@ import { DCELLAR_URL, GF_EXPLORER_URL } from '../env';
 import { useWalletModal } from '../hooks/useWalletModal';
 import { useCollectionItems } from '../hooks/useCollectionItems';
 import { reportEvent } from '../utils/ga';
+import BSCIcon from '../components/svgIcon/BSCIcon';
+import { BscTraceIcon } from '../components/svgIcon/BscTraceIcon';
+import { useItemStatus } from '../hooks/useItemStatus';
 
 enum Type {
   Description = 'description',
@@ -86,6 +89,7 @@ const Resource = () => {
     bucketInfo,
     bucketListed,
   } = baseInfo;
+
   const { salesVolume } = useSalesVolume(groupId);
   const { status } = useStatus(
     bGroupName || gName,
@@ -100,6 +104,7 @@ const Resource = () => {
   const state = useGlobal();
   const showBuy = useMemo(() => {
     const list = state.globalState.breadList;
+    console.log('state.globalState.breadList', list);
     const fromPurchase =
       list.findIndex((item) => item.name == 'My Purchase') > -1;
     return (status == 1 || status == -1) && !fromPurchase;
@@ -149,30 +154,18 @@ const Resource = () => {
     return isOwner || status === 2;
   }, [isOwner, status]);
 
-  const navItems = useMemo(() => {
-    const _navItems = [
-      {
-        name: 'Description',
-        key: Type.Description,
-      },
-    ];
-    if (resourceType === '1') {
-      _navItems.unshift({
-        name: 'Data List',
-        key: Type.DataList,
-      });
-    }
-    return _navItems;
-  }, [address, ownerAddress, status, resourceType]);
+  // 0: data
+  // 1: collection
+  console.log('resourchasOwneType', resourceType);
 
-  const currentTab = useMemo(() => {
-    const tab = p.getAll('tab')[0];
-    return resourceType === '1'
-      ? tab
-        ? tab
-        : Type.Description
-      : Type.Description;
-  }, [p, resourceType]);
+  console.log('isOwner', isOwner);
+
+  // hasOwn: true = had bought
+  console.log('hasOwn', hasOwn);
+  console.log('listed', listed);
+
+  const itemStatus = useItemStatus(isOwner, hasOwn);
+  console.log('itemStatus', itemStatus);
 
   const CreateTime = useMemo(() => {
     let obj;
@@ -190,7 +183,7 @@ const Resource = () => {
 
   const { num } = useCollectionItems(name, bucketListed);
   if (loading) return <Loader></Loader>;
-  if (noData)
+  if (noData) {
     return (
       <NoDataCon
         alignItems={'center'}
@@ -202,6 +195,7 @@ const Resource = () => {
         <NoDataSub>No data available</NoDataSub>
       </NoDataCon>
     );
+  }
 
   return (
     <Container>
@@ -230,7 +224,7 @@ const Resource = () => {
         })}
       </MyBreadcrumb>
 
-      <ResourceInfo gap={20}>
+      <ResourceInfo gap={120}>
         <ImgCon
           onMouseMove={() => {
             if (isOwner && listed) {
@@ -263,8 +257,9 @@ const Resource = () => {
         >
           <NameCon gap={4} alignItems={'center'} justifyContent={'flex-start'}>
             <Name>{title}</Name>
-            <SendIcon
-              width={20}
+            <BscTraceIcon
+              color="#53EAA1"
+              width={24}
               height={20}
               cursor={'pointer'}
               marginLeft={6}
@@ -377,10 +372,29 @@ const Resource = () => {
           </ActionGroup>
         </Info>
       </ResourceInfo>
-      <Box h={30}></Box>
-      <NavBar active={currentTab} onChange={handleTabChange} items={navItems} />
-      <Box h={10} w={996}></Box>
-      {currentTab === Type.Description ? (
+
+      <Hr />
+
+      <Box mt="55px">
+        <Overview
+          desc={desc}
+          showEdit={address === ownerAddress}
+          editFun={() => {
+            setOpen(true);
+          }}
+          name={name}
+          bucketName={bucketName}
+          listed={listed}
+          showEndpoints={showEndPoint}
+          itemStatus={itemStatus}
+          baseInfo={baseInfo}
+        />
+      </Box>
+
+      {/* <Box h={30}></Box> */}
+      {/* <NavBar active={currentTab} onChange={handleTabChange} items={navItems} />
+      <Box h={10} w={996}></Box> */}
+      {/* {currentTab === Type.Description ? (
         <Overview
           desc={desc}
           showEdit={address === ownerAddress}
@@ -401,7 +415,7 @@ const Resource = () => {
           bucketInfo={bucketInfo}
           hasOwn={hasOwn}
         ></List>
-      )}
+      )} */}
       {open && (
         <EditModal
           isOpen={open}
@@ -426,13 +440,26 @@ const Resource = () => {
 export default Resource;
 
 const Container = styled.div`
-  padding-top: 60px;
+  margin-top: 20px;
+  width: 1400px;
+  background-color: #181a1e;
+  border-radius: 16px;
+  border: 1px solid #1e2026;
+  padding: 80px 100px;
 `;
+
 const ResourceInfo = styled(Flex)`
   margin-top: 30px;
+  margin-bottom: 50px;
+`;
+
+const Hr = styled(Box)`
+  height: 1px;
+  background-color: #373943;
 `;
 
 const MyBreadcrumb = styled(Breadcrumb)`
+  /* background: #373943; */
   font-style: normal;
   font-weight: 400;
   font-size: 16px;
@@ -445,12 +472,13 @@ const MyBreadcrumbItem = styled(BreadcrumbItem)``;
 
 const ImgCon = styled.div`
   position: relative;
-  width: 246px;
-  height: 246px;
+  border-radius: 16px;
+  overflow: hidden;
 
   img {
-    width: 246px;
-    height: 246px;
+    object-fit: cover;
+    width: 500px;
+    height: 500px;
 
     background-color: #d9d9d9;
     border-radius: 8px;
@@ -470,7 +498,10 @@ const EditCon = styled(Flex)`
   cursor: pointer;
 `;
 
-const Info = styled(Flex)``;
+const Info = styled(Flex)`
+  padding-top: 50px;
+  padding-bottom: 50px;
+`;
 
 const NameCon = styled(Flex)``;
 
@@ -483,7 +514,7 @@ const Name = styled.div`
   line-height: 38px;
   /* identical to box height, or 119% */
 
-  color: #f0b90b;
+  color: #f7f7f8;
 `;
 
 const Tag = styled(Flex)`
