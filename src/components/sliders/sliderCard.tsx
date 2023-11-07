@@ -31,12 +31,12 @@ export const SliderCard = (props: Props) => {
   const navigator = useNavigate();
 
   return (
-    <Box w="340px" pb="80px" pl="32px">
+    <Box boxSizing="border-box" pb="80px" transform="translateX(32px)">
       <MainContainer
         h="408px"
         direction="column"
         padding="8px"
-        justifyContent="space-around"
+        justifyContent="space-between"
         cursor="pointer"
         onClick={() => {
           navigator(
