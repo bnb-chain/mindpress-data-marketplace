@@ -8,7 +8,7 @@ export const MovieIcon = (props: IconProps) => {
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <g clip-path="url(#clip0_426_23396)">
+      <g>
         <mask
           id="mask0_426_23396"
           maskUnits="userSpaceOnUse"
