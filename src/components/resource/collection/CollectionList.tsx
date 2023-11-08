@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Button, Flex, Table } from '@totejs/uikit';
-import { usePagination } from '../../hooks/usePagination';
+import { usePagination } from '../../../hooks/usePagination';
 import { useAccount } from 'wagmi';
 import {
   contentTypeToExtension,
@@ -10,15 +10,15 @@ import {
   generateGroupName,
   parseFileSize,
   trimLongStr,
-} from '../../utils';
-import { useCollectionItems } from '../../hooks/useCollectionItems';
-import { useSalesVolume } from '../../hooks/useSalesVolume';
-import { useModal } from '../../hooks/useModal';
+} from '../../../utils';
+import { useCollectionItems } from '../../../hooks/useCollectionItems';
+import { useSalesVolume } from '../../../hooks/useSalesVolume';
+import { useModal } from '../../../hooks/useModal';
 import { BN } from 'bn.js';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useGlobal } from '../../hooks/useGlobal';
+import { useGlobal } from '../../../hooks/useGlobal';
 import { GoIcon, CardPocketIcon } from '@totejs/icons';
-import { OwnActionCom } from '../OwnActionCom';
+import { OwnActionCom } from '../../OwnActionCom';
 
 const TotalVol = (props: any) => {
   const { groupId } = props;
@@ -26,7 +26,7 @@ const TotalVol = (props: any) => {
   return <div>{Number(salesVolume) || '-'}</div>;
 };
 
-const ProfileList = (props: any) => {
+const CollectionList = (props: any) => {
   const {
     name,
     bucketName,
@@ -37,6 +37,8 @@ const ProfileList = (props: any) => {
   } = props;
 
   const { list, loading } = useCollectionItems(name, collectionListed);
+
+  console.log('list', list);
 
   const { handlePageChange, page } = usePagination();
 
@@ -75,6 +77,7 @@ const ProfileList = (props: any) => {
             gap={6}
             onClick={() => {
               let list = state.globalState.breadList;
+              console.log('list in from', list);
               if (list.slice(-1)[0].name !== bucketName) {
                 const item = {
                   path: '/resource',
@@ -89,6 +92,7 @@ const ProfileList = (props: any) => {
               }
 
               const from = encodeURIComponent(JSON.stringify(list));
+              // console.log('obkect_info', object_info);
               if (!object_info) {
                 navigator(
                   `/folder?bid=${bucketId}&f=${encodeURIComponent(
@@ -98,7 +102,7 @@ const ProfileList = (props: any) => {
               } else {
                 const { id } = object_info;
                 navigate(
-                  `/resource?oid=${id}&bgn=${bgn}&address=${ownerAddress}&tab=dataList&from=${from}`,
+                  `/resource?oid=${id}&bgn=${bgn}&address=${ownerAddress}&from=${from}`,
                 );
               }
             }}
@@ -116,7 +120,7 @@ const ProfileList = (props: any) => {
       },
     },
     {
-      header: 'Type',
+      header: 'Category',
       width: 160,
       cell: (data: any) => {
         const content_type =
@@ -276,10 +280,13 @@ const ProfileList = (props: any) => {
   return (
     <Container>
       <Box h={10} />
+      <Title as="h2" mb="30px">
+        Data in this collection ({Math.min(20, list.length)})
+      </Title>
       <Table
-        headerContent={`Latest ${Math.min(20, list.length)}  Data (Total of ${
-          list.length
-        })`}
+        // headerContent={`Latest ${Math.min(20, list.length)}  Data (Total of ${
+        //   list.length
+        // })`}
         containerStyle={{ padding: 20 }}
         pagination={{
           current: page,
@@ -296,7 +303,7 @@ const ProfileList = (props: any) => {
   );
 };
 
-export default ProfileList;
+export default CollectionList;
 
 const Container = styled.div`
   width: 996px;
@@ -318,4 +325,9 @@ const ImgCon = styled.img`
 const IconCon = styled(Flex)`
   width: 40px;
   height: 40px;
+`;
+
+const Title = styled(Box)`
+  color: #fff;
+  font-size: 24px;
 `;

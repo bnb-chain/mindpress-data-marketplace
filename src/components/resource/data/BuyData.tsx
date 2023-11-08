@@ -1,9 +1,9 @@
 import { Box, Flex } from '@totejs/uikit';
-import { LockIcon } from '../svgIcon/LockIcon';
+import { LockIcon } from '../../svgIcon/LockIcon';
 import { useAccount } from 'wagmi';
-import { useGlobal } from '../../hooks/useGlobal';
-import { useModal } from '../../hooks/useModal';
-import { useWalletModal } from '../../hooks/useWalletModal';
+import { useGlobal } from '../../../hooks/useGlobal';
+import { useModal } from '../../../hooks/useModal';
+import { useWalletModal } from '../../../hooks/useWalletModal';
 
 interface Props {
   baseInfo?: any;
@@ -13,7 +13,6 @@ export const BuyData = (props: Props) => {
   const { baseInfo } = props;
   const { address, isConnected, isConnecting } = useAccount();
   const { handleModalOpen } = useWalletModal();
-  const state = useGlobal();
   const modalData = useModal();
 
   return (

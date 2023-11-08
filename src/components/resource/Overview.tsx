@@ -1,13 +1,10 @@
 import styled from '@emotion/styled';
-import { PenIcon, ColoredInfoIcon } from '@totejs/icons';
 import { Box, Flex, Tooltip } from '@totejs/uikit';
 // import { Copy } from '../Copy';
-import { getRandomSp } from '../../utils/gfSDK';
-import { useEffect, useMemo, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ITEM_STATUS } from '../../hooks/useItemStatus';
-import { GetMyData } from './GetMyData';
+import { GetMyData } from './data/GetMyData';
 
 interface IOverView {
   desc: string;
@@ -19,6 +16,7 @@ interface IOverView {
   showEndpoints?: boolean;
   itemStatus: ITEM_STATUS;
   baseInfo: any;
+  resourceType: string;
 }
 
 const Overview = (props: IOverView) => {
@@ -32,43 +30,40 @@ const Overview = (props: IOverView) => {
     showEndpoints,
     itemStatus,
     baseInfo,
+    resourceType,
   } = props;
-  const [domain, setDomain] = useState('');
+  // const [domain, setDomain] = useState('');
 
-  console.log('name', name);
+  console.log('itemStatus', itemStatus);
 
-  // const downloadUrl = useMemo(() => {
-  //   return `${domain}/download/${bucketName}/${name}`;
-  // }, [name, bucketName, domain]);
+  // useEffect(() => {
+  //   getRandomSp().then((result) => {
+  //     setDomain(result);
+  //   });
+  //   const clickHandle = () => {
+  //     setIsOpenF(false);
+  //     setIsOpenS(false);
+  //   };
+  //   document.addEventListener('click', clickHandle);
+  //   return () => {
+  //     document.removeEventListener('click', clickHandle);
+  //   };
+  // }, []);
 
-  // const previewUrl = useMemo(() => {
-  //   return `${domain}/view/${bucketName}/${name}`;
-  // }, [name, bucketName, domain]);
+  // const [isOpenF, setIsOpenF] = useState(false);
+  // const [isOpenS, setIsOpenS] = useState(false);
 
-  useEffect(() => {
-    getRandomSp().then((result) => {
-      setDomain(result);
-    });
-    const clickHandle = () => {
-      setIsOpenF(false);
-      setIsOpenS(false);
-    };
-    document.addEventListener('click', clickHandle);
-    return () => {
-      document.removeEventListener('click', clickHandle);
-    };
-  }, []);
-
-  const [isOpenF, setIsOpenF] = useState(false);
-  const [isOpenS, setIsOpenS] = useState(false);
+  // 0: data
+  // 1: collection
+  console.log('resourceType', resourceType);
 
   return (
-    <Container>
-      <Box>
+    <Container justifyContent="space-between">
+      <Box flex="1">
         <Title as="h2" mb="30px">
           Desctiption
         </Title>
-        <DescBox w={480} alignItems={'center'} justifyItems={'center'}>
+        <DescBox alignItems={'center'} justifyItems={'center'}>
           {desc ? (
             <ReactMarkdown children={desc} remarkPlugins={[remarkGfm]} />
           ) : (
@@ -85,14 +80,16 @@ const Overview = (props: IOverView) => {
         </DescBox>
       </Box>
 
-      <GetMyDataBox>
-        <GetMyData
-          itemStatus={itemStatus}
-          baseInfo={baseInfo}
-          name={name}
-          bucketName={bucketName}
-        />
-      </GetMyDataBox>
+      {resourceType == '0' && (
+        <GetMyDataBox w="600px">
+          <GetMyData
+            itemStatus={itemStatus}
+            baseInfo={baseInfo}
+            name={name}
+            bucketName={bucketName}
+          />
+        </GetMyDataBox>
+      )}
 
       {/* {name && bucketName && name != bucketName && showEndpoints && (
         <>
@@ -209,85 +206,9 @@ const DescBox = styled(Box)`
   // background: rgba(255, 255, 255, 0.19);
 `;
 
-const PenCon = styled(PenIcon)`
-  width: 16px;
-  height: 16px;
-  margin-left: 4px;
-  cursor: pointer;
-`;
-
 const Title = styled(Box)`
   color: #fff;
   font-size: 24px;
-`;
-
-const SupInfoCon = styled(Box)`
-  width: 996px;
-  height: 228px;
-  background: rgba(255, 255, 255, 0.14);
-  border-radius: 8px;
-`;
-
-const SupInfoItem = styled(Flex)``;
-
-const SupInfoTitle = styled(Flex)`
-  width: 948px;
-
-  font-style: normal;
-  font-weight: 600;
-  font-size: 16px;
-  line-height: 24px;
-
-  color: #ffffff;
-`;
-
-const UrlCon = styled(Flex)`
-  width: 948px;
-  height: 50px;
-
-  /* bg/bottom */
-
-  background: #f5f5f5;
-  /* readable/border */
-
-  border: 1px solid #e6e8ea;
-  border-radius: 8px;
-`;
-
-const Left = styled(Flex)`
-  width: 115px;
-
-  font-style: normal;
-  font-weight: 500;
-  font-size: 14px;
-  line-height: 21px;
-
-  color: #76808f;
-
-  border-right: 1px solid #e6e8ea;
-`;
-
-const CopyCon = styled(Flex)`
-  width: 50px;
-`;
-
-const Url = styled(Flex)`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 14px;
-  line-height: 21px;
-  /* identical to box height, or 150% */
-
-  /* readable/normal */
-
-  color: #1e2026;
-
-  flex: 1;
-  padding-left: 20px;
-`;
-
-const LearnMore = styled.a`
-  color: #f0b90b;
 `;
 
 const GetMyDataBox = styled(Box)`

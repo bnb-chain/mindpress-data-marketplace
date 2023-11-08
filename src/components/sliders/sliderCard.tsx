@@ -40,7 +40,7 @@ export const SliderCard = (props: Props) => {
         cursor="pointer"
         onClick={() => {
           navigator(
-            `/resource?gid=${id}&gn=${groupName}&address=${address}&tab=dataList&from=${encodeURIComponent(
+            `/resource?gid=${id}&gn=${groupName}&address=${address}&from=${encodeURIComponent(
               JSON.stringify([props]),
             )}`,
           );

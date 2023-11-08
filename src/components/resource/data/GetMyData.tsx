@@ -2,11 +2,11 @@ import styled from '@emotion/styled';
 import { DownloadIcon } from '@totejs/icons';
 import { Box, Button, Flex } from '@totejs/uikit';
 import { useEffect, useMemo, useState } from 'react';
-import { ITEM_STATUS } from '../../hooks/useItemStatus';
-import { getRandomSp } from '../../utils/gfSDK';
-import { ViewIcon } from '../svgIcon/ViewIcon';
+import { ITEM_STATUS } from '../../../hooks/useItemStatus';
+import { getRandomSp } from '../../../utils/gfSDK';
+import { ViewIcon } from '../../svgIcon/ViewIcon';
 import { BuyData } from './BuyData';
-import { Copy } from '../Copy';
+import { Copy } from '../../Copy';
 
 interface Props {
   itemStatus: ITEM_STATUS;

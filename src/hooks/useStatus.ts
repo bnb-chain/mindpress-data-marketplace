@@ -10,7 +10,7 @@ export const useStatus = (
   // -1 do not login
   // 0 owner
   // 1 Waiting for purchase
-  // 2 purchase
+  // 2 purchased
   const { address } = useAccount();
   const [status, setStatus] = useState(address ? 0 : -1);
   const [loading, setLoading] = useState(true);

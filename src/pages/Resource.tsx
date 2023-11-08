@@ -10,21 +10,13 @@ import {
 import { NavBar } from '../components/NavBar';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import Overview from '../components/resource/Overview';
-import List from '../components/resource/List';
+import CollectionList from '../components/resource/collection/CollectionList';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { EditModal } from '../components/modal/EditModal';
 import { useAccount } from 'wagmi';
 import { useResourceInfo } from '../hooks/useResourceInfo';
 import { Loader } from '../components/Loader';
-import {
-  defaultImg,
-  divide10Exp,
-  trimLongStr,
-  formatDateUTC,
-  parseFileSize,
-  roundFun,
-} from '../utils';
-import BN from 'bn.js';
+import { defaultImg } from '../utils';
 import { useSalesVolume } from '../hooks/useSalesVolume';
 import { useStatus } from '../hooks/useStatus';
 import { useModal } from '../hooks/useModal';
@@ -39,18 +31,16 @@ import { reportEvent } from '../utils/ga';
 import BSCIcon from '../components/svgIcon/BSCIcon';
 import { BscTraceIcon } from '../components/svgIcon/BscTraceIcon';
 import { useItemStatus } from '../hooks/useItemStatus';
-
-enum Type {
-  Description = 'description',
-  DataList = 'dataList',
-}
+import { DataInfo } from '../components/resource/data/DataInfo';
+import { SellIcon } from '../components/svgIcon/SellIcon';
+import { CollectionInfo } from '../components/resource/collection/CollectionInfo';
 
 const Resource = () => {
-  const navigator = useNavigate();
   const [p] = useSearchParams();
 
   const groupId = p.getAll('gid')[0];
   const bucketId = p.getAll('bid')[0];
+  const cid = p.getAll('cid')[0];
   const objectId = p.getAll('oid')[0];
   const ownerAddress = p.getAll('address')[0];
   const gName = p.getAll('gn')[0];
@@ -58,14 +48,7 @@ const Resource = () => {
 
   const [open, setOpen] = useState(false);
 
-  const handleTabChange = useCallback((tab: any) => {
-    navigator(
-      `/resource?${p.toString().replace(/tab=([^&]*)/g, `tab=${tab}`)}`,
-    );
-  }, []);
-
   const { address, isConnected, isConnecting } = useAccount();
-  const { handleModalOpen } = useWalletModal();
 
   const [update, setUpdate] = useState(false);
 
@@ -90,6 +73,8 @@ const Resource = () => {
     bucketListed,
   } = baseInfo;
 
+  console.log('baseInfo', baseInfo);
+
   const { salesVolume } = useSalesVolume(groupId);
   const { status } = useStatus(
     bGroupName || gName,
@@ -102,29 +87,26 @@ const Resource = () => {
   const [breadItems, setBreadItems] = useState<any>([]);
 
   const state = useGlobal();
-  const showBuy = useMemo(() => {
-    const list = state.globalState.breadList;
-    console.log('state.globalState.breadList', list);
-    const fromPurchase =
-      list.findIndex((item) => item.name == 'My Purchase') > -1;
-    return (status == 1 || status == -1) && !fromPurchase;
-  }, [status, address, state.globalState.breadList]);
+  // const showBuy = useMemo(() => {
+  //   const list = state.globalState.breadList;
+  //   console.log('state.globalState.breadList', list);
+  //   const fromPurchase =
+  //     list.findIndex((item) => item.name == 'My Purchase') > -1;
+  //   return (status == 1 || status == -1) && !fromPurchase;
+  // }, [status, address, state.globalState.breadList]);
 
-  const showDcellarBut = useMemo(() => {
-    return status > -1;
-  }, [status, address]);
+  // const showDcellarBut = useMemo(() => {
+  //   return status > -1;
+  // }, [status, address]);
 
   const resourceType = useMemo(() => {
     return objectId || type === 'Data' ? '0' : '1';
   }, [objectId, type]);
 
-  const modalData = useModal();
-
   const title = useMemo(() => {
     return bucketName === name ? name : `${bucketName} #${name}`;
   }, [name, bucketName]);
 
-  const { price: bnbPrice } = useBNBPrice();
   useEffect(() => {
     const list = state.globalState.breadList;
     if (list.length && list[list.length - 1].name != title) {
@@ -156,16 +138,14 @@ const Resource = () => {
 
   // 0: data
   // 1: collection
-  console.log('resourchasOwneType', resourceType);
-
-  console.log('isOwner', isOwner);
-
-  // hasOwn: true = had bought
-  console.log('hasOwn', hasOwn);
-  console.log('listed', listed);
+  // console.log('resourchasOwneType', resourceType);
+  // console.log('isOwner', isOwner);
+  // // hasOwn: true = had bought
+  // console.log('hasOwn', hasOwn);
+  // console.log('listed', listed);
 
   const itemStatus = useItemStatus(isOwner, hasOwn);
-  console.log('itemStatus', itemStatus);
+  // console.log('itemStatus', itemStatus);
 
   const CreateTime = useMemo(() => {
     let obj;
@@ -197,6 +177,8 @@ const Resource = () => {
     );
   }
 
+  console.log('breadItems -=---->', breadItems);
+
   return (
     <Container>
       <MyBreadcrumb>
@@ -224,37 +206,60 @@ const Resource = () => {
         })}
       </MyBreadcrumb>
 
-      <ResourceInfo gap={120}>
+      <ResourceInfo gap={110} padding="30px 0">
         <ImgCon
-          onMouseMove={() => {
-            if (isOwner && listed) {
-              setShowEdit(true);
-            }
-          }}
-          onMouseLeave={() => {
-            if (isOwner && listed) {
-              setShowEdit(false);
-            }
-          }}
-          onClick={() => {
-            if (isOwner && listed) {
-              reportEvent({ name: 'dm.detail.overview.edit.click' });
-              setOpen(true);
-            }
-          }}
+        // onMouseMove={() => {
+        //   if (itemStatus !== 'NOT_PURCHASED_BY_ME') {
+        //     setShowEdit(true);
+        //   }
+        // }}
+        // onMouseLeave={() => {
+        //   // if (isOwner && listed) {
+        //   setShowEdit(false);
+        //   // }
+        // }}
         >
           <img src={url || defaultImg(name, 246)} alt="" />
-          {showEdit && (
-            <EditCon alignItems={'center'} justifyContent={'center'}>
-              <PenIcon />
-            </EditCon>
+          {itemStatus !== 'NOT_PURCHASED_BY_ME' && (
+            <Cover alignItems={'center'} justifyContent="flex-end" p="16px">
+              {itemStatus === 'PURCHASED_BY_ME' && (
+                <Flex
+                  alignItems="center"
+                  gap="8px"
+                  color="#181A1E"
+                  bg="#53EAA1"
+                  borderRadius="40px"
+                  p="8px 12px"
+                  fontSize="16px"
+                  fontWeight={600}
+                >
+                  <SellIcon w={24} color="#181A1E" /> PURCHASED
+                </Flex>
+              )}
+
+              {itemStatus === 'LISTED_BY_ME' && (
+                <Flex
+                  alignItems="center"
+                  gap="8px"
+                  color="#181A1E"
+                  bg="#F1F2F3"
+                  borderRadius="40px"
+                  p="8px 12px"
+                  fontSize="16px"
+                  fontWeight={600}
+                  cursor="pointer"
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                >
+                  <PenIcon w={24} color="#181A1E" /> Edit
+                </Flex>
+              )}
+            </Cover>
           )}
         </ImgCon>
-        <Info
-          gap={4}
-          flexDirection={['column', 'column', 'column']}
-          justifyContent={'space-around'}
-        >
+
+        <Info gap={4} flexDirection="column" flex="1">
           <NameCon gap={4} alignItems={'center'} justifyContent={'flex-start'}>
             <Name>{title}</Name>
             <BscTraceIcon
@@ -277,6 +282,47 @@ const Resource = () => {
               }}
             />
           </NameCon>
+
+          {resourceType === '0' && (
+            <DataInfo
+              collection={{
+                path: breadItems[1].path,
+                name: breadItems[1].name,
+                query: breadItems[1].query,
+              }}
+              baseInfo={baseInfo}
+              listed={listed}
+              createdAt={CreateTime}
+              fileSize={fileSize}
+              salesVolume={salesVolume}
+              itemStatus={itemStatus}
+              ownerAddress={ownerAddress}
+              categoryId={parseInt(cid)}
+              price={price}
+            />
+          )}
+
+          {resourceType == '1' && (
+            <CollectionInfo
+              collection={{
+                path: breadItems[1].path,
+                name: breadItems[1].name,
+                query: breadItems[1].query,
+              }}
+              name={name}
+              baseInfo={baseInfo}
+              listed={listed}
+              createdAt={CreateTime}
+              fileSize={fileSize}
+              salesVolume={salesVolume}
+              itemStatus={itemStatus}
+              ownerAddress={ownerAddress}
+              categoryId={parseInt(cid)}
+              price={price}
+            />
+          )}
+
+          {/* 
           {resourceType == '1' && (
             <CollInfo gap={8}>
               <ItemNum>{num} Items</ItemNum>
@@ -300,22 +346,7 @@ const Resource = () => {
             )}{' '}
             At {formatDateUTC(CreateTime * 1000)}
           </OwnCon>
-          {listed ? (
-            <MarketInfo alignItems={'center'} gap="8">
-              {divide10Exp(new BN(price, 10), 18)} BNB
-              <Price>
-                $
-                {roundFun(
-                  divide10Exp(
-                    new BN(price, 10).mul(new BN(Number(bnbPrice), 10)),
-                    18,
-                  ).toString(),
-                  8,
-                )}
-              </Price>
-              <BoughtNum>{salesVolume} Bought</BoughtNum>
-            </MarketInfo>
-          ) : null}
+
           <ActionGroup gap={10} alignItems={'center'}>
             {address === ownerAddress && !listed && !bucketListed && (
               <Button
@@ -369,27 +400,42 @@ const Resource = () => {
                 View in Dcellar
               </Button>
             )}
-          </ActionGroup>
+          </ActionGroup> */}
         </Info>
       </ResourceInfo>
 
-      <Hr />
+      <Hr mb="55px" />
 
-      <Box mt="55px">
-        <Overview
-          desc={desc}
-          showEdit={address === ownerAddress}
-          editFun={() => {
-            setOpen(true);
-          }}
-          name={name}
-          bucketName={bucketName}
-          listed={listed}
-          showEndpoints={showEndPoint}
-          itemStatus={itemStatus}
-          baseInfo={baseInfo}
-        />
-      </Box>
+      <Overview
+        resourceType={resourceType}
+        desc={desc}
+        showEdit={address === ownerAddress}
+        editFun={() => {
+          setOpen(true);
+        }}
+        name={name}
+        bucketName={bucketName}
+        listed={listed}
+        showEndpoints={showEndPoint}
+        itemStatus={itemStatus}
+        baseInfo={baseInfo}
+      />
+
+      {resourceType === '1' && (
+        <>
+          <Hr mt="55px" />
+          <Box mt="50px">
+            <CollectionList
+              status={status}
+              name={name}
+              listed={bucketListed}
+              bucketName={bucketName}
+              bucketInfo={bucketInfo}
+              hasOwn={hasOwn}
+            />
+          </Box>
+        </>
+      )}
 
       {/* <Box h={30}></Box> */}
       {/* <NavBar active={currentTab} onChange={handleTabChange} items={navItems} />
@@ -448,10 +494,7 @@ const Container = styled.div`
   padding: 80px 100px;
 `;
 
-const ResourceInfo = styled(Flex)`
-  margin-top: 30px;
-  margin-bottom: 50px;
-`;
+const ResourceInfo = styled(Flex)``;
 
 const Hr = styled(Box)`
   height: 1px;
@@ -485,17 +528,17 @@ const ImgCon = styled.div`
   }
 `;
 
-const EditCon = styled(Flex)`
+const Cover = styled(Flex)`
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: #d9d9d9;
-
-  border-radius: 8px;
-
-  cursor: pointer;
+  right: 0;
+  height: 72px;
+  background: linear-gradient(
+    180deg,
+    rgba(24, 26, 30, 0.8) 0%,
+    rgba(25, 27, 31, 0) 100%
+  );
 `;
 
 const Info = styled(Flex)`
@@ -505,8 +548,6 @@ const Info = styled(Flex)`
 
 const NameCon = styled(Flex)``;
 
-const CollInfo = styled(Flex)``;
-
 const Name = styled.div`
   font-style: normal;
   font-weight: 600;
@@ -515,69 +556,6 @@ const Name = styled.div`
   /* identical to box height, or 119% */
 
   color: #f7f7f8;
-`;
-
-const Tag = styled(Flex)`
-  width: 128px;
-  height: 24px;
-
-  background: rgba(255, 255, 255, 0.14);
-  border-radius: 16px;
-`;
-
-const ItemNum = styled.div`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 21px;
-
-  color: #ffffff;
-`;
-
-const OwnCon = styled(Flex)`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 18px;
-
-  color: #ffffff;
-
-  span {
-    margin: 0 4px;
-    color: #f0b90b;
-  }
-`;
-
-const MarketInfo = styled(Flex)`
-  font-size: 32px;
-  color: #f0b90b;
-`;
-
-const Price = styled.div`
-  font-size: 20px;
-  color: #f0b90b;
-`;
-
-const ActionGroup = styled(Flex)``;
-
-const BoughtNum = styled.div`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 21px;
-
-  color: #979797;
-`;
-
-const FileSize = styled.div`
-  margin-right: 6px;
-
-  font-style: normal;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 18px;
-
-  color: #ffffff;
 `;
 
 const NoDataCon = styled(Flex)``;

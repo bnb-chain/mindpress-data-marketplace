@@ -24,6 +24,7 @@ export const useCollectionItems = (
     if (bucketName) {
       getBucketFileList({ bucketName })
         .then(async (result: any) => {
+          console.log('getBucketFileList', result);
           const { body, code } = result;
           if (code == 0) {
             let { objects } = body;

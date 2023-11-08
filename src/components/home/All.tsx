@@ -49,6 +49,7 @@ const AllList = () => {
           metaData: { groupName },
           ownerAddress,
           type,
+          categoryId,
         } = data;
         return (
           <ImgContainer
@@ -69,7 +70,7 @@ const AllList = () => {
               });
 
               navigator(
-                `/resource?gid=${id}&gn=${groupName}&address=${ownerAddress}&tab=dataList&from=${encodeURIComponent(
+                `/resource?gid=${id}&gn=${groupName}&address=${ownerAddress}&from=${encodeURIComponent(
                   JSON.stringify([item]),
                 )}`,
               );
