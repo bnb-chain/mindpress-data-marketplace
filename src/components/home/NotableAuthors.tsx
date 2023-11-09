@@ -25,7 +25,11 @@ export const NotableAuthors = () => {
         {USER_ADDRESS_LIST.map((item) => {
           return (
             <Link to={`/profile?address=${item}`}>
-              <UserContainer>
+              <UserContainer
+                _hover={{
+                  background: '#373943',
+                }}
+              >
                 <MetaMaskAvatar size={40} address={item} />
                 <Address>{trimLongStr(item)}</Address>
               </UserContainer>

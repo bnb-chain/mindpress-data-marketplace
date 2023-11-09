@@ -77,21 +77,24 @@ export const CollectionInfo = (props: Props) => {
         <Box fontWeight="16px" color="#C4C5CB" ml="8px" mr="16px">
           created by
         </Box>
-        <Flex
-          bg="#1E2026"
-          border="1px solid #373943"
-          borderRadius="16px"
-          p="8px"
-        >
-          <Link to={`/profile?address=${ownerAddress}`}>
+        <Link to={`/profile?address=${ownerAddress}`}>
+          <Flex
+            bg="#1E2026"
+            border="1px solid #373943"
+            borderRadius="16px"
+            p="8px"
+            _hover={{
+              background: '#373943',
+            }}
+          >
             <Flex alignItems="center">
               <MetaMaskAvatar address={ownerAddress} />
               <Box as="p" ml="8px">
                 {trimLongStr(ownerAddress)}
               </Box>
             </Flex>
-          </Link>
-        </Flex>
+          </Flex>
+        </Link>
       </Flex>
 
       <FieldList justifyContent="space-between">

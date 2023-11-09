@@ -41,6 +41,8 @@ import { BSC_CHAIN_ID, GF_CHAIN_ID } from '../../env';
 import Search from '../../components/Search';
 import { reportEvent } from '../../utils/ga';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
+import { TowerIcon } from '../svgIcon/TowerIcon';
+import { CheckIcon } from '../svgIcon/CheckIcon';
 
 const CustomMenuButton = forwardRef(
   (props: { children: ReactNode }, ref: ForwardedRef<HTMLButtonElement>) => {
@@ -49,16 +51,17 @@ const CustomMenuButton = forwardRef(
     return (
       <Button
         ref={ref}
-        w={206}
+        w={194}
         h={40}
-        background={'rgba(255, 255, 255, 0.22);'}
+        background={'#373943'}
         variant="ghost"
         justifyContent="space-between"
         px={12}
         fontWeight={600}
         fontSize={14}
         lineHeight={'17px'}
-        border={'none'}
+        border="1px solid #5C5F6A"
+        borderColor={'none'}
         mr={1}
         borderRadius={8}
         _hover={{
@@ -71,7 +74,7 @@ const CustomMenuButton = forwardRef(
         }}
         {...restProps}
       >
-        <BSCLogo></BSCLogo>
+        <TowerIcon color="#00FF67" w={16} />
         <Flex align={'center'}>{children}</Flex>
         <MenuCloseIcon className="close-icon" transitionDuration="normal" />
       </Button>
@@ -159,24 +162,41 @@ const Header = () => {
                 ? 'BNB Smart Chain'
                 : 'BNB Greenfield'}
             </MenuButton>
-            <MenuList w={206}>
+            <MenuList w={194}>
               <MenuItem
-                icon={<BSCLogo />}
                 onClick={() => {
                   switchNetwork?.(BSC_CHAIN_ID);
                   onClose();
                 }}
               >
-                BNB Smart Chain
+                <Flex
+                  w="100%"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Box>BNB Smart Chain</Box>
+                  <Box>
+                    {chain?.id === BSC_CHAIN_ID ? <CheckIcon w={16} /> : null}
+                  </Box>
+                </Flex>
               </MenuItem>
               <MenuItem
-                icon={<BSCLogo />}
+                // icon={<BSCLogo />}
                 onClick={() => {
                   switchNetwork?.(GF_CHAIN_ID);
                   onClose();
                 }}
               >
-                BNB Greenfield
+                <Flex
+                  w="100%"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Box>BNB Greenfield</Box>
+                  <Box>
+                    {chain?.id === GF_CHAIN_ID ? <CheckIcon w={16} /> : null}
+                  </Box>
+                </Flex>
               </MenuItem>
             </MenuList>
           </Menu>
@@ -221,7 +241,7 @@ const Header = () => {
               <HeaderProfileBg width={300} height={96}></HeaderProfileBg>
 
               <ImageWrapper>
-                <ProfileImage width={64} height={64} />
+                <MetaMaskAvatar address={address!} size={64} />
               </ImageWrapper>
 
               <AddressWrapper>
