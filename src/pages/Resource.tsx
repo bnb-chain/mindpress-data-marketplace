@@ -206,19 +206,8 @@ const Resource = () => {
         })}
       </MyBreadcrumb>
 
-      <ResourceInfo gap={110} padding="30px 0">
-        <ImgCon
-        // onMouseMove={() => {
-        //   if (itemStatus !== 'NOT_PURCHASED_BY_ME') {
-        //     setShowEdit(true);
-        //   }
-        // }}
-        // onMouseLeave={() => {
-        //   // if (isOwner && listed) {
-        //   setShowEdit(false);
-        //   // }
-        // }}
-        >
+      <ResourceInfo gap={100} padding="30px 0">
+        <ImgCon>
           <img src={url || defaultImg(name, 246)} alt="" />
           {itemStatus !== 'NOT_PURCHASED_BY_ME' && (
             <Cover alignItems={'center'} justifyContent="flex-end" p="16px">
@@ -259,7 +248,7 @@ const Resource = () => {
           )}
         </ImgCon>
 
-        <Info gap={4} flexDirection="column" flex="1">
+        <Info flexDirection="column" flex="1">
           <NameCon gap={4} alignItems={'center'} justifyContent={'flex-start'}>
             <Name>{title}</Name>
             <BscTraceIcon

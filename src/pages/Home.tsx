@@ -10,38 +10,7 @@ import { Popular } from '../components/home/Popular';
 const Home = () => {
   return (
     <Container flexDirection={'column'} alignItems={'center'}>
-      {/* <BannerInfo>
-        <img src={Bg} alt="" />
-        <Info flexDirection={'column'} gap={26}>
-          <Title>
-            DECENTRALIZED<br></br> DATA MARKETPLACE
-          </Title>
-          <SubTitle>
-            A Best Practice of BNB Greenfield Cross Chain Programmable Ability.
-          </SubTitle>
-          <Box
-            onClick={() => {
-              reportEvent({ name: 'dm.main.banner.build_my_market.click' });
-              window.open(
-                'https://github.com/bnb-chain/greenfield-data-marketplace-ui',
-                '_blank',
-              );
-            }}
-          >
-            <GithubCon
-              gap={12}
-              justifyContent={'flex-start'}
-              alignItems={'center'}
-            >
-              <GithubIcon w={22} h={22} className="githubIcon"></GithubIcon>
-              BUILD MY MARKETPLACE
-              <LinkArrowIcon w={18} h={18} className="arrow"></LinkArrowIcon>
-            </GithubCon>
-          </Box>
-        </Info>
-      </BannerInfo> */}
-
-      <CardBox mt="34px">
+      <CardBox mt="20px">
         <Banner />
       </CardBox>
 

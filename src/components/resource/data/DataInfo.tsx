@@ -8,6 +8,7 @@ import { ITEM_STATUS } from '../../../hooks/useItemStatus';
 import { useModal } from '../../../hooks/useModal';
 import {
   divide10Exp,
+  formatDateDot,
   formatDateUTC,
   parseFileSize,
   roundFun,
@@ -111,7 +112,7 @@ export const DataInfo = (props: Props) => {
 
         <FlexCon flex={1} justifyContent="space-between" ml="10px">
           <Block>
-            <Value>{formatDateUTC(createdAt * 1000)}</Value>
+            <Value>{formatDateDot(createdAt * 1000)}</Value>
             <Field>
               <CalendarIcon /> Created
             </Field>
@@ -164,7 +165,7 @@ export const DataInfo = (props: Props) => {
             </Box>
           )}
 
-          {itemStatus !== 'NOT_PURCHASED_BY_ME' && (
+          {/* {itemStatus !== 'NOT_PURCHASED_BY_ME' && (
             <Box>
               <Button
                 color="#FFE900"
@@ -177,7 +178,7 @@ export const DataInfo = (props: Props) => {
                 Get My Data
               </Button>
             </Box>
-          )}
+          )} */}
         </ActionBox>
       </Box>
     </Box>

@@ -6,12 +6,17 @@ export interface CopyProps extends BoxProps {
   value?: string;
   children?: React.ReactNode;
   copyToolTips?: string;
+  size?: {
+    w: number;
+    h: number;
+  };
 }
 
 export const Copy = ({
   value = '',
   copyToolTips,
   children,
+  size = { w: 20, h: 20 },
   ...restProps
 }: CopyProps) => {
   const { hasCopied, setValue, onCopy } = useClipboard(value ?? '');
@@ -63,8 +68,8 @@ export const Copy = ({
           <CopyIcon
             color="readable.secondary"
             _hover={{ color: 'scene.primary.active' }}
-            h={20}
-            w={20}
+            h={size.h}
+            w={size.w}
           />
         )}
       </Box>

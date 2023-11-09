@@ -1,18 +1,21 @@
+import styled from '@emotion/styled';
 import { Box, Flex } from '@totejs/uikit';
-import { useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import TinySlider from 'tiny-slider-react';
 import 'tiny-slider/dist/tiny-slider.css';
+import { DefaultButton } from '../ui/buttons/DefaultButton';
+import { LeftArrow } from './LeftArrow';
+import { RightArrow } from './RightArrow';
 import { SliderCard } from './sliderCard';
-import LArrow from './l_arrow.png';
-import RArrow from './r_arrow.png';
-import styled from '@emotion/styled';
+
+const ITEMS_COUNT = 3;
 
 const settings = {
   // lazyload: true,
   nav: false,
   mouseDrag: false,
   loop: false,
-  items: 3,
+  items: ITEMS_COUNT,
   gutter: 32,
   // edgePadding: 16,
   swipeAngle: false,
@@ -37,6 +40,7 @@ interface Props {
 export const Sliders = (props: Props) => {
   const { data } = props;
   const ref = useRef() as any;
+  const [index, setIndex] = useState(0);
 
   return (
     <Box position="relative">
@@ -60,22 +64,32 @@ export const Sliders = (props: Props) => {
         ))}
       </TinySlider>
 
-      <ButtonGroup>
-        <Box
-          as="button"
-          title="Previous"
-          onClick={() => ref.current.slider.goTo('prev')}
-        >
-          <img src={LArrow} />
-        </Box>
-        <Box
-          as="button"
-          title="Next"
-          onClick={() => ref.current.slider.goTo('next')}
-        >
-          <img src={RArrow} />
-        </Box>
-      </ButtonGroup>
+      {data.length > ITEMS_COUNT && (
+        <ButtonGroup>
+          <DefaultButton
+            as="button"
+            title="Previous"
+            onClick={() => {
+              setIndex(index - 1);
+              ref.current.slider.goTo('prev');
+            }}
+            disabled={index === 0}
+          >
+            <LeftArrow w={16} color="#1C1B1F" />
+          </DefaultButton>
+          <DefaultButton
+            as="button"
+            title="Next"
+            onClick={() => {
+              setIndex(index + 1);
+              ref.current.slider.goTo('next');
+            }}
+            disabled={index === data.length}
+          >
+            <RightArrow w={16} color="#1C1B1F" />
+          </DefaultButton>
+        </ButtonGroup>
+      )}
     </Box>
   );
 };
@@ -85,8 +99,4 @@ const ButtonGroup = styled(Flex)`
   padding-bottom: 40px;
   gap: 16px;
   margin-right: 30px;
-
-  /* position: absolute;
-  bottom: 0;
-  right: 0; */
 `;

@@ -26,6 +26,7 @@ export const useCollectionItems = (
         .then(async (result: any) => {
           console.log('getBucketFileList', result);
           const { body, code } = result;
+
           if (code == 0) {
             let { objects } = body;
             objects = objects.filter((item: any) => !item.removed);
@@ -83,6 +84,8 @@ export const useCollectionItems = (
                 return item;
               }
             });
+
+            console.log('tree', strColl.join('\n'));
 
             await Promise.all(t);
             tree.orderTraverse((item: any) => {

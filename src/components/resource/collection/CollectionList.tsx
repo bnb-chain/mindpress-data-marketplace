@@ -38,7 +38,7 @@ const CollectionList = (props: any) => {
 
   const { list, loading } = useCollectionItems(name, collectionListed);
 
-  console.log('list', list);
+  console.log('list', name, bucketName, list);
 
   const { handlePageChange, page } = usePagination();
 

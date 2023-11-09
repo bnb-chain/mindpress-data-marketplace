@@ -60,7 +60,7 @@ const Overview = (props: IOverView) => {
   return (
     <Container justifyContent="space-between">
       <Box flex="1">
-        <Title as="h2" mb="30px">
+        <Title as="h2" mb="30px" mt="10px">
           Desctiption
         </Title>
         <DescBox alignItems={'center'} justifyItems={'center'}>

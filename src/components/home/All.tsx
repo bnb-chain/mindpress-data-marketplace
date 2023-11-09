@@ -19,6 +19,7 @@ import { ActionCom } from '../ActionCom';
 import { reportEvent } from '../../utils/ga';
 import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
 import { CATEGORY_MAP } from '../../utils/category';
+import { MetaMaskAvatar } from 'react-metamask-avatar';
 
 const AllList = () => {
   const { handlePageChange, page } = usePagination();
@@ -32,11 +33,10 @@ const AllList = () => {
   const columns = [
     {
       header: '#',
-      cell: (data: any) => {
-        const { id } = data;
-        return <Box>{id}</Box>;
+      cell: (data: any, index: any) => {
+        return <Box>{data.id}</Box>;
       },
-      width: 100,
+      width: 80,
     },
     {
       header: 'Data/Collection',
@@ -77,18 +77,19 @@ const AllList = () => {
             }}
           >
             <ImgCon src={url || defaultImg(name, 40)}></ImgCon>
-            {trimLongStr(name, 15)}
-            {type === 'Collection' && (
-              <CollectionLogo
-                style={{ width: '10px', height: '10px' }}
-              ></CollectionLogo>
-            )}
+            <Box>
+              {trimLongStr(name, 15)}
+              {type === 'Collection' && (
+                <CollectionLogo w={14} ml="4px"></CollectionLogo>
+              )}
+            </Box>
           </ImgContainer>
         );
       },
     },
     {
       header: 'Category',
+      width: 200,
       cell: (data: any) => {
         const { categoryId } = data;
         const categoryName = categoryies.data?.find(
@@ -97,6 +98,7 @@ const AllList = () => {
         const category = CATEGORY_MAP[categoryId];
         return (
           <Flex
+            display="inline-flex"
             background={category.bgColor}
             borderRadius={'40px'}
             padding="8px 12px"
@@ -145,6 +147,7 @@ const AllList = () => {
         const { ownerAddress } = data;
         return (
           <MyLink to={`/profile?address=${ownerAddress}`}>
+            <MetaMaskAvatar size={24} address={ownerAddress} />
             {trimLongStr(ownerAddress)}
           </MyLink>
         );
@@ -166,10 +169,6 @@ const AllList = () => {
   return (
     <Container>
       <Table
-        // headerContent={`Latest ${Math.min(
-        //   20,
-        //   list.length,
-        // )} Collections (Total of ${total})`}
         containerStyle={{ padding: '0', background: '#181a1e' }}
         pagination={{
           current: page,
@@ -195,8 +194,10 @@ const Container = styled(Box)`
 `;
 
 const ImgContainer = styled(Flex)`
+  gap: 16px;
   cursor: pointer;
-  color: ${(props: any) => props.theme.colors.scene.primary.normal};
+  color: #fff;
+  font-size: 16px;
 `;
 
 const ImgCon = styled.img`
@@ -209,6 +210,9 @@ const ImgCon = styled.img`
 
 const MyLink = styled(Link)`
   /* color: ${(props: any) => props.theme.colors.scene.primary.normal}; */
+  display: flex;
+  align-items: center;
+  gap: 8px;
   color: #fff;
   text-decoration: underline;
 
@@ -217,8 +221,6 @@ const MyLink = styled(Link)`
     width: 16px;
     height: 16px;
     display: inline-block;
-    margin-left: 3px;
-    margin-top: 9px;
   }
 
   &:hover {

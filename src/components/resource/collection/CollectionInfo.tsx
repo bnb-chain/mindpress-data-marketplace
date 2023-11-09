@@ -8,6 +8,7 @@ import { ITEM_STATUS } from '../../../hooks/useItemStatus';
 import { useModal } from '../../../hooks/useModal';
 import {
   divide10Exp,
+  formatDateDot,
   formatDateUTC,
   parseFileSize,
   roundFun,
@@ -57,13 +58,6 @@ export const CollectionInfo = (props: Props) => {
   const { price: bnbPrice } = useBNBPrice();
 
   const { list, loading } = useCollectionItems(name, listed);
-  // console.log(`${collection.path}${collection.query}?${collection.query}`);
-
-  // const categoryies = useGetCatoriesMap();
-  // const category = categoryies.data?.find((c) => c.id === categoryId);
-
-  // console.log('category', category, categoryId);
-
   const modalData = useModal();
 
   return (
@@ -115,13 +109,13 @@ export const CollectionInfo = (props: Props) => {
 
         <FlexCon flex={1} justifyContent="space-between" ml="10px">
           <Block>
-            <Value>{formatDateUTC(createdAt * 1000)}</Value>
+            <Value>{formatDateDot(createdAt * 1000)}</Value>
             <Field>
               <CalendarIcon /> Created
             </Field>
           </Block>
           <Block>
-            <Value>{salesVolume}</Value>
+            <Value>{salesVolume || 0}</Value>
             <Field>
               <ShoppingIcon /> Purchased
             </Field>
@@ -168,7 +162,7 @@ export const CollectionInfo = (props: Props) => {
             </Box>
           )}
 
-          {itemStatus !== 'NOT_PURCHASED_BY_ME' && (
+          {/* {itemStatus !== 'NOT_PURCHASED_BY_ME' && (
             <Box>
               <Button
                 color="#FFE900"
@@ -181,7 +175,7 @@ export const CollectionInfo = (props: Props) => {
                 Get My Data
               </Button>
             </Box>
-          )}
+          )} */}
         </ActionBox>
       </Box>
     </Box>

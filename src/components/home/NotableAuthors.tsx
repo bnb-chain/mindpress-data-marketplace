@@ -11,7 +11,7 @@ const USER_ADDRESS_LIST = [
   '0x901004b8fe76eb465c68d953f9ccc350c0181457',
   '0xace41854f9b1ebc3c54b2559605b4348fa90d5ad',
   '0xc917fc8c92181a84fe107093543897c7c328cc06',
-  '0xace41854f9b1ebc3c54b2559605b4348fa90d50d',
+  // '0xace41854f9b1ebc3c54b2559605b4348fa90d50d',
 ];
 
 export const NotableAuthors = () => {

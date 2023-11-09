@@ -24,7 +24,11 @@ const {
   REACT_APP_DAPP_NAME,
   REACT_APP_NETWORK,
   REACT_APP_API_DOMAIN,
+  REACT_APP_NET_ENV,
 } = process.env;
+
+type NET = 'TESTNET' | 'MAINNET';
+export const NET_ENV: NET = REACT_APP_NET_ENV as NET;
 
 export const GF_CHAIN_ID = Number(REACT_APP_GF_CHAIN_ID);
 export const GF_RPC_URL = REACT_APP_GF_RPC_URL as string;

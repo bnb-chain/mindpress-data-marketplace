@@ -38,6 +38,12 @@ export const formatDateUTC = (date: number | string) => {
   return format(zonedTime, formatStr, { timeZone: 'UTC' });
 };
 
+export const formatDateDot = (date: number | string) => {
+  const numDate = Number(date);
+  const zonedTime = utcToZonedTime(numDate, 'UTC');
+  return format(zonedTime, 'yyyy.M.d', { timeZone: 'UTC' });
+};
+
 export const batchUpdate = (fn: () => void) => {
   ReactDOM.unstable_batchedUpdates(fn);
 };

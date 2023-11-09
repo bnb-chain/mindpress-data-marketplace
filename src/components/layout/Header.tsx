@@ -1,48 +1,45 @@
+import styled from '@emotion/styled';
 import {
+  Box,
   Button,
   Flex,
   Menu,
-  MenuList,
-  MenuItem,
   MenuButton,
+  MenuItem,
+  MenuList,
   useDisclosure,
   useOutsideClick,
-  Box,
 } from '@totejs/uikit';
-import styled from '@emotion/styled';
 import { useWalletModal } from '../../hooks/useWalletModal';
 
+import {
+  MenuCloseIcon,
+  SaverIcon,
+  // BookmarkIcon,
+  WithdrawIcon,
+} from '@totejs/icons';
 import {
   ForwardedRef,
   ReactNode,
   forwardRef,
   useCallback,
-  useState,
   useRef,
+  useState,
 } from 'react';
-import { useAccount, useDisconnect, useSwitchNetwork, useNetwork } from 'wagmi';
-import { Copy } from '../Copy';
-import { trimLongStr } from '../../utils';
-import ProfileImage from '../svgIcon/ProfileImage';
-import { HeaderProfileBg } from '../svgIcon/HeaderProfileBg';
-import {
-  // BookmarkIcon,
-  WithdrawIcon,
-  SaverIcon,
-  MenuCloseIcon,
-  DepositIcon,
-} from '@totejs/icons';
-import { useNavigate } from 'react-router-dom';
-// import { useRevoke } from '../../hooks/useRevoke';
-// import { useHasRole } from '../../hooks/useHasRole';
-import LogoGroup from '../../images/logo-group.png';
-import { BSCLogo } from '../svgIcon/BSCLogo';
-import { BSC_CHAIN_ID, GF_CHAIN_ID } from '../../env';
-import Search from '../../components/Search';
-import { reportEvent } from '../../utils/ga';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { TowerIcon } from '../svgIcon/TowerIcon';
+import { useNavigate } from 'react-router-dom';
+import { useAccount, useDisconnect, useNetwork, useSwitchNetwork } from 'wagmi';
+import Search from '../../components/Search';
+import { BSC_CHAIN_ID, GF_CHAIN_ID, NET_ENV } from '../../env';
+import MainNetLogo from '../../images/logo.svg';
+import TestNetLogo from '../../images/logo-testnet.svg';
+import { trimLongStr } from '../../utils';
+import { reportEvent } from '../../utils/ga';
+import { Copy } from '../Copy';
 import { CheckIcon } from '../svgIcon/CheckIcon';
+import { SellIcon } from '../svgIcon/SellIcon';
+import { TowerIcon } from '../svgIcon/TowerIcon';
+import { DefaultButton } from '../ui/buttons/DefaultButton';
 
 const CustomMenuButton = forwardRef(
   (props: { children: ReactNode }, ref: ForwardedRef<HTMLButtonElement>) => {
@@ -103,9 +100,6 @@ const Header = () => {
     },
   });
 
-  // const { revoke } = useRevoke();
-  // const { hasRole, setHasRole } = useHasRole();
-
   const navigate = useNavigate();
   const { onClose, onToggle } = useDisclosure();
   const { switchNetwork } = useSwitchNetwork();
@@ -119,12 +113,13 @@ const Header = () => {
       padding={'0px 24px 0'}
       height={80}
     >
-      <LeftCon gap={42} alignItems={'center'}>
+      <LeftCon h="50px" gap={90} alignItems={'center'}>
         <img
+          title="market place"
           onClick={() => {
             navigate('/');
           }}
-          src={LogoGroup}
+          src={NET_ENV === 'TESTNET' ? TestNetLogo : MainNetLogo}
           alt="logo"
         />
         <Search width="380px" height="40px"></Search>
@@ -132,23 +127,18 @@ const Header = () => {
 
       <RightFunCon alignItems={'center'} justifyContent={'center'} gap={18}>
         <>
-          <Box
+          <DefaultButton
             as="button"
-            background="#F1F2F3"
-            color="#181A1E"
-            pl="12px"
-            pr="12px"
-            h="40px"
-            borderRadius="8px"
             onClick={() => {
               reportEvent({ name: 'dm.main.header.list_my_data.click' });
               if (!isConnecting && !isConnected) handleModalOpen();
-              navigate('/profile?tab=collections');
+              navigate('/profile');
             }}
           >
             List Item
-          </Box>
+          </DefaultButton>
         </>
+
         {address && (
           <Menu placement="bottom-end">
             <MenuButton
@@ -201,6 +191,7 @@ const Header = () => {
             </MenuList>
           </Menu>
         )}
+
         <ButtonWrapper>
           {!isConnected && !isConnecting ? (
             <StyledButton
@@ -229,77 +220,66 @@ const Header = () => {
                 // w={158}
               >
                 <Profile>
-                  {/* <ProfileImage width={32} height={32} /> */}
                   {address && <MetaMaskAvatar address={address} size={32} />}
                 </Profile>
-                {/* <div>{address ? trimLongStr(address, 10, 6, 4) : ''}</div> */}
               </ProfileWrapper>
             </ConnectProfile>
           )}
           {dropDownOpen && isConnected && !isConnecting && (
             <DropDown>
-              <HeaderProfileBg width={300} height={96}></HeaderProfileBg>
+              <Flex alignItems="center" pl="24px" pr="24px">
+                <Flex gap="12px" flex={1} alignItems="center">
+                  <ImageWrapper>
+                    <MetaMaskAvatar address={address!} size={40} />
+                  </ImageWrapper>
+                  <Address>
+                    {address ? trimLongStr(address, 10, 6, 4) : ''}
+                  </Address>
+                </Flex>
+                <Copy color="#C4C5CB" size={{ w: 26, h: 26 }} value={address} />
+              </Flex>
 
-              <ImageWrapper>
-                <MetaMaskAvatar address={address!} size={64} />
-              </ImageWrapper>
+              <Hr mt="16px" mb="8px" />
 
-              <AddressWrapper>
-                <Address gap={10} mb={24} height={24}>
-                  <div>{address ? trimLongStr(address, 10, 6, 4) : ''}</div>
-                  <Copy value={address} />
-                </Address>
-                <MenuElement
-                  onClick={async (e: React.MouseEvent<HTMLElement>) => {
-                    reportEvent({ name: 'dm.account.my_data.my_data.click' });
-                    e.preventDefault();
-                    navigate('/profile?tab=collections');
-                  }}
-                >
-                  <SaverIcon mr={8} width={24} height={24} />
-                  My Data Collections
-                </MenuElement>
-                <MenuElement
-                  onClick={async (e: React.MouseEvent<HTMLElement>) => {
-                    reportEvent({
-                      name: 'dm.account.my_purchase.my_purchase.click',
-                    });
-                    e.preventDefault();
-                    navigate('/profile?tab=purchase');
-                  }}
-                >
-                  <DepositIcon mr={8} width={24} height={24} />
-                  My Purchases
-                </MenuElement>
-                {/* {hasRole && (
-                          <MenuElement
-                            onClick={() => {
-                              revoke().then(() => {
-                                setHasRole(true);
-                              });
-                            }}
-                          >
-                            <WalletIcon mr={8} width={24} height={24} /> Revoke
-                          </MenuElement>
-                        )} */}
-                <Disconnect
-                  onClick={async () => {
-                    reportEvent({
-                      name: 'dm.account.disconnect.disconnect.click',
-                    });
-                    await disconnect();
-                    navigate('/');
-                  }}
-                >
-                  <WithdrawIcon
-                    mr={8}
-                    width={24}
-                    height={24}
-                    style={{ transform: 'rotate(-90deg)' }}
-                  />{' '}
-                  Disconnect
-                </Disconnect>
-              </AddressWrapper>
+              <MenuElement
+                onClick={async (e: React.MouseEvent<HTMLElement>) => {
+                  reportEvent({ name: 'dm.account.my_data.my_data.click' });
+                  e.preventDefault();
+                  navigate('/profile?tab=collections');
+                }}
+              >
+                <SaverIcon mr={8} width={24} height={24} />
+                My Data Collections
+              </MenuElement>
+              <MenuElement
+                onClick={async (e: React.MouseEvent<HTMLElement>) => {
+                  reportEvent({
+                    name: 'dm.account.my_purchase.my_purchase.click',
+                  });
+                  e.preventDefault();
+                  navigate('/profile?tab=purchase');
+                }}
+              >
+                <SellIcon mr={8} w={24} height={24} />
+                My Purchases
+              </MenuElement>
+              <MenuElement
+                onClick={async () => {
+                  reportEvent({
+                    name: 'dm.account.disconnect.disconnect.click',
+                  });
+                  await disconnect();
+                  navigate('/');
+                }}
+              >
+                <WithdrawIcon
+                  mr={8}
+                  width={24}
+                  height={24}
+                  style={{ transform: 'rotate(-90deg)' }}
+                />{' '}
+                Disconnect
+              </MenuElement>
             </DropDown>
           )}
         </ButtonWrapper>
@@ -312,10 +292,12 @@ export default Header;
 
 const HeaderFlex = styled(Flex)`
   position: fixed;
-  width: 100%;
+  left: 0;
+  right: 0;
   z-index: 10;
-  background-color: #1e2026;
-  border-bottom: 1px #2f3034 solid;
+  background-color: #181a1e;
+  border-bottom: 1px #1e2026 solid;
+  padding: 0 40px;
 `;
 const LeftCon = styled(Flex)`
   img {
@@ -354,46 +336,33 @@ const ButtonWrapper = styled.div`
 
 const DropDown = styled.div`
   position: absolute;
-  top: calc(100% - 4px);
+  top: 50px;
   right: 0;
   margin-top: 4px;
   border-radius: 12px;
-  width: 300px;
-  height: 330px;
-  background: ${(props: any) => props.theme.colors.bg?.middle};
+  width: 335px;
+  background: #373943;
   box-shadow: ${(props: any) => props.theme.shadows.normal};
   z-index: 11;
-`;
-
-const AddressWrapper = styled.div`
-  padding: 12px;
-  margin-top: 46px;
+  padding: 16px 0;
 `;
 
 const Address = styled(Flex)`
-  font-size: 20px;
+  font-size: 16px;
   font-weight: 600;
   line-height: 24px;
   justify-content: center;
   align-items: center;
   gap: 12px;
+  color: #fbfbfb;
 `;
 
-const Disconnect = styled.div`
-  display: flex;
-  flex-direction: row;
+const ImageWrapper = styled(Flex)`
+  justify-content: center;
   align-items: center;
-
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 24px;
-  text-align: left;
-  padding: 8px 12px;
-  border-radius: 8px;
-  &:hover {
-    cursor: pointer;
-    background: ${(props: any) => props.theme.colors.bg.bottom};
-  }
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 `;
 
 const ProfileWrapper = styled(Flex)`
@@ -410,33 +379,18 @@ const Profile = styled(Flex)`
   border: 1px solid ${(props: any) => props.theme.colors.readable.border};
 `;
 
-const ImageWrapper = styled(Flex)`
-  position: absolute;
-  justify-content: center;
+const MenuElement = styled(Flex)`
   align-items: center;
-  top: 62px;
-  right: 50%;
-  transform: translateX(50%);
-  background: ${(props: any) => props.theme.colors.bg.middle};
-  width: 68px;
-  height: 68px;
-  border-radius: 50%;
-`;
-
-const MenuElement = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-
   font-size: 16px;
   font-weight: 500;
   line-height: 24px;
-  text-align: left;
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: 20px 24px;
+  color: #c4c5cb;
+
   &:hover {
     cursor: pointer;
-    background: ${(props: any) => props.theme.colors.bg.bottom};
+    background: #5c5f6a;
+    color: #f7f7f8;
   }
 `;
 
@@ -457,4 +411,9 @@ const ConnectProfile = styled(Flex)`
   &:hover {
     background: ${(props: any) => props.theme.colors.read?.normal};
   }
+`;
+
+const Hr = styled(Box)`
+  height: 1px;
+  background: #5c5f6a;
 `;
