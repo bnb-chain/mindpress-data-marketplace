@@ -11,6 +11,7 @@ export const GlobalProvider: React.ComponentType<GlobalProviderProps> = (
 ) => {
   const { children } = props;
   const [globalState, globalDispatch] = useReducer(GlobalReducer, initialState);
+  console.log('globalState', globalState);
 
   return (
     <GlobalContext.Provider

@@ -37,3 +37,23 @@ export const getCategoryMap = async (): Promise<IItemCategoriesResponse[]> => {
   //   return data?.data?.data?.categories || [];
   // });
 };
+
+type Item = {
+  categoryId: number;
+  createdAt: number;
+  description: string;
+  groupId: number;
+  groupName: string;
+  id: number;
+  name: string;
+  ownerAddress: string;
+  price: string;
+  status: 'LISTED' | 'PENDING' | 'BLOCKED';
+  totalSale: number;
+  totalVolume: string;
+  type: 'COLLECTION' | 'OBJECT';
+};
+export const getItem = async (id: number): Promise<Item> => {
+  const data = await instance.get(`item/${id}`);
+  return data?.data?.data?.item || {};
+};
