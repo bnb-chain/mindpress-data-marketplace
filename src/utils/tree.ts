@@ -25,55 +25,37 @@ export class Tree {
   }
 
   init(str: string) {
-    const menuObj: any = {};
-    let arr: Array<INode> = [];
-    [...new Set<string>(str.split('\n'))].forEach((text) => {
-      const itemArr = text
-        .split('/')
-        .map((e) => e.trim())
-        .filter((e) => e);
-      arr.push(
-        ...itemArr.map((e, i) => {
-          const tt = e.split('_%_%_');
-          const name = tt[0];
+    const destList: any = [];
+
+    str.split('\n').forEach((path) => {
+      const pathList = path.split('/');
+      let levelList = destList;
+      for (const name of pathList) {
+        let obj = levelList.find((item: any) => item.name == name);
+        const tt = name.split('_%_%_');
+        const _name = tt[0];
+        if (!obj) {
           const id = tt[1];
           const type = tt[2];
-          const result = {
-            label: name,
-            name: name,
+          obj = {
+            label: _name,
+            name: _name,
+            children: [],
             _id: id,
-            _type: type,
-            pLabel: itemArr[i - 1],
+            _type: type || 'folder',
           };
-          return result;
-        }),
-      );
-    });
+          if (_name) levelList.push(obj);
 
-    arr = [...new Set(arr.map((e: INode) => JSON.stringify(e)))].map(
-      (e: string) => JSON.parse(e),
-    );
-    const t: {
-      [str: string]: INode;
-    } = {};
-    arr = arr.reduce(function (data: any, item: any) {
-      t[item._id] ? '' : (t[item._id] = true && item._id && data.push(item));
-      return data;
-    }, []);
-
-    arr.forEach((item: INode) => {
-      item.children = [];
-      menuObj[item.label] = item;
+          // 7.若当前被增节点是叶子节点，则裁剪该节点子节点属性
+          if (name == pathList[pathList.length - 1]) {
+            delete obj.children;
+          }
+        }
+        // 8.已有则进入下一层，继续寻找
+        _name && (levelList = obj.children);
+      }
     });
-    arr = arr.filter((item: INode) => {
-      const childList = menuObj[item?.pLabel as string]?.children;
-      if (childList) childList.push(item);
-      return !('pLabel' in item);
-    });
-    return forEachTree(arr, (e) => {
-      delete e.pLabel;
-      if (!e.children?.length) delete e.children;
-    });
+    return destList;
   }
 
   forEachTree(tree: Array<INode>, callback: (item: INode) => void) {

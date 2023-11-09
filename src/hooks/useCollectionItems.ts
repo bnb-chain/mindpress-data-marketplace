@@ -44,8 +44,7 @@ export const useCollectionItems = (
                     '_%_%_' +
                     id +
                     '_%_%_' +
-                    `${isFile ? 'file' : 'folder'}` +
-                    '/'
+                    `${isFile ? 'file' : 'folder/'}`
                 : object_name + '_%_%_' + id + '_%_%_' + 'file';
               // return object_name;
             });
