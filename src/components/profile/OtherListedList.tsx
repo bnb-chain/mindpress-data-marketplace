@@ -1,28 +1,21 @@
 import styled from '@emotion/styled';
-import { Flex, Table } from '@totejs/uikit';
-import { usePagination } from '../../hooks/usePagination';
+import { ColumnDef, Flex, Table } from '@totejs/uikit';
+import BN from 'bn.js';
 import { useNavigate } from 'react-router-dom';
+import { usePagination } from '../../hooks/usePagination';
 import {
+  defaultImg,
+  divide10Exp,
   formatDateUTC,
   trimLongStr,
-  divide10Exp,
-  defaultImg,
 } from '../../utils';
-import { useUserListed } from '../../hooks/useUserListed';
-import BN from 'bn.js';
 // import { useSalesVolume } from '../../hooks/useSalesVolume';
-import { CollectionLogo } from '../svgIcon/CollectionLogo';
+import { useGetItemList } from '../../hooks/useGetItemList';
+import { Item } from '../../utils/http';
 import { ActionCom } from '../ActionCom';
+import { Loader } from '../Loader';
+import { CollectionLogo } from '../svgIcon/CollectionLogo';
 import { TableProps } from '../ui/table/TableProps';
-
-// interface ITotalVol {
-//   id: string;
-// }
-// const TotalVol = (props: ITotalVol) => {
-//   const { id } = props;
-//   const { salesVolume } = useSalesVolume(id);
-//   return <div>{salesVolume}</div>;
-// };
 
 interface IOtherListedList {
   realAddress: string;
@@ -36,12 +29,24 @@ const OtherListedList = (props: IOtherListedList) => {
   const { handlePageChange, page } = usePagination();
   const pageSize = 10;
 
-  const { list, loading, total } = useUserListed(realAddress, page, pageSize);
+  const { data: itemData, isLoading } = useGetItemList(
+    {
+      filter: {
+        address: realAddress,
+        keyword: '',
+      },
+      offset: (page - 1) * pageSize,
+      limit: pageSize,
+      sort: 'CREATION_DESC',
+    },
+    page,
+    pageSize,
+  );
 
-  const columns = [
+  const columns: ColumnDef<Item> = [
     {
       header: 'Data',
-      cell: (data: any) => {
+      cell: (data) => {
         const { name, url, type, id, groupName, ownerAddress } = data;
 
         return (
@@ -57,7 +62,7 @@ const OtherListedList = (props: IOtherListedList) => {
           >
             <ImgCon src={url || defaultImg(name, 40)}></ImgCon>
             {trimLongStr(name, 15)}
-            {type === 'Collection' && (
+            {type === 'COLLECTION' && (
               <CollectionLogo
                 style={{ width: '10px', height: '10px' }}
               ></CollectionLogo>
@@ -68,7 +73,7 @@ const OtherListedList = (props: IOtherListedList) => {
     },
     {
       header: 'Type',
-      cell: (data: any) => {
+      cell: (data) => {
         const { type } = data;
         return <div>{type}</div>;
       },
@@ -76,7 +81,7 @@ const OtherListedList = (props: IOtherListedList) => {
     {
       header: 'Price',
       width: 160,
-      cell: (data: any) => {
+      cell: (data) => {
         const { price } = data;
         const balance = divide10Exp(new BN(price, 10), 18);
         return <div>{balance} BNB</div>;
@@ -85,17 +90,17 @@ const OtherListedList = (props: IOtherListedList) => {
     {
       header: 'Data Listed',
       width: 160,
-      cell: (data: any) => {
-        const { listTime } = data;
-        return <div>{listTime ? formatDateUTC(listTime * 1000) : '-'}</div>;
+      cell: (data) => {
+        const { createdAt } = data;
+        return <div>{createdAt ? formatDateUTC(createdAt * 1000) : '-'}</div>;
       },
     },
     {
       header: 'Total Vol',
       width: 120,
-      cell: (data: any) => {
-        const { totalVol } = data;
-        return <div>{totalVol}</div>;
+      cell: (data) => {
+        const { totalSale } = data;
+        return <div>{totalSale || 0}</div>;
       },
     },
     {
@@ -105,23 +110,27 @@ const OtherListedList = (props: IOtherListedList) => {
       },
     },
   ];
+
+  if (isLoading || !itemData) {
+    return <Loader />;
+  }
+
   return (
     <Container>
       <Table
         headerContent={`Latest ${Math.min(
           pageSize,
-          list.length,
-        )}  Collections (Total of ${list.length})`}
-        // containerStyle={{ padding: '4px 20px' }}
+          itemData.total,
+        )}  Collections (Total of ${itemData.total})`}
         pagination={{
           current: page,
           pageSize: pageSize,
-          total,
+          total: itemData.total,
           onChange: handlePageChange,
         }}
         columns={columns}
-        data={list}
-        loading={loading}
+        data={itemData.items}
+        loading={isLoading}
         {...TableProps}
       />
     </Container>
@@ -132,6 +141,8 @@ export default OtherListedList;
 
 const Container = styled.div`
   width: 1123px;
+  background: #181a1e;
+  padding: 4px 20px;
 `;
 
 const ImgContainer = styled(Flex)`

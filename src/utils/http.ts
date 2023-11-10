@@ -8,10 +8,31 @@ const instance = axios.create({
   },
 });
 
-export const getListedList = (data: any) => {
-  return instance.post('item/search', JSON.stringify(data)).then((data) => {
-    return data.data.data;
-  });
+export interface SearchRequestParams {
+  filter: {
+    address: string;
+    categoryId?: number;
+    keyword: string;
+  };
+  sort:
+    | 'CREATION_DESC'
+    | 'CREATION_ASC'
+    | 'TOTAL_VOLUME_ASC'
+    | 'TOTAL_VOLUME_DESC'
+    | 'TOTAL_SALE_ASC'
+    | 'TOTAL_SALE_DESC';
+  offset: number;
+  limit: number;
+}
+export interface SearchResponse {
+  items: Item[];
+  total: number;
+}
+export const getItemList = async (
+  params: SearchRequestParams,
+): Promise<SearchResponse> => {
+  const data = await instance.post('item/search', JSON.stringify(params));
+  return data.data.data;
 };
 
 export const getPurchaseList = (data: any) => {
@@ -38,21 +59,21 @@ export const getCategoryMap = async (): Promise<IItemCategoriesResponse[]> => {
   // });
 };
 
-type Item = {
-  url?: string;
+export type Item = {
+  id: number;
   categoryId: number;
+  type: 'COLLECTION' | 'OBJECT';
+  name: string;
   createdAt: number;
   description: string;
+  url?: string;
   groupId: number;
   groupName: string;
-  id: number;
-  name: string;
   ownerAddress: string;
   price: string;
   status: 'LISTED' | 'PENDING' | 'BLOCKED';
   totalSale: number;
   totalVolume: string;
-  type: 'COLLECTION' | 'OBJECT';
 };
 export const getItem = async (id: number): Promise<Item> => {
   const data = await instance.get(`item/${id}`);

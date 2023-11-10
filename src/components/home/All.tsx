@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
-import { Box, Flex, Table } from '@totejs/uikit';
+import { Box, ColumnDef, Flex, Table } from '@totejs/uikit';
 import BN from 'bn.js';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
-import { useGetListed } from '../../hooks/useGetListed';
+import { useGetItemList } from '../../hooks/useGetItemList';
 import { useGlobal } from '../../hooks/useGlobal';
 import { usePagination } from '../../hooks/usePagination';
 import LinkArrow from '../../images/link_arrow.png';
@@ -15,20 +15,34 @@ import { reportEvent } from '../../utils/ga';
 import { ActionCom } from '../ActionCom';
 import { CollectionLogo } from '../svgIcon/CollectionLogo';
 import { TableProps } from '../ui/table/TableProps';
+import { Loader } from '../Loader';
+import { Item } from '../../utils/http';
+
+const PAGE_SIZE = 10;
 
 const AllList = () => {
   const { handlePageChange, page } = usePagination();
   const navigator = useNavigate();
   const { address } = useAccount();
-  const { list, loading, total } = useGetListed(address, page, 10);
+  const { data, isLoading, error } = useGetItemList(
+    {
+      filter: {
+        address: '',
+        keyword: '',
+      },
+      offset: (page - 1) * PAGE_SIZE,
+      limit: PAGE_SIZE,
+      sort: 'CREATION_DESC',
+    },
+    page,
+    PAGE_SIZE,
+  );
   const state = useGlobal();
-
   const categoryies = useGetCatoriesMap();
-
-  const columns = [
+  const columns: ColumnDef<Item> = [
     {
       header: '#',
-      cell: (data: any, index: any) => {
+      cell: (data) => {
         return <Box>{data.id}</Box>;
       },
       width: 80,
@@ -36,16 +50,8 @@ const AllList = () => {
     {
       header: 'Data/Collection',
       width: 200,
-      cell: (data: any) => {
-        const {
-          name,
-          url,
-          id,
-          metaData: { groupName },
-          ownerAddress,
-          type,
-          categoryId,
-        } = data;
+      cell: (data) => {
+        const { name, url, id, ownerAddress, type, groupName } = data;
         return (
           <ImgContainer
             alignItems={'center'}
@@ -74,7 +80,7 @@ const AllList = () => {
             <ImgCon src={url || defaultImg(name, 40)}></ImgCon>
             <Box title="collection">
               {trimLongStr(name, 15)}
-              {type === 'Collection' && <CollectionLogo w={14} ml="4px" />}
+              {type === 'COLLECTION' && <CollectionLogo w={14} ml="4px" />}
             </Box>
           </ImgContainer>
         );
@@ -117,14 +123,6 @@ const AllList = () => {
         return <div>{balance} BNB</div>;
       },
     },
-    // {
-    //   header: 'Total Sales Vol',
-    //   width: 160,
-    //   cell: (data: any) => {
-    //     const { listTime } = data;
-    //     return <div>{listTime ? formatDateUTC(listTime * 1000) : '-'}</div>;
-    //   },
-    // },
     {
       header: 'Total Sales Vol',
       width: 120,
@@ -159,22 +157,27 @@ const AllList = () => {
       },
     },
   ];
+
+  if (!data || isLoading || error) {
+    return <Loader />;
+  }
+
   return (
     <Container>
       <Table
         headerContent={`Latest ${Math.min(
           20,
-          list.length,
-        )} Collections (Total of ${total})`}
+          data.total,
+        )} Collections (Total of ${data.total})`}
         pagination={{
           current: page,
           pageSize: 10,
-          total: total,
+          total: data.total,
           onChange: handlePageChange,
         }}
         columns={columns}
-        data={list}
-        loading={loading}
+        data={data.items}
+        loading={isLoading}
         {...TableProps}
       />
     </Container>
