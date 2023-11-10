@@ -19,6 +19,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useGlobal } from '../../../hooks/useGlobal';
 import { GoIcon, CardPocketIcon } from '@totejs/icons';
 import { OwnActionCom } from '../../OwnActionCom';
+import { TableProps } from '../../ui/table/TableProps';
 
 const TotalVol = (props: any) => {
   const { groupId } = props;
@@ -287,7 +288,6 @@ const CollectionList = (props: any) => {
         headerContent={`Latest ${Math.min(20, list.length)}  Data (Total of ${
           list.length
         })`}
-        containerStyle={{ padding: 20 }}
         pagination={{
           current: page,
           pageSize: 20,
@@ -297,7 +297,13 @@ const CollectionList = (props: any) => {
         columns={columns}
         data={list}
         loading={loading}
-        hoverBg={'#14151A'}
+        // {...TableProps}
+        thProps={{
+          style: {
+            background: '#181A1E',
+            borderColor: '#1E2026',
+          },
+        }}
       />
     </Container>
   );

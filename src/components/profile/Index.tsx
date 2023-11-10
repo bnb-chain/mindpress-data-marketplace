@@ -3,7 +3,7 @@ import { NavBar } from '../NavBar';
 import { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Flex } from '@totejs/uikit';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import CollectionList from './CollectionList';
+import MyCollectionList from './MyCollectionList';
 import PurchaseList from './PurchaseList';
 import OtherListedList from './OtherListedList';
 import { DCELLAR_URL } from '../../env';
@@ -84,7 +84,7 @@ const ProfileList = (props: IProfileList) => {
       <Box h={20} />
       {self ? (
         currentTab === Type.Collections ? (
-          <CollectionList setShowButton={setShowButton}></CollectionList>
+          <MyCollectionList setShowButton={setShowButton}></MyCollectionList>
         ) : (
           <PurchaseList></PurchaseList>
         )

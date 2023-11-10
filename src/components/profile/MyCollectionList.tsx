@@ -20,6 +20,7 @@ import { useGlobal } from '../../hooks/useGlobal';
 import CollNoData from './CollNoData';
 import { Dispatch, useMemo } from 'react';
 import { reportEvent } from '../../utils/ga';
+import { TableProps } from '../ui/table/TableProps';
 
 const PriceCon = (props: { groupId: string }) => {
   const { groupId } = props;
@@ -35,7 +36,7 @@ const PriceCon = (props: { groupId: string }) => {
 interface ICollectionList {
   setShowButton: Dispatch<boolean>;
 }
-const CollectionList = (props: ICollectionList) => {
+const MyCollectionList = (props: ICollectionList) => {
   const pageSize = 10;
 
   const { handlePageChange, page } = usePagination();
@@ -200,7 +201,7 @@ const CollectionList = (props: ICollectionList) => {
           pageSize,
           list.length,
         )}  Collections (Total of ${list.length})`}
-        containerStyle={{ padding: '4px 20px' }}
+        // containerStyle={{ padding: '4px 20px' }}
         pagination={{
           current: page,
           pageSize: pageSize,
@@ -210,17 +211,18 @@ const CollectionList = (props: ICollectionList) => {
         columns={columns}
         data={list}
         loading={loading}
-        withContainer={false}
-        hoverBg="#1E2026"
         customComponent={showNoData && <CollNoData></CollNoData>}
+        {...TableProps}
       />
     </Container>
   );
 };
 
-export default CollectionList;
+export default MyCollectionList;
 
 const Container = styled.div`
+  background: #181a1e;
+  padding: 4px 20px;
   width: 1123px;
 `;
 

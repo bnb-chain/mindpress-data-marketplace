@@ -15,6 +15,7 @@ import { OwnActionCom } from '../OwnActionCom';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { CollectionLogo } from '../svgIcon/CollectionLogo';
 import { useGlobal } from '../../hooks/useGlobal';
+import { TableProps } from '../ui/table/TableProps';
 
 // const TotalVol = (props: any) => {
 //   const { groupId } = props;
@@ -150,7 +151,6 @@ const PurchaseList = () => {
           pageSize,
           list.length,
         )}  Collections (Total of ${list.length})`}
-        containerStyle={{ padding: '4px 20px' }}
         pagination={{
           current: page,
           pageSize: pageSize,
@@ -160,8 +160,7 @@ const PurchaseList = () => {
         columns={columns}
         data={list}
         loading={loading}
-        withContainer={false}
-        hoverBg="#1E2026"
+        {...TableProps}
       />
     </Container>
   );
@@ -171,6 +170,8 @@ export default PurchaseList;
 
 const Container = styled.div`
   width: 1123px;
+  background: #181a1e;
+  padding: '4px 20px';
 `;
 
 const ImgContainer = styled(Flex)`

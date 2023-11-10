@@ -14,6 +14,7 @@ import { CATEGORY_MAP } from '../../utils/category';
 import { reportEvent } from '../../utils/ga';
 import { ActionCom } from '../ActionCom';
 import { CollectionLogo } from '../svgIcon/CollectionLogo';
+import { TableProps } from '../ui/table/TableProps';
 
 const AllList = () => {
   const { handlePageChange, page } = usePagination();
@@ -174,8 +175,7 @@ const AllList = () => {
         columns={columns}
         data={list}
         loading={loading}
-        withContainer={false}
-        hoverBg="#1E2026"
+        {...TableProps}
       />
     </Container>
   );

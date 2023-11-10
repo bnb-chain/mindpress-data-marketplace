@@ -13,6 +13,7 @@ import BN from 'bn.js';
 // import { useSalesVolume } from '../../hooks/useSalesVolume';
 import { CollectionLogo } from '../svgIcon/CollectionLogo';
 import { ActionCom } from '../ActionCom';
+import { TableProps } from '../ui/table/TableProps';
 
 // interface ITotalVol {
 //   id: string;
@@ -111,7 +112,7 @@ const OtherListedList = (props: IOtherListedList) => {
           pageSize,
           list.length,
         )}  Collections (Total of ${list.length})`}
-        containerStyle={{ padding: '4px 20px' }}
+        // containerStyle={{ padding: '4px 20px' }}
         pagination={{
           current: page,
           pageSize: pageSize,
@@ -121,7 +122,7 @@ const OtherListedList = (props: IOtherListedList) => {
         columns={columns}
         data={list}
         loading={loading}
-        hoverBg={'#14151A'}
+        {...TableProps}
       />
     </Container>
   );

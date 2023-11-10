@@ -16,6 +16,7 @@ import { CollectionLogo } from '../svgIcon/CollectionLogo';
 import { useAccount } from 'wagmi';
 import { ActionCom } from '../ActionCom';
 import { reportEvent } from '../../utils/ga';
+import { TableProps } from '../ui/table/TableProps';
 
 const TrendingList = () => {
   const navigator = useNavigate();
@@ -142,8 +143,7 @@ const TrendingList = () => {
         columns={columns}
         data={list}
         loading={loading}
-        hoverBg={'#14151A'}
-        withContainer={true}
+        {...TableProps}
       />
     </Container>
   );

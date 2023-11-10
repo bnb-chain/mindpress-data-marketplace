@@ -19,6 +19,7 @@ import { BN } from 'bn.js';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useGlobal } from '../../hooks/useGlobal';
 import { GoIcon } from '@totejs/icons';
+import { TableProps } from '../ui/table/TableProps';
 
 const TotalVol = (props: any) => {
   const { groupId } = props;
@@ -231,8 +232,7 @@ const List = (props: any) => {
         columns={columns}
         data={folderList}
         loading={loading}
-        withContainer={false}
-        hoverBg="#1E2026"
+        {...TableProps}
       />
     </Container>
   );
