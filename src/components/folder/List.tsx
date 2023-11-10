@@ -218,10 +218,10 @@ const List = (props: any) => {
     <Container>
       <Box h={10} />
       <Table
-        // headerContent={`Latest ${Math.min(
-        //   20,
-        //   folderList.length,
-        // )}  Data (Total of ${folderList.length})`}
+        headerContent={`Latest ${Math.min(
+          20,
+          folderList.length,
+        )}  Data (Total of ${folderList.length})`}
         pagination={{
           current: page,
           pageSize: 20,

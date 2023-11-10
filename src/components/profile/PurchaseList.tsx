@@ -146,10 +146,10 @@ const PurchaseList = () => {
   return (
     <Container>
       <Table
-        // headerContent={`Latest ${Math.min(
-        //   pageSize,
-        //   list.length,
-        // )}  Collections (Total of ${list.length})`}
+        headerContent={`Latest ${Math.min(
+          pageSize,
+          list.length,
+        )}  Collections (Total of ${list.length})`}
         containerStyle={{ padding: '4px 20px' }}
         pagination={{
           current: page,

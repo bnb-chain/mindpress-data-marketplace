@@ -284,9 +284,9 @@ const CollectionList = (props: any) => {
         Data in this collection ({Math.min(20, list.length)})
       </Title>
       <Table
-        // headerContent={`Latest ${Math.min(20, list.length)}  Data (Total of ${
-        //   list.length
-        // })`}
+        headerContent={`Latest ${Math.min(20, list.length)}  Data (Total of ${
+          list.length
+        })`}
         containerStyle={{ padding: 20 }}
         pagination={{
           current: page,
