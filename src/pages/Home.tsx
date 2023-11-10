@@ -6,12 +6,13 @@ import { Banner } from '../components/home/Banner';
 import { Links } from '../components/home/Links';
 import { NotableAuthors } from '../components/home/NotableAuthors';
 import { Popular } from '../components/home/Popular';
+import { BANNER_IDS } from '../env';
 
 const Home = () => {
   return (
     <Container flexDirection={'column'} alignItems={'center'}>
       <CardBox mt="20px">
-        <Banner />
+        <Banner itemIds={BANNER_IDS} />
       </CardBox>
 
       <CardBox mt="20px">

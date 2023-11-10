@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Flex } from '@totejs/uikit';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import TinySlider from 'tiny-slider-react';
 import 'tiny-slider/dist/tiny-slider.css';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
@@ -84,7 +84,7 @@ export const Sliders = (props: Props) => {
               setIndex(index + 1);
               ref.current.slider.goTo('next');
             }}
-            disabled={index === data.length}
+            disabled={index === data.length - 2}
           >
             <RightArrow w={16} color="#1C1B1F" />
           </DefaultButton>

@@ -39,6 +39,7 @@ export const getCategoryMap = async (): Promise<IItemCategoriesResponse[]> => {
 };
 
 type Item = {
+  url?: string;
   categoryId: number;
   createdAt: number;
   description: string;
@@ -56,4 +57,9 @@ type Item = {
 export const getItem = async (id: number): Promise<Item> => {
   const data = await instance.get(`item/${id}`);
   return data?.data?.data?.item || {};
+};
+
+export const getItems = async (ids: number[]): Promise<Item[]> => {
+  const data = await instance.post(`item/batch`, { ids });
+  return data?.data?.data?.items || [];
 };

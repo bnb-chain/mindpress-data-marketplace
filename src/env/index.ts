@@ -25,11 +25,14 @@ const {
   REACT_APP_NETWORK,
   REACT_APP_API_DOMAIN,
   REACT_APP_NET_ENV,
+  REACT_APP_BANNER_IDS,
 } = process.env;
 
 type NET = 'TESTNET' | 'MAINNET';
 export const NET_ENV: NET = REACT_APP_NET_ENV as NET;
 
+export const BANNER_IDS =
+  REACT_APP_BANNER_IDS?.split(',').map((x) => Number(x)) || [];
 export const GF_CHAIN_ID = Number(REACT_APP_GF_CHAIN_ID);
 export const GF_RPC_URL = REACT_APP_GF_RPC_URL as string;
 export const BSC_RPC_URL = REACT_APP_BSC_RPC_URL as string;

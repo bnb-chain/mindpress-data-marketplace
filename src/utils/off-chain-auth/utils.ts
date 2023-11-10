@@ -140,3 +140,15 @@ export const getGAOptions = (name: string) => {
 export const getGNFDChainId = () => {
   return GREENFIELD_CHAIN_ID;
 };
+
+type Path = {
+  id: number;
+  name: string;
+  type: 'OBJECT' | 'COLLECTION';
+};
+export const encodePath = (path: Path[]) => {
+  return btoa(JSON.stringify(path));
+};
+export const decodePath = (encodedPath: string): Path[] => {
+  return JSON.parse(atob(encodedPath)) as Path[];
+};

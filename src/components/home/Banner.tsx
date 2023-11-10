@@ -1,30 +1,31 @@
-import { Box, Flex } from '@totejs/uikit';
 import styled from '@emotion/styled';
+import { Box } from '@totejs/uikit';
+import BN from 'bn.js';
+import { useGetItems } from '../../hooks/useGetItems';
 import MindPress from '../../images/mindpress.png';
+import { defaultImg, divide10Exp } from '../../utils';
+import { Loader } from '../Loader';
 import { Sliders } from '../sliders';
 
-const SELL_DATA = [
-  {
-    id: 1,
-    imgUrl: 'https://source.unsplash.com/random/200x400',
-    name: 'Hero Kids #1',
-    address: '0x1C893441AB6c1A75E01887087ea508bE8e07AAae',
-    volumn: 1000,
-    price: '20.52',
-    groupName: '11',
-  },
-  {
-    id: 2,
-    imgUrl: 'https://source.unsplash.com/random/400x400',
-    name: 'Hero Kids #1',
-    address: '0x1C893441AB6c1A75E01887087ea508bE8e07AAae',
-    volumn: 1000,
-    price: '20.52',
-    groupName: '11',
-  },
-];
+interface Props {
+  itemIds: number[];
+}
 
-export const Banner = () => {
+export const Banner = (props: Props) => {
+  const { data, isLoading } = useGetItems(props.itemIds);
+
+  const bannerData = data?.map((item) => {
+    return {
+      id: item.id,
+      imgUrl: item?.url || defaultImg(item.name, 300),
+      name: item.name,
+      groupName: item.groupName,
+      address: item.ownerAddress,
+      volumn: item.totalSale || 0,
+      price: divide10Exp(new BN(item.price, 10), 18),
+    };
+  });
+
   return (
     <Box>
       <BannerBox>
@@ -40,46 +41,13 @@ export const Banner = () => {
         </Box>
 
         <Box mt="50px" w="1200px">
-          <Sliders data={SELL_DATA} />
+          {isLoading && <Loader />}
+          {bannerData && <Sliders data={bannerData} />}
         </Box>
       </BannerBox>
-
-      {/* <A>
-          <B />
-        </A> */}
     </Box>
   );
 };
-
-const A = styled(Flex)`
-  height: 60px;
-  margin-top: 40px;
-  width: 800px;
-  background: #181a1e;
-  border: 1px solid #fff;
-  border-radius: 0 40px 0 0;
-  padding-top: 20px;
-`;
-
-const B = styled(Flex)`
-  width: 780px;
-  height: 60px;
-  background: red;
-  border-radius: 0 40px 0 0;
-
-  /* &::before {
-    content: '';
-    background: #181a1e;
-    flex: 1;
-    border-radius: 0 20px 0 0;
-  }
-
-  &::after {
-    content: '';
-    width: 120px;
-    background: #181a1e;
-  } */
-`;
 
 const BannerBox = styled(Box)`
   /* margin-top: 32px; */
