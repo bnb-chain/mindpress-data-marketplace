@@ -4,7 +4,7 @@
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 // import { MarketPlaceContract } from '../base/contract/marketPlaceContract';
-import { getItemDetail } from '../utils/apis';
+import { getItemByGroupId } from '../utils/apis';
 
 // export const useSalesVolume = (groupId: string) => {
 //   const { address } = useAccount();
@@ -29,7 +29,7 @@ export const useSalesVolume = (groupId: string) => {
 
   useEffect(() => {
     if (groupId) {
-      getItemDetail(groupId).then((result: any) => {
+      getItemByGroupId(groupId).then((result: any) => {
         setSalesVolume(result.totalSale);
       });
     }

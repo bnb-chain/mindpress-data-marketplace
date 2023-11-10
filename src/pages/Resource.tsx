@@ -16,7 +16,7 @@ import { EditModal } from '../components/modal/EditModal';
 import { useAccount } from 'wagmi';
 import { useResourceInfo } from '../hooks/useResourceInfo';
 import { Loader } from '../components/Loader';
-import { defaultImg } from '../utils';
+import { defaultImg, parseGroupName } from '../utils';
 import { useSalesVolume } from '../hooks/useSalesVolume';
 import { useStatus } from '../hooks/useStatus';
 import { useModal } from '../hooks/useModal';
@@ -34,59 +34,76 @@ import { useItemStatus } from '../hooks/useItemStatus';
 import { DataInfo } from '../components/resource/data/DataInfo';
 import { SellIcon } from '../components/svgIcon/SellIcon';
 import { CollectionInfo } from '../components/resource/collection/CollectionInfo';
+import { useGetItemById } from '../hooks/useGetItemById';
+import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
+import { useGetStorageInfoByGroupName } from '../hooks/useGetBucketOrObj';
 
 const Resource = () => {
   const [p] = useSearchParams();
-
-  const groupId = p.getAll('gid')[0];
+  // const groupId = p.getAll('gid')[0];
   const bucketId = p.getAll('bid')[0];
   const cid = p.getAll('cid')[0];
   const objectId = p.getAll('oid')[0];
   const ownerAddress = p.getAll('address')[0];
   const gName = p.getAll('gn')[0];
   const bGroupName = p.getAll('bgn')[0];
+  const itemId = p.getAll('id')[0];
 
   const [open, setOpen] = useState(false);
-
-  const { address, isConnected, isConnecting } = useAccount();
+  const { address } = useAccount();
 
   const [update, setUpdate] = useState(false);
 
-  const { loading, baseInfo, noData } = useResourceInfo({
-    groupId,
-    bucketId,
-    objectId,
-    address: ownerAddress,
-    groupName: gName,
-    update,
-  });
-  const {
-    name,
-    price,
-    url,
-    desc,
-    listed,
-    type,
-    bucketName,
-    objectInfo,
-    bucketInfo,
-    bucketListed,
-  } = baseInfo;
-
-  console.log('baseInfo', baseInfo);
-
-  const { salesVolume } = useSalesVolume(groupId);
-  const { status } = useStatus(
-    bGroupName || gName,
-    ownerAddress,
-    address as string,
+  const { data: itemInfo, isLoading: itemInfoLoading } = useGetItemById(
+    parseInt(itemId),
   );
 
-  const [showEdit, setShowEdit] = useState(false);
+  const { name, type, price, url, description, status, createdAt, groupName } =
+    itemInfo;
 
-  const [breadItems, setBreadItems] = useState<any>([]);
+  // /* const { loading, baseInfo, noData } = useResourceInfo({
+  //   groupId,
+  //   bucketId,
+  //   objectId,
+  //   address: ownerAddress,
+  //   groupName: gName,
+  //   update,
+  // });
+  // const {
+  //   name,
+  //   price,
+  //   url,
+  //   desc,
+  //   listed,
+  //   type,
+  //   bucketName,
+  //   objectInfo,
+  //   bucketInfo,
+  //   bucketListed,
+  // } = baseInfo; */
 
-  const state = useGlobal();
+  const relation = useGetItemRelationWithAddr(address, itemInfo);
+
+  const { data: storageInfo, isLoading: storageInfoLoading } =
+    useGetStorageInfoByGroupName(groupName);
+  const resourceName = useMemo(() => {
+    if (!storageInfo) return;
+
+    return storageInfo.type === 'COLLECTION'
+      ? name
+      : `${storageInfo.bucketInfo.bucketName} #${name}`;
+  }, [name, storageInfo]);
+
+  // const { salesVolume } = useSalesVolume(groupId);
+  // const { status } = useStatus(
+  //   bGroupName || gName,
+  //   ownerAddress,
+  //   address as string,
+  // );
+
+  // const [breadItems, setBreadItems] = useState([]);
+
+  // const state = useGlobal();
   // const showBuy = useMemo(() => {
   //   const list = state.globalState.breadList;
   //   console.log('state.globalState.breadList', list);
@@ -95,19 +112,7 @@ const Resource = () => {
   //   return (status == 1 || status == -1) && !fromPurchase;
   // }, [status, address, state.globalState.breadList]);
 
-  // const showDcellarBut = useMemo(() => {
-  //   return status > -1;
-  // }, [status, address]);
-
-  const resourceType = useMemo(() => {
-    return objectId || type === 'Data' ? '0' : '1';
-  }, [objectId, type]);
-
-  const title = useMemo(() => {
-    return bucketName === name ? name : `${bucketName} #${name}`;
-  }, [name, bucketName]);
-
-  useEffect(() => {
+  /* useEffect(() => {
     const list = state.globalState.breadList;
     if (list.length && list[list.length - 1].name != title) {
       setBreadItems(
@@ -122,19 +127,15 @@ const Resource = () => {
     } else {
       setBreadItems(list);
     }
-  }, [state.globalState.breadList, title]);
+  }, [state.globalState.breadList, title]); */
 
-  const isOwner = useMemo(() => {
-    return address === ownerAddress;
-  }, [address, ownerAddress]);
+  // const showEndPoint = useMemo(() => {
+  //   return isOwner || (address !== ownerAddress && status === 2);
+  // }, [isOwner, address, ownerAddress, status]);
 
-  const showEndPoint = useMemo(() => {
-    return isOwner || (address !== ownerAddress && status === 2);
-  }, [isOwner, address, ownerAddress, status]);
-
-  const hasOwn = useMemo(() => {
-    return isOwner || status === 2;
-  }, [isOwner, status]);
+  // const hasOwn = useMemo(() => {
+  //   return isOwner || status === 2;
+  // }, [isOwner, status]);
 
   // 0: data
   // 1: collection
@@ -144,44 +145,23 @@ const Resource = () => {
   // console.log('hasOwn', hasOwn);
   // console.log('listed', listed);
 
-  const itemStatus = useItemStatus(isOwner, hasOwn);
+  // const itemStatus = useItemStatus(isOwner, hasOwn);
   // console.log('itemStatus', itemStatus);
 
-  const CreateTime = useMemo(() => {
-    let obj;
-    if (resourceType === '0') {
-      obj = objectInfo;
-    } else {
-      obj = bucketInfo;
-    }
-    return obj?.createAt?.low || 0;
-  }, [bucketInfo, objectInfo]);
+  // const fileSize = useMemo(() => {
+  //   return objectInfo?.payloadSize?.low;
+  // }, [objectInfo]);
 
-  const fileSize = useMemo(() => {
-    return objectInfo?.payloadSize?.low;
-  }, [objectInfo]);
+  // const { num } = useCollectionItems(name, bucketListed);
+  // console.log('breadItems -=---->', breadItems);
 
-  const { num } = useCollectionItems(name, bucketListed);
-  if (loading) return <Loader></Loader>;
-  if (noData) {
-    return (
-      <NoDataCon
-        alignItems={'center'}
-        justifyContent={'center'}
-        flexDirection={'column'}
-      >
-        <NoData size={280}></NoData>
-        <NoDataTitle>No Data</NoDataTitle>
-        <NoDataSub>No data available</NoDataSub>
-      </NoDataCon>
-    );
+  if (itemInfoLoading || storageInfoLoading || !itemInfo) {
+    return <Loader />;
   }
-
-  console.log('breadItems -=---->', breadItems);
 
   return (
     <Container>
-      <MyBreadcrumb>
+      {/* <MyBreadcrumb>
         {breadItems.map((item: any, index: number) => {
           return (
             <MyBreadcrumbItem
@@ -204,14 +184,14 @@ const Resource = () => {
             </MyBreadcrumbItem>
           );
         })}
-      </MyBreadcrumb>
+      </MyBreadcrumb> */}
 
       <ResourceInfo gap={100} padding="30px 0">
         <ImgCon>
           <img src={url || defaultImg(name, 246)} alt="" />
-          {itemStatus !== 'NOT_PURCHASED_BY_ME' && (
+          {relation !== 'NOT_PURCHASE' && (
             <Cover alignItems={'center'} justifyContent="flex-end" p="16px">
-              {itemStatus === 'PURCHASED_BY_ME' && (
+              {relation === 'PURCHASED' && (
                 <Flex
                   alignItems="center"
                   gap="8px"
@@ -226,7 +206,7 @@ const Resource = () => {
                 </Flex>
               )}
 
-              {itemStatus === 'LISTED_BY_ME' && (
+              {relation === 'OWNER' && (
                 <Flex
                   alignItems="center"
                   gap="8px"
@@ -250,7 +230,7 @@ const Resource = () => {
 
         <Info flexDirection="column" flex="1">
           <NameCon gap={4} alignItems={'center'} justifyContent={'flex-start'}>
-            <Name>{title}</Name>
+            <Name>{resourceName}</Name>
             <BscTraceIcon
               color="#53EAA1"
               width={24}
@@ -258,144 +238,54 @@ const Resource = () => {
               cursor={'pointer'}
               marginLeft={6}
               onClick={() => {
-                const o = resourceType == '1' ? bucketInfo : objectInfo;
-                const { id } = o;
+                if (!storageInfo) return;
+                const o =
+                  type == 'COLLECTION'
+                    ? storageInfo.bucketInfo
+                    : storageInfo.objectInfo;
+
                 reportEvent({
                   name: 'dm.detail.overview.view_in_explorer.click',
                 });
                 window.open(
                   `${GF_EXPLORER_URL}${
-                    resourceType == '1' ? 'bucket' : 'object'
-                  }/0x${Number(id).toString(16).padStart(64, '0')}`,
+                    type == 'COLLECTION' ? 'bucket' : 'object'
+                  }/0x${Number(o?.id).toString(16).padStart(64, '0')}`,
                 );
               }}
             />
           </NameCon>
 
-          {resourceType === '0' && (
-            <DataInfo
-              collection={{
-                path: breadItems[1].path,
-                name: breadItems[1].name,
-                query: breadItems[1].query,
-              }}
-              baseInfo={baseInfo}
-              listed={listed}
-              createdAt={CreateTime}
-              fileSize={fileSize}
-              salesVolume={salesVolume}
-              itemStatus={itemStatus}
-              ownerAddress={ownerAddress}
-              categoryId={parseInt(cid)}
-              price={price}
-            />
+          {type === 'OBJECT' && (
+            <DataInfo itemId={itemId} objectInfo={storageInfo?.objectInfo} />
           )}
 
-          {resourceType == '1' && (
-            <CollectionInfo
-              collection={{
-                path: breadItems[1].path,
-                name: breadItems[1].name,
-                query: breadItems[1].query,
-              }}
-              name={name}
-              baseInfo={baseInfo}
-              listed={listed}
-              createdAt={CreateTime}
-              fileSize={fileSize}
-              salesVolume={salesVolume}
-              itemStatus={itemStatus}
-              ownerAddress={ownerAddress}
-              categoryId={parseInt(cid)}
-              price={price}
-            />
+          {type == 'COLLECTION' && (
+            <Box>Collecton</Box>
+            // <CollectionInfo
+            //   collection={{
+            //     path: breadItems[1].path,
+            //     name: breadItems[1].name,
+            //     query: breadItems[1].query,
+            //   }}
+            //   name={name}
+            //   baseInfo={baseInfo}
+            //   listed={listed}
+            //   createdAt={CreateTime}
+            //   fileSize={fileSize}
+            //   salesVolume={salesVolume}
+            //   itemStatus={itemStatus}
+            //   ownerAddress={ownerAddress}
+            //   categoryId={parseInt(cid)}
+            //   price={price}
+            // />
           )}
-
-          {/* 
-          {resourceType == '1' && (
-            <CollInfo gap={8}>
-              <ItemNum>{num} Items</ItemNum>
-              <Tag alignItems={'center'} justifyContent={'center'}>
-                Collection
-              </Tag>
-            </CollInfo>
-          )}
-
-          <OwnCon alignItems={'center'}>
-            {resourceType == '0' && (
-              <FileSize> {parseFileSize(fileSize)} </FileSize>
-            )}
-            Created by{' '}
-            {address === ownerAddress ? (
-              <span>You</span>
-            ) : (
-              <Link to={`/profile?address=${ownerAddress}`}>
-                <span>{trimLongStr(ownerAddress)}</span>
-              </Link>
-            )}{' '}
-            At {formatDateUTC(CreateTime * 1000)}
-          </OwnCon>
-
-          <ActionGroup gap={10} alignItems={'center'}>
-            {address === ownerAddress && !listed && !bucketListed && (
-              <Button
-                size={'sm'}
-                onClick={async () => {
-                  reportEvent({ name: 'dm.detail.overview.list.click' });
-                  const initInfo = {
-                    bucket_name: bucketName,
-                    object_name: bucketName === name ? '' : name,
-                    create_at: CreateTime,
-                    payload_size: fileSize,
-                  };
-                  modalData.modalDispatch({
-                    type: 'OPEN_LIST',
-                    initInfo,
-                  });
-                }}
-              >
-                List
-              </Button>
-            )}
-            {showBuy && (
-              <Button
-                size={'sm'}
-                onClick={() => {
-                  reportEvent({ name: 'dm.detail.overview.buy.click' });
-                  if (!isConnected && !isConnecting) {
-                    handleModalOpen();
-                  } else {
-                    modalData.modalDispatch({
-                      type: 'OPEN_BUY',
-                      buyData: baseInfo,
-                    });
-                  }
-                }}
-              >
-                Buy
-              </Button>
-            )}
-            {showDcellarBut && (
-              <Button
-                size={'sm'}
-                onClick={() => {
-                  reportEvent({
-                    name: 'dm.detail.overview.view_in_dcellar.click',
-                  });
-                  window.open(`${DCELLAR_URL}buckets/${bucketName}`);
-                }}
-                variant="ghost"
-              >
-                View in Dcellar
-              </Button>
-            )}
-          </ActionGroup> */}
         </Info>
       </ResourceInfo>
 
       <Hr mb="55px" />
 
-      <Overview
+      {/* <Overview
         resourceType={resourceType}
         desc={desc}
         showEdit={address === ownerAddress}
@@ -405,68 +295,44 @@ const Resource = () => {
         name={name}
         bucketName={bucketName}
         listed={listed}
-        showEndpoints={showEndPoint}
+        showEndpoints={false}
         itemStatus={itemStatus}
         baseInfo={baseInfo}
-      />
+      /> */}
 
-      {resourceType === '1' && (
+      {type === 'COLLECTION' && (
         <>
           <Hr mt="55px" />
           <Box mt="50px">
-            <CollectionList
+            {/* <CollectionList
               status={status}
               name={name}
               listed={bucketListed}
               bucketName={bucketName}
               bucketInfo={bucketInfo}
               hasOwn={hasOwn}
-            />
+            /> */}
           </Box>
         </>
       )}
 
-      {/* <Box h={30}></Box> */}
-      {/* <NavBar active={currentTab} onChange={handleTabChange} items={navItems} />
-      <Box h={10} w={996}></Box> */}
-      {/* {currentTab === Type.Description ? (
-        <Overview
-          desc={desc}
-          showEdit={address === ownerAddress}
-          editFun={() => {
-            setOpen(true);
-          }}
-          name={name}
-          bucketName={bucketName}
-          listed={listed}
-          showEndpoints={showEndPoint}
-        ></Overview>
-      ) : (
-        <List
-          status={status}
-          name={name}
-          listed={bucketListed}
-          bucketName={bucketName}
-          bucketInfo={bucketInfo}
-          hasOwn={hasOwn}
-        ></List>
-      )} */}
       {open && (
-        <EditModal
-          isOpen={open}
-          handleOpen={() => {
-            reportEvent({ name: 'dm.detail.overview.edit.click' });
-            setOpen(false);
-          }}
-          detail={{
-            ...baseInfo,
-            desc,
-            url,
-          }}
-          updateFn={() => {
-            setUpdate(true);
-          }}
-        ></EditModal>
+        <Box>x</Box>
+        // <EditModal
+        //   isOpen={open}
+        //   handleOpen={() => {
+        //     reportEvent({ name: 'dm.detail.overview.edit.click' });
+        //     setOpen(false);
+        //   }}
+        //   detail={{
+        //     ...baseInfo,
+        //     desc,
+        //     url,
+        //   }}
+        //   updateFn={() => {
+        //     setUpdate(true);
+        //   }}
+        // />
       )}
     </Container>
   );
@@ -545,15 +411,4 @@ const Name = styled.div`
   /* identical to box height, or 119% */
 
   color: #f7f7f8;
-`;
-
-const NoDataCon = styled(Flex)``;
-
-const NoDataTitle = styled.div`
-  font-size: 32px;
-  font-weight: 600;
-`;
-
-const NoDataSub = styled.div`
-  font-size: 20px;
 `;

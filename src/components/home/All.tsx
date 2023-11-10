@@ -146,7 +146,7 @@ const AllList = () => {
     },
     {
       header: 'Action',
-      cell: (data: any) => {
+      cell: (data) => {
         return (
           <ActionCom
             data={data}

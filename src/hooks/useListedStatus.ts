@@ -4,7 +4,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 // import { MarketPlaceContract } from '../base/contract/marketPlaceContract';
-import { getItemDetail } from '../utils/apis';
+import { getItemByGroupId } from '../utils/apis';
 
 // export const useListedStatus = (groupId?: string) => {
 //   const { address } = useAccount();
@@ -40,7 +40,7 @@ export const useListedStatus = (groupId?: string) => {
   const checkListed = useCallback(
     async (groupId: string) => {
       if (groupId) {
-        const result = await getItemDetail(groupId);
+        const result = await getItemByGroupId(groupId);
         const { price, status } = result;
         if (status === 'LISTED') {
           setPrice(price);

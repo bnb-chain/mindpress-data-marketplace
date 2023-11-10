@@ -39,11 +39,12 @@ export const SliderCard = (props: Props) => {
         justifyContent="space-between"
         cursor="pointer"
         onClick={() => {
-          navigator(
-            `/resource?gid=${id}&gn=${groupName}&address=${address}&from=${encodeURIComponent(
-              JSON.stringify([props]),
-            )}`,
-          );
+          navigator(`/resource?id=${id}`);
+          // navigator(
+          //   `/resource?id=${id}&gid=${id}&gn=${groupName}&address=${address}&from=${encodeURIComponent(
+          //     JSON.stringify([props]),
+          //   )}`,
+          // );
         }}
       >
         <Box h="240px">
@@ -66,8 +67,6 @@ export const SliderCard = (props: Props) => {
             >
               {address && <MetaMaskAvatar address={address} size={40} />}
             </Link>
-
-            {/* <ProfileImage w="40px" h="40px" /> */}
           </Box>
         </ContainerAddress>
 

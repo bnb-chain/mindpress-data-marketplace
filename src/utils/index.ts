@@ -9,6 +9,7 @@ import { AxiosResponse } from 'axios';
 import { IReturnOffChainAuthKeyPairAndUpload } from '@bnb-chain/greenfield-js-sdk';
 import { getUtcZeroTimestamp } from './time';
 import { DAPP_NAME } from '../env';
+import { Item } from './apis/types';
 
 // import ProgressBarToast from '../components/ProgressBarToast';
 
@@ -103,6 +104,9 @@ export const generateResourceName = (bucketName: string, objName?: string) => {
   }
 };
 
+/**
+ * get bucket name / object name from group name
+ */
 export const parseGroupName = (groupName: string) => {
   let name = groupName;
   let type = 'Collection';

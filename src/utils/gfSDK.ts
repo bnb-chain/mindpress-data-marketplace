@@ -153,6 +153,10 @@ export const getObjectInfo = async (objectId: string) => {
   return await client.object.headObjectById(objectId);
 };
 
+export type QueryHeadObjectResponse = Awaited<
+  ReturnType<typeof getObjectInfoByName>
+>;
+
 export const getObjectInfoByName = async (
   bucketName: string,
   objectName: string,

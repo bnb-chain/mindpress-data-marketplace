@@ -24,11 +24,11 @@ export const BuyModal = (props: any) => {
 
   const { buyData } = modalData.modalState;
 
-  const { name, id, price, type, groupName, ownerAddress } = buyData;
+  const { name, id, groupId, price, type, groupName, ownerAddress } = buyData;
 
   const { buy, relayFee } = useBuy(groupName, ownerAddress, price);
 
-  const { GfBalanceVal, BscBalanceVal } = useChainBalance();
+  const { BscBalanceVal } = useChainBalance();
 
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
@@ -53,7 +53,7 @@ export const BuyModal = (props: any) => {
 
   const BSC_FEE_SUFF = useMemo(() => {
     return Number(BscBalanceVal) >= TotalPrice;
-  }, [GfBalanceVal, TotalPrice]);
+  }, [BscBalanceVal, TotalPrice]);
 
   return (
     <Container
@@ -80,7 +80,7 @@ export const BuyModal = (props: any) => {
                 flexDirection={'column'}
               >
                 {name}
-                {type === 'Collection' ? (
+                {type === 'COLLECTION' ? (
                   <Tag justifyContent={'center'} alignItems={'center'}>
                     Collection
                   </Tag>
@@ -132,7 +132,7 @@ export const BuyModal = (props: any) => {
           <Button
             width={'50%'}
             onClick={() => {
-              buy(id);
+              buy(groupId);
               modalData.modalDispatch({ type: 'BUYING' });
             }}
             disabled={!BSC_FEE_SUFF}

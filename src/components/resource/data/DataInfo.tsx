@@ -1,59 +1,92 @@
 import styled from '@emotion/styled';
+import { CalendarIcon } from '@totejs/icons';
 import { Box, Button, Flex } from '@totejs/uikit';
 import BN from 'bn.js';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { Link } from 'react-router-dom';
 import { useBNBPrice } from '../../../hooks/useBNBPrice';
-import { ITEM_STATUS } from '../../../hooks/useItemStatus';
+import { useGetItemById } from '../../../hooks/useGetItemById';
 import { useModal } from '../../../hooks/useModal';
 import {
   divide10Exp,
   formatDateDot,
-  formatDateUTC,
   parseFileSize,
   roundFun,
   trimLongStr,
 } from '../../../utils';
+import { Loader } from '../../Loader';
 import BSCIcon from '../../svgIcon/BSCIcon';
-import { SizeIcon } from '../../svgIcon/SizeIcon';
 import { CategoryIcon } from '../../svgIcon/CategoryIcon';
-import { CalendarIcon } from '@totejs/icons';
 import { ShoppingIcon } from '../../svgIcon/ShoppingIcon';
+import { SizeIcon } from '../../svgIcon/SizeIcon';
+import { QueryHeadObjectResponse } from '../../../utils/gfSDK';
+import { NoData } from '../../NoData';
+import { useGetItemRelationWithAddr } from '../../../hooks/useGetItemRelationWithAddr';
+import { useAccount } from 'wagmi';
 
 interface Props {
-  collection: {
-    path: string;
-    name: string;
-    query: string;
-  };
-  ownerAddress: string;
-  fileSize: number;
-  categoryId: number;
-  createdAt: number;
-  salesVolume: number;
-  itemStatus: ITEM_STATUS;
-  price: string;
-  listed: boolean;
-  baseInfo: any;
+  // collection: {
+  //   path: string;
+  //   name: string;
+  //   query: string;
+  // };
+  // ownerAddress: string;
+  // // fileSize: number;
+  // categoryId: number;
+  // // createdAt: number;
+  // // salesVolume: number;
+  // // itemStatus: ITEM_STATUS;
+  // price: string;
+  // listed: boolean;
+  // baseInfo: any;
+  itemId: string;
+  objectInfo?: QueryHeadObjectResponse['objectInfo'];
 }
 
 export const DataInfo = (props: Props) => {
   const {
-    collection,
-    ownerAddress,
-    fileSize,
-    baseInfo,
-    categoryId,
-    createdAt,
-    salesVolume,
-    itemStatus,
-    price,
-    listed,
+    itemId,
+    objectInfo,
+    // collection,
+    // ownerAddress,
+    // fileSize,
+    // baseInfo,
+    // categoryId,
+    // createdAt,
+    // salesVolume,
+    // itemStatus,
+    // price,
+    // listed,
   } = props;
 
-  console.log('listed', listed);
+  const { data: itemInfo, isLoading: itemInfoLoading } = useGetItemById(
+    parseInt(itemId),
+  );
 
+  const {
+    name,
+    type,
+    price,
+    url,
+    ownerAddress,
+    description,
+    status,
+    createdAt,
+    groupName,
+    categoryId,
+  } = itemInfo;
+
+  const { address } = useAccount();
   const { price: bnbPrice } = useBNBPrice();
+  const relation = useGetItemRelationWithAddr(address, itemInfo);
+
+  const modalData = useModal();
+  if (!itemInfo || itemInfoLoading) {
+    return <Loader />;
+  }
+  if (!objectInfo) {
+    return <NoData size={300} />;
+  }
   // console.log(`${collection.path}${collection.query}?${collection.query}`);
 
   // const categoryies = useGetCatoriesMap();
@@ -61,15 +94,13 @@ export const DataInfo = (props: Props) => {
 
   // console.log('category', category, categoryId);
 
-  const modalData = useModal();
-
   return (
     <Box>
       <Flex mt="16px" mb="32px" alignItems="center">
         <Box color="#F7F7F8" fontSize="16px" fontWeight="600">
-          <Link to={`${collection.path}?${collection.query || ''}`}>
+          {/* <Link to={`${collection.path}?${collection.query || ''}`}>
             {collection?.name?.replace('+', ' ')}
-          </Link>
+          </Link> */}
         </Box>
         <Box fontWeight="16px" color="#C4C5CB" ml="8px" mr="16px">
           created by
@@ -97,7 +128,7 @@ export const DataInfo = (props: Props) => {
       <FieldList justifyContent="space-between">
         <FlexCon flex={1} justifyContent="space-between" mr="10px">
           <Block>
-            <Value>{parseFileSize(fileSize)}</Value>
+            <Value>{parseFileSize(objectInfo.payloadSize.low)}</Value>
             <Field>
               <SizeIcon /> Size
             </Field>
@@ -105,7 +136,7 @@ export const DataInfo = (props: Props) => {
           <Block>
             <Value>{/* {category?.name} */} Uncategorized </Value>
             <Field>
-              <CategoryIcon /> Category{' '}
+              <CategoryIcon /> Category
             </Field>
           </Block>
         </FlexCon>
@@ -118,7 +149,7 @@ export const DataInfo = (props: Props) => {
             </Field>
           </Block>
           <Block>
-            <Value>{salesVolume || 0}</Value>
+            <Value>{itemInfo.totalSale || 0}</Value>
             <Field>
               <ShoppingIcon /> Purchased
             </Field>
@@ -148,7 +179,7 @@ export const DataInfo = (props: Props) => {
             </Flex>
           </Flex>
 
-          {itemStatus === 'NOT_PURCHASED_BY_ME' && listed && (
+          {relation === 'NOT_PURCHASE' && (
             <Box>
               <Button
                 color="#FFE900"
@@ -156,7 +187,7 @@ export const DataInfo = (props: Props) => {
                 onClick={() => {
                   modalData.modalDispatch({
                     type: 'OPEN_BUY',
-                    buyData: baseInfo,
+                    buyData: itemInfo,
                   });
                 }}
               >
@@ -164,21 +195,6 @@ export const DataInfo = (props: Props) => {
               </Button>
             </Box>
           )}
-
-          {/* {itemStatus !== 'NOT_PURCHASED_BY_ME' && (
-            <Box>
-              <Button
-                color="#FFE900"
-                background="#665800"
-                onClick={() => {
-                  // ...
-                  document.documentElement.scrollTop = 500;
-                }}
-              >
-                Get My Data
-              </Button>
-            </Box>
-          )} */}
         </ActionBox>
       </Box>
     </Box>

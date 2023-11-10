@@ -9,7 +9,6 @@ import {
   formatDateUTC,
   trimLongStr,
 } from '../../utils';
-// import { useSalesVolume } from '../../hooks/useSalesVolume';
 import { useGetItemList } from '../../hooks/useGetItemList';
 import { ActionCom } from '../ActionCom';
 import { Loader } from '../Loader';
@@ -106,19 +105,7 @@ const OtherListedList = (props: IOtherListedList) => {
     {
       header: 'Action',
       cell: (data) => {
-        return (
-          <ActionCom
-            data={{
-              groupName: data.groupName,
-              id: data.groupId,
-              name: data.name,
-              ownerAddress: data.ownerAddress,
-              type: data.type,
-              price: data.price,
-            }}
-            address={realAddress}
-          ></ActionCom>
-        );
+        return <ActionCom data={data} address={realAddress}></ActionCom>;
       },
     },
   ];

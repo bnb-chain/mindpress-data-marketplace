@@ -6,7 +6,7 @@ import { useAccount } from 'wagmi';
 // import { MarketPlaceContract } from '../base/contract/marketPlaceContract';
 // import { headGroupNFT } from '../utils/gfSDK';
 import { parseGroupName } from '../utils';
-import { getPurchaseList } from '../utils/apis';
+import { searchPurchase } from '../utils/apis';
 
 // export const useUserPurchased = (page: number, pageSize = 10) => {
 //   const [list, setList] = useState(<any>[]);
@@ -71,8 +71,10 @@ export const useUserPurchased = (page: number, pageSize = 10) => {
   const { address } = useAccount();
 
   useEffect(() => {
+    if (!address) return;
+
     setLoading(true);
-    getPurchaseList({
+    searchPurchase({
       filter: {
         address,
       },

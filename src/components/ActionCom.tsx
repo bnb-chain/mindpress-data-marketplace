@@ -6,9 +6,10 @@ import { useModal } from '../hooks/useModal';
 import { useStatus } from '../hooks/useStatus';
 import { useWalletModal } from '../hooks/useWalletModal';
 import { OwnActionCom } from './OwnActionCom';
+import { Item } from '../utils/apis/types';
 
 interface IActionCom {
-  data: BuyData;
+  data: Item;
   address: string;
   from?: string;
 }

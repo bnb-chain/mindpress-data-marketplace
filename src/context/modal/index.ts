@@ -1,5 +1,6 @@
 import { StateModalVariantType } from '@totejs/uikit';
 import React from 'react';
+import { Item } from '../../utils/apis/types';
 
 export const initialState: any = {
   openList: false,
@@ -37,7 +38,7 @@ export interface ModalState {
     openBuy: boolean;
     buying: boolean;
     listData: object;
-    buyData: BuyData;
+    buyData: Item;
     initInfo: object;
     initListStatus: number;
     initListResult: object;

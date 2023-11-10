@@ -10,7 +10,7 @@ import { parseGroupName } from '../utils';
 // import { multiCallFun } from '../base/contract/multiCall';
 // import { MarketPlaceContract } from '../base/contract/marketPlaceContract';
 import Web3 from 'web3';
-import { getItemDetail } from '../utils/apis';
+import { getItemByGroupId } from '../utils/apis';
 
 const Group = (props: any) => {
   const {
@@ -70,7 +70,7 @@ const Search = (props: ISearch) => {
               const {
                 group: { id },
               } = item;
-              return getItemDetail(id);
+              return getItemByGroupId(id);
             }),
           );
           // const res = await multiCallFun(

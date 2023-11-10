@@ -31,13 +31,28 @@ export interface SearchItemsRequest {
   offset: number;
   limit: number;
 }
-
 export interface SearchItemsResponse {
   items: Item[];
   total: number;
 }
 
-export interface getCategoriesResponse {
+export interface CategoriesResponse {
   id: number;
   name: string;
+}
+
+export interface SearchPurchaseRequest {
+  filter: {
+    address?: string;
+    itemId?: number;
+    bucketId?: number;
+    objectId?: number;
+  };
+  sort: 'CREATION_ASC' | 'CREATION_DESC' | 'PRICE_ASC' | 'PRICE_DESC';
+  offset: number;
+  limit: number;
+}
+export interface SearchPurchaseResponse {
+  purchases: Item[];
+  total: number;
 }

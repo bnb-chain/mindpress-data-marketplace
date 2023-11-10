@@ -4,7 +4,9 @@ import {
   Item,
   SearchItemsRequest,
   SearchItemsResponse,
-  getCategoriesResponse,
+  CategoriesResponse,
+  SearchPurchaseRequest,
+  SearchPurchaseResponse,
 } from './types';
 
 const instance = axios.create({
@@ -21,26 +23,27 @@ export const searchItems = async (
   return data.data.data;
 };
 
-export const getPurchaseList = (data: any) => {
-  return instance.post('purchase/search', JSON.stringify(data)).then((data) => {
-    return data.data.data;
-  });
+export const searchPurchase = async (
+  params: SearchPurchaseRequest,
+): Promise<SearchPurchaseResponse> => {
+  const data = await instance.post('purchase/search', JSON.stringify(params));
+
+  return data.data.data;
 };
 
-export const getItemDetail = (groupId: string) => {
-  return instance.get(`item_by_group/${groupId}`).then((data) => {
-    return data?.data?.data?.item || {};
-  });
-};
-
-export const getCategoryMap = async (): Promise<getCategoriesResponse[]> => {
-  const data = await instance.get('item/categories');
-  return data?.data?.data?.categories || [];
-};
-
-export const getItem = async (id: number): Promise<Item> => {
+export const getItemById = async (id: number): Promise<Item> => {
   const data = await instance.get(`item/${id}`);
   return data?.data?.data?.item || {};
+};
+
+export const getItemByGroupId = async (groupId: string) => {
+  const data = await instance.get(`item_by_group/${groupId}`);
+  return data?.data?.data?.item || {};
+};
+
+export const getCategoryMap = async (): Promise<CategoriesResponse[]> => {
+  const data = await instance.get('item/categories');
+  return data?.data?.data?.categories || [];
 };
 
 export const getItemsById = async (ids: number[]): Promise<Item[]> => {

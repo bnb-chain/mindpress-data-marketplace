@@ -3,7 +3,7 @@ import { useAccount } from 'wagmi';
 import { getBucketList, getGroupInfoByName } from '../utils/gfSDK';
 import { generateGroupName } from '../utils';
 import { useListedStatus } from './useListedStatus';
-import { getItemDetail } from '../utils/apis';
+import { getItemByGroupId } from '../utils/apis';
 
 export const useCollectionList = (page: number, pageSize = 10) => {
   const [list, setList] = useState([]);
@@ -40,7 +40,7 @@ export const useCollectionList = (page: number, pageSize = 10) => {
                   // const { totalSale } = await getItemDetail(id);
                   const [result, { totalSale }] = await Promise.all([
                     checkListed(id),
-                    getItemDetail(id),
+                    getItemByGroupId(id),
                   ]);
                   return {
                     ...item,
