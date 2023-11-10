@@ -9,8 +9,6 @@ export const theme: Theme = {
     storageKey: 'marketplace-color-mode',
   },
 
-  ...colors,
-
   styles: {
     global: {
       body: {
@@ -21,4 +19,6 @@ export const theme: Theme = {
       },
     },
   },
+
+  ...colors,
 };

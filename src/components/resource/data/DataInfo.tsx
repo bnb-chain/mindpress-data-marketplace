@@ -118,7 +118,7 @@ export const DataInfo = (props: Props) => {
             </Field>
           </Block>
           <Block>
-            <Value>{salesVolume}</Value>
+            <Value>{salesVolume || 0}</Value>
             <Field>
               <ShoppingIcon /> Purchased
             </Field>

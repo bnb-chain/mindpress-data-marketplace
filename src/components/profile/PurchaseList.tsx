@@ -146,10 +146,10 @@ const PurchaseList = () => {
   return (
     <Container>
       <Table
-        headerContent={`Latest ${Math.min(
-          pageSize,
-          list.length,
-        )}  Collections (Total of ${list.length})`}
+        // headerContent={`Latest ${Math.min(
+        //   pageSize,
+        //   list.length,
+        // )}  Collections (Total of ${list.length})`}
         containerStyle={{ padding: '4px 20px' }}
         pagination={{
           current: page,
@@ -160,7 +160,8 @@ const PurchaseList = () => {
         columns={columns}
         data={list}
         loading={loading}
-        hoverBg={'#14151A'}
+        withContainer={false}
+        hoverBg="#1E2026"
       />
     </Container>
   );

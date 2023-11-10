@@ -218,11 +218,10 @@ const List = (props: any) => {
     <Container>
       <Box h={10} />
       <Table
-        headerContent={`Latest ${Math.min(
-          20,
-          folderList.length,
-        )}  Data (Total of ${folderList.length})`}
-        containerStyle={{ padding: 20 }}
+        // headerContent={`Latest ${Math.min(
+        //   20,
+        //   folderList.length,
+        // )}  Data (Total of ${folderList.length})`}
         pagination={{
           current: page,
           pageSize: 20,
@@ -232,7 +231,8 @@ const List = (props: any) => {
         columns={columns}
         data={folderList}
         loading={loading}
-        hoverBg={'#14151A'}
+        withContainer={false}
+        hoverBg="#1E2026"
       />
     </Container>
   );

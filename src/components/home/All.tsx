@@ -1,25 +1,19 @@
 import styled from '@emotion/styled';
 import { Box, Flex, Table } from '@totejs/uikit';
-import { usePagination } from '../../hooks/usePagination';
-import { Link, useNavigate } from 'react-router-dom';
-import LinkArrow from '../../images/link_arrow.png';
-import {
-  formatDateUTC,
-  trimLongStr,
-  divide10Exp,
-  defaultImg,
-  contentTypeToExtension,
-} from '../../utils';
-import { useGetListed } from '../../hooks/useGetListed';
 import BN from 'bn.js';
-import { useAccount } from 'wagmi';
-import { useGlobal } from '../../hooks/useGlobal';
-import { CollectionLogo } from '../svgIcon/CollectionLogo';
-import { ActionCom } from '../ActionCom';
-import { reportEvent } from '../../utils/ga';
-import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
-import { CATEGORY_MAP } from '../../utils/category';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAccount } from 'wagmi';
+import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
+import { useGetListed } from '../../hooks/useGetListed';
+import { useGlobal } from '../../hooks/useGlobal';
+import { usePagination } from '../../hooks/usePagination';
+import LinkArrow from '../../images/link_arrow.png';
+import { defaultImg, divide10Exp, trimLongStr } from '../../utils';
+import { CATEGORY_MAP } from '../../utils/category';
+import { reportEvent } from '../../utils/ga';
+import { ActionCom } from '../ActionCom';
+import { CollectionLogo } from '../svgIcon/CollectionLogo';
 
 const AllList = () => {
   const { handlePageChange, page } = usePagination();
@@ -77,11 +71,9 @@ const AllList = () => {
             }}
           >
             <ImgCon src={url || defaultImg(name, 40)}></ImgCon>
-            <Box>
+            <Box title="collection">
               {trimLongStr(name, 15)}
-              {type === 'Collection' && (
-                <CollectionLogo w={14} ml="4px"></CollectionLogo>
-              )}
+              {type === 'Collection' && <CollectionLogo w={14} ml="4px" />}
             </Box>
           </ImgContainer>
         );
@@ -169,7 +161,6 @@ const AllList = () => {
   return (
     <Container>
       <Table
-        containerStyle={{ padding: '0', background: '#181a1e' }}
         pagination={{
           current: page,
           pageSize: 10,
@@ -179,7 +170,8 @@ const AllList = () => {
         columns={columns}
         data={list}
         loading={loading}
-        hoverBg={'#14151A'}
+        withContainer={false}
+        hoverBg="#1E2026"
       />
     </Container>
   );

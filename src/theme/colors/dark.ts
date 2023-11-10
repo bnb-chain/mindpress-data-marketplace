@@ -15,6 +15,7 @@ export const dark = {
 
     bg: {
       bottom: '#14151A',
+      bottom_secondary: '#181A1E',
       middle: '#1E2026',
       walletTab: '#F7F7F7',
       codebox: '#262D37',
