@@ -16,7 +16,7 @@ import { ActionCom } from '../ActionCom';
 import { CollectionLogo } from '../svgIcon/CollectionLogo';
 import { TableProps } from '../ui/table/TableProps';
 import { Loader } from '../Loader';
-import { Item } from '../../utils/http';
+import { Item } from '../../utils/apis/types';
 
 const PAGE_SIZE = 10;
 

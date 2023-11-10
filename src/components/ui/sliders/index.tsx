@@ -3,7 +3,7 @@ import { Box, Flex } from '@totejs/uikit';
 import { useRef, useState } from 'react';
 import TinySlider from 'tiny-slider-react';
 import 'tiny-slider/dist/tiny-slider.css';
-import { DefaultButton } from '../ui/buttons/DefaultButton';
+import { DefaultButton } from '../buttons/DefaultButton';
 import { LeftArrow } from './LeftArrow';
 import { RightArrow } from './RightArrow';
 import { SliderCard } from './sliderCard';

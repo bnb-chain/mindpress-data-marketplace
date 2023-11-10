@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
-import { getItems } from '../utils/http';
+import { getItemsById } from '../utils/apis';
 
 export const useGetItems = (ids: number[]) => {
   return useQuery({
     queryKey: ['GET_ITEMS_BY_IDS', ids],
-    queryFn: () => getItems(ids),
-    gcTime: Infinity,
-    staleTime: Infinity,
+    queryFn: () => getItemsById(ids),
+    gcTime: 10000,
+    staleTime: 30000,
   });
 };

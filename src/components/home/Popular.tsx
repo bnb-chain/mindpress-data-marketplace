@@ -3,7 +3,7 @@ import { BN } from 'bn.js';
 import { useGetItemList } from '../../hooks/useGetItemList';
 import { defaultImg, divide10Exp } from '../../utils';
 import { Loader } from '../Loader';
-import { Sliders } from '../sliders';
+import { Sliders } from '../ui/sliders';
 
 const PAGE_SIZE = 10;
 

@@ -1,19 +1,14 @@
-import { useAccount } from 'wagmi';
-import { useStatus } from '../hooks/useStatus';
-import { useModal } from '../hooks/useModal';
-import { OwnActionCom } from './OwnActionCom';
 import styled from '@emotion/styled';
 import { Button, Flex } from '@totejs/uikit';
+import { useAccount } from 'wagmi';
+import { BuyData } from '../context/modal';
+import { useModal } from '../hooks/useModal';
+import { useStatus } from '../hooks/useStatus';
 import { useWalletModal } from '../hooks/useWalletModal';
-import { reportEvent } from '../utils/ga';
+import { OwnActionCom } from './OwnActionCom';
 
 interface IActionCom {
-  data: {
-    id: string;
-    groupName: string;
-    ownerAddress: string;
-    type: string;
-  };
+  data: BuyData;
   address: string;
   from?: string;
 }
@@ -34,8 +29,8 @@ export const ActionCom = (obj: IActionCom) => {
           background="#665800"
           color="#FFE900"
           onClick={async () => {
-            if (from === 'home')
-              reportEvent({ name: 'dm.main.list.buy.click' });
+            // if (from === 'home')
+            //   reportEvent({ name: 'dm.main.list.buy.click' });
             modalData.modalDispatch({
               type: 'OPEN_BUY',
               buyData: data,

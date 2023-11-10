@@ -10,7 +10,7 @@ import { parseGroupName } from '../utils';
 // import { multiCallFun } from '../base/contract/multiCall';
 // import { MarketPlaceContract } from '../base/contract/marketPlaceContract';
 import Web3 from 'web3';
-import { getItemDetail } from '../utils/http';
+import { getItemDetail } from '../utils/apis';
 
 const Group = (props: any) => {
   const {

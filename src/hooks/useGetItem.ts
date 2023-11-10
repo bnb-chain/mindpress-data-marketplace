@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getItem } from '../utils/http';
+import { getItem } from '../utils/apis';
 
 export const useGetItem = (id: number) => {
   return useQuery({

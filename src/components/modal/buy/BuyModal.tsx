@@ -11,19 +11,18 @@ import {
 } from '@totejs/uikit';
 import { BN } from 'bn.js';
 import { useMemo } from 'react';
-import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { BSC_CHAIN_ID, NETWORK } from '../../../env';
 import { useBuy } from '../../../hooks/useBuy';
 import { useChainBalance } from '../../../hooks/useChainBalance';
 import { useModal } from '../../../hooks/useModal';
-import { usePagination } from '../../../hooks/usePagination';
 import { defaultImg, divide10Exp, roundFun } from '../../../utils';
 
 export const BuyModal = (props: any) => {
   const modalData = useModal();
   const { isOpen, handleOpen } = props;
 
-  const { buyData }: { buyData: any } = modalData.modalState;
+  const { buyData } = modalData.modalState;
 
   const { name, id, price, type, groupName, ownerAddress } = buyData;
 

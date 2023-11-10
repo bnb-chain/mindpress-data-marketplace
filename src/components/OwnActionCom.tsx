@@ -11,7 +11,7 @@ import { useGlobal } from '../hooks/useGlobal';
 
 interface IOwnActionCom {
   data: {
-    id?: string;
+    id?: number;
     groupName?: string;
     ownerAddress: string;
     type: string;

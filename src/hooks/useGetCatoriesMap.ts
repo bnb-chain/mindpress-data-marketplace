@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getCategoryMap } from '../utils/http';
+import { getCategoryMap } from '../utils/apis';
 
 export const useGetCatoriesMap = () => {
   return useQuery({

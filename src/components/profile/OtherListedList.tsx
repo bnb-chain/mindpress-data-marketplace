@@ -11,11 +11,11 @@ import {
 } from '../../utils';
 // import { useSalesVolume } from '../../hooks/useSalesVolume';
 import { useGetItemList } from '../../hooks/useGetItemList';
-import { Item } from '../../utils/http';
 import { ActionCom } from '../ActionCom';
 import { Loader } from '../Loader';
 import { CollectionLogo } from '../svgIcon/CollectionLogo';
 import { TableProps } from '../ui/table/TableProps';
+import { Item } from '../../utils/apis/types';
 
 interface IOtherListedList {
   realAddress: string;
@@ -105,8 +105,20 @@ const OtherListedList = (props: IOtherListedList) => {
     },
     {
       header: 'Action',
-      cell: (data: any) => {
-        return <ActionCom data={data} address={realAddress}></ActionCom>;
+      cell: (data) => {
+        return (
+          <ActionCom
+            data={{
+              groupName: data.groupName,
+              id: data.groupId,
+              name: data.name,
+              ownerAddress: data.ownerAddress,
+              type: data.type,
+              price: data.price,
+            }}
+            address={realAddress}
+          ></ActionCom>
+        );
       },
     },
   ];

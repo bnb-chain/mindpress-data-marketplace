@@ -21,6 +21,15 @@ export const initialState: any = {
 
 export const defaultState: any = JSON.parse(JSON.stringify(initialState));
 
+export type BuyData = {
+  id: number;
+  name: string;
+  groupName: string;
+  ownerAddress: string;
+  type: string;
+  price: string;
+};
+
 export interface ModalState {
   modalState: {
     openList: boolean;
@@ -28,7 +37,7 @@ export interface ModalState {
     openBuy: boolean;
     buying: boolean;
     listData: object;
-    buyData: object;
+    buyData: BuyData;
     initInfo: object;
     initListStatus: number;
     initListResult: object;
@@ -79,6 +88,7 @@ export const ModalReducer = (initialState: any, action: any) => {
         listData: action.listData || initialState.listData,
       };
     case 'OPEN_BUY':
+      console.log('initListStatus', initialState);
       return {
         ...initialState,
         openBuy: true,

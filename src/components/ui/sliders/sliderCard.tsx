@@ -3,7 +3,7 @@ import { Box, Flex } from '@totejs/uikit';
 import { ReactNode } from 'react';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { Link, useNavigate } from 'react-router-dom';
-import { trimLongStr } from '../../utils';
+import { trimLongStr } from '../../../utils';
 interface Props {
   id: number;
   imgUrl: string;

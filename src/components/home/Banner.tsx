@@ -5,7 +5,7 @@ import { useGetItems } from '../../hooks/useGetItems';
 import MindPress from '../../images/mindpress.png';
 import { defaultImg, divide10Exp } from '../../utils';
 import { Loader } from '../Loader';
-import { Sliders } from '../sliders';
+import { Sliders } from '../ui/sliders';
 
 interface Props {
   itemIds: number[];

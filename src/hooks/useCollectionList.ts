@@ -3,7 +3,7 @@ import { useAccount } from 'wagmi';
 import { getBucketList, getGroupInfoByName } from '../utils/gfSDK';
 import { generateGroupName } from '../utils';
 import { useListedStatus } from './useListedStatus';
-import { getItemDetail } from '../utils/http';
+import { getItemDetail } from '../utils/apis';
 
 export const useCollectionList = (page: number, pageSize = 10) => {
   const [list, setList] = useState([]);
