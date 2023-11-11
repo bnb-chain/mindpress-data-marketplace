@@ -59,6 +59,9 @@ const AllList = () => {
             gap={6}
             onClick={() => {
               reportEvent({ name: 'dm.main.list.item_name.click' });
+
+              navigator(`/resource?id=${data.id}`);
+
               const item = {
                 path: '/',
                 name: 'Data MarketPlace',
@@ -70,11 +73,11 @@ const AllList = () => {
                 item,
               });
 
-              navigator(
-                `/resource?gid=${id}&gn=${groupName}&address=${ownerAddress}&from=${encodeURIComponent(
-                  JSON.stringify([item]),
-                )}`,
-              );
+              // navigator(
+              //   `/resource?gid=${id}&gn=${groupName}&address=${ownerAddress}&from=${encodeURIComponent(
+              //     JSON.stringify([item]),
+              //   )}`,
+              // );
             }}
           >
             <ImgCon src={url || defaultImg(name, 40)}></ImgCon>

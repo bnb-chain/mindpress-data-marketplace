@@ -31,16 +31,6 @@ export const searchPurchase = async (
   return data.data.data;
 };
 
-export const getItemById = async (id: number): Promise<Item> => {
-  const data = await instance.get(`item/${id}`);
-  return data?.data?.data?.item || {};
-};
-
-export const getItemByGroupId = async (groupId: string) => {
-  const data = await instance.get(`item_by_group/${groupId}`);
-  return data?.data?.data?.item || {};
-};
-
 export const getCategoryMap = async (): Promise<CategoriesResponse[]> => {
   const data = await instance.get('item/categories');
   return data?.data?.data?.categories || [];
@@ -49,4 +39,26 @@ export const getCategoryMap = async (): Promise<CategoriesResponse[]> => {
 export const getItemsById = async (ids: number[]): Promise<Item[]> => {
   const data = await instance.post(`item/batch`, { ids });
   return data?.data?.data?.items || [];
+};
+
+export const getItemByBucketId = async (bucketId: string): Promise<Item> => {
+  const data = await instance.get(`item_by_bucket/${bucketId}`);
+
+  return data?.data?.data?.item || {};
+};
+
+export const getItemByObjectId = async (objectId: string): Promise<Item> => {
+  const data = await instance.get(`item_by_object/${objectId}`);
+
+  return data?.data?.data?.item || {};
+};
+
+export const getItemById = async (id: number): Promise<Item> => {
+  const data = await instance.get(`item/${id}`);
+  return data?.data?.data?.item || {};
+};
+
+export const getItemByGroupId = async (groupId: string) => {
+  const data = await instance.get(`item_by_group/${groupId}`);
+  return data?.data?.data?.item || {};
 };

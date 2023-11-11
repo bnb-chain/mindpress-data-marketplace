@@ -38,7 +38,8 @@ import { useGetItemById } from '../hooks/useGetItemById';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
 import {
   useGetBOInfoFromGroup,
-  useGetBucket,
+  useGetBucketById,
+  useGetBucketByName,
   useGetGroup,
   useGetObject,
 } from '../hooks/useGetBucketOrObj';
@@ -47,17 +48,15 @@ import { ImgCon } from '../components/resource/ImgCon';
 const Resource = () => {
   const [p] = useSearchParams();
   // const groupId = p.getAll('gid')[0];
-  // const bucketId = p.getAll('bid')[0];
   // const cid = p.getAll('cid')[0];
   // const objectId = p.getAll('oid')[0];
   // const ownerAddress = p.getAll('address')[0];
   // const gName = p.getAll('gn')[0];
   // const bGroupName = p.getAll('bgn')[0];
   const itemId = p.getAll('id')[0];
+  // const bucketId = p.getAll('bid')[0];
 
   const { address } = useAccount();
-
-  // const [update, setUpdate] = useState(false);
 
   const { data: itemInfo, isLoading: itemInfoLoading } = useGetItemById(
     parseInt(itemId),
@@ -76,7 +75,7 @@ const Resource = () => {
 
   const storageInfo = useGetBOInfoFromGroup(itemInfo?.groupName);
 
-  const { data: bucketData } = useGetBucket(storageInfo?.bucketName);
+  const { data: bucketData } = useGetBucketByName(storageInfo?.bucketName);
 
   const { data: objectData } = useGetObject(
     storageInfo?.bucketName,
@@ -105,10 +104,6 @@ const Resource = () => {
   if (itemInfoLoading || !itemInfo) {
     return <Loader />;
   }
-
-  // if (!objectData || !bucketData) {
-  //   return <NoData size={400} />;
-  // }
 
   // const [breadItems, setBreadItems] = useState([]);
 

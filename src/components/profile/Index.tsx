@@ -46,16 +46,19 @@ const ProfileList = (props: IProfileList) => {
     } else {
       setNavItems(_navItems);
     }
-  }, [realAddress]);
+  }, [realAddress, self]);
 
   const currentTab = tab ? tab : Type.Collections;
-  const handleTabChange = useCallback((tab: any) => {
-    if (tab === 'collections')
-      reportEvent({ name: 'dm.profile.my_data.my_data.click' });
-    if (tab === 'purchase')
-      reportEvent({ name: 'dm.profile.my_purchase.my_purchase.click' });
-    navigator(`/profile?tab=${tab}`);
-  }, []);
+  const handleTabChange = useCallback(
+    (tab: any) => {
+      if (tab === 'collections')
+        reportEvent({ name: 'dm.profile.my_data.my_data.click' });
+      if (tab === 'purchase')
+        reportEvent({ name: 'dm.profile.my_purchase.my_purchase.click' });
+      navigator(`/profile?tab=${tab}`);
+    },
+    [navigator],
+  );
 
   const [showButton, setShowButton] = useState(false);
 

@@ -2,19 +2,34 @@ import { useQuery } from '@tanstack/react-query';
 import { parseGroupName } from '../utils';
 import { Item } from '../utils/apis/types';
 import {
+  getCollectionInfo,
   getCollectionInfoByName,
   getGroupInfoByName,
   getObjectInfoByName,
 } from '../utils/gfSDK';
 import { useEffect, useState } from 'react';
 
-export const useGetBucket = (bucketName?: string) => {
+export const useGetBucketByName = (bucketName?: string) => {
   return useQuery({
     enabled: !!bucketName,
-    queryKey: ['GET_BUCKET', bucketName],
+    queryKey: ['GET_BUCKET_BY_NAME', bucketName],
     queryFn: async () => {
       if (!bucketName) return;
       const res = await getCollectionInfoByName(bucketName);
+      return res;
+    },
+    gcTime: Infinity,
+    staleTime: Infinity,
+  });
+};
+
+export const useGetBucketById = (bucketId?: string) => {
+  return useQuery({
+    enabled: !!bucketId,
+    queryKey: ['GET_BUCKET_BY_ID', bucketId],
+    queryFn: async () => {
+      if (!bucketId) return;
+      const res = await getCollectionInfo(bucketId);
       return res;
     },
     gcTime: Infinity,

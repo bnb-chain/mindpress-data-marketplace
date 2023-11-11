@@ -1,30 +1,28 @@
 import styled from '@emotion/styled';
-import { Box, Button, ColumnDef, Flex, Table } from '@totejs/uikit';
-import { usePagination } from '../../../hooks/usePagination';
+import { CardPocketIcon, GoIcon } from '@totejs/icons';
+import { Box, Button, Flex, Table } from '@totejs/uikit';
+import { BN } from 'bn.js';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import { useCollectionItems } from '../../../hooks/useCollectionItems';
+import { ITEM_RELATION_ADDR } from '../../../hooks/useGetItemRelationWithAddr';
+import { useGlobal } from '../../../hooks/useGlobal';
+import { useModal } from '../../../hooks/useModal';
+import { usePagination } from '../../../hooks/usePagination';
+import { useSalesVolume } from '../../../hooks/useSalesVolume';
 import {
   contentTypeToExtension,
   defaultImg,
   divide10Exp,
   formatDateUTC,
-  generateGroupName,
   parseFileSize,
   trimLongStr,
 } from '../../../utils';
-import { useCollectionItems } from '../../../hooks/useCollectionItems';
-import { useSalesVolume } from '../../../hooks/useSalesVolume';
-import { useModal } from '../../../hooks/useModal';
-import { BN } from 'bn.js';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useGlobal } from '../../../hooks/useGlobal';
-import { GoIcon, CardPocketIcon } from '@totejs/icons';
-import { OwnActionCom } from '../../OwnActionCom';
-import { TableProps } from '../../ui/table/TableProps';
 import { Item } from '../../../utils/apis/types';
 import { QueryHeadBucketResponse } from '../../../utils/gfSDK';
 import { NoData } from '../../NoData';
-import { ITEM_RELATION_ADDR } from '../../../hooks/useGetItemRelationWithAddr';
-import { INode } from '../../../utils/tree';
+import { OwnActionCom } from '../../OwnActionCom';
+import { TableProps } from '../../ui/table/TableProps';
 
 interface Props {
   itemInfo: Item;
@@ -34,13 +32,10 @@ interface Props {
 const CollectionList = (props: Props) => {
   const { itemInfo, bucketData, relation } = props;
 
-  console.log('list', itemInfo.status === 'LISTED');
   const { list, loading } = useCollectionItems(
     itemInfo.name,
     itemInfo.status === 'LISTED',
   );
-
-  console.log('list', itemInfo.name, list);
 
   const { handlePageChange, page } = usePagination();
 
@@ -56,6 +51,8 @@ const CollectionList = (props: Props) => {
   //   const bucketId = bucketData.bucketInfo.id;
   //   bgn = generateGroupName(bucketData.bucketInfo.bucketName);
   //
+
+  // const { data: bucketIdData, refetch } = useGetBucketById(bucketId);
 
   const state = useGlobal();
 
@@ -322,8 +319,10 @@ const Container = styled.div`
 `;
 
 const ImgContainer = styled(Flex)`
+  gap: 16px;
   cursor: pointer;
-  color: ${(props: any) => props.theme.colors.scene.primary.normal};
+  color: #fff;
+  font-size: 16px;
 `;
 
 const ImgCon = styled.img`
