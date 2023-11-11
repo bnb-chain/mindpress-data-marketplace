@@ -9,7 +9,7 @@ export const cache: { [str: string]: any } = {};
 
 export const useCollectionItems = (
   bucketName: string,
-  collectionListed: boolean,
+  collectionListed?: boolean,
 ) => {
   // 0 owner
   // 1 Waiting for purchase
@@ -21,6 +21,8 @@ export const useCollectionItems = (
 
   const { checkListed } = useListedStatus();
   useEffect(() => {
+    if (collectionListed === undefined) return;
+
     if (bucketName) {
       getBucketFileList({ bucketName })
         .then(async (result: any) => {
@@ -103,7 +105,7 @@ export const useCollectionItems = (
           setLoading(false);
         });
     }
-  }, [bucketName, address]);
+  }, [bucketName, address, collectionListed, checkListed]);
 
   return { loading, list, num };
 };

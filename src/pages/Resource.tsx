@@ -41,7 +41,6 @@ import {
   useGetBucket,
   useGetGroup,
   useGetObject,
-  useGetStorageInfoByGroupName,
 } from '../hooks/useGetBucketOrObj';
 import { ImgCon } from '../components/resource/ImgCon';
 
@@ -84,7 +83,10 @@ const Resource = () => {
     storageInfo?.objectName,
   );
 
-  const { data: groupData } = useGetGroup(itemInfo?.groupName, address);
+  const { data: groupData } = useGetGroup(
+    itemInfo?.groupName,
+    itemInfo?.ownerAddress,
+  );
 
   const resourceName = useMemo(() => {
     if (!storageInfo || !bucketData || !itemInfo) return;
@@ -94,6 +96,7 @@ const Resource = () => {
       : `${bucketData.bucketInfo.bucketName} #${itemInfo?.name}`;
   }, [bucketData, itemInfo, storageInfo]);
 
+  console.log('itemInfo', itemInfo);
   console.log('storageInfo', storageInfo);
   console.log('groupData', groupData);
   console.log('bucketData', bucketData);
@@ -103,9 +106,9 @@ const Resource = () => {
     return <Loader />;
   }
 
-  if (!objectData || !bucketData) {
-    return <NoData size={400} />;
-  }
+  // if (!objectData || !bucketData) {
+  //   return <NoData size={400} />;
+  // }
 
   // const [breadItems, setBreadItems] = useState([]);
 
@@ -201,24 +204,7 @@ const Resource = () => {
           )}
 
           {itemInfo?.type == 'COLLECTION' && (
-            <Box>Collecton</Box>
-            // <CollectionInfo
-            //   collection={{
-            //     path: breadItems[1].path,
-            //     name: breadItems[1].name,
-            //     query: breadItems[1].query,
-            //   }}
-            //   name={name}
-            //   baseInfo={baseInfo}
-            //   listed={listed}
-            //   createdAt={CreateTime}
-            //   fileSize={fileSize}
-            //   salesVolume={salesVolume}
-            //   itemStatus={itemStatus}
-            //   ownerAddress={ownerAddress}
-            //   categoryId={parseInt(cid)}
-            //   price={price}
-            // />
+            <CollectionInfo itemInfo={itemInfo} relation={relation} />
           )}
         </Info>
       </ResourceInfo>
@@ -236,14 +222,11 @@ const Resource = () => {
         <>
           <Hr mt="55px" />
           <Box mt="50px">
-            {/* <CollectionList
-              status={status}
-              name={name}
-              listed={bucketListed}
-              bucketName={bucketName}
-              bucketInfo={bucketInfo}
-              hasOwn={hasOwn}
-            /> */}
+            <CollectionList
+              itemInfo={itemInfo}
+              bucketData={bucketData}
+              relation={relation}
+            />
           </Box>
         </>
       )}

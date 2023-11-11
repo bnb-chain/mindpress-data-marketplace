@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Box, Button, Flex, Table } from '@totejs/uikit';
+import { Box, Button, ColumnDef, Flex, Table } from '@totejs/uikit';
 import { usePagination } from '../../../hooks/usePagination';
 import { useAccount } from 'wagmi';
 import {
@@ -20,26 +20,27 @@ import { useGlobal } from '../../../hooks/useGlobal';
 import { GoIcon, CardPocketIcon } from '@totejs/icons';
 import { OwnActionCom } from '../../OwnActionCom';
 import { TableProps } from '../../ui/table/TableProps';
+import { Item } from '../../../utils/apis/types';
+import { QueryHeadBucketResponse } from '../../../utils/gfSDK';
+import { NoData } from '../../NoData';
+import { ITEM_RELATION_ADDR } from '../../../hooks/useGetItemRelationWithAddr';
+import { INode } from '../../../utils/tree';
 
-const TotalVol = (props: any) => {
-  const { groupId } = props;
-  const { salesVolume } = useSalesVolume(groupId);
-  return <div>{Number(salesVolume) || '-'}</div>;
-};
+interface Props {
+  itemInfo: Item;
+  bucketData?: QueryHeadBucketResponse;
+  relation: ITEM_RELATION_ADDR;
+}
+const CollectionList = (props: Props) => {
+  const { itemInfo, bucketData, relation } = props;
 
-const CollectionList = (props: any) => {
-  const {
-    name,
-    bucketName,
-    listed: collectionListed,
-    status: bucketStatus,
-    bucketInfo,
-    hasOwn,
-  } = props;
+  console.log('list', itemInfo.status === 'LISTED');
+  const { list, loading } = useCollectionItems(
+    itemInfo.name,
+    itemInfo.status === 'LISTED',
+  );
 
-  const { list, loading } = useCollectionItems(name, collectionListed);
-
-  console.log('list', name, bucketName, list);
+  console.log('list', itemInfo.name, list);
 
   const { handlePageChange, page } = usePagination();
 
@@ -48,16 +49,14 @@ const CollectionList = (props: any) => {
   const { address } = useAccount();
 
   const navigate = useNavigate();
-
   const [p] = useSearchParams();
-  let bucketId = p.getAll('bid')[0];
-  const ownerAddress = p.getAll('address')[0];
 
-  let bgn = '';
-  if (!bucketId && bucketInfo) {
-    bucketId = bucketInfo.id;
-    bgn = generateGroupName(bucketInfo.bucketName);
-  }
+  const bgn = '';
+  // if (bucketData.bucketInfo) {
+  //   const bucketId = bucketData.bucketInfo.id;
+  //   bgn = generateGroupName(bucketData.bucketInfo.bucketName);
+  //
+
   const state = useGlobal();
 
   const navigator = useNavigate();
@@ -79,10 +78,12 @@ const CollectionList = (props: any) => {
             onClick={() => {
               let list = state.globalState.breadList;
               console.log('list in from', list);
-              if (list.slice(-1)[0].name !== bucketName) {
+              if (
+                list.slice(-1)[0].name !== bucketData?.bucketInfo.bucketName
+              ) {
                 const item = {
                   path: '/resource',
-                  name: bucketName || 'Collection',
+                  name: bucketData?.bucketInfo.bucketName || 'Collection',
                   query: p.toString(),
                 };
                 state.globalDispatch({
@@ -95,15 +96,17 @@ const CollectionList = (props: any) => {
               const from = encodeURIComponent(JSON.stringify(list));
               // console.log('obkect_info', object_info);
               if (!object_info) {
-                navigator(
-                  `/folder?bid=${bucketId}&f=${encodeURIComponent(
-                    name,
-                  )}&address=${ownerAddress}&from=${from}`,
-                );
+                // navigator(
+                //   `/folder?bid=${
+                //     bucketData?.bucketInfo.bucketId
+                //   }&f=${encodeURIComponent(
+                //     name,
+                //   )}&address=${item}&from=${from}`,
+                // );
               } else {
                 const { id } = object_info;
                 navigate(
-                  `/resource?oid=${id}&bgn=${bgn}&address=${ownerAddress}&from=${from}`,
+                  `/resource?oid=${id}&bgn=${bgn}&address=${itemInfo.ownerAddress}&from=${from}`,
                 );
               }
             }}
@@ -182,32 +185,34 @@ const CollectionList = (props: any) => {
               cursor={'pointer'}
               color={'#AEB4BC'}
               onClick={() => {
-                let list = state.globalState.breadList;
-                if (list.slice(-1)[0].name !== bucketName) {
-                  const item = {
-                    path: '/resource',
-                    name: bucketName,
-                    query: p.toString(),
-                  };
-                  state.globalDispatch({
-                    type: 'ADD_BREAD',
-                    item,
-                  });
-                  list = list.concat([item]);
+                const list = state.globalState.breadList;
+                if (
+                  list.slice(-1)[0].name !== bucketData?.bucketInfo.bucketName
+                ) {
+                  // const item = {
+                  //   path: '/resource',
+                  //   name: bucketData?.bucketInfo.bucketName,
+                  //   query: p.toString(),
+                  // };
+                  // state.globalDispatch({
+                  //   type: 'ADD_BREAD',
+                  //   item,
+                  // });
+                  // list = list.concat([item]);
                 }
 
-                const from = encodeURIComponent(JSON.stringify(list));
+                // const from = encodeURIComponent(JSON.stringify(list));
 
-                navigator(
-                  `/folder?bid=${bucketId}&f=${name}&address=${ownerAddress}&collectionListed=${collectionListed}&from=${from}`,
-                );
+                // navigator(
+                //   `/folder?bid=${bucketId}&f=${name}&address=${ownerAddress}&collectionListed=${collectionListed}&from=${from}`,
+                // );
               }}
             />
           );
         const { owner, object_name, create_at } = object_info;
         return (
           <div>
-            {owner === address && !collectionListed && (
+            {owner === address && itemInfo.status !== 'LISTED' && (
               <Button
                 size={'sm'}
                 onClick={async () => {
@@ -233,14 +238,14 @@ const CollectionList = (props: any) => {
                 {!listed ? 'List' : 'Delist'}
               </Button>
             )}
-            {owner === address && collectionListed && (
+            {owner === address && itemInfo.status === 'LISTED' && (
               <GoIcon
                 cursor={'pointer'}
                 onClick={async () => {
                   const list = state.globalState.breadList;
                   const item = {
                     path: '/resource',
-                    name: bucketName || 'Collection',
+                    name: bucketData?.bucketInfo.bucketName || 'Collection',
                     query: p.toString(),
                   };
                   state.globalDispatch({
@@ -254,18 +259,18 @@ const CollectionList = (props: any) => {
 
                   const { id } = object_info;
                   navigate(
-                    `/resource?oid=${id}&bgn=${bgn}&address=${ownerAddress}&tab=dataList&from=${from}`,
+                    `/resource?oid=${id}&bgn=${bgn}&address=${itemInfo.ownerAddress}&tab=dataList&from=${from}`,
                   );
                 }}
               ></GoIcon>
             )}
-            {bucketStatus == 2 && owner !== address && (
+            {relation == 'PURCHASED' && owner !== address && (
               <OwnActionCom
                 data={{
-                  ownerAddress,
+                  ownerAddress: itemInfo.ownerAddress,
                   type: 'Data',
                   oid: object_info.id,
-                  bn: bucketName,
+                  bn: bucketData?.bucketInfo.bucketName,
                   on: object_name,
                 }}
               ></OwnActionCom>
@@ -275,9 +280,14 @@ const CollectionList = (props: any) => {
       },
     },
   ];
-  if (!hasOwn) {
-    columns.splice(4, 6);
+  // if (relation !== 'OWNER') {
+  //   columns.splice(4, 6);
+  // }
+
+  if (!bucketData) {
+    return <NoData />;
   }
+
   return (
     <Container>
       <Box h={10} />
@@ -297,13 +307,7 @@ const CollectionList = (props: any) => {
         columns={columns}
         data={list}
         loading={loading}
-        // {...TableProps}
-        thProps={{
-          style: {
-            background: '#181A1E',
-            borderColor: '#1E2026',
-          },
-        }}
+        {...TableProps}
       />
     </Container>
   );
@@ -312,7 +316,9 @@ const CollectionList = (props: any) => {
 export default CollectionList;
 
 const Container = styled.div`
-  width: 996px;
+  background: #181a1e;
+  padding: 4px 20px;
+  /* width: 1123px; */
 `;
 
 const ImgContainer = styled(Flex)`
@@ -337,3 +343,9 @@ const Title = styled(Box)`
   color: #fff;
   font-size: 24px;
 `;
+
+const TotalVol = (props: any) => {
+  const { groupId } = props;
+  const { salesVolume } = useSalesVolume(groupId);
+  return <div>{Number(salesVolume) || '-'}</div>;
+};

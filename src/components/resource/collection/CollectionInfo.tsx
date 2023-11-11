@@ -21,57 +21,37 @@ import { CalendarIcon } from '@totejs/icons';
 import { ShoppingIcon } from '../../svgIcon/ShoppingIcon';
 import { useCollectionItems } from '../../../hooks/useCollectionItems';
 import { CountIcon } from '../../svgIcon/CountIcon';
+import { Item } from '../../../utils/apis/types';
+import { ITEM_RELATION_ADDR } from '../../../hooks/useGetItemRelationWithAddr';
 
 interface Props {
-  collection: {
-    path: string;
-    name: string;
-    query: string;
-  };
-  ownerAddress: string;
-  fileSize: number;
-  categoryId: number;
-  createdAt: number;
-  salesVolume: number;
-  itemStatus: ITEM_STATUS;
-  price: string;
-  listed: boolean;
-  baseInfo: any;
-  name: string;
+  itemInfo: Item;
+  relation: ITEM_RELATION_ADDR;
 }
 
 export const CollectionInfo = (props: Props) => {
-  const {
-    name,
-    collection,
-    ownerAddress,
-    fileSize,
-    baseInfo,
-    categoryId,
-    createdAt,
-    salesVolume,
-    itemStatus,
-    price,
-    listed,
-  } = props;
+  const { itemInfo, relation } = props;
 
   const { price: bnbPrice } = useBNBPrice();
 
-  const { list, loading } = useCollectionItems(name, listed);
+  const { list, loading } = useCollectionItems(
+    itemInfo.name,
+    itemInfo.status === 'LISTED',
+  );
   const modalData = useModal();
 
   return (
     <Box>
       <Flex mt="16px" mb="32px" alignItems="center">
         <Box color="#F7F7F8" fontSize="16px" fontWeight="600">
-          <Link to={`${collection.path}?${collection.query || ''}`}>
+          {/* <Link to={`${collection.path}?${collection.query || ''}`}>
             {collection?.name?.replace('+', ' ')}
-          </Link>
+          </Link> */}
         </Box>
         <Box fontWeight="16px" color="#C4C5CB" ml="8px" mr="16px">
           created by
         </Box>
-        <Link to={`/profile?address=${ownerAddress}`}>
+        <Link to={`/profile?address=${itemInfo.ownerAddress}`}>
           <Flex
             bg="#1E2026"
             border="1px solid #373943"
@@ -82,9 +62,9 @@ export const CollectionInfo = (props: Props) => {
             }}
           >
             <Flex alignItems="center">
-              <MetaMaskAvatar address={ownerAddress} />
+              <MetaMaskAvatar address={itemInfo.ownerAddress} />
               <Box as="p" ml="8px">
-                {trimLongStr(ownerAddress)}
+                {trimLongStr(itemInfo.ownerAddress)}
               </Box>
             </Flex>
           </Flex>
@@ -109,13 +89,13 @@ export const CollectionInfo = (props: Props) => {
 
         <FlexCon flex={1} justifyContent="space-between" ml="10px">
           <Block>
-            <Value>{formatDateDot(createdAt * 1000)}</Value>
+            <Value>{formatDateDot(itemInfo.createdAt * 1000)}</Value>
             <Field>
               <CalendarIcon /> Created
             </Field>
           </Block>
           <Block>
-            <Value>{salesVolume || 0}</Value>
+            <Value>{itemInfo.totalSale || 0}</Value>
             <Field>
               <ShoppingIcon /> Purchased
             </Field>
@@ -131,12 +111,14 @@ export const CollectionInfo = (props: Props) => {
             </Box>
 
             <Flex gap="8px" alignItems="center">
-              <BNB>{divide10Exp(new BN(price, 10), 18)} BNB</BNB>
+              <BNB>{divide10Exp(new BN(itemInfo.price, 10), 18)} BNB</BNB>
               <Dollar>
                 $
                 {roundFun(
                   divide10Exp(
-                    new BN(price, 10).mul(new BN(Number(bnbPrice), 10)),
+                    new BN(itemInfo.price, 10).mul(
+                      new BN(Number(bnbPrice), 10),
+                    ),
                     18,
                   ).toString(),
                   8,
@@ -145,7 +127,7 @@ export const CollectionInfo = (props: Props) => {
             </Flex>
           </Flex>
 
-          {itemStatus === 'NOT_PURCHASED_BY_ME' && listed && (
+          {(relation === 'NOT_PURCHASE' || relation === 'UNKNOWN') && (
             <Box>
               <Button
                 color="#FFE900"
@@ -153,7 +135,7 @@ export const CollectionInfo = (props: Props) => {
                 onClick={() => {
                   modalData.modalDispatch({
                     type: 'OPEN_BUY',
-                    buyData: baseInfo,
+                    buyData: itemInfo,
                   });
                 }}
               >
@@ -161,21 +143,6 @@ export const CollectionInfo = (props: Props) => {
               </Button>
             </Box>
           )}
-
-          {/* {itemStatus !== 'NOT_PURCHASED_BY_ME' && (
-            <Box>
-              <Button
-                color="#FFE900"
-                background="#665800"
-                onClick={() => {
-                  // ...
-                  document.documentElement.scrollTop = 500;
-                }}
-              >
-                Get My Data
-              </Button>
-            </Box>
-          )} */}
         </ActionBox>
       </Box>
     </Box>

@@ -38,14 +38,15 @@ export const useGetObject = (bucketName?: string, objectName?: string) => {
 
 export const useGetGroup = (
   groupName: string | undefined,
-  address: string | undefined,
+  ownerAddress: string | undefined,
 ) => {
   return useQuery({
-    enabled: !!groupName,
-    queryKey: ['GET_GROUP', groupName, address],
+    enabled: !!groupName && !!ownerAddress,
+    queryKey: ['GET_GROUP', groupName, ownerAddress],
     queryFn: async () => {
-      if (!groupName || !address) return;
-      const res = await getGroupInfoByName(groupName, address);
+      if (!groupName || !ownerAddress) return;
+      const res = await getGroupInfoByName(groupName, ownerAddress);
+      console.log('res', res);
       return res;
     },
     gcTime: Infinity,
@@ -66,16 +67,22 @@ export const useGetBOInfoFromGroup = (groupName?: string) => {
   useEffect(() => {
     if (!groupName) return;
 
-    const { bucketName: _, name, type } = parseGroupName(groupName);
+    const { bucketName, name, type } = parseGroupName(groupName);
+    // console.log('_', _, name, type);
     let objectName = '';
-    let bucketName = '';
+    // let bucketName = '';
     let rType: Item['type'] = 'COLLECTION';
     if (type === 'Data') {
       rType = 'OBJECT';
       objectName = name;
-      bucketName = _;
+      // bucketName = _;
     }
 
+    console.log({
+      type: rType,
+      bucketName,
+      objectName,
+    });
     setBoInfo({
       type: rType,
       bucketName,
@@ -86,45 +93,45 @@ export const useGetBOInfoFromGroup = (groupName?: string) => {
   return boInfo;
 };
 
-export type StorageInfoResponse = Awaited<
-  ReturnType<typeof getChainInfoByGroupName>
->;
-const getChainInfoByGroupName = async (groupName?: string) => {
-  console.log('groupName: ', groupName);
-  if (!groupName) return;
-  const { bucketName: _, name, type } = parseGroupName(groupName);
-  let objectName = '';
-  let bucketName = '';
-  let rType: Item['type'] = 'COLLECTION';
-  if (type === 'Data') {
-    rType = 'OBJECT';
-    objectName = name;
-    bucketName = _;
-  }
+// export type StorageInfoResponse = Awaited<
+//   ReturnType<typeof getChainInfoByGroupName>
+// >;
+// const getChainInfoByGroupName = async (groupName?: string) => {
+//   console.log('groupName: ', groupName);
+//   if (!groupName) return;
+//   const { bucketName: _, name, type } = parseGroupName(groupName);
+//   let objectName = '';
+//   let bucketName = '';
+//   let rType: Item['type'] = 'COLLECTION';
+//   if (type === 'Data') {
+//     rType = 'OBJECT';
+//     objectName = name;
+//     bucketName = _;
+//   }
 
-  console.log('bucketName: ', bucketName);
-  const bucket = await getCollectionInfoByName(bucketName);
-  const bucketInfo = bucket.bucketInfo;
-  console.log('bucketInfo: ', bucketInfo);
+//   console.log('bucketName: ', bucketName);
+//   const bucket = await getCollectionInfoByName(bucketName);
+//   const bucketInfo = bucket.bucketInfo;
+//   console.log('bucketInfo: ', bucketInfo);
 
-  let objectInfo;
-  if (objectName) {
-    objectInfo = (await getObjectInfoByName(bucketName, objectName)).objectInfo;
-  }
+//   let objectInfo;
+//   if (objectName) {
+//     objectInfo = (await getObjectInfoByName(bucketName, objectName)).objectInfo;
+//   }
 
-  return {
-    type: rType,
-    bucketInfo,
-    objectInfo,
-  };
-};
+//   return {
+//     type: rType,
+//     bucketInfo,
+//     objectInfo,
+//   };
+// };
 
-export const useGetStorageInfoByGroupName = (groupName: string | undefined) => {
-  return useQuery({
-    enabled: !!groupName,
-    queryKey: ['GET_CHAIN_INFO_BY_GROUP_NAME', groupName],
-    queryFn: () => getChainInfoByGroupName(groupName),
-    gcTime: Infinity,
-    staleTime: Infinity,
-  });
-};
+// export const useGetStorageInfoByGroupName = (groupName: string | undefined) => {
+//   return useQuery({
+//     enabled: !!groupName,
+//     queryKey: ['GET_CHAIN_INFO_BY_GROUP_NAME', groupName],
+//     queryFn: () => getChainInfoByGroupName(groupName),
+//     gcTime: Infinity,
+//     staleTime: Infinity,
+//   });
+// };

@@ -112,7 +112,11 @@ export const getGroupInfoByName = async (
   groupName: string,
   groupOwner: string,
 ) => {
-  return await client.group.headGroup(groupName, groupOwner);
+  try {
+    return await client.group.headGroup(groupName, groupOwner);
+  } catch {
+    return {} as any;
+  }
 };
 
 export const checkGroupExistByName = async (
