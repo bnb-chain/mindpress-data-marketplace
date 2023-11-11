@@ -1,61 +1,30 @@
 import styled from '@emotion/styled';
-import { Box, Flex, Tooltip } from '@totejs/uikit';
-// import { Copy } from '../Copy';
+import { Box, Flex } from '@totejs/uikit';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { ITEM_STATUS } from '../../hooks/useItemStatus';
+import { ITEM_RELATION_ADDR } from '../../hooks/useGetItemRelationWithAddr';
+import { Item } from '../../utils/apis/types';
+import {
+  QueryHeadBucketResponse,
+  QueryHeadGroupResponse,
+} from '../../utils/gfSDK';
+import { NoData } from '../NoData';
 import { GetMyData } from './data/GetMyData';
 
 interface IOverView {
-  desc: string;
-  showEdit: boolean;
-  editFun: () => void;
-  name: string;
-  bucketName?: string;
-  listed?: boolean;
-  showEndpoints?: boolean;
-  itemStatus: ITEM_STATUS;
-  baseInfo: any;
-  resourceType: string;
+  itemInfo: Item;
+  relation: ITEM_RELATION_ADDR;
+  bucketData?: QueryHeadBucketResponse;
+  groupData?: QueryHeadGroupResponse;
 }
 
 const Overview = (props: IOverView) => {
-  const {
-    desc,
-    showEdit,
-    editFun,
-    name,
-    bucketName,
-    listed,
-    showEndpoints,
-    itemStatus,
-    baseInfo,
-    resourceType,
-  } = props;
-  // const [domain, setDomain] = useState('');
+  const { itemInfo, relation, bucketData } = props;
+  const { description, type } = itemInfo;
 
-  console.log('itemStatus', itemStatus);
-
-  // useEffect(() => {
-  //   getRandomSp().then((result) => {
-  //     setDomain(result);
-  //   });
-  //   const clickHandle = () => {
-  //     setIsOpenF(false);
-  //     setIsOpenS(false);
-  //   };
-  //   document.addEventListener('click', clickHandle);
-  //   return () => {
-  //     document.removeEventListener('click', clickHandle);
-  //   };
-  // }, []);
-
-  // const [isOpenF, setIsOpenF] = useState(false);
-  // const [isOpenS, setIsOpenS] = useState(false);
-
-  // 0: data
-  // 1: collection
-  console.log('resourceType', resourceType);
+  if (!itemInfo) {
+    return <NoData />;
+  }
 
   return (
     <Container justifyContent="space-between">
@@ -64,133 +33,23 @@ const Overview = (props: IOverView) => {
           Desctiption
         </Title>
         <DescBox alignItems={'center'} justifyItems={'center'}>
-          {desc ? (
-            <ReactMarkdown children={desc} remarkPlugins={[remarkGfm]} />
+          {description ? (
+            <ReactMarkdown children={description} remarkPlugins={[remarkGfm]} />
           ) : (
             'This is a default description.'
           )}
-          {/* {showEdit && listed && (
-          <PenCon
-            onClick={() => {
-              editFun?.();
-            }}
-            style={{ width: '16px', height: '16px', marginLeft: '4px' }}
-          />
-        )} */}
         </DescBox>
       </Box>
 
-      {resourceType == '0' && (
+      {type == 'OBJECT' && (
         <GetMyDataBox w="600px">
           <GetMyData
-            itemStatus={itemStatus}
-            baseInfo={baseInfo}
-            name={name}
-            bucketName={bucketName}
+            itemInfo={itemInfo}
+            bucketName={bucketData?.bucketInfo.bucketName}
+            relation={relation}
           />
         </GetMyDataBox>
       )}
-
-      {/* {name && bucketName && name != bucketName && showEndpoints && (
-        <>
-          <Box h={65}></Box>
-          <Title>Endpoints</Title>
-          <Box h={20}></Box>
-          <SupInfoCon w={996} h={300} padding={'24'}>
-            <SupInfoItem flexDirection={'column'}>
-              <SupInfoTitle
-                gap={18}
-                alignItems={'center'}
-                justifyItems={'center'}
-              >
-                Download Universal Endpoint{' '}
-                <Tooltip
-                  isOpen={isOpenF}
-                  content={
-                    <div>
-                      All storage objects in the Greenfield Network can be
-                      identified and accessed through a universal resource
-                      identifier (URI).
-                      <LearnMore
-                        target="_blank"
-                        href="https://github.com/bnb-chain/greenfield-whitepaper/blob/main/part3.md#231-universal-endpoint"
-                      >
-                        Learn More
-                      </LearnMore>
-                    </div>
-                  }
-                >
-                  <ColoredInfoIcon
-                    onClick={(e: React.MouseEvent) => {
-                      e.stopPropagation();
-                      setIsOpenF(true);
-                    }}
-                    style={{ width: '20px', height: '20px' }}
-                  ></ColoredInfoIcon>
-                </Tooltip>
-              </SupInfoTitle>
-              <Box h={8}></Box>
-              <UrlCon justifyContent={'space-between'}>
-                <Left alignItems={'center'} justifyContent={'center'}>
-                  Https
-                </Left>
-                <Url alignItems={'center'} justifyContent={'flex-start'}>
-                  {downloadUrl}
-                </Url>
-                <CopyCon alignItems={'center'} justifyContent={'center'}>
-                  <Copy value={downloadUrl}></Copy>
-                </CopyCon>
-              </UrlCon>
-            </SupInfoItem>
-            <Box h={16}></Box>
-            <SupInfoItem flexDirection={'column'}>
-              <SupInfoTitle
-                gap={18}
-                alignItems={'center'}
-                justifyItems={'center'}
-              >
-                Preview Universal Endpoint{' '}
-                <Tooltip
-                  isOpen={isOpenS}
-                  content={
-                    <div>
-                      All storage objects in the Greenfield Network can be
-                      identified and accessed through a universal resource
-                      identifier (URI).
-                      <LearnMore
-                        target="_blank"
-                        href="https://github.com/bnb-chain/greenfield-whitepaper/blob/main/part3.md#231-universal-endpoint"
-                      >
-                        Learn More
-                      </LearnMore>
-                    </div>
-                  }
-                >
-                  <ColoredInfoIcon
-                    onClick={(e: React.MouseEvent) => {
-                      e.stopPropagation();
-                      setIsOpenS(true);
-                    }}
-                    style={{ width: '20px', height: '20px' }}
-                  ></ColoredInfoIcon>
-                </Tooltip>
-              </SupInfoTitle>
-              <Box h={8}></Box>
-              <UrlCon justifyContent={'space-between'}>
-                <Left alignItems={'center'} justifyContent={'center'}>
-                  Https
-                </Left>
-                <Url alignItems={'center'} justifyContent={'flex-start'}>
-                  {previewUrl}
-                </Url>
-                <CopyCon alignItems={'center'} justifyContent={'center'}>
-                  <Copy value={previewUrl}></Copy>
-                </CopyCon>
-              </UrlCon>
-            </SupInfoItem>
-          </SupInfoCon>
-        </>
-      )} */}
     </Container>
   );
 };

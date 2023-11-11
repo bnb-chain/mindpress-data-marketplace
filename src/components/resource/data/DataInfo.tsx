@@ -4,9 +4,11 @@ import { Box, Button, Flex } from '@totejs/uikit';
 import BN from 'bn.js';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { Link } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 import { useBNBPrice } from '../../../hooks/useBNBPrice';
-import { useGetItemById } from '../../../hooks/useGetItemById';
+import { useGetItemRelationWithAddr } from '../../../hooks/useGetItemRelationWithAddr';
 import { useModal } from '../../../hooks/useModal';
+import { useWalletModal } from '../../../hooks/useWalletModal';
 import {
   divide10Exp,
   formatDateDot,
@@ -14,85 +16,34 @@ import {
   roundFun,
   trimLongStr,
 } from '../../../utils';
-import { Loader } from '../../Loader';
+import { Item } from '../../../utils/apis/types';
+import { QueryHeadObjectResponse } from '../../../utils/gfSDK';
+import { NoData } from '../../NoData';
 import BSCIcon from '../../svgIcon/BSCIcon';
 import { CategoryIcon } from '../../svgIcon/CategoryIcon';
 import { ShoppingIcon } from '../../svgIcon/ShoppingIcon';
 import { SizeIcon } from '../../svgIcon/SizeIcon';
-import { QueryHeadObjectResponse } from '../../../utils/gfSDK';
-import { NoData } from '../../NoData';
-import { useGetItemRelationWithAddr } from '../../../hooks/useGetItemRelationWithAddr';
-import { useAccount } from 'wagmi';
 
 interface Props {
-  // collection: {
-  //   path: string;
-  //   name: string;
-  //   query: string;
-  // };
-  // ownerAddress: string;
-  // // fileSize: number;
-  // categoryId: number;
-  // // createdAt: number;
-  // // salesVolume: number;
-  // // itemStatus: ITEM_STATUS;
-  // price: string;
-  // listed: boolean;
-  // baseInfo: any;
-  itemId: string;
-  objectInfo?: QueryHeadObjectResponse['objectInfo'];
+  itemInfo: Item;
+  objectData?: QueryHeadObjectResponse;
 }
 
 export const DataInfo = (props: Props) => {
-  const {
-    itemId,
-    objectInfo,
-    // collection,
-    // ownerAddress,
-    // fileSize,
-    // baseInfo,
-    // categoryId,
-    // createdAt,
-    // salesVolume,
-    // itemStatus,
-    // price,
-    // listed,
-  } = props;
+  const { itemInfo, objectData } = props;
 
-  const { data: itemInfo, isLoading: itemInfoLoading } = useGetItemById(
-    parseInt(itemId),
-  );
+  const { price, ownerAddress, createdAt } = itemInfo;
 
-  const {
-    name,
-    type,
-    price,
-    url,
-    ownerAddress,
-    description,
-    status,
-    createdAt,
-    groupName,
-    categoryId,
-  } = itemInfo;
-
-  const { address } = useAccount();
+  const { address, isConnected, isConnecting } = useAccount();
   const { price: bnbPrice } = useBNBPrice();
   const relation = useGetItemRelationWithAddr(address, itemInfo);
 
   const modalData = useModal();
-  if (!itemInfo || itemInfoLoading) {
-    return <Loader />;
-  }
-  if (!objectInfo) {
+  const { handleModalOpen } = useWalletModal();
+
+  if (!objectData || !itemInfo) {
     return <NoData size={300} />;
   }
-  // console.log(`${collection.path}${collection.query}?${collection.query}`);
-
-  // const categoryies = useGetCatoriesMap();
-  // const category = categoryies.data?.find((c) => c.id === categoryId);
-
-  // console.log('category', category, categoryId);
 
   return (
     <Box>
@@ -128,7 +79,9 @@ export const DataInfo = (props: Props) => {
       <FieldList justifyContent="space-between">
         <FlexCon flex={1} justifyContent="space-between" mr="10px">
           <Block>
-            <Value>{parseFileSize(objectInfo.payloadSize.low)}</Value>
+            <Value>
+              {parseFileSize(objectData.objectInfo.payloadSize.low)}
+            </Value>
             <Field>
               <SizeIcon /> Size
             </Field>
@@ -179,16 +132,23 @@ export const DataInfo = (props: Props) => {
             </Flex>
           </Flex>
 
-          {relation === 'NOT_PURCHASE' && (
+          {(relation === 'NOT_PURCHASE' || relation === 'UNKNOWN') && (
             <Box>
               <Button
                 color="#FFE900"
                 background="#665800"
                 onClick={() => {
-                  modalData.modalDispatch({
-                    type: 'OPEN_BUY',
-                    buyData: itemInfo,
-                  });
+                  console.log('relation', relation, isConnecting, isConnected);
+                  if (relation === 'UNKNOWN') {
+                    if (!isConnected && !isConnecting) {
+                      handleModalOpen();
+                    }
+                  } else {
+                    modalData.modalDispatch({
+                      type: 'OPEN_BUY',
+                      buyData: itemInfo,
+                    });
+                  }
                 }}
               >
                 Buy

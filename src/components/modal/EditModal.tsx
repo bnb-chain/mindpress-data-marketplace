@@ -16,54 +16,57 @@ import { useChainBalance } from '../../hooks/useChainBalance';
 import { useEdit } from '../../hooks/useEdit';
 import { Loader } from '../Loader';
 import { roundFun } from '../../utils';
+import { Item } from '../../utils/apis/types';
+import { QueryHeadGroupResponse } from '../../utils/gfSDK';
 
 interface ListModalProps {
   isOpen: boolean;
   handleOpen: (show: boolean) => void;
-  detail: any;
+  itemInfo: Item;
+  groupData?: QueryHeadGroupResponse;
   updateFn: () => void;
 }
 
 export const EditModal = (props: ListModalProps) => {
-  const { isOpen, handleOpen, detail, updateFn } = props;
+  const { groupData, isOpen, handleOpen, itemInfo, updateFn } = props;
 
   const { switchNetwork } = useSwitchNetwork();
   const { GfBalanceVal } = useChainBalance();
 
   const { chain } = useNetwork();
 
-  const { name, type, desc: _desc, url, groupName, extra } = detail;
+  // const { name, type, desc: _desc, url, groupName, extra } = detail;
 
   const { address } = useAccount();
 
-  const [desc, setDesc] = useState(_desc);
-  const [imgUrl, setImgUrl] = useState(url);
+  // const [desc, setDesc] = useState(_desc);
+  // const [imgUrl, setImgUrl] = useState(url);
 
   const [loading, setLoading] = useState(false);
 
-  const onChangeDesc = (event: any) => {
-    setDesc(event.target.value);
-  };
-  const onChangeImgUrl = (event: any) => {
-    setImgUrl(event.target.value);
-  };
+  // const onChangeDesc = (event: any) => {
+  //   setDesc(event.target.value);
+  // };
+  // const onChangeImgUrl = (event: any) => {
+  //   setImgUrl(event.target.value);
+  // };
 
-  const INFO_NO_CHANGE = useMemo(() => {
-    return desc === _desc && imgUrl === url;
-  }, [desc, imgUrl, isOpen]);
+  // const INFO_NO_CHANGE = useMemo(() => {
+  //   return desc === _desc && imgUrl === url;
+  // }, [_desc, desc, imgUrl, url]);
 
-  const extraStr = useMemo(() => {
-    return JSON.stringify({
-      ...JSON.parse(extra),
-      desc,
-      url: imgUrl,
-    });
-  }, [desc, imgUrl]);
+  // const extraStr = useMemo(() => {
+  //   return JSON.stringify({
+  //     ...JSON.parse(extra),
+  //     desc,
+  //     url: imgUrl,
+  //   });
+  // }, [desc, extra, imgUrl]);
 
   const { edit, simulateInfo, simLoading } = useEdit(
     address as string,
-    groupName,
-    extraStr,
+    itemInfo.groupName,
+    groupData?.groupInfo.extra || '',
   );
 
   const GF_FEE_SUFF = useMemo(() => {
@@ -71,7 +74,7 @@ export const EditModal = (props: ListModalProps) => {
       return GfBalanceVal >= Number(simulateInfo.gasFee);
     }
     return false;
-  }, [simulateInfo, isOpen]);
+  }, [simulateInfo, GfBalanceVal]);
 
   return (
     <Container
@@ -87,8 +90,8 @@ export const EditModal = (props: ListModalProps) => {
       <CustomBody>
         <Box h={10}></Box>
         <ResourceNameCon alignItems={'center'}>
-          {name}
-          {type === 'Collection' ? (
+          {itemInfo.name}
+          {itemInfo.type === 'COLLECTION' ? (
             <Tag justifyContent={'center'} alignItems={'center'}>
               Data collection
             </Tag>
@@ -97,15 +100,18 @@ export const EditModal = (props: ListModalProps) => {
         <Box h={32}></Box>
         <ItemTittle alignItems={'center'} justifyContent={'space-between'}>
           Description
-          <span>
-            Markdown syntax is supported. {desc.length} of 300 characters used.
-          </span>
+          {/* {itemInfo && (
+            <span>
+              Markdown syntax is supported. {itemInfo.description.length} of 300
+              characters used.
+            </span>
+          )} */}
         </ItemTittle>
         <Box h={10}></Box>
         <InputCon>
           <Textarea
-            value={desc}
-            onChange={onChangeDesc}
+            value={itemInfo.description}
+            // onChange={onChangeDesc}
             placeholder="Please enter an description..."
             maxLength={300}
           />
@@ -118,15 +124,15 @@ export const EditModal = (props: ListModalProps) => {
         <Box h={10}></Box>
         <InputCon>
           <Input
-            value={imgUrl}
-            onChange={onChangeImgUrl}
+            value={itemInfo.url}
+            // onChange={onChangeImgUrl}
             placeholder="Please enter an url..."
           ></Input>
         </InputCon>
         <Box h={32}></Box>
         <FeeCon flexDirection={'column'} justifyContent={'space-between'}>
           <BottomInfo>
-            <Item alignItems={'center'} justifyContent={'space-between'}>
+            <ItemCon alignItems={'center'} justifyContent={'space-between'}>
               <ItemSubTittle>
                 Gas fee to edit <ColoredWarningIcon size="sm" color="#AEB4BC" />
               </ItemSubTittle>
@@ -153,7 +159,7 @@ export const EditModal = (props: ListModalProps) => {
                   </>
                 )}
               </BalanceCon>
-            </Item>
+            </ItemCon>
           </BottomInfo>
         </FeeCon>
       </CustomBody>
@@ -165,7 +171,11 @@ export const EditModal = (props: ListModalProps) => {
               onClick={async () => {
                 try {
                   setLoading(true);
-                  await edit(address as string, groupName, extraStr);
+                  await edit(
+                    address as string,
+                    itemInfo.groupName,
+                    groupData?.groupInfo.extra || '',
+                  );
                   toast.success({
                     description: 'edit success',
                     duration: 3000,
@@ -177,7 +187,7 @@ export const EditModal = (props: ListModalProps) => {
                 updateFn?.();
                 handleOpen(false);
               }}
-              disabled={!GF_FEE_SUFF || INFO_NO_CHANGE || loading}
+              // disabled={!GF_FEE_SUFF || INFO_NO_CHANGE || loading}
               isLoading={loading}
             >
               Confirm
@@ -281,7 +291,7 @@ const FeeCon = styled(Flex)`
 `;
 
 const BottomInfo = styled.div``;
-const Item = styled(Flex)`
+const ItemCon = styled(Flex)`
   height: 40px;
 `;
 const ItemSubTittle = styled.div`

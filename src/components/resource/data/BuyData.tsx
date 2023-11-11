@@ -1,16 +1,16 @@
 import { Box, Flex } from '@totejs/uikit';
-import { LockIcon } from '../../svgIcon/LockIcon';
 import { useAccount } from 'wagmi';
-import { useGlobal } from '../../../hooks/useGlobal';
 import { useModal } from '../../../hooks/useModal';
 import { useWalletModal } from '../../../hooks/useWalletModal';
+import { Item } from '../../../utils/apis/types';
+import { LockIcon } from '../../svgIcon/LockIcon';
 
 interface Props {
-  baseInfo?: any;
+  itemInfo: Item;
 }
 
 export const BuyData = (props: Props) => {
-  const { baseInfo } = props;
+  const { itemInfo } = props;
   const { address, isConnected, isConnecting } = useAccount();
   const { handleModalOpen } = useWalletModal();
   const modalData = useModal();
@@ -47,7 +47,7 @@ export const BuyData = (props: Props) => {
               } else {
                 modalData.modalDispatch({
                   type: 'OPEN_BUY',
-                  buyData: baseInfo,
+                  buyData: itemInfo,
                 });
               }
             }}

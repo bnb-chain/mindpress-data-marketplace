@@ -8,7 +8,7 @@ export const useGetPurchaseList = (
   pageSize = 10,
 ) => {
   return useQuery({
-    queryKey: [page, pageSize, params],
+    queryKey: ['SEARCH_PURCHASE', page, pageSize, params],
     queryFn: () => searchPurchase(params),
     staleTime: 10000,
     gcTime: 20000,

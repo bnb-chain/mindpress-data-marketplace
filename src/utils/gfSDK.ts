@@ -105,15 +105,14 @@ export const putBucketPolicy = async (bucketName: string, srcMsg: any) => {
   return await client.bucket.putBucketPolicy(bucketName, srcMsg);
 };
 
+export type QueryHeadGroupResponse = Awaited<
+  ReturnType<typeof getGroupInfoByName>
+>;
 export const getGroupInfoByName = async (
   groupName: string,
   groupOwner: string,
 ) => {
-  try {
-    return await client.group.headGroup(groupName, groupOwner);
-  } catch (e) {
-    return {} as any;
-  }
+  return await client.group.headGroup(groupName, groupOwner);
 };
 
 export const checkGroupExistByName = async (
@@ -193,6 +192,10 @@ export const mirrorGroup = async (
 export const getCollectionInfo = async (bucketId: string) => {
   return await client.bucket.headBucketById(bucketId);
 };
+
+export type QueryHeadBucketResponse = Awaited<
+  ReturnType<typeof getCollectionInfoByName>
+>;
 
 export const getCollectionInfoByName = async (bucketName: string) => {
   return await client.bucket.headBucket(bucketName);

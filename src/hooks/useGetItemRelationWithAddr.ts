@@ -13,14 +13,14 @@ export type ITEM_RELATION_ADDR =
  */
 export const useGetItemRelationWithAddr = (
   addr: string | undefined,
-  item: Item,
+  item: Item | undefined,
 ) => {
   const [relation, setRelation] = useState<ITEM_RELATION_ADDR>('UNKNOWN');
 
   const { data, isLoading } = useGetPurchaseList({
     filter: {
       address: addr,
-      itemId: item.id,
+      itemId: item?.id,
     },
     limit: 10,
     offset: 0,
@@ -28,11 +28,12 @@ export const useGetItemRelationWithAddr = (
   });
 
   useEffect(() => {
-    if (!addr) return;
+    if (!addr || !item) return;
     if (isLoading || !data) return;
 
     if (addr === item.ownerAddress) {
       setRelation('OWNER');
+      return;
     }
 
     if (data.purchases.length > 0) {
@@ -40,7 +41,7 @@ export const useGetItemRelationWithAddr = (
     } else {
       setRelation('NOT_PURCHASE');
     }
-  }, [addr, data, isLoading, item.ownerAddress]);
+  }, [addr, data, isLoading, item]);
 
   return relation;
 };

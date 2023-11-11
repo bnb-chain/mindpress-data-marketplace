@@ -36,30 +36,33 @@ import { SellIcon } from '../components/svgIcon/SellIcon';
 import { CollectionInfo } from '../components/resource/collection/CollectionInfo';
 import { useGetItemById } from '../hooks/useGetItemById';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
-import { useGetStorageInfoByGroupName } from '../hooks/useGetBucketOrObj';
+import {
+  useGetBOInfoFromGroup,
+  useGetBucket,
+  useGetGroup,
+  useGetObject,
+  useGetStorageInfoByGroupName,
+} from '../hooks/useGetBucketOrObj';
+import { ImgCon } from '../components/resource/ImgCon';
 
 const Resource = () => {
   const [p] = useSearchParams();
   // const groupId = p.getAll('gid')[0];
-  const bucketId = p.getAll('bid')[0];
-  const cid = p.getAll('cid')[0];
-  const objectId = p.getAll('oid')[0];
-  const ownerAddress = p.getAll('address')[0];
-  const gName = p.getAll('gn')[0];
-  const bGroupName = p.getAll('bgn')[0];
+  // const bucketId = p.getAll('bid')[0];
+  // const cid = p.getAll('cid')[0];
+  // const objectId = p.getAll('oid')[0];
+  // const ownerAddress = p.getAll('address')[0];
+  // const gName = p.getAll('gn')[0];
+  // const bGroupName = p.getAll('bgn')[0];
   const itemId = p.getAll('id')[0];
 
-  const [open, setOpen] = useState(false);
   const { address } = useAccount();
 
-  const [update, setUpdate] = useState(false);
+  // const [update, setUpdate] = useState(false);
 
   const { data: itemInfo, isLoading: itemInfoLoading } = useGetItemById(
     parseInt(itemId),
   );
-
-  const { name, type, price, url, description, status, createdAt, groupName } =
-    itemInfo;
 
   // /* const { loading, baseInfo, noData } = useResourceInfo({
   //   groupId,
@@ -69,37 +72,40 @@ const Resource = () => {
   //   groupName: gName,
   //   update,
   // });
-  // const {
-  //   name,
-  //   price,
-  //   url,
-  //   desc,
-  //   listed,
-  //   type,
-  //   bucketName,
-  //   objectInfo,
-  //   bucketInfo,
-  //   bucketListed,
-  // } = baseInfo; */
 
   const relation = useGetItemRelationWithAddr(address, itemInfo);
 
-  const { data: storageInfo, isLoading: storageInfoLoading } =
-    useGetStorageInfoByGroupName(groupName);
+  const storageInfo = useGetBOInfoFromGroup(itemInfo?.groupName);
+
+  const { data: bucketData } = useGetBucket(storageInfo?.bucketName);
+
+  const { data: objectData } = useGetObject(
+    storageInfo?.bucketName,
+    storageInfo?.objectName,
+  );
+
+  const { data: groupData } = useGetGroup(itemInfo?.groupName, address);
+
   const resourceName = useMemo(() => {
-    if (!storageInfo) return;
+    if (!storageInfo || !bucketData || !itemInfo) return;
 
     return storageInfo.type === 'COLLECTION'
-      ? name
-      : `${storageInfo.bucketInfo.bucketName} #${name}`;
-  }, [name, storageInfo]);
+      ? itemInfo?.name
+      : `${bucketData.bucketInfo.bucketName} #${itemInfo?.name}`;
+  }, [bucketData, itemInfo, storageInfo]);
 
-  // const { salesVolume } = useSalesVolume(groupId);
-  // const { status } = useStatus(
-  //   bGroupName || gName,
-  //   ownerAddress,
-  //   address as string,
-  // );
+  console.log('storageInfo', storageInfo);
+  console.log('groupData', groupData);
+  console.log('bucketData', bucketData);
+  console.log('objectData', objectData);
+
+  if (itemInfoLoading || !itemInfo) {
+    return <Loader />;
+  }
+
+  if (!objectData || !bucketData) {
+    return <NoData size={400} />;
+  }
 
   // const [breadItems, setBreadItems] = useState([]);
 
@@ -129,35 +135,8 @@ const Resource = () => {
     }
   }, [state.globalState.breadList, title]); */
 
-  // const showEndPoint = useMemo(() => {
-  //   return isOwner || (address !== ownerAddress && status === 2);
-  // }, [isOwner, address, ownerAddress, status]);
-
-  // const hasOwn = useMemo(() => {
-  //   return isOwner || status === 2;
-  // }, [isOwner, status]);
-
-  // 0: data
-  // 1: collection
-  // console.log('resourchasOwneType', resourceType);
-  // console.log('isOwner', isOwner);
-  // // hasOwn: true = had bought
-  // console.log('hasOwn', hasOwn);
-  // console.log('listed', listed);
-
-  // const itemStatus = useItemStatus(isOwner, hasOwn);
-  // console.log('itemStatus', itemStatus);
-
-  // const fileSize = useMemo(() => {
-  //   return objectInfo?.payloadSize?.low;
-  // }, [objectInfo]);
-
   // const { num } = useCollectionItems(name, bucketListed);
   // console.log('breadItems -=---->', breadItems);
-
-  if (itemInfoLoading || storageInfoLoading || !itemInfo) {
-    return <Loader />;
-  }
 
   return (
     <Container>
@@ -187,46 +166,7 @@ const Resource = () => {
       </MyBreadcrumb> */}
 
       <ResourceInfo gap={100} padding="30px 0">
-        <ImgCon>
-          <img src={url || defaultImg(name, 246)} alt="" />
-          {relation !== 'NOT_PURCHASE' && (
-            <Cover alignItems={'center'} justifyContent="flex-end" p="16px">
-              {relation === 'PURCHASED' && (
-                <Flex
-                  alignItems="center"
-                  gap="8px"
-                  color="#181A1E"
-                  bg="#53EAA1"
-                  borderRadius="40px"
-                  p="8px 12px"
-                  fontSize="16px"
-                  fontWeight={600}
-                >
-                  <SellIcon w={24} color="#181A1E" /> PURCHASED
-                </Flex>
-              )}
-
-              {relation === 'OWNER' && (
-                <Flex
-                  alignItems="center"
-                  gap="8px"
-                  color="#181A1E"
-                  bg="#F1F2F3"
-                  borderRadius="40px"
-                  p="8px 12px"
-                  fontSize="16px"
-                  fontWeight={600}
-                  cursor="pointer"
-                  onClick={() => {
-                    setOpen(true);
-                  }}
-                >
-                  <PenIcon w={24} color="#181A1E" /> Edit
-                </Flex>
-              )}
-            </Cover>
-          )}
-        </ImgCon>
+        <ImgCon relation={relation} itemInfo={itemInfo} />
 
         <Info flexDirection="column" flex="1">
           <NameCon gap={4} alignItems={'center'} justifyContent={'flex-start'}>
@@ -240,27 +180,27 @@ const Resource = () => {
               onClick={() => {
                 if (!storageInfo) return;
                 const o =
-                  type == 'COLLECTION'
-                    ? storageInfo.bucketInfo
-                    : storageInfo.objectInfo;
+                  itemInfo?.type == 'COLLECTION'
+                    ? bucketData?.bucketInfo
+                    : objectData?.objectInfo;
 
                 reportEvent({
                   name: 'dm.detail.overview.view_in_explorer.click',
                 });
                 window.open(
                   `${GF_EXPLORER_URL}${
-                    type == 'COLLECTION' ? 'bucket' : 'object'
+                    itemInfo?.type == 'COLLECTION' ? 'bucket' : 'object'
                   }/0x${Number(o?.id).toString(16).padStart(64, '0')}`,
                 );
               }}
             />
           </NameCon>
 
-          {type === 'OBJECT' && (
-            <DataInfo itemId={itemId} objectInfo={storageInfo?.objectInfo} />
+          {itemInfo?.type === 'OBJECT' && (
+            <DataInfo itemInfo={itemInfo} objectData={objectData} />
           )}
 
-          {type == 'COLLECTION' && (
+          {itemInfo?.type == 'COLLECTION' && (
             <Box>Collecton</Box>
             // <CollectionInfo
             //   collection={{
@@ -285,22 +225,14 @@ const Resource = () => {
 
       <Hr mb="55px" />
 
-      {/* <Overview
-        resourceType={resourceType}
-        desc={desc}
-        showEdit={address === ownerAddress}
-        editFun={() => {
-          setOpen(true);
-        }}
-        name={name}
-        bucketName={bucketName}
-        listed={listed}
-        showEndpoints={false}
-        itemStatus={itemStatus}
-        baseInfo={baseInfo}
-      /> */}
+      <Overview
+        itemInfo={itemInfo}
+        relation={relation}
+        bucketData={bucketData}
+        groupData={groupData}
+      />
 
-      {type === 'COLLECTION' && (
+      {itemInfo?.type === 'COLLECTION' && (
         <>
           <Hr mt="55px" />
           <Box mt="50px">
@@ -315,32 +247,13 @@ const Resource = () => {
           </Box>
         </>
       )}
-
-      {open && (
-        <Box>x</Box>
-        // <EditModal
-        //   isOpen={open}
-        //   handleOpen={() => {
-        //     reportEvent({ name: 'dm.detail.overview.edit.click' });
-        //     setOpen(false);
-        //   }}
-        //   detail={{
-        //     ...baseInfo,
-        //     desc,
-        //     url,
-        //   }}
-        //   updateFn={() => {
-        //     setUpdate(true);
-        //   }}
-        // />
-      )}
     </Container>
   );
 };
 
 export default Resource;
 
-const Container = styled.div`
+const Container = styled(Box)`
   margin-top: 20px;
   width: 1400px;
   background-color: #181a1e;
@@ -367,34 +280,6 @@ const MyBreadcrumb = styled(Breadcrumb)`
 `;
 
 const MyBreadcrumbItem = styled(BreadcrumbItem)``;
-
-const ImgCon = styled.div`
-  position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-
-  img {
-    object-fit: cover;
-    width: 500px;
-    height: 500px;
-
-    background-color: #d9d9d9;
-    border-radius: 8px;
-  }
-`;
-
-const Cover = styled(Flex)`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 72px;
-  background: linear-gradient(
-    180deg,
-    rgba(24, 26, 30, 0.8) 0%,
-    rgba(25, 27, 31, 0) 100%
-  );
-`;
 
 const Info = styled(Flex)`
   padding-top: 50px;

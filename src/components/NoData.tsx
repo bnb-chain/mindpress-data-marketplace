@@ -1,4 +1,32 @@
-import { useColorMode } from '@totejs/uikit';
+import styled from '@emotion/styled';
+import { Box, Flex, useColorMode } from '@totejs/uikit';
+
+export const NoData = ({ size = 100 }: { size?: number }) => {
+  const { colorMode } = useColorMode();
+
+  return (
+    <NoDataCon
+      alignItems={'center'}
+      justifyContent={'center'}
+      flexDirection={'column'}
+    >
+      <Box>{colorMode === 'light' ? noDataLight(size) : noDataDark(size)}</Box>
+      <NoDataTitle>No Data</NoDataTitle>
+      <NoDataSub>No data available</NoDataSub>
+    </NoDataCon>
+  );
+};
+
+const NoDataCon = styled(Flex)``;
+
+const NoDataTitle = styled.div`
+  font-size: 32px;
+  font-weight: 600;
+`;
+
+const NoDataSub = styled.div`
+  font-size: 20px;
+`;
 
 const noDataLight = (size?: number) => (
   <svg
@@ -241,9 +269,3 @@ const noDataDark = (size?: number) => (
     </g>
   </svg>
 );
-
-export const NoData = ({ size = 100 }: { size?: number }) => {
-  const { colorMode } = useColorMode();
-
-  return colorMode === 'light' ? noDataLight(size) : noDataDark(size);
-};

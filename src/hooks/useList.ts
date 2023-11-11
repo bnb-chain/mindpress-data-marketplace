@@ -1,5 +1,6 @@
 import {
   CreateGroup,
+  QueryHeadGroupResponse,
   getGroupInfoByName,
   mirrorGroup,
   multiTx,
@@ -101,7 +102,10 @@ export const useList = (props: IList) => {
     [groupName, extra, address],
   );
   const getGroupInfo = useCallback(
-    async (groupName: string, address: string): Promise<IHeadGroup> => {
+    async (
+      groupName: string,
+      address: string,
+    ): Promise<QueryHeadGroupResponse> => {
       const result = await getGroupInfoByName(groupName, address);
       return result;
     },

@@ -23,6 +23,8 @@ import * as env from './env';
 
 import RouteGuard from './router/index';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import React from 'react';
 
 export interface IRoute {
   children?: Array<IRoute>;
@@ -74,6 +76,14 @@ const gfChain: Chain = {
     decimals: 18,
   },
 };
+
+const ReactQueryDevtoolsProduction = React.lazy(() =>
+  import('@tanstack/react-query-devtools/build/modern/production.js').then(
+    (d) => ({
+      default: d.ReactQueryDevtools,
+    }),
+  ),
+);
 
 const { chains, provider } = configureChains(
   [env.NETWORK === 'Mainnet' ? bsc : bscTestnet, gfChain],
@@ -139,6 +149,15 @@ function App() {
       warn: (message: string) => console.log(message),
     },
   });
+
+  const [showDevtools, setShowDevtools] = React.useState(false);
+
+  React.useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    window.toggleDevtools = () => setShowDevtools((old) => !old);
+  }, []);
+
   return (
     <WagmiConfig client={client}>
       <ThemeProvider theme={theme}>
@@ -164,6 +183,13 @@ function App() {
               </WalletModalProvider>
             </ModalProvider>
           </GlobalProvider>
+
+          <ReactQueryDevtools initialIsOpen />
+          {showDevtools && (
+            <React.Suspense fallback={null}>
+              <ReactQueryDevtoolsProduction initialIsOpen={false} />
+            </React.Suspense>
+          )}
         </QueryClientProvider>
       </ThemeProvider>
     </WagmiConfig>

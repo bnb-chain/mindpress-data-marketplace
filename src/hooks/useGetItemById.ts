@@ -21,12 +21,12 @@ const DEFAULT_DATA: Item = {
 };
 
 /**
- * @name:
- *  if @type === 'COLLECTION', `name` is bucket name.
- *  if @type === 'OBJECT', `name` is object name.
+ * name:
+ *   if @type === 'COLLECTION', `name` is bucket name.
+ *   if @type === 'OBJECT', `name` is object name.
  */
 export const useGetItemById = (id: number) => {
-  const [itemData, setItemData] = useState<Item>(DEFAULT_DATA);
+  const [itemData, setItemData] = useState<Item>();
 
   const { data, isLoading } = useQuery({
     queryKey: ['GET_ITEM', id],

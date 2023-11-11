@@ -2,27 +2,27 @@ import styled from '@emotion/styled';
 import { DownloadIcon } from '@totejs/icons';
 import { Box, Button, Flex } from '@totejs/uikit';
 import { useEffect, useMemo, useState } from 'react';
-import { ITEM_STATUS } from '../../../hooks/useItemStatus';
+import { ITEM_RELATION_ADDR } from '../../../hooks/useGetItemRelationWithAddr';
+import { Item } from '../../../utils/apis/types';
 import { getRandomSp } from '../../../utils/gfSDK';
+import { Copy } from '../../Copy';
 import { ViewIcon } from '../../svgIcon/ViewIcon';
 import { BuyData } from './BuyData';
-import { Copy } from '../../Copy';
 
 interface Props {
-  itemStatus: ITEM_STATUS;
-  baseInfo?: any;
   bucketName?: string;
-  name: string;
+  itemInfo: Item;
+  relation: ITEM_RELATION_ADDR;
 }
 
 export const GetMyData = (props: Props) => {
-  const { itemStatus, baseInfo, name, bucketName } = props;
+  const { itemInfo, bucketName, relation } = props;
 
   const [domain, setDomain] = useState('');
   const downloadUrl = useMemo(() => {
-    const str = `${domain}/download/${bucketName}/${name}`;
+    const str = `${domain}/download/${bucketName}/${itemInfo.name}`;
     return str;
-  }, [name, bucketName, domain]);
+  }, [domain, bucketName, itemInfo.name]);
   useEffect(() => {
     getRandomSp().then((result) => {
       setDomain(result);
@@ -30,15 +30,19 @@ export const GetMyData = (props: Props) => {
   }, []);
 
   const previewUrl = useMemo(() => {
-    const str = `${domain}/view/${bucketName}/${name}`;
+    const str = `${domain}/view/${bucketName}/${itemInfo.name}`;
     return str;
-  }, [name, bucketName, domain]);
+  }, [domain, bucketName, itemInfo.name]);
+
+  const showButtonGroup = useMemo(() => {
+    return relation === 'PURCHASED' || relation === 'OWNER';
+  }, [relation]);
 
   return (
     <Box>
       <Flex alignItems="center" justifyContent="space-between">
         <Title>Get my Data</Title>
-        {itemStatus !== 'NOT_PURCHASED_BY_ME' && (
+        {showButtonGroup && (
           <ButtonGroup>
             <Button
               variant="ghost"
@@ -77,9 +81,9 @@ export const GetMyData = (props: Props) => {
         )}
       </Flex>
 
-      {itemStatus === 'NOT_PURCHASED_BY_ME' && <BuyData baseInfo={baseInfo} />}
+      {relation === 'NOT_PURCHASE' && <BuyData itemInfo={itemInfo} />}
 
-      {itemStatus !== 'NOT_PURCHASED_BY_ME' && (
+      {relation !== 'NOT_PURCHASE' && (
         <>
           <Hr mt="25px" mb="25px" />
 
