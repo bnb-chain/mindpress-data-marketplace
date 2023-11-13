@@ -91,7 +91,7 @@ export const DataInfo = (props: Props) => {
             </Field>
           </Block>
           <Block>
-            {/* <Value> {categroyInfo?.name} </Value> */}
+            <Value> {categroyInfo?.name} </Value>
             <Field>
               <CategoryIcon /> Category
             </Field>

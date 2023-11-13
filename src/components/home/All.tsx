@@ -106,6 +106,7 @@ const AllList = () => {
             padding="8px 12px"
             gap="8px"
             alignItems="center"
+            color={category.color}
           >
             <Box w="16px" h="16px">
               {category.icon({

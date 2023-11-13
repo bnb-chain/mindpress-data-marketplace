@@ -39,6 +39,7 @@ export const CATEGORY_MAP: Record<
     icon: (props: IconProps) => React.ReactNode;
     name: string;
     bgColor: string;
+    color: string;
   }
 > = {
   // AI Model
@@ -46,50 +47,60 @@ export const CATEGORY_MAP: Record<
     name: 'AI Model',
     icon: (props: IconProps) => <AiModelIcon {...props} />,
     bgColor: '#7EB5F6',
+    color: '#181A1E',
   },
   '2': {
-    name: 'Source Code',
+    name: 'Code Resource',
     icon: (props: IconProps) => <SourceCodeIcon {...props} />,
     bgColor: '#C4C8D0',
+    color: '#181A1E',
   },
   '3': {
     name: 'Digital Media',
     icon: (props: IconProps) => <PhotoIcon {...props} />,
-    bgColor: '#DFD93F',
+    bgColor: '#CEA3E8',
+    color: '#181A1E',
   },
   '4': {
-    name: 'Book',
+    name: 'Literary Creation',
     icon: (props: IconProps) => <BookIcon {...props} />,
     bgColor: '#E9927C',
+    color: '#181A1E',
   },
   '5': {
     name: 'Scientific Data',
     icon: (props: IconProps) => <ScienceIcon {...props} />,
     bgColor: '#92E4B9',
+    color: '#181A1E',
   },
   '6': {
     name: 'Game',
     icon: (props: IconProps) => <GameIcon {...props} />,
     bgColor: '#EA9D98',
+    color: '#181A1E',
   },
   '7': {
-    name: '3D Model',
+    name: 'AIGC',
     icon: (props: IconProps) => <Model3DIcon {...props} />,
-    bgColor: '#B0A7E7',
+    bgColor: '#7EB5F6',
+    color: '#181A1E',
   },
   '8': {
     name: 'Education',
     icon: (props: IconProps) => <EducationIcon {...props} />,
     bgColor: '#8BADD6',
+    color: '#181A1E',
   },
   '9': {
     name: 'Finance',
     icon: (props: IconProps) => <FinanceIcon {...props} />,
     bgColor: '#53F6A1',
+    color: '#181A1E',
   },
   '100': {
     name: 'Uncategorized',
     icon: (props: IconProps) => <UncategorizedIcon {...props} />,
     bgColor: '#373943',
+    color: '#C4C5CB',
   },
 };
