@@ -1,4 +1,4 @@
-import { Box, Flex } from '@totejs/uikit';
+import { IconProps } from '@totejs/icons';
 import { AiModelIcon } from '../components/svgIcon/AiModelIcon';
 import { BookIcon } from '../components/svgIcon/Book';
 import { EducationIcon } from '../components/svgIcon/Education';
@@ -9,7 +9,6 @@ import { PhotoIcon } from '../components/svgIcon/PhototIcon';
 import { ScienceIcon } from '../components/svgIcon/ScienceIcon';
 import { SourceCodeIcon } from '../components/svgIcon/SourceCodeIcon';
 import { UncategorizedIcon } from '../components/svgIcon/Uncategorized';
-import { IconProps } from '@totejs/icons';
 
 // interface Props {
 //   id: string;

@@ -7,6 +7,7 @@ import { useStatus } from '../hooks/useStatus';
 import { useWalletModal } from '../hooks/useWalletModal';
 import { OwnActionCom } from './OwnActionCom';
 import { Item } from '../utils/apis/types';
+import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
 
 interface IActionCom {
   data: Item;
@@ -18,17 +19,21 @@ export const ActionCom = (obj: IActionCom) => {
   const { id, groupName, ownerAddress, type } = data;
   const { isConnected, isConnecting } = useAccount();
 
-  const { status } = useStatus(groupName, ownerAddress, address);
+  const relation = useGetItemRelationWithAddr(address, data);
+
   const { handleModalOpen } = useWalletModal();
 
   const modalData = useModal();
   return (
     <ButtonCon gap={6}>
-      {status == 1 && (
+      {relation == 'NOT_PURCHASE' && (
         <Button
           size={'sm'}
           background="#665800"
           color="#FFE900"
+          h="32px"
+          fontSize="14px"
+          p="8px 16px"
           onClick={async () => {
             // if (from === 'home')
             //   reportEvent({ name: 'dm.main.list.buy.click' });
@@ -41,7 +46,7 @@ export const ActionCom = (obj: IActionCom) => {
           Buy
         </Button>
       )}
-      {(status == 0 || status == 2) && (
+      {(relation == 'OWNER' || relation == 'PURCHASED') && (
         <OwnActionCom
           data={{
             id,
@@ -52,13 +57,14 @@ export const ActionCom = (obj: IActionCom) => {
           address={address}
         ></OwnActionCom>
       )}
-      {status === -1 && (
+      {relation === 'UNKNOWN' && (
         <Button
           size={'sm'}
           background="#665800"
           color="#FFE900"
+          h="32px"
           fontSize="14px"
-          fontWeight="600"
+          p="8px 16px"
           onClick={() => {
             if (!isConnected && !isConnecting) handleModalOpen();
           }}

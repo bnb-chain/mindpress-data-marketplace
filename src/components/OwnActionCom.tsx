@@ -6,8 +6,9 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { parseGroupName } from '../utils/';
 import styled from '@emotion/styled';
-import { Flex } from '@totejs/uikit';
+import { Box, Button, Flex } from '@totejs/uikit';
 import { useGlobal } from '../hooks/useGlobal';
+import { useGetDownloadUrl } from '../hooks/useGetDownloadUrl';
 
 interface IOwnActionCom {
   data: {
@@ -43,10 +44,10 @@ export const OwnActionCom = (obj: IOwnActionCom) => {
 
   const [domain, setDomain] = useState('');
 
-  const downloadUrl = useMemo(() => {
-    const str = `${domain}/download/${bucketName}/${name}`;
-    return str;
-  }, [name, bucketName, domain]);
+  const downloadUrl = useGetDownloadUrl({
+    bucketName,
+    name,
+  });
 
   const previewUrl = useMemo(() => {
     const str = `${domain}/view/${bucketName}/${name}`;
@@ -61,16 +62,29 @@ export const OwnActionCom = (obj: IOwnActionCom) => {
 
   return (
     <ActionCon gap={10}>
-      {type === 'Data' && (
-        <DownloadIcon
-          color={'#AEB4BC'}
-          cursor="pointer"
-          onClick={async () => {
+      {type === 'OBJECT' && (
+        <Button
+          h="32px"
+          bg="none"
+          color="#F1F2F3"
+          border="1px solid #F1F2F3"
+          fontSize="14px"
+          p="8px 16px"
+          _hover={{
+            background: '#E1E2E5',
+            color: '#181A1E',
+          }}
+          onClick={() => {
             window.open(downloadUrl);
           }}
-        />
+        >
+          <DownloadIcon />
+          <Box as="span" ml="8px">
+            Download
+          </Box>
+        </Button>
       )}
-      {type === 'Data' && (
+      {/* {type === 'OBJECT' && (
         <Preview
           cursor="pointer"
           onClick={async () => {
@@ -78,8 +92,8 @@ export const OwnActionCom = (obj: IOwnActionCom) => {
           }}
         ></Preview>
         // </Copy>
-      )}
-      <GoIcon
+      )} */}
+      {/* <GoIcon
         cursor={'pointer'}
         color={'#AEB4BC'}
         onClick={() => {
@@ -109,7 +123,7 @@ export const OwnActionCom = (obj: IOwnActionCom) => {
             );
           }
         }}
-      />
+      /> */}
     </ActionCon>
   );
 };

@@ -8,6 +8,7 @@ import { getRandomSp } from '../../../utils/gfSDK';
 import { Copy } from '../../Copy';
 import { ViewIcon } from '../../svgIcon/ViewIcon';
 import { BuyData } from './BuyData';
+import { useGetDownloadUrl } from '../../../hooks/useGetDownloadUrl';
 
 interface Props {
   bucketName?: string;
@@ -19,15 +20,20 @@ export const GetMyData = (props: Props) => {
   const { itemInfo, bucketName, relation } = props;
 
   const [domain, setDomain] = useState('');
-  const downloadUrl = useMemo(() => {
-    const str = `${domain}/download/${bucketName}/${itemInfo.name}`;
-    return str;
-  }, [domain, bucketName, itemInfo.name]);
+  // const downloadUrl = useMemo(() => {
+  //   const str = `${domain}/download/${bucketName}/${itemInfo.name}`;
+  //   return str;
+  // }, [domain, bucketName, itemInfo.name]);
   useEffect(() => {
     getRandomSp().then((result) => {
       setDomain(result);
     });
   }, []);
+
+  const downloadUrl = useGetDownloadUrl({
+    bucketName,
+    name: itemInfo.name,
+  });
 
   const previewUrl = useMemo(() => {
     const str = `${domain}/view/${bucketName}/${itemInfo.name}`;
