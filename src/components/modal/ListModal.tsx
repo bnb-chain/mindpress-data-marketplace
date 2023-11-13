@@ -67,7 +67,7 @@ export const ListModal = (props: ListModalProps) => {
   const [_price, _setPrice] = useState('');
   const [_desc, _setDesc] = useState('');
   const [_imgUrl, _setImgUrl] = useState('');
-  const [_category, _setCategory] = useState('');
+  const [_category, _setCategory] = useState('Uncategorized');
 
   const [waringPrice, setWarningPrice] = useState(false);
   const { switchNetwork } = useSwitchNetwork();

@@ -30,7 +30,10 @@ import { Item } from '../../utils/apis/types';
 import { QueryHeadGroupResponse } from '../../utils/gfSDK';
 import { useGetItemById } from '../../hooks/useGetItemById';
 import { useGetGroup } from '../../hooks/useGetBucketOrObj';
-import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
+import {
+  useGetCategory,
+  useGetCatoriesMap,
+} from '../../hooks/useGetCatoriesMap';
 
 interface ListModalProps {
   isOpen: boolean;
@@ -60,9 +63,12 @@ export const EditModal = (props: ListModalProps) => {
 
   const [desc, setDesc] = useState(itemInfo.description);
   const [imgUrl, setImgUrl] = useState(itemInfo.url || '');
-  const [category, setCategory] = useState(itemInfo.categoryId || '100');
 
   const { data: categories } = useGetCatoriesMap();
+  const defaultCategory = useGetCategory(itemInfo.categoryId);
+  const [category, setCategory] = useState(
+    defaultCategory?.name || 'Uncategorized',
+  );
 
   const [loading, setLoading] = useState(false);
 
@@ -177,7 +183,7 @@ export const EditModal = (props: ListModalProps) => {
             </MenuList>
           </Menu>
           <Box ml="10px" as="span" color="#1e2026">
-            {categories && category && `select category: ${category}`}
+            {`select category: ${category}`}
           </Box>
         </InputCon>
         <Box h={10}></Box>
