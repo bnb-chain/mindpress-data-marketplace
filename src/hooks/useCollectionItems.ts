@@ -26,7 +26,7 @@ export const useCollectionItems = (
     if (bucketName) {
       getBucketFileList({ bucketName })
         .then(async (result: any) => {
-          console.log('getBucketFileList', result);
+          // console.log('getBucketFileList', result);
           const { body, code } = result;
 
           if (code == 0) {
@@ -86,7 +86,7 @@ export const useCollectionItems = (
               }
             });
 
-            console.log('tree', strColl.join('\n'));
+            // console.log('tree', strColl.join('\n'));
 
             await Promise.all(t);
             tree.orderTraverse((item: any) => {

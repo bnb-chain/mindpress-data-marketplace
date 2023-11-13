@@ -1,6 +1,14 @@
 import styled from '@emotion/styled';
 import { ColoredWarningIcon } from '@totejs/icons';
-import { Box, Flex, Input } from '@totejs/uikit';
+import {
+  Box,
+  Flex,
+  Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+} from '@totejs/uikit';
 import {
   Modal,
   ModalHeader,
@@ -10,7 +18,14 @@ import {
   Button,
   Textarea,
 } from '@totejs/uikit';
-import { useCallback, useMemo, useState } from 'react';
+import {
+  ForwardedRef,
+  ReactNode,
+  forwardRef,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import {
   GF_CHAIN_ID,
@@ -33,6 +48,7 @@ import { useModal } from '../../hooks/useModal';
 import Logo from '../../images/logo.png';
 import { Loader } from '../Loader';
 import { useDebounce } from '../../hooks/useDebounce';
+import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
 
 interface ListModalProps {
   isOpen: boolean;
@@ -46,15 +62,19 @@ export const ListModal = (props: ListModalProps) => {
   const [price, setPrice] = useState('');
   const [desc, setDesc] = useState('');
   const [imgUrl, setImgUrl] = useState('');
+  const [category, setCategory] = useState('');
 
   const [_price, _setPrice] = useState('');
   const [_desc, _setDesc] = useState('');
   const [_imgUrl, _setImgUrl] = useState('');
+  const [_category, _setCategory] = useState('');
 
   const [waringPrice, setWarningPrice] = useState(false);
   const { switchNetwork } = useSwitchNetwork();
   const { GfBalanceVal, BscBalanceVal } = useChainBalance();
   const modalData = useModal();
+
+  const { data: categories } = useGetCatoriesMap();
 
   const { chain } = useNetwork();
 
@@ -89,6 +109,10 @@ export const ListModal = (props: ListModalProps) => {
     _setImgUrl(event.target.value);
     setValue(setImgUrl, event.target.value);
   };
+  const onChangeCategory = (v: string) => {
+    _setCategory(v);
+    setValue(setCategory, v);
+  };
 
   const GF_FEE_SUFF = useMemo(() => {
     return GfBalanceVal >= LIST_FEE_ON_GF;
@@ -96,14 +120,15 @@ export const ListModal = (props: ListModalProps) => {
 
   const BSC_FEE_SUFF = useMemo(() => {
     return BscBalanceVal >= LIST_ESTIMATE_FEE_ON_BSC;
-  }, [GfBalanceVal]);
+  }, [BscBalanceVal]);
 
   const reset = useCallback(() => {
     setPrice('');
     setDesc('');
     setImgUrl('');
+    setCategory('');
     handleOpen(false);
-  }, []);
+  }, [handleOpen]);
 
   const listData = useMemo(() => {
     return {
@@ -113,15 +138,16 @@ export const ListModal = (props: ListModalProps) => {
         desc,
         url: imgUrl,
         price: price ? Web3.utils.toWei(price) : '',
+        category: category || 'Uncategorized',
       }),
     };
-  }, [bucket_name, object_name, desc, imgUrl, price]);
+  }, [bucket_name, object_name, desc, imgUrl, price, category]);
 
   const { InitiateList, loading, simulateInfo } = useList(listData);
 
   const available = useMemo(() => {
     return GF_FEE_SUFF && BSC_FEE_SUFF && !loading && !waringPrice;
-  }, [GF_FEE_SUFF, BSC_FEE_SUFF, loading]);
+  }, [GF_FEE_SUFF, BSC_FEE_SUFF, loading, waringPrice]);
 
   return (
     <Container
@@ -184,6 +210,38 @@ export const ListModal = (props: ListModalProps) => {
           </BNBCon>
         </InputCon>
         <Box h={10}></Box>
+
+        <ItemTittle alignItems={'center'} justifyContent={'space-between'}>
+          Category
+        </ItemTittle>
+        <InputCon>
+          <Menu>
+            <MenuButton as={CustomMenuButton}>Select...</MenuButton>
+            <MenuList h="200px" bg="#FFF" overflow="scroll" fontSize="12px">
+              {categories?.map((category) => {
+                return (
+                  <MenuItem
+                    key={category.id}
+                    h="30px"
+                    color="#1e2026"
+                    _hover={{ color: '#fff', bg: '#1e2026' }}
+                    onClick={() => {
+                      onChangeCategory(category.name);
+                    }}
+                  >
+                    {category.name}
+                  </MenuItem>
+                );
+              })}
+            </MenuList>
+          </Menu>
+          <Box ml="10px" as="span" color="#1e2026">
+            {categories && category && `select category: ${category}`}
+          </Box>
+        </InputCon>
+
+        <Box h={10}></Box>
+
         <ItemTittle alignItems={'center'} justifyContent={'space-between'}>
           Description
           <span>
@@ -512,3 +570,41 @@ const LineBox = styled(Box)`
 const FooterCon = styled(Flex)`
   width: 100%;
 `;
+
+const CustomMenuButton = forwardRef(
+  (props: { children: ReactNode }, ref: ForwardedRef<HTMLButtonElement>) => {
+    const { children, ...restProps } = props;
+
+    return (
+      <Button
+        size="sm"
+        ref={ref}
+        // background={'#373943'}
+        variant="ghost"
+        justifyContent="space-between"
+        px={12}
+        fontWeight={600}
+        fontSize={14}
+        h="30px"
+        lineHeight={'30px'}
+        color="#76808f"
+        // border="1px solid #5C5F6A"
+        borderColor="#76808f"
+        mt="5px"
+        borderRadius={8}
+        _hover={{
+          color: '#FFF',
+          background: '#1e2026',
+        }}
+        _expanded={{
+          '.close-icon': {
+            transform: 'rotate(-180deg)',
+          },
+        }}
+        {...restProps}
+      >
+        select category
+      </Button>
+    );
+  },
+);

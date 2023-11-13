@@ -1,6 +1,16 @@
 import styled from '@emotion/styled';
 import { ColoredWarningIcon } from '@totejs/icons';
-import { Box, Flex, Input, toast, Textarea } from '@totejs/uikit';
+import {
+  Box,
+  Flex,
+  Input,
+  toast,
+  Textarea,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+} from '@totejs/uikit';
 import {
   Modal,
   ModalHeader,
@@ -9,7 +19,7 @@ import {
   ModalCloseButton,
   Button,
 } from '@totejs/uikit';
-import { useMemo, useState } from 'react';
+import { ForwardedRef, ReactNode, forwardRef, useMemo, useState } from 'react';
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import { GF_CHAIN_ID } from '../../env';
 import { useChainBalance } from '../../hooks/useChainBalance';
@@ -18,17 +28,21 @@ import { Loader } from '../Loader';
 import { roundFun } from '../../utils';
 import { Item } from '../../utils/apis/types';
 import { QueryHeadGroupResponse } from '../../utils/gfSDK';
+import { useGetItemById } from '../../hooks/useGetItemById';
+import { useGetGroup } from '../../hooks/useGetBucketOrObj';
+import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
 
 interface ListModalProps {
   isOpen: boolean;
   handleOpen: (show: boolean) => void;
   itemInfo: Item;
   groupData?: QueryHeadGroupResponse;
-  updateFn: () => void;
 }
 
 export const EditModal = (props: ListModalProps) => {
-  const { groupData, isOpen, handleOpen, itemInfo, updateFn } = props;
+  const { isOpen, handleOpen, itemInfo } = props;
+
+  const { refetch } = useGetItemById(itemInfo.id);
 
   const { switchNetwork } = useSwitchNetwork();
   const { GfBalanceVal } = useChainBalance();
@@ -37,37 +51,58 @@ export const EditModal = (props: ListModalProps) => {
 
   // const { name, type, desc: _desc, url, groupName, extra } = detail;
 
+  const { data: groupData } = useGetGroup(
+    itemInfo.groupName,
+    itemInfo.ownerAddress,
+  );
+
   const { address } = useAccount();
 
-  // const [desc, setDesc] = useState(_desc);
-  // const [imgUrl, setImgUrl] = useState(url);
+  const [desc, setDesc] = useState(itemInfo.description);
+  const [imgUrl, setImgUrl] = useState(itemInfo.url || '');
+  const [category, setCategory] = useState(itemInfo.categoryId || '100');
+
+  const { data: categories } = useGetCatoriesMap();
 
   const [loading, setLoading] = useState(false);
 
-  // const onChangeDesc = (event: any) => {
-  //   setDesc(event.target.value);
-  // };
-  // const onChangeImgUrl = (event: any) => {
-  //   setImgUrl(event.target.value);
-  // };
+  const onChangeDesc = (event: any) => {
+    setDesc(event.target.value);
+  };
+  const onChangeImgUrl = (event: any) => {
+    setImgUrl(event.target.value);
+  };
 
-  // const INFO_NO_CHANGE = useMemo(() => {
-  //   return desc === _desc && imgUrl === url;
-  // }, [_desc, desc, imgUrl, url]);
+  const onChangeCategory = (v: string) => {
+    setCategory(v);
+  };
 
-  // const extraStr = useMemo(() => {
-  //   return JSON.stringify({
-  //     ...JSON.parse(extra),
-  //     desc,
-  //     url: imgUrl,
-  //   });
-  // }, [desc, extra, imgUrl]);
+  const INFO_NO_CHANGE = useMemo(() => {
+    return desc === itemInfo.description && imgUrl === itemInfo.url;
+  }, [desc, imgUrl, itemInfo.description, itemInfo.url]);
 
+  const extraStr = useMemo(() => {
+    if (!groupData) return '';
+
+    // console.log('groupData?.groupInfo.extra', groupData?.groupInfo.extra);
+    // console.log('hr,', imgUrl);
+
+    return JSON.stringify({
+      ...JSON.parse(groupData?.groupInfo.extra),
+      desc,
+      url: imgUrl,
+      category,
+    });
+  }, [category, desc, groupData, imgUrl]);
+
+  // console.log('GroupData', groupData);
   const { edit, simulateInfo, simLoading } = useEdit(
     address as string,
     itemInfo.groupName,
-    groupData?.groupInfo.extra || '',
+    extraStr,
   );
+
+  // console.log('GfBalanceVal', GfBalanceVal, simulateInfo);
 
   const GF_FEE_SUFF = useMemo(() => {
     if (simulateInfo) {
@@ -86,7 +121,7 @@ export const EditModal = (props: ListModalProps) => {
       closeOnOverlayClick={false}
     >
       <ModalCloseButton />
-      <Header> Edit Description</Header>
+      <Header> Edit </Header>
       <CustomBody>
         <Box h={10}></Box>
         <ResourceNameCon alignItems={'center'}>
@@ -110,13 +145,43 @@ export const EditModal = (props: ListModalProps) => {
         <Box h={10}></Box>
         <InputCon>
           <Textarea
-            value={itemInfo.description}
-            // onChange={onChangeDesc}
+            value={desc}
+            onChange={onChangeDesc}
             placeholder="Please enter an description..."
             maxLength={300}
           />
         </InputCon>
         <Box h={10}></Box>
+        <ItemTittle alignItems={'center'} justifyContent={'space-between'}>
+          Category
+        </ItemTittle>
+        <InputCon>
+          <Menu>
+            <MenuButton as={CustomMenuButton}>Select...</MenuButton>
+            <MenuList h="200px" bg="#FFF" overflow="scroll" fontSize="12px">
+              {categories?.map((category) => {
+                return (
+                  <MenuItem
+                    key={category.id}
+                    h="30px"
+                    color="#1e2026"
+                    _hover={{ color: '#fff', bg: '#1e2026' }}
+                    onClick={() => {
+                      onChangeCategory(category.name);
+                    }}
+                  >
+                    {category.name}
+                  </MenuItem>
+                );
+              })}
+            </MenuList>
+          </Menu>
+          <Box ml="10px" as="span" color="#1e2026">
+            {categories && category && `select category: ${category}`}
+          </Box>
+        </InputCon>
+        <Box h={10}></Box>
+
         <ItemTittle alignItems={'center'} justifyContent={'space-between'}>
           Thumbnail URL
           <span>Use Greenfield Universal Endpoint or other public url</span>
@@ -124,8 +189,8 @@ export const EditModal = (props: ListModalProps) => {
         <Box h={10}></Box>
         <InputCon>
           <Input
-            value={itemInfo.url}
-            // onChange={onChangeImgUrl}
+            value={imgUrl}
+            onChange={onChangeImgUrl}
             placeholder="Please enter an url..."
           ></Input>
         </InputCon>
@@ -171,11 +236,7 @@ export const EditModal = (props: ListModalProps) => {
               onClick={async () => {
                 try {
                   setLoading(true);
-                  await edit(
-                    address as string,
-                    itemInfo.groupName,
-                    groupData?.groupInfo.extra || '',
-                  );
+                  await edit(address as string, itemInfo.groupName, extraStr);
                   toast.success({
                     description: 'edit success',
                     duration: 3000,
@@ -184,10 +245,11 @@ export const EditModal = (props: ListModalProps) => {
                   toast.error({ description: 'edit failed', duration: 3000 });
                 }
                 setLoading(false);
-                updateFn?.();
+                // updateFn?.();
+                refetch();
                 handleOpen(false);
               }}
-              // disabled={!GF_FEE_SUFF || INFO_NO_CHANGE || loading}
+              disabled={!GF_FEE_SUFF || INFO_NO_CHANGE || loading}
               isLoading={loading}
             >
               Confirm
@@ -337,3 +399,41 @@ const BalanceWarn = styled(Flex)`
 const FooterCon = styled(Flex)`
   width: 100%;
 `;
+
+const CustomMenuButton = forwardRef(
+  (props: { children: ReactNode }, ref: ForwardedRef<HTMLButtonElement>) => {
+    const { children, ...restProps } = props;
+
+    return (
+      <Button
+        size="sm"
+        ref={ref}
+        // background={'#373943'}
+        variant="ghost"
+        justifyContent="space-between"
+        px={12}
+        fontWeight={600}
+        fontSize={14}
+        h="30px"
+        lineHeight={'30px'}
+        color="#76808f"
+        // border="1px solid #5C5F6A"
+        borderColor="#76808f"
+        mt="5px"
+        borderRadius={8}
+        _hover={{
+          color: '#FFF',
+          background: '#1e2026',
+        }}
+        _expanded={{
+          '.close-icon': {
+            transform: 'rotate(-180deg)',
+          },
+        }}
+        {...restProps}
+      >
+        select category
+      </Button>
+    );
+  },
+);

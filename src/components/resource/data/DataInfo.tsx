@@ -23,6 +23,7 @@ import BSCIcon from '../../svgIcon/BSCIcon';
 import { CategoryIcon } from '../../svgIcon/CategoryIcon';
 import { ShoppingIcon } from '../../svgIcon/ShoppingIcon';
 import { SizeIcon } from '../../svgIcon/SizeIcon';
+import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
 
 interface Props {
   itemInfo: Item;
@@ -40,6 +41,9 @@ export const DataInfo = (props: Props) => {
 
   const modalData = useModal();
   const { handleModalOpen } = useWalletModal();
+  console.log(itemInfo.categoryId);
+
+  const categroyInfo = useGetCategory(itemInfo.categoryId);
 
   if (!objectData || !itemInfo) {
     return <NoData size={300} />;
@@ -87,7 +91,7 @@ export const DataInfo = (props: Props) => {
             </Field>
           </Block>
           <Block>
-            <Value>{/* {category?.name} */} Uncategorized </Value>
+            {/* <Value> {categroyInfo?.name} </Value> */}
             <Field>
               <CategoryIcon /> Category
             </Field>

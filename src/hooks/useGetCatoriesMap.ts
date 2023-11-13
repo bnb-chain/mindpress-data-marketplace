@@ -9,3 +9,13 @@ export const useGetCatoriesMap = () => {
     staleTime: Infinity,
   });
 };
+
+export const useGetCategory = (categoryId: number) => {
+  const { data: categories } = useGetCatoriesMap();
+
+  if (!categories) {
+    return;
+  }
+
+  return categories.find((item) => item.id === categoryId);
+};

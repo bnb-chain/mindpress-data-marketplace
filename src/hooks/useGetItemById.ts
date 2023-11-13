@@ -3,7 +3,7 @@ import { getItemById } from '../utils/apis';
 import { Item } from '../utils/apis/types';
 import { useEffect, useState } from 'react';
 
-const DEFAULT_DATA: Item = {
+export const DEFAULT_ITEM: Item = {
   id: 0,
   categoryId: 0,
   type: 'OBJECT',
@@ -28,7 +28,7 @@ const DEFAULT_DATA: Item = {
 export const useGetItemById = (id: number) => {
   const [itemData, setItemData] = useState<Item>();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['GET_ITEM', id],
     queryFn: () => getItemById(id),
     gcTime: 20000,
@@ -45,5 +45,6 @@ export const useGetItemById = (id: number) => {
   return {
     data: itemData,
     isLoading,
+    refetch,
   };
 };

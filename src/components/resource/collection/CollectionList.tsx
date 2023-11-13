@@ -23,6 +23,11 @@ import { QueryHeadBucketResponse } from '../../../utils/gfSDK';
 import { NoData } from '../../NoData';
 import { OwnActionCom } from '../../OwnActionCom';
 import { TableProps } from '../../ui/table/TableProps';
+import { useGetItemByObjId } from '../../../hooks/useGetItemByObjId';
+import { useEffect, useState } from 'react';
+import { DEFAULT_ITEM } from '../../../hooks/useGetItemById';
+import _ from 'lodash';
+import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
 
 interface Props {
   itemInfo: Item;
@@ -30,12 +35,34 @@ interface Props {
   relation: ITEM_RELATION_ADDR;
 }
 const CollectionList = (props: Props) => {
+  const state = useGlobal();
+  const navigator = useNavigate();
   const { itemInfo, bucketData, relation } = props;
 
   const { list, loading } = useCollectionItems(
     itemInfo.name,
     itemInfo.status === 'LISTED',
   );
+
+  const [selectObjectId, setSelectObjectId] = useState('');
+  const { data: selectItem } = useGetItemByObjId(selectObjectId);
+
+  // TODO: if selectItem is null, the object is not listed, should go to bid or oid page
+  // console.log('selectItem', selectObjectId, selectItem);
+  useEffect(() => {
+    if (selectItem?.id === DEFAULT_ITEM.id) return;
+
+    console.log('selectItem', selectItem);
+    if (!_.isEmpty(selectItem)) {
+      console.log(`/resource?id=${selectItem.id}`);
+      navigator(`/resource?id=${selectItem.id}`);
+    } else {
+      console.log(`/resource?oid=${selectObjectId}`);
+      // navigator(
+      //   `/resource?oid=${selectObjectId}&ownerAddress=${itemInfo.ownerAddress}`,
+      // );
+    }
+  });
 
   const { handlePageChange, page } = usePagination();
 
@@ -53,10 +80,6 @@ const CollectionList = (props: Props) => {
   //
 
   // const { data: bucketIdData, refetch } = useGetBucketById(bucketId);
-
-  const state = useGlobal();
-
-  const navigator = useNavigate();
 
   const columns = [
     {
@@ -91,8 +114,9 @@ const CollectionList = (props: Props) => {
               }
 
               const from = encodeURIComponent(JSON.stringify(list));
-              // console.log('obkect_info', object_info);
+              console.log('obkect_info', object_info);
               if (!object_info) {
+                // this is folder
                 // navigator(
                 //   `/folder?bid=${
                 //     bucketData?.bucketInfo.bucketId
@@ -102,9 +126,10 @@ const CollectionList = (props: Props) => {
                 // );
               } else {
                 const { id } = object_info;
-                navigate(
-                  `/resource?oid=${id}&bgn=${bgn}&address=${itemInfo.ownerAddress}&from=${from}`,
-                );
+                setSelectObjectId(id);
+                // navigate(
+                //   `/resource?oid=${id}&bgn=${bgn}&address=${itemInfo.ownerAddress}&from=${from}`,
+                // );
               }
             }}
           >

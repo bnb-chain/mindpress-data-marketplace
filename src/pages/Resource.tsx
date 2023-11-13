@@ -1,60 +1,45 @@
 import styled from '@emotion/styled';
-import {
-  Flex,
-  Button,
-  Box,
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-} from '@totejs/uikit';
-import { NavBar } from '../components/NavBar';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import Overview from '../components/resource/Overview';
-import CollectionList from '../components/resource/collection/CollectionList';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { EditModal } from '../components/modal/EditModal';
+import { Box, Breadcrumb, BreadcrumbItem, Flex } from '@totejs/uikit';
+import { useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
-import { useResourceInfo } from '../hooks/useResourceInfo';
 import { Loader } from '../components/Loader';
-import { defaultImg, parseGroupName } from '../utils';
-import { useSalesVolume } from '../hooks/useSalesVolume';
-import { useStatus } from '../hooks/useStatus';
-import { useModal } from '../hooks/useModal';
-import { PenIcon, SendIcon } from '@totejs/icons';
-import { useGlobal } from '../hooks/useGlobal';
-import { useBNBPrice } from '../hooks/useBNBPrice';
-import { NoData } from '../components/NoData';
-import { DCELLAR_URL, GF_EXPLORER_URL } from '../env';
-import { useWalletModal } from '../hooks/useWalletModal';
-import { useCollectionItems } from '../hooks/useCollectionItems';
-import { reportEvent } from '../utils/ga';
-import BSCIcon from '../components/svgIcon/BSCIcon';
-import { BscTraceIcon } from '../components/svgIcon/BscTraceIcon';
-import { useItemStatus } from '../hooks/useItemStatus';
-import { DataInfo } from '../components/resource/data/DataInfo';
-import { SellIcon } from '../components/svgIcon/SellIcon';
+import { ImgCon } from '../components/resource/ImgCon';
+import Overview from '../components/resource/Overview';
 import { CollectionInfo } from '../components/resource/collection/CollectionInfo';
-import { useGetItemById } from '../hooks/useGetItemById';
-import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
+import CollectionList from '../components/resource/collection/CollectionList';
+import { DataInfo } from '../components/resource/data/DataInfo';
+import { BscTraceIcon } from '../components/svgIcon/BscTraceIcon';
+import { GF_EXPLORER_URL } from '../env';
 import {
   useGetBOInfoFromGroup,
-  useGetBucketById,
   useGetBucketByName,
   useGetGroup,
   useGetObject,
 } from '../hooks/useGetBucketOrObj';
-import { ImgCon } from '../components/resource/ImgCon';
+import { useGetItemById } from '../hooks/useGetItemById';
+import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
+import { reportEvent } from '../utils/ga';
+import { useResourceInfo } from '../hooks/useResourceInfo';
 
 const Resource = () => {
   const [p] = useSearchParams();
   // const groupId = p.getAll('gid')[0];
   // const cid = p.getAll('cid')[0];
-  // const objectId = p.getAll('oid')[0];
-  // const ownerAddress = p.getAll('address')[0];
+  const objectId = p.getAll('oid')[0];
+  const ownerAddress = p.getAll('ownerAddress')[0];
   // const gName = p.getAll('gn')[0];
   // const bGroupName = p.getAll('bgn')[0];
   const itemId = p.getAll('id')[0];
   // const bucketId = p.getAll('bid')[0];
+
+  // const { loading, baseInfo, noData } = useResourceInfo({
+  //   objectId,
+  //   address: ownerAddress,
+  //   // groupName: gName,
+  //   // update,
+  // });
+  // console.log('baseInfo', baseInfo);
 
   const { address } = useAccount();
 
@@ -62,14 +47,7 @@ const Resource = () => {
     parseInt(itemId),
   );
 
-  // /* const { loading, baseInfo, noData } = useResourceInfo({
-  //   groupId,
-  //   bucketId,
-  //   objectId,
-  //   address: ownerAddress,
-  //   groupName: gName,
-  //   update,
-  // });
+  console.log('objectId: ' + objectId);
 
   const relation = useGetItemRelationWithAddr(address, itemInfo);
 

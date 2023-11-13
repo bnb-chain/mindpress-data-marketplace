@@ -149,6 +149,9 @@ dependencies:
   jest-watch-typeahead:
     specifier: ^1.0.0
     version: 1.1.0(jest@27.5.1)
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   mini-css-extract-plugin:
     specifier: ^2.4.5
     version: 2.7.6(webpack@5.87.0)
@@ -262,6 +265,9 @@ devDependencies:
   '@types/identicon.js':
     specifier: ^2.3.1
     version: 2.3.1
+  '@types/lodash':
+    specifier: ^4.14.201
+    version: 4.14.201
   '@types/sha256':
     specifier: ^0.2.0
     version: 0.2.0
@@ -4170,6 +4176,10 @@ packages:
     dependencies:
       '@types/node': 16.18.34
     dev: false
+
+  /@types/lodash@4.14.201:
+    resolution: {integrity: sha512-y9euML0cim1JrykNxADLfaG0FgD1g/yTHwUs/Jg9ZIU7WKj2/4IW9Lbb1WZbvck78W/lfGXFfe+u2EGfIJXdLQ==}
+    dev: true
 
   /@types/long@4.0.2:
     resolution: {integrity: sha512-MqTGEo5bj5t157U6fA/BiDynNkn0YknVdh48CMPkTSpFTVmvao5UQmm7uEF6xBEo7qIMAlY/JSleYaE6VOdpaA==}

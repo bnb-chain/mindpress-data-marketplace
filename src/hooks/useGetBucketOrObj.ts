@@ -61,11 +61,11 @@ export const useGetGroup = (
     queryFn: async () => {
       if (!groupName || !ownerAddress) return;
       const res = await getGroupInfoByName(groupName, ownerAddress);
-      console.log('res', res);
+      console.log('group res', res);
       return res;
     },
-    gcTime: Infinity,
-    staleTime: Infinity,
+    // gcTime: Infinity,
+    // staleTime: Infinity,
   });
 };
 

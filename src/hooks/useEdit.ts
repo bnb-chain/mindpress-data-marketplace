@@ -23,14 +23,14 @@ export const useEdit = (address: string, groupName: string, extra: string) => {
       }
       setSimLoading(false);
     },
-    [address, groupName, extra],
+    [],
   );
 
   useEffect(() => {
     if (address && groupName && extra) {
       Init(address, groupName, extra);
     }
-  }, [address, groupName, extra]);
+  }, [address, groupName, extra, Init]);
 
   const edit = useCallback(
     async (address: string, groupName: string, extra: string) => {

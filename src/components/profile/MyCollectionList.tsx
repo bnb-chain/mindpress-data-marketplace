@@ -53,6 +53,7 @@ const MyCollectionList = (props: ICollectionList) => {
 
   const [selectBucketId, setSelectBucketId] = useState<string>('');
   const { data: selectItem } = useGetItemByBucketId(selectBucketId);
+  // TODO: if selectItem is null, the bucket is not listed, should go to bid or oid page
   console.log('selectItem', selectItem);
 
   useEffect(() => {

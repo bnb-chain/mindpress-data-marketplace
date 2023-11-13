@@ -23,6 +23,7 @@ import { useCollectionItems } from '../../../hooks/useCollectionItems';
 import { CountIcon } from '../../svgIcon/CountIcon';
 import { Item } from '../../../utils/apis/types';
 import { ITEM_RELATION_ADDR } from '../../../hooks/useGetItemRelationWithAddr';
+import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
 
 interface Props {
   itemInfo: Item;
@@ -33,6 +34,8 @@ export const CollectionInfo = (props: Props) => {
   const { itemInfo, relation } = props;
 
   const { price: bnbPrice } = useBNBPrice();
+
+  const categroyInfo = useGetCategory(itemInfo.categoryId);
 
   const { list, loading } = useCollectionItems(
     itemInfo.name,
@@ -80,7 +83,7 @@ export const CollectionInfo = (props: Props) => {
             </Field>
           </Block>
           <Block>
-            <Value>{/* {category?.name} */} Uncategorized </Value>
+            <Value>{categroyInfo?.name} </Value>
             <Field>
               <CategoryIcon /> Category{' '}
             </Field>

@@ -67,10 +67,6 @@ export const ImgCon = (props: Props) => {
             setOpen(false);
           }}
           itemInfo={itemInfo}
-          updateFn={() => {
-            console.log('xx');
-            // setUpdate(true);
-          }}
         />
       )}
     </Container>
