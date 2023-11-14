@@ -6,7 +6,7 @@ settings:
 
 dependencies:
   '@babel/core':
-    specifier: ^7.16.0
+    specifier: ^7.22.1
     version: 7.22.1
   '@bnb-chain/greenfield-js-sdk':
     specifier: 1.0.2
@@ -21,7 +21,7 @@ dependencies:
     specifier: ^11.11.0
     version: 11.11.0(@emotion/react@11.11.0)(@types/react@18.2.7)(react@18.2.0)
   '@pmmmwh/react-refresh-webpack-plugin':
-    specifier: ^0.5.3
+    specifier: ^0.5.10
     version: 0.5.10(react-refresh@0.11.0)(webpack-dev-server@4.15.0)(webpack@5.87.0)
   '@svgr/webpack':
     specifier: ^5.5.0
@@ -63,10 +63,10 @@ dependencies:
     specifier: ^1.4.0
     version: 1.4.0
   babel-jest:
-    specifier: ^27.4.2
+    specifier: ^27.5.1
     version: 27.5.1(@babel/core@7.22.1)
   babel-loader:
-    specifier: ^8.2.3
+    specifier: ^8.3.0
     version: 8.3.0(@babel/core@7.22.1)(webpack@5.87.0)
   babel-plugin-named-asset-import:
     specifier: ^0.3.8
@@ -81,22 +81,22 @@ dependencies:
     specifier: ^5.2.1
     version: 5.2.1
   browserslist:
-    specifier: ^4.18.1
+    specifier: ^4.21.7
     version: 4.21.7
   buffer:
     specifier: ^6.0.3
     version: 6.0.3
   camelcase:
-    specifier: ^6.2.1
+    specifier: ^6.3.0
     version: 6.3.0
   case-sensitive-paths-webpack-plugin:
     specifier: ^2.4.0
     version: 2.4.0
   css-loader:
-    specifier: ^6.5.1
+    specifier: ^6.8.1
     version: 6.8.1(webpack@5.87.0)
   css-minimizer-webpack-plugin:
-    specifier: ^3.2.0
+    specifier: ^3.4.1
     version: 3.4.1(webpack@5.87.0)
   date-fns-tz:
     specifier: ^2.0.0
@@ -111,19 +111,19 @@ dependencies:
     specifier: ^5.1.0
     version: 5.1.0
   eslint:
-    specifier: ^8.3.0
+    specifier: ^8.41.0
     version: 8.41.0
   eslint-config-react-app:
     specifier: ^7.0.1
     version: 7.0.1(@babel/plugin-syntax-flow@7.23.3)(@babel/plugin-transform-react-jsx@7.22.15)(eslint@8.41.0)(jest@27.5.1)(typescript@4.9.5)
   eslint-webpack-plugin:
-    specifier: ^3.1.1
+    specifier: ^3.2.0
     version: 3.2.0(eslint@8.41.0)(webpack@5.87.0)
   file-loader:
     specifier: ^6.2.0
     version: 6.2.0(webpack@5.87.0)
   fs-extra:
-    specifier: ^10.0.0
+    specifier: ^10.1.0
     version: 10.1.0
   history:
     specifier: ^5.3.0
@@ -132,7 +132,7 @@ dependencies:
     specifier: ^1.11.1
     version: 1.11.1(html-webpack-plugin@5.5.1)
   html-webpack-plugin:
-    specifier: ^5.5.0
+    specifier: ^5.5.1
     version: 5.5.1(webpack@5.87.0)
   identicon.js:
     specifier: ^2.3.3
@@ -141,22 +141,22 @@ dependencies:
     specifier: ^3.0.0
     version: 3.0.0
   jest:
-    specifier: ^27.4.3
+    specifier: ^27.5.1
     version: 27.5.1
   jest-resolve:
-    specifier: ^27.4.2
+    specifier: ^27.5.1
     version: 27.5.1
   jest-watch-typeahead:
-    specifier: ^1.0.0
+    specifier: ^1.1.0
     version: 1.1.0(jest@27.5.1)
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
   mini-css-extract-plugin:
-    specifier: ^2.4.5
+    specifier: ^2.7.6
     version: 2.7.6(webpack@5.87.0)
   postcss:
-    specifier: ^8.4.4
+    specifier: ^8.4.24
     version: 8.4.24
   postcss-flexbugs-fixes:
     specifier: ^5.0.2
@@ -168,7 +168,7 @@ dependencies:
     specifier: ^10.0.1
     version: 10.0.1(browserslist@4.21.7)(postcss@8.4.24)
   postcss-preset-env:
-    specifier: ^7.0.1
+    specifier: ^7.8.3
     version: 7.8.3(postcss@8.4.24)
   prompts:
     specifier: ^2.4.2
@@ -198,31 +198,31 @@ dependencies:
     specifier: ^3.0.1
     version: 3.0.1
   resolve:
-    specifier: ^1.20.0
+    specifier: ^1.22.2
     version: 1.22.2
   resolve-url-loader:
     specifier: ^4.0.0
     version: 4.0.0
   sass-loader:
-    specifier: ^12.3.0
+    specifier: ^12.6.0
     version: 12.6.0(webpack@5.87.0)
   semver:
-    specifier: ^7.3.5
+    specifier: ^7.5.1
     version: 7.5.1
   sha256:
     specifier: ^0.2.0
     version: 0.2.0
   source-map-loader:
-    specifier: ^3.0.0
+    specifier: ^3.0.2
     version: 3.0.2(webpack@5.87.0)
   style-loader:
-    specifier: ^3.3.1
+    specifier: ^3.3.3
     version: 3.3.3(webpack@5.87.0)
   tailwindcss:
-    specifier: ^3.0.2
+    specifier: ^3.3.2
     version: 3.3.2
   terser-webpack-plugin:
-    specifier: ^5.2.5
+    specifier: ^5.3.9
     version: 5.3.9(webpack@5.87.0)
   tiny-slider:
     specifier: ^2.9.4
@@ -246,13 +246,13 @@ dependencies:
     specifier: ^5.87.0
     version: 5.87.0
   webpack-dev-server:
-    specifier: ^4.6.0
+    specifier: ^4.15.0
     version: 4.15.0(webpack@5.87.0)
   webpack-manifest-plugin:
-    specifier: ^4.0.2
+    specifier: ^4.1.1
     version: 4.1.1(webpack@5.87.0)
   workbox-webpack-plugin:
-    specifier: ^6.4.1
+    specifier: ^6.6.0
     version: 6.6.0(webpack@5.87.0)
 
 devDependencies:
@@ -5421,7 +5421,7 @@ packages:
       postcss: ^8.1.0
     dependencies:
       browserslist: 4.21.7
-      caniuse-lite: 1.0.30001489
+      caniuse-lite: 1.0.30001562
       fraction.js: 4.2.0
       normalize-range: 0.1.2
       picocolors: 1.0.0
@@ -5814,7 +5814,7 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001489
+      caniuse-lite: 1.0.30001562
       electron-to-chromium: 1.4.413
       node-releases: 2.0.12
       update-browserslist-db: 1.0.11(browserslist@4.21.7)
@@ -5960,13 +5960,13 @@ packages:
     resolution: {integrity: sha512-bsTwuIg/BZZK/vreVTYYbSWoe2F+71P7K5QGEX+pT250DZbfU1MQ5prOKpPR+LL6uWKK3KMwMCAS74QB3Um1uw==}
     dependencies:
       browserslist: 4.21.7
-      caniuse-lite: 1.0.30001489
+      caniuse-lite: 1.0.30001562
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
     dev: false
 
-  /caniuse-lite@1.0.30001489:
-    resolution: {integrity: sha512-x1mgZEXK8jHIfAxm+xgdpHpk50IN3z3q3zP261/WS+uvePxW8izXuCu6AHz0lkuYTlATDehiZ/tNyYBdSQsOUQ==}
+  /caniuse-lite@1.0.30001562:
+    resolution: {integrity: sha512-kfte3Hym//51EdX4239i+Rmp20EsLIYGdPkERegTgU19hQWCRhsRFGKHTliUlsry53tv17K7n077Kqa0WJU4ng==}
 
   /case-sensitive-paths-webpack-plugin@2.4.0:
     resolution: {integrity: sha512-roIFONhcxog0JSSWbvVAh3OocukmSgpqOH6YpMkCvav/ySIV3JKg4Dc8vYtQjYi/UxpNE36r/9v+VqTQqgkYmw==}

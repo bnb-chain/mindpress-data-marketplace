@@ -1,0 +1,108 @@
+name: Mindpress Production Docker Image CI ### rename Github Action ###
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [ui]
+
+env:
+  REGION: us-east-1
+  ECR_REGISTRY_ID: 553885929720
+  AWS_ASSUMED_ROLE_ARN: arn:aws:iam::553885929720:role/tf_nodereal_prod_ecr_cicd_deployment_assume_role
+  STATIC_BUCKET: tf-nodereal-prod-nodereal-static
+  ### IMPORTANT !!!! ###
+  ### The following three need to be modified according to your project ###
+  APP_NAME: mindpress ### your application name
+  GIT_SYNC_PATH_TESTNET: prod/gitops/tf-nodereal-prod-noderealap/web-ui/mindpress/values.yaml
+  GIT_SYNC_PATH_MAINNET: prod/gitops/tf-nodereal-prod-noderealus/web-ui/mindpress/values.yaml ### fit your service config path in https://github.com/node-real/nodereal-app
+  TAG_FIELD: .nodereal-app.image.tag ### fit your service config path in https://github.com/node-real/nodereal-app: https://app.clickup.com/25652588/v/dc/revbc-8947/revbc-20047?comment=854233399
+
+jobs:
+  build:
+    runs-on: [self-hosted, qa-infra-k8s]
+    # if: "contains(github.event.head_commit.message, 'aptos-trace')"
+    steps:
+      - uses: actions/checkout@v3
+      - name: aws assume role
+        id: aws-assume-role
+        run: |
+          UUID=$(cat /proc/sys/kernel/random/uuid)
+          OUT=$(aws sts assume-role --role-arn $AWS_ASSUMED_ROLE_ARN --role-session-name $UUID)
+          echo ::set-output name=aws_access_key_id::"$(echo $OUT | jq -r '.Credentials''.AccessKeyId')"
+          echo ::set-output name=aws_secret_key::"$(echo $OUT | jq -r '.Credentials''.SecretAccessKey')"
+          echo ::set-output name=aws_sessions_token::"$(echo $OUT | jq -r '.Credentials''.SessionToken')"
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - uses: ./.github/actions/ci-setup
+
+      - name: Build React App
+        run: |
+          pnpm run build
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: image
+        env:
+          AWS_ACCESS_KEY_ID: ${{ steps.aws-assume-role.outputs.aws_access_key_id }}
+          AWS_SECRET_ACCESS_KEY: ${{ steps.aws-assume-role.outputs.aws_secret_key }}
+          AWS_SESSION_TOKEN: ${{ steps.aws-assume-role.outputs.aws_sessions_token }}
+        run: |
+          GIT_COMMIT=${GITHUB_SHA}
+          IMAGE_NAME="${ECR_REGISTRY_ID}.dkr.ecr.${REGION}.amazonaws.com/${APP_NAME}:${GITHUB_SHA}"
+          aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY_ID}.dkr.ecr.${REGION}.amazonaws.com
+          aws ecr --region ${REGION} describe-repositories --registry-id ${ECR_REGISTRY_ID} --repository-names ${APP_NAME} || aws ecr --region ${REGION} create-repository --repository-name ${APP_NAME}
+          aws ecr --region ${REGION} set-repository-policy --registry-id ${ECR_REGISTRY_ID} --repository-name ${APP_NAME} --policy-text file:///home/runner/repo-access-permissions.json || true
+
+          #### Write your own build arg for your project
+          docker build --build-arg COMMIT_SHA=${GIT_COMMIT} \
+                       -f Dockerfile . -t ${IMAGE_NAME}
+          docker push ${IMAGE_NAME}
+          echo ::set-output name=image_id::$IMAGE_NAME
+      - uses: shrink/actions-docker-extract@v1
+        id: extract
+        with:
+          image: ${{ steps.image.outputs.image_id }}
+          path: /opt/deploy/assets
+      - name: upload static file to qa s3 bucket from CI artifact
+        env:
+          AWS_ACCESS_KEY_ID: ${{ steps.aws-assume-role.outputs.aws_access_key_id }}
+          AWS_SECRET_ACCESS_KEY: ${{ steps.aws-assume-role.outputs.aws_secret_key }}
+          AWS_SESSION_TOKEN: ${{ steps.aws-assume-role.outputs.aws_sessions_token }}
+        run: |
+          aws s3 cp ${{ steps.extract.outputs.destination }}/assets/.next/static s3://${STATIC_BUCKET}/static/aptos-trace/_next/static --recursive --cache-control "private, max-age=259200"
+          aws s3 cp ${{ steps.extract.outputs.destination }}/assets/public s3://${STATIC_BUCKET}/static/aptos-trace --recursive --cache-control "private, max-age=259200"
+      - name: clone the gitops config repo
+        uses: actions/checkout@v3
+        with:
+          repository: node-real/nodereal-app
+          token: ${{ secrets.GO_MODULES_TOKEN }}
+      - name: update image tag in gitops config repo for testnet
+        env:
+          GIT_SYNC_PATH: ${{ env.GIT_SYNC_PATH_TESTNET }}
+          TAG_FIELD: ${{ env.TAG_FIELD }}
+        run: |
+          yq e "$TAG_FIELD = \"${GITHUB_SHA}\"" -i $GIT_SYNC_PATH
+      - name: update image tag in gitops config repo for mainnet
+        env:
+          GIT_SYNC_PATH: ${{ env.GIT_SYNC_PATH_MAINNET }}
+          TAG_FIELD: ${{ env.TAG_FIELD }}
+        run: |
+          yq e "$TAG_FIELD = \"${GITHUB_SHA}\"" -i $GIT_SYNC_PATH
+      - name: Set PR branch name
+        id: vars
+        run: echo ::set-output name=branch-name::"github-action-patches/${GITHUB_SHA::7}"
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GO_MODULES_TOKEN }}
+          commit-message: update image tag
+          title: github action APTOS-TRACE deploy auto-update
+          body: lgtm
+          branch: ${{ steps.vars.outputs.branch-name }}
+          labels: |
+            lgtm
+            approved
