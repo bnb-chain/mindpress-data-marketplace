@@ -1,16 +1,16 @@
 FROM nginx:1.21
 
-WORKDIR /app
+# WORKDIR /app
 
 # COPY package.json /app
 # COPY pnpm-lock.yaml /app
 
-COPY build .
-RUN echo 'build successful'
+# COPY build .
+# RUN echo 'build successful'
 
 # Stage 1, based on Nginx, to have only the compiled app, ready for production with Nginx
 
-COPY /app/build/ /usr/share/nginx/html
+COPY ./build/ /usr/share/nginx/html
 # Copy the default nginx.conf provided by tiangolo/node-frontend
 # COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
 
