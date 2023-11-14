@@ -25,7 +25,6 @@ const Home = () => {
           </Box>
         </BoxWithArrow>
       </CardBox>
-
       <CardBox
         mt="20px"
         boxShadow="0px 24px 64px 0px rgba(0, 0, 0, 0.48), 0px 4px 0px 0px #ffe900"
@@ -39,11 +38,9 @@ const Home = () => {
           </Box>
         </BoxWithArrow>
       </CardBox>
-
       <CardBox mt="20px" w="1200px">
         <NotableAuthors />
       </CardBox>
-
       <CardBox
         mt="20px"
         w="1200px"
@@ -51,7 +48,6 @@ const Home = () => {
       >
         <Ad />
       </CardBox>
-
       <Links />
     </Container>
   );
