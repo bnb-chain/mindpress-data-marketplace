@@ -7,6 +7,7 @@ on:
     branches: [ui]
 
 env:
+  CI: false
   REGION: us-east-1
   ECR_REGISTRY_ID: 553885929720
   STATIC_BUCKET: tf-nodereal-prod-nodereal-static
