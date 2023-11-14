@@ -34,6 +34,7 @@
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
     "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^3.4.1",
+    "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "dayjs": "^1.11.8",
     "dotenv": "^10.0.0",
