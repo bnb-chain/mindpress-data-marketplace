@@ -7,16 +7,12 @@ on:
     branches: [ui]
 
 env:
+  IMAGE_NAME: ghcr.io/${{ github.repository }}
+  IMAGE_SOURCE: https://github.com/${{ github.repository }}
   CI: false
-  REGION: us-east-1
-  ECR_REGISTRY_ID: 553885929720
-  STATIC_BUCKET: tf-nodereal-prod-nodereal-static
   ### IMPORTANT !!!! ###
   ### The following three need to be modified according to your project ###
   APP_NAME: mindpress ### your application name
-  GIT_SYNC_PATH_TESTNET: prod/gitops/tf-nodereal-prod-noderealap/web-ui/mindpress/values.yaml
-  GIT_SYNC_PATH_MAINNET: prod/gitops/tf-nodereal-prod-noderealus/web-ui/mindpress/values.yaml ### fit your service config path in https://github.com/node-real/nodereal-app
-  TAG_FIELD: .nodereal-app.image.tag ### fit your service config path in https://github.com/node-real/nodereal-app: https://app.clickup.com/25652588/v/dc/revbc-8947/revbc-20047?comment=854233399
 
 jobs:
   build:
@@ -56,63 +52,33 @@ jobs:
         run: |
           pnpm run build
 
-      - name: Build, tag, and push image to Amazon ECR
-        id: image
-        env:
-          AWS_ACCESS_KEY_ID: ${{ steps.aws-assume-role.outputs.aws_access_key_id }}
-          AWS_SECRET_ACCESS_KEY: ${{ steps.aws-assume-role.outputs.aws_secret_key }}
-          AWS_SESSION_TOKEN: ${{ steps.aws-assume-role.outputs.aws_sessions_token }}
+      - name: Build Image
         run: |
-          GIT_COMMIT=${GITHUB_SHA}
-          IMAGE_NAME="${ECR_REGISTRY_ID}.dkr.ecr.${REGION}.amazonaws.com/${APP_NAME}:${GITHUB_SHA}"
-          aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY_ID}.dkr.ecr.${REGION}.amazonaws.com
+          docker build . \
+          --label "org.opencontainers.image.source=${IMAGE_SOURCE}" \
+          --label "org.opencontainers.image.revision=$(git rev-parse HEAD)" \
+          --label "org.opencontainers.image.version=$(git describe --tags --abbrev=0)" \
+          --label "org.opencontainers.image.licenses=AGPL-3.0" \
+          -f ./Dockerfile -t "${IMAGE_NAME}"
+    
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-          #### Write your own build arg for your project
-          docker build --build-arg COMMIT_SHA=${GIT_COMMIT} \
-                       -f Dockerfile . -t ${IMAGE_NAME}
-          docker push ${IMAGE_NAME}
-          echo ::set-output name=image_id::$IMAGE_NAME
-      - uses: shrink/actions-docker-extract@v1
-        id: extract
-        with:
-          image: ${{ steps.image.outputs.image_id }}
-          path: /opt/deploy/assets
-      - name: upload static file to qa s3 bucket from CI artifact
-        env:
-          AWS_ACCESS_KEY_ID: ${{ steps.aws-assume-role.outputs.aws_access_key_id }}
-          AWS_SECRET_ACCESS_KEY: ${{ steps.aws-assume-role.outputs.aws_secret_key }}
-          AWS_SESSION_TOKEN: ${{ steps.aws-assume-role.outputs.aws_sessions_token }}
+      - name: Push image
         run: |
-          aws s3 cp ${{ steps.extract.outputs.destination }}/assets/.next/static s3://${STATIC_BUCKET}/static/aptos-trace/_next/static --recursive --cache-control "private, max-age=259200"
-          aws s3 cp ${{ steps.extract.outputs.destination }}/assets/public s3://${STATIC_BUCKET}/static/aptos-trace --recursive --cache-control "private, max-age=259200"
-      - name: clone the gitops config repo
-        uses: actions/checkout@v3
-        with:
-          repository: node-real/nodereal-app
-          token: ${{ secrets.GO_MODULES_TOKEN }}
-      - name: update image tag in gitops config repo for testnet
-        env:
-          GIT_SYNC_PATH: ${{ env.GIT_SYNC_PATH_TESTNET }}
-          TAG_FIELD: ${{ env.TAG_FIELD }}
-        run: |
-          yq e "$TAG_FIELD = \"${GITHUB_SHA}\"" -i $GIT_SYNC_PATH
-      - name: update image tag in gitops config repo for mainnet
-        env:
-          GIT_SYNC_PATH: ${{ env.GIT_SYNC_PATH_MAINNET }}
-          TAG_FIELD: ${{ env.TAG_FIELD }}
-        run: |
-          yq e "$TAG_FIELD = \"${GITHUB_SHA}\"" -i $GIT_SYNC_PATH
-      - name: Set PR branch name
-        id: vars
-        run: echo ::set-output name=branch-name::"github-action-patches/${GITHUB_SHA::7}"
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v4
-        with:
-          token: ${{ secrets.GO_MODULES_TOKEN }}
-          commit-message: update image tag
-          title: github action APTOS-TRACE deploy auto-update
-          body: lgtm
-          branch: ${{ steps.vars.outputs.branch-name }}
-          labels: |
-            lgtm
-            approved
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_NAME=$IMAGE_NAME
+          echo VERSION=$VERSION
+          docker tag $IMAGE_NAME $IMAGE_NAME:$VERSION
+          docker tag $IMAGE_NAME $IMAGE_NAME:latest
+          docker push $IMAGE_NAME:$VERSION
+          docker push $IMAGE_NAME:latest
