@@ -30,7 +30,7 @@ jobs:
 
       - name: Build React App
         env:
-          PUBLIC_URL: https://mindpress.io
+          PUBLIC_URL: https://marketplace.mindpress.io
           GENERATE_SOURCEMAP: false
           REACT_APP_GF_EXPLORER_URL: https://greenfieldscan.com/
           REACT_APP_BSC_EXPLORER_URL: https://www.bscscan.com/
