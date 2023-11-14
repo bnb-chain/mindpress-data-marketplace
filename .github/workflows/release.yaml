@@ -1,4 +1,4 @@
-name: Mindpress Production Docker Image CI ### rename Github Action ###
+name: Mindpress Mainnet Docker Image CI # rename Github Action ###
 
 on:
   pull_request:
@@ -30,25 +30,25 @@ jobs:
 
       - name: Build React App
         env:
-          PUBLIC_URL: https://static.nodereal.cc/static/gf-marketplace
+          PUBLIC_URL: https://mindpress.io
           GENERATE_SOURCEMAP: false
           REACT_APP_GF_EXPLORER_URL: https://greenfieldscan.com/
-          REACT_APP_BSC_EXPLORER_URL: https://testnet.bscscan.com/
-          REACT_APP_DCELLAR_URL: https://testnet.dcellar.io/
+          REACT_APP_BSC_EXPLORER_URL: https://www.bscscan.com/
+          REACT_APP_DCELLAR_URL: https://dcellar.io/
 
-          REACT_APP_GF_CHAIN_ID: 5600
-          REACT_APP_GF_RPC_URL: https://gnfd-testnet-fullnode-tendermint-us.bnbchain.org
-          REACT_APP_BSC_RPC_URL: https://data-seed-prebsc-1-s1.binance.org:8545
-          REACT_APP_BSC_CHAIN_ID: 97
-          REACT_APP_MARKETPLACE_CONTRACT_ADDRESS: "0xaa80E8Ee052BaA700c3Ca5b35ce5F02EeF02368d"
-          REACT_APP_GROUP_HUB_CONTRACT_ADDRESS: "0x50B3BF0d95a8dbA57B58C82dFDB5ff6747Cc1a9E"
-          REACT_APP_MULTI_CALL_CONTRACT_ADDRESS: "0x50f6210b85d38F5d0E660D6C8978C9bdCd12F130"
-          REACT_APP_ERC1155_TRANSFER_CONTRACT_ADDRESS: "0x43bdF3d63e6318A2831FE1116cBA69afd0F05267"
-          REACT_APP_ERC721_TRANSFER_CONTRACT_ADDRESS: "0x7fC61D6FCA8D6Ea811637bA58eaf6aB17d50c4d1"
-          REACT_APP_NETWORK: Testnet
-          REACT_APP_DAPP_NAME: mindt1020
-          G_TAG: G-SHLTDD3YG4
-          REACT_APP_API_DOMAIN: https://gnfd-testnet-marketplace.bnbchain.org/v1/
+          REACT_APP_GF_CHAIN_ID: 1017
+          REACT_APP_GF_RPC_URL: https://greenfield-chain.bnbchain.org:443
+          REACT_APP_BSC_RPC_URL: https://bsc-dataseed1.binance.org
+          REACT_APP_BSC_CHAIN_ID: 56
+          REACT_APP_MARKETPLACE_CONTRACT_ADDRESS: "0x1FdBF1726Cf853Cc340e68bae68Dc6a5b6301DeE"
+          REACT_APP_GROUP_HUB_CONTRACT_ADDRESS: "0xDd9af4573D64324125fCa5Ce13407be79331B7F7"
+          REACT_APP_MULTI_CALL_CONTRACT_ADDRESS: "0xcA11bde05977b3631167028862bE2a173976CA11"
+          REACT_APP_ERC1155_TRANSFER_CONTRACT_ADDRESS: "0xAb73f243Be4d0fC5644c822351eC77e85DC2B5Ea"
+          REACT_APP_ERC721_TRANSFER_CONTRACT_ADDRESS: "0x943FAC6CEBE6e45CE59bA911E5B6447c1a991450"
+          REACT_APP_NETWORK: Mainnet
+          REACT_APP_DAPP_NAME: mindv05
+          G_TAG: G-VRYHWMVQ50
+          REACT_APP_API_DOMAIN: https://api-marketplace.mindpress.io/v1/
         run: |
           pnpm run build
 
