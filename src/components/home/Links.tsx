@@ -41,10 +41,7 @@ export const Links = () => {
         <Box
           onClick={() => {
             reportEvent({ name: 'dm.main.body.gnfd_github.click' });
-            window.open(
-              'https://docs.bnbchain.org/greenfield-docs/docs/guide/home',
-              '_blank',
-            );
+            window.open('https://github.com/bnb-chain/greenfield', '_blank');
           }}
         >
           <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
@@ -69,7 +66,7 @@ export const Links = () => {
         <Box
           onClick={() => {
             reportEvent({ name: 'dm.main.body.gnfd_discord.click' });
-            window.open('https://greenfieldscan.com/', '_blank');
+            window.open('https://discord.com/invite/QRTQvfhADQ', '_blank');
           }}
         >
           <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
@@ -82,7 +79,7 @@ export const Links = () => {
         <Box
           onClick={() => {
             reportEvent({ name: 'dm.main.body.contract_me.click' });
-            window.open('', '_blank');
+            window.open('https://www.bnbchain.org/en/contact', '_blank');
           }}
         >
           <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
@@ -93,7 +90,7 @@ export const Links = () => {
         <Box
           onClick={() => {
             reportEvent({ name: 'dm.main.body.twitter.click' });
-            window.open('', '_blank');
+            window.open('https://twitter.com/Mindpress_io', '_blank');
           }}
         >
           <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
@@ -104,7 +101,10 @@ export const Links = () => {
         <Box
           onClick={() => {
             reportEvent({ name: 'dm.main.body.blog.click' });
-            window.open('', '_blank');
+            window.open(
+              'https://mindpress-lab.gitbook.io/get-started/ ',
+              '_blank',
+            );
           }}
         >
           <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>

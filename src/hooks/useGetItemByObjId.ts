@@ -1,6 +1,20 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 import { getItemByObjectId } from '../utils/apis';
 import { DEFAULT_ITEM } from './useGetItemById';
+
+export const useGetItemsByObjIds = (objectIdList: string[]) => {
+  return useQueries({
+    queries: objectIdList.map((objectId) => {
+      return {
+        queryKey: ['GET_ITEM_BY_OBJECT_ID', objectId],
+        queryFn: async () => {
+          const res = await getItemByObjectId(objectId);
+          return res;
+        },
+      };
+    }),
+  });
+};
 
 export const useGetItemByObjId = (objectId: string) => {
   return useQuery({

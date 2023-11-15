@@ -44,17 +44,24 @@ const MyCollectionList = (props: ICollectionList) => {
   const { handlePageChange, page } = usePagination();
   const { setShowButton } = props;
   const { address } = useAccount();
-  const { list, loading, total } = useCollectionList(page, pageSize);
   const modalData = useModal();
+  // const { list, loading, total } = useCollectionList(page, pageSize, modalData.modalState.result);
+  const { list, loading, total } = useCollectionList(
+    page,
+    pageSize,
+    modalData.modalState.result,
+  );
   const { switchNetwork } = useSwitchNetwork();
   const navigator = useNavigate();
   const state = useGlobal();
   const [p] = useSearchParams();
 
+  console.log('modalData', modalData);
+
   const [selectBucketId, setSelectBucketId] = useState<string>('');
   const { data: selectItem } = useGetItemByBucketId(selectBucketId);
   // TODO: if selectItem is null, the bucket is not listed, should go to bid or oid page
-  console.log('selectItem', selectItem);
+  // console.log('selectItem', selectItem);
 
   useEffect(() => {
     if (!selectItem) return;

@@ -73,7 +73,10 @@ export const getBucketFileList = async ({ bucketName }: any) => {
     bucketName,
     endpoint,
   });
-  fileList.body = fileList.body?.GfSpListObjectsByBucketNameResponse;
+  if (!fileList.body) return null;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  fileList.body = fileList.body.GfSpListObjectsByBucketNameResponse;
   forEach(fileList.body);
   return fileList;
 };

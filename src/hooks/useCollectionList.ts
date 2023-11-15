@@ -5,7 +5,11 @@ import { generateGroupName } from '../utils';
 import { useListedStatus } from './useListedStatus';
 import { getItemByGroupId } from '../utils/apis';
 
-export const useCollectionList = (page: number, pageSize = 10) => {
+export const useCollectionList = (
+  page: number,
+  pageSize = 10,
+  updateTag: object,
+) => {
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [total, setTotal] = useState(0);
@@ -69,6 +73,6 @@ export const useCollectionList = (page: number, pageSize = 10) => {
           setLoading(false);
         });
     }
-  }, [address, page, pageSize]);
+  }, [address, checkListed, page, pageSize, updateTag]);
   return { loading, list, total };
 };

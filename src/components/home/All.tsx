@@ -60,7 +60,7 @@ const AllList = () => {
             onClick={() => {
               reportEvent({ name: 'dm.main.list.item_name.click' });
 
-              navigator(`/resource?id=${data.id}`);
+              navigator(`/resource?id=${data.id}&path=/`);
 
               const item = {
                 path: '/',

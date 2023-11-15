@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Box, Button, Flex } from '@totejs/uikit';
 import BN from 'bn.js';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useBNBPrice } from '../../../hooks/useBNBPrice';
 import { ITEM_STATUS } from '../../../hooks/useItemStatus';
 import { useModal } from '../../../hooks/useModal';
@@ -24,6 +24,9 @@ import { CountIcon } from '../../svgIcon/CountIcon';
 import { Item } from '../../../utils/apis/types';
 import { ITEM_RELATION_ADDR } from '../../../hooks/useGetItemRelationWithAddr';
 import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
+import { useGetObjectList } from '../../../hooks/useGetObjectList';
+import { Loader } from '../../Loader';
+import { FolderIcon } from '../../svgIcon/FolderIcon';
 
 interface Props {
   itemInfo: Item;
@@ -32,24 +35,29 @@ interface Props {
 
 export const CollectionInfo = (props: Props) => {
   const { itemInfo, relation } = props;
-
+  const [p] = useSearchParams();
   const { price: bnbPrice } = useBNBPrice();
+  const path = p.get('path') as string;
 
   const categroyInfo = useGetCategory(itemInfo.categoryId);
 
-  const { list, loading } = useCollectionItems(
-    itemInfo.name,
-    itemInfo.status === 'LISTED',
-  );
+  const { data: objectList, isLoading } = useGetObjectList({
+    bucketName: itemInfo?.name,
+    path: path,
+  });
+
   const modalData = useModal();
 
   return (
     <Box>
       <Flex mt="16px" mb="32px" alignItems="center">
         <Box color="#F7F7F8" fontSize="16px" fontWeight="600">
-          {/* <Link to={`${collection.path}?${collection.query || ''}`}>
-            {collection?.name?.replace('+', ' ')}
-          </Link> */}
+          <FolderIcon color="#D9D9D9" mr="5px" />
+          <Link to={`/resource?id=${itemInfo.id}&path=/`}>
+            <Box as="span" textDecoration="underline">
+              {itemInfo.name}
+            </Box>
+          </Link>
         </Box>
         <Box fontWeight="16px" color="#C4C5CB" ml="8px" mr="16px">
           created by
@@ -77,7 +85,20 @@ export const CollectionInfo = (props: Props) => {
       <FieldList justifyContent="space-between">
         <FlexCon flex={1} justifyContent="space-between" mr="10px">
           <Block>
-            <Value>{list.length}</Value>
+            <Value>
+              {isLoading ? (
+                <Loader
+                  style={{
+                    width: '10px',
+                    height: '10px',
+                  }}
+                  minHeight={32}
+                  size={10}
+                />
+              ) : (
+                objectList?.length
+              )}
+            </Value>
             <Field>
               <CountIcon /> Item count
             </Field>
@@ -85,7 +106,7 @@ export const CollectionInfo = (props: Props) => {
           <Block>
             <Value>{categroyInfo?.name} </Value>
             <Field>
-              <CategoryIcon /> Category{' '}
+              <CategoryIcon /> Category
             </Field>
           </Block>
         </FlexCon>

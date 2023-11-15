@@ -136,6 +136,7 @@ export const DelistModal = (props: any) => {
                 type: 'OPEN_RESULT',
                 result: tmp,
               });
+              setLoading(false);
             }}
             disabled={!BSC_FEE_SUFF || loading}
             isLoading={loading}

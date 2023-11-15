@@ -49,31 +49,32 @@ const PurchaseList = () => {
             justifyContent={'flex-start'}
             gap={6}
             onClick={() => {
-              let from = '';
-              if (breadInfo) {
-                const list = state.globalState.breadList;
-                const item = {
-                  path: (breadInfo as any).path,
-                  name: (breadInfo as any).name,
-                  query: p.toString(),
-                };
-                state.globalDispatch({
-                  type: 'ADD_BREAD',
-                  item,
-                });
+              navigator(`/resource?id=${id}`);
+              // let from = '';
+              // if (breadInfo) {
+              //   const list = state.globalState.breadList;
+              //   const item = {
+              //     path: (breadInfo as any).path,
+              //     name: (breadInfo as any).name,
+              //     query: p.toString(),
+              //   };
+              //   state.globalDispatch({
+              //     type: 'ADD_BREAD',
+              //     item,
+              //   });
 
-                from = encodeURIComponent(JSON.stringify(list.concat([item])));
-              }
-              const _from = from ? `&from=${from}` : '';
-              if (groupName) {
-                navigator(
-                  `/resource?gid=${id}&gn=${groupName}&address=${ownerAddress}&type=collection&tab=dataList${_from}`,
-                );
-              } else {
-                navigator(
-                  `/resource?oid=${oid}&address=${ownerAddress}&type=collection&tab=dataList${_from}`,
-                );
-              }
+              //   from = encodeURIComponent(JSON.stringify(list.concat([item])));
+              // }
+              // const _from = from ? `&from=${from}` : '';
+              // if (groupName) {
+              //   navigator(
+              //     `/resource?gid=${id}&gn=${groupName}&address=${ownerAddress}&type=collection&tab=dataList${_from}`,
+              //   );
+              // } else {
+              //   navigator(
+              //     `/resource?oid=${oid}&address=${ownerAddress}&type=collection&tab=dataList${_from}`,
+              //   );
+              // }
             }}
           >
             <ImgCon src={url || defaultImg(name, 40)}></ImgCon>

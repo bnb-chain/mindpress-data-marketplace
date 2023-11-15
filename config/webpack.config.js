@@ -410,8 +410,9 @@ module.exports = function (webpackEnv) {
                   },
                 },
                 {
-                  loader: require.resolve('file-loader'),
+                  loader: require.resolve('url-loader'),
                   options: {
+                    limit: 300000,
                     name: 'static/media/[name].[hash].[ext]',
                   },
                 },

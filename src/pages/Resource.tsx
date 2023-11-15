@@ -14,32 +14,28 @@ import { GF_EXPLORER_URL } from '../env';
 import {
   useGetBOInfoFromGroup,
   useGetBucketByName,
-  useGetGroup,
+  useGetGroupByName,
   useGetObject,
 } from '../hooks/useGetBucketOrObj';
 import { useGetItemById } from '../hooks/useGetItemById';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
+import { useGfGetObjInfo } from '../hooks/useGfGetObjInfo';
 import { reportEvent } from '../utils/ga';
-import { useResourceInfo } from '../hooks/useResourceInfo';
 
+/**
+ * Have been listed
+ *
+ * Can be queryed in API
+ */
 const Resource = () => {
   const [p] = useSearchParams();
   // const groupId = p.getAll('gid')[0];
   // const cid = p.getAll('cid')[0];
-  const objectId = p.getAll('oid')[0];
-  const ownerAddress = p.getAll('ownerAddress')[0];
+  // const objectId = p.get('oid') as string;
   // const gName = p.getAll('gn')[0];
   // const bGroupName = p.getAll('bgn')[0];
-  const itemId = p.getAll('id')[0];
-  // const bucketId = p.getAll('bid')[0];
-
-  // const { loading, baseInfo, noData } = useResourceInfo({
-  //   objectId,
-  //   address: ownerAddress,
-  //   // groupName: gName,
-  //   // update,
-  // });
-  // console.log('baseInfo', baseInfo);
+  const itemId = p.get('id') as string;
+  // const bucketId = p.getAll('bid')[0]
 
   const { address } = useAccount();
 
@@ -47,7 +43,11 @@ const Resource = () => {
     parseInt(itemId),
   );
 
-  console.log('objectId: ' + objectId);
+  // console.log('p.getAll(oid)', p.get('oid'), p.get('id'));
+  // console.log('objectId: ', objectId);
+
+  // const { data: xx } = useGfGetObjInfo(objectId);
+  // console.log('xx', xx);
 
   const relation = useGetItemRelationWithAddr(address, itemInfo);
 
@@ -60,7 +60,7 @@ const Resource = () => {
     storageInfo?.objectName,
   );
 
-  const { data: groupData } = useGetGroup(
+  const { data: groupData } = useGetGroupByName(
     itemInfo?.groupName,
     itemInfo?.ownerAddress,
   );
@@ -73,11 +73,11 @@ const Resource = () => {
       : `${bucketData.bucketInfo.bucketName} #${itemInfo?.name}`;
   }, [bucketData, itemInfo, storageInfo]);
 
-  console.log('itemInfo', itemInfo);
-  console.log('storageInfo', storageInfo);
+  // console.log('itemInfo', itemInfo);
+  // console.log('storageInfo', storageInfo);
   console.log('groupData', groupData);
-  console.log('bucketData', bucketData);
-  console.log('objectData', objectData);
+  // console.log('bucketData', bucketData);
+  // console.log('objectData', objectData);
 
   if (itemInfoLoading || !itemInfo) {
     return <Loader />;
@@ -146,7 +146,14 @@ const Resource = () => {
 
         <Info flexDirection="column" flex="1">
           <NameCon gap={4} alignItems={'center'} justifyContent={'flex-start'}>
-            <Name>{resourceName}</Name>
+            <Name>
+              {resourceName || (
+                <Loader
+                  style={{ width: '38px', height: '38px' }}
+                  minHeight={38}
+                />
+              )}
+            </Name>
             <BscTraceIcon
               color="#53EAA1"
               width={24}

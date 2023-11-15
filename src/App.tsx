@@ -25,6 +25,7 @@ import RouteGuard from './router/index';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import React from 'react';
+import { Detail } from './pages/Detail';
 
 export interface IRoute {
   children?: Array<IRoute>;
@@ -51,6 +52,10 @@ const routes: Array<IRoute> = [
   {
     path: '/resource',
     element: <Resource></Resource>,
+  },
+  {
+    path: '/detail',
+    element: <Detail></Detail>,
   },
   {
     path: '/folder',

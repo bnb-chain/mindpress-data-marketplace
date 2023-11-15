@@ -29,19 +29,19 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   const handleListOpen = useCallback(() => {
     modalData.modalDispatch({ type: 'CLOSE_LIST' });
-  }, []);
+  }, [modalData]);
 
   const handleListProcessOpen = useCallback(() => {
     modalData.modalDispatch({ type: 'CLOSE_LIST_PROCESS' });
-  }, []);
+  }, [modalData]);
 
   const handleDelistOpen = useCallback(() => {
     modalData.modalDispatch({ type: 'CLOSE_DELIST' });
-  }, []);
+  }, [modalData]);
 
   const handleResultOpen = useCallback(() => {
     modalData.modalDispatch({ type: 'CLOSE_RESULT' });
-  }, []);
+  }, [modalData]);
 
   return (
     <>

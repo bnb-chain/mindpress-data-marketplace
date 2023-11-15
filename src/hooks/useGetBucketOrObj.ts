@@ -51,7 +51,7 @@ export const useGetObject = (bucketName?: string, objectName?: string) => {
   });
 };
 
-export const useGetGroup = (
+export const useGetGroupByName = (
   groupName: string | undefined,
   ownerAddress: string | undefined,
 ) => {
@@ -61,7 +61,7 @@ export const useGetGroup = (
     queryFn: async () => {
       if (!groupName || !ownerAddress) return;
       const res = await getGroupInfoByName(groupName, ownerAddress);
-      console.log('group res', res);
+      // console.log('group res', res);
       return res;
     },
     // gcTime: Infinity,

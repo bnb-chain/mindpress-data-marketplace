@@ -29,7 +29,7 @@ import { roundFun } from '../../utils';
 import { Item } from '../../utils/apis/types';
 import { QueryHeadGroupResponse } from '../../utils/gfSDK';
 import { useGetItemById } from '../../hooks/useGetItemById';
-import { useGetGroup } from '../../hooks/useGetBucketOrObj';
+import { useGetGroupByName } from '../../hooks/useGetBucketOrObj';
 import {
   useGetCategory,
   useGetCatoriesMap,
@@ -54,7 +54,7 @@ export const EditModal = (props: ListModalProps) => {
 
   // const { name, type, desc: _desc, url, groupName, extra } = detail;
 
-  const { data: groupData } = useGetGroup(
+  const { data: groupData } = useGetGroupByName(
     itemInfo.groupName,
     itemInfo.ownerAddress,
   );

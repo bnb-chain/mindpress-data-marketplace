@@ -29,7 +29,7 @@ export const Ad = () => {
 
       <AdList>
         <AdItem>
-          <MovieIcon /> Moive
+          <MovieIcon /> Movie
         </AdItem>
         <AdItem>
           <PhotoIcon /> Photos

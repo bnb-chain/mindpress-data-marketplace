@@ -26,7 +26,6 @@ export const useCollectionItems = (
     if (bucketName) {
       getBucketFileList({ bucketName })
         .then(async (result: any) => {
-          // console.log('getBucketFileList', result);
           const { body, code } = result;
 
           if (code == 0) {
@@ -62,6 +61,7 @@ export const useCollectionItems = (
               if (object_name.slice(-1) === '/') return {};
 
               const groupName = generateGroupName(bucket_name, object_name);
+
               const { groupInfo } = await getGroupInfoByName(
                 groupName,
                 address as string,

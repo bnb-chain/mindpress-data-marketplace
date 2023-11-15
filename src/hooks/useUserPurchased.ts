@@ -96,7 +96,7 @@ export const useUserPurchased = (page: number, pageSize = 10) => {
                 ...item,
                 type,
                 name,
-                id: item.groupId,
+                id: item.id,
                 listTime: item.createdAt,
                 metaData: { groupName: item.groupName },
                 totalVol: item.totalSale || '0',
