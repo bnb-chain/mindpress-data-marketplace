@@ -51,6 +51,11 @@ jobs:
           REACT_APP_DAPP_NAME: mindv05
           G_TAG: G-VRYHWMVQ50
           REACT_APP_API_DOMAIN: https://api-marketplace.mindpress.io/v1/
+          REACT_APP_CROSS_CHAIN_FEE: 0.000001
+          REACT_APP_INITIATE_LIST_FEE: 0.00003
+          REACT_APP_LIST_FEE_ON_GF: 0.0000036
+          REACT_APP_LIST_ESTIMATE_FEE_ON_BSC: 0.0000036
+          REACT_APP_BSC_SEND_GAS_FEE: 10000000000
         run: |
           pnpm run build
 
@@ -73,11 +78,12 @@ jobs:
       - name: Push image
         run: |
           # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          VERSION = ${GITHUB_SHA::8}
           # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=latest
+          # [ "$VERSION" == "master" ] && VERSION=latest
           echo IMAGE_NAME=$IMAGE_NAME
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_NAME:$VERSION
