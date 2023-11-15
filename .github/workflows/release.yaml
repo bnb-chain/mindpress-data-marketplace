@@ -79,13 +79,13 @@ jobs:
         run: |
           # Strip git ref prefix from version
           # VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          VERSION = ${GITHUB_SHA::8}
+          # VERSION = ${GITHUB_SHA::8}
           # Strip "v" prefix from tag name
           # [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           # Use Docker `latest` tag convention
           # [ "$VERSION" == "master" ] && VERSION=latest
           echo IMAGE_NAME=$IMAGE_NAME
-          echo VERSION=$VERSION
+          echo VERSION=${GITHUB_SHA::8}
           docker tag $IMAGE_NAME $IMAGE_NAME:$VERSION
           docker tag $IMAGE_NAME $IMAGE_NAME:latest
           docker push $IMAGE_NAME:$VERSION
