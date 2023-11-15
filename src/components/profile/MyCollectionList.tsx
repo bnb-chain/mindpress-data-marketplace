@@ -58,15 +58,15 @@ const MyCollectionList = (props: ICollectionList) => {
 
   console.log('modalData', modalData);
 
-  const [selectBucketId, setSelectBucketId] = useState<string>('');
-  const { data: selectItem } = useGetItemByBucketId(selectBucketId);
+  // const [selectBucketId, setSelectBucketId] = useState<string>('');
+  // const { data: selectItem } = useGetItemByBucketId(selectBucketId);
   // TODO: if selectItem is null, the bucket is not listed, should go to bid or oid page
   // console.log('selectItem', selectItem);
 
-  useEffect(() => {
-    if (!selectItem) return;
-    navigator(`/resource?id=${selectItem.id}`);
-  }, [navigator, selectItem]);
+  // useEffect(() => {
+  //   if (!selectBucketId) return;
+  //   navigator(`/detail?bid=${selectBucketId}`);
+  // }, [navigator, selectBucketId]);
 
   const showNoData = useMemo(() => {
     const show = !loading && !list.length;
@@ -87,9 +87,9 @@ const MyCollectionList = (props: ICollectionList) => {
             justifyContent={'flex-start'}
             gap={6}
             onClick={async () => {
-              console.log('bucketId', bucketId);
-              setSelectBucketId(bucketId);
-
+              // console.log('bucketId', bucketId);
+              // setSelectBucketId(bucketId);
+              navigator(`/detail?bid=${bucketId}`);
               // const xx = await refetch();
               // console.log('xx', xx);
 

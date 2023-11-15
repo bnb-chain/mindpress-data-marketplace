@@ -8,7 +8,7 @@ import { INode, Tree } from '../utils/tree';
 export const cache: { [str: string]: any } = {};
 
 export const useCollectionItems = (
-  bucketName: string,
+  bucketName: string | undefined,
   collectionListed?: boolean,
 ) => {
   // 0 owner

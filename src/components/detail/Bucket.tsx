@@ -1,0 +1,263 @@
+import styled from '@emotion/styled';
+import { SendIcon } from '@totejs/icons';
+import { Box, Button, Flex } from '@totejs/uikit';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useAccount } from 'wagmi';
+import { Loader } from '../../components/Loader';
+import { NoData } from '../../components/NoData';
+import { useGetBucketById } from '../../hooks/useGetBucketOrObj';
+import {
+  defaultImg,
+  formatDateUTC,
+  generateGroupName,
+  trimLongStr,
+} from '../../utils';
+import { useGetItemByBucketId } from '../../hooks/useGetItemByBucketId';
+import _ from 'lodash';
+import { DCELLAR_URL, GF_EXPLORER_URL } from '../../env';
+import { id, tr } from 'date-fns/locale';
+import { useModal } from '../../hooks/useModal';
+import { useCollectionItems } from '../../hooks/useCollectionItems';
+import List from '../../components/detail/List';
+import { useStatus } from '../../hooks/useStatus';
+import { useGfGetObjInfo } from '../../hooks/useGfGetObjInfo';
+
+/**
+ * Have not been listed
+ * Show bucket or object detail info
+ */
+export const Bucket = () => {
+  const navigator = useNavigate();
+  const [p] = useSearchParams();
+
+  const bucketId = p.get('bid') as string;
+  const modalData = useModal();
+
+  const { data: bucketData } = useGetBucketById(bucketId);
+
+  // if bucketItemInfo is `{}`,
+  // means this bucket is not listed
+  const { data: bucketItemInfo } = useGetItemByBucketId(bucketId);
+
+  const { address } = useAccount();
+  const { num } = useCollectionItems(bucketData?.bucketInfo.bucketName, false);
+
+  const { status } = useStatus(
+    generateGroupName(bucketData?.bucketInfo.bucketName || ''),
+    bucketData?.bucketInfo.owner || '',
+    address || '',
+  );
+
+  if (!_.isEmpty(bucketItemInfo)) {
+    navigator(`/resource?id=${bucketItemInfo.id}`, {
+      replace: true,
+    });
+  }
+
+  // if (isLoading) {
+  //   return <Loader />;
+  // }
+
+  if (!bucketData) {
+    return <NoData />;
+  }
+
+  console.log('bucketItemInfo', bucketItemInfo);
+
+  return (
+    <>
+      <ResourceInfo gap={20}>
+        <ImgCon>
+          <img src={defaultImg(bucketData.bucketInfo.bucketName, 246)} alt="" />
+        </ImgCon>
+        <Info
+          gap={4}
+          flexDirection={['column', 'column', 'column']}
+          justifyContent={'space-around'}
+        >
+          <NameCon gap={4} alignItems={'center'} justifyContent={'flex-start'}>
+            <Name>{bucketData.bucketInfo.bucketName}</Name>
+            <SendIcon
+              width={20}
+              height={20}
+              cursor={'pointer'}
+              marginLeft={6}
+              onClick={() => {
+                // const o = resourceType == '1' ? bucketInfo : objectInfo;
+                window.open(
+                  `${GF_EXPLORER_URL}bucket/0x${Number(bucketId)
+                    .toString(16)
+                    .padStart(64, '0')}`,
+                );
+              }}
+            />
+          </NameCon>
+
+          {/* if bucket */}
+          <CollInfo gap={8}>
+            <ItemNum>{num} Items</ItemNum>
+            <Tag alignItems={'center'} justifyContent={'center'}>
+              Collection
+            </Tag>
+          </CollInfo>
+
+          <OwnCon alignItems={'center'}>
+            {/* {resourceType == '0' && (
+              <FileSize> {parseFileSize(fileSize)} </FileSize>
+            )}*/}
+            Created by{' '}
+            {address === bucketData.bucketInfo.owner ? (
+              <span>You</span>
+            ) : (
+              <Link to={`/profile?address=${bucketData.bucketInfo.owner}`}>
+                <span>{trimLongStr(bucketData.bucketInfo.owner)}</span>
+              </Link>
+            )}{' '}
+            At {formatDateUTC(bucketData.bucketInfo.createAt.low * 1000)}
+          </OwnCon>
+
+          <ActionGroup gap={10} alignItems={'center'}>
+            {address === bucketData.bucketInfo.owner &&
+              _.isEmpty(bucketItemInfo) && (
+                <Button
+                  size={'sm'}
+                  onClick={async () => {
+                    const initInfo = {
+                      bucket_name: bucketData.bucketInfo.bucketName,
+                      create_at: bucketData.bucketInfo.createAt.low,
+                    };
+                    modalData.modalDispatch({
+                      type: 'OPEN_LIST',
+                      initInfo,
+                    });
+                  }}
+                >
+                  List
+                </Button>
+              )}
+
+            <Button
+              size={'sm'}
+              onClick={() => {
+                window.open(
+                  `${DCELLAR_URL}buckets/${bucketData.bucketInfo.bucketName}`,
+                );
+              }}
+              variant="ghost"
+            >
+              View in Dcellar
+            </Button>
+          </ActionGroup>
+        </Info>
+      </ResourceInfo>
+
+      <Box h={40} w={1000}></Box>
+      <List
+        status={status}
+        name={bucketData.bucketInfo.bucketName}
+        listed={false}
+        bucketName={bucketData.bucketInfo.bucketName}
+        bucketInfo={bucketData.bucketInfo}
+      ></List>
+    </>
+  );
+};
+
+const ResourceInfo = styled(Flex)`
+  margin-top: 30px;
+`;
+
+const ImgCon = styled.div`
+  position: relative;
+  width: 246px;
+  height: 246px;
+
+  img {
+    width: 246px;
+    height: 246px;
+
+    background-color: #d9d9d9;
+    border-radius: 8px;
+  }
+`;
+
+const Info = styled(Flex)``;
+
+const NameCon = styled(Flex)``;
+
+const CollInfo = styled(Flex)``;
+
+const Name = styled.div`
+  font-style: normal;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 38px;
+  /* identical to box height, or 119% */
+
+  color: #f0b90b;
+`;
+
+const Tag = styled(Flex)`
+  width: 128px;
+  height: 24px;
+
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+`;
+
+const ItemNum = styled.div`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 21px;
+
+  color: #ffffff;
+`;
+
+const OwnCon = styled(Flex)`
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18px;
+
+  color: #ffffff;
+
+  span {
+    margin: 0 4px;
+    color: #f0b90b;
+  }
+`;
+
+const MarketInfo = styled(Flex)`
+  font-size: 32px;
+  color: #f0b90b;
+`;
+
+const Price = styled.div`
+  font-size: 20px;
+  color: #f0b90b;
+`;
+
+const ActionGroup = styled(Flex)``;
+
+const FileSize = styled.div`
+  margin-right: 6px;
+
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 18px;
+
+  color: #ffffff;
+`;
+
+const NoDataCon = styled(Flex)``;
+
+const NoDataTitle = styled.div`
+  font-size: 32px;
+  font-weight: 600;
+`;
+
+const NoDataSub = styled.div`
+  font-size: 20px;
+`;
