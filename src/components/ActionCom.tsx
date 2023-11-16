@@ -15,7 +15,7 @@ interface IActionCom {
   from?: string;
 }
 export const ActionCom = (obj: IActionCom) => {
-  const { data, address, from } = obj;
+  const { data, address } = obj;
   const { id, groupName, ownerAddress, type } = data;
   const { isConnected, isConnecting } = useAccount();
 

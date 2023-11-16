@@ -15,6 +15,7 @@ import { Loader } from '../Loader';
 import { CollectionLogo } from '../svgIcon/CollectionLogo';
 import { TableProps } from '../ui/table/TableProps';
 import { Item } from '../../utils/apis/types';
+import { useAccount } from 'wagmi';
 
 interface IOtherListedList {
   realAddress: string;
@@ -24,6 +25,7 @@ interface IOtherListedList {
 const OtherListedList = (props: IOtherListedList) => {
   const navigator = useNavigate();
   const { realAddress } = props;
+  const { address } = useAccount();
 
   const { handlePageChange, page } = usePagination();
   const pageSize = 10;
@@ -105,7 +107,7 @@ const OtherListedList = (props: IOtherListedList) => {
     {
       header: 'Action',
       cell: (data) => {
-        return <ActionCom data={data} address={realAddress}></ActionCom>;
+        return <ActionCom data={data} address={address as string}></ActionCom>;
       },
     },
   ];

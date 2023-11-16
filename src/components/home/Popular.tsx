@@ -1,5 +1,6 @@
 import { Box } from '@totejs/uikit';
 import { BN } from 'bn.js';
+import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
 import { useGetItemList } from '../../hooks/useGetItemList';
 import { defaultImg, divide10Exp } from '../../utils';
 import { Loader } from '../Loader';
@@ -18,18 +19,20 @@ export const Popular = () => {
     sort: 'TOTAL_SALE_DESC',
   });
 
+  // const { data: categories } = useGetCatoriesMap();
+
   if (isLoading || !itemData) {
     return <Loader />;
   }
 
-  const data = itemData.items.map((item: any) => {
+  const data = itemData.items.map((item) => {
     return {
       id: item.id,
       imgUrl: item.url || defaultImg(item.name, 300),
       name: item.name,
-      groupName: item.metaData?.groupName,
+      categoryId: item.categoryId,
       address: item.ownerAddress,
-      volumn: item.totalVol || 0,
+      volumn: String(item.totalSale) || '0',
       price: divide10Exp(new BN(item.price, 10), 18),
     };
   });

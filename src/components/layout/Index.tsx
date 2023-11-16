@@ -17,8 +17,6 @@ export default function Layout({ children }: { children: ReactNode }) {
   const { modalData: walletModalData, handleModalClose } = useWalletModal();
   const walletModalOpen = walletModalData.modalState?.open;
 
-  console.log('walletModalData', walletModalData);
-
   const {
     openList,
     initInfo,

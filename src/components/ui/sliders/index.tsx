@@ -16,7 +16,7 @@ const settings = {
   mouseDrag: false,
   loop: false,
   items: ITEMS_COUNT,
-  gutter: 32,
+  gutter: 16,
   // edgePadding: 16,
   swipeAngle: false,
   fixedWidth: 340,
@@ -27,13 +27,13 @@ const settings = {
 
 interface Props {
   data: {
+    categoryId: number;
     imgUrl: string;
     name: string;
     address: string;
-    volumn: number;
+    volumn: string;
     price: string;
     id: number;
-    groupName: string;
   }[];
 }
 
@@ -56,10 +56,10 @@ export const Sliders = (props: Props) => {
             address={item.address}
             imgUrl={item.imgUrl}
             name={item.name}
+            categoryId={item.categoryId}
             price={item.price}
             volumn={item.volumn}
             id={item.id}
-            groupName={item.groupName}
           />
         ))}
       </TinySlider>
@@ -75,7 +75,9 @@ export const Sliders = (props: Props) => {
             }}
             disabled={index === 0}
           >
-            <LeftArrow w={16} color="#1C1B1F" />
+            <Box w="30px" h="30px" lineHeight="30px">
+              <LeftArrow w={18} color="#1C1B1F" />
+            </Box>
           </DefaultButton>
           <DefaultButton
             as="button"
@@ -86,7 +88,9 @@ export const Sliders = (props: Props) => {
             }}
             disabled={index === data.length - 2}
           >
-            <RightArrow w={16} color="#1C1B1F" />
+            <Box w="30px" h="30px" lineHeight="30px">
+              <RightArrow w={18} color="#1C1B1F" />
+            </Box>
           </DefaultButton>
         </ButtonGroup>
       )}

@@ -1,17 +1,16 @@
 import styled from '@emotion/styled/macro';
 import { Box, Flex } from '@totejs/uikit';
-import { ReactNode } from 'react';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { Link, useNavigate } from 'react-router-dom';
 import { trimLongStr } from '../../../utils';
+import { CATEGORY_MAP } from '../../../utils/category';
 interface Props {
   id: number;
   imgUrl: string;
-  tag?: ReactNode | string;
+  categoryId: number;
   name: string;
-  groupName: string;
   address: string;
-  volumn: number;
+  volumn: string;
   price: string;
 }
 
@@ -25,10 +24,12 @@ export const SliderCard = (props: Props) => {
     price,
     volumn,
     id,
-    groupName,
+    categoryId,
   } = props;
 
   const navigator = useNavigate();
+
+  const category = CATEGORY_MAP[categoryId!];
 
   return (
     <Box boxSizing="border-box" pb="80px" transform="translateX(32px)">
@@ -40,13 +41,14 @@ export const SliderCard = (props: Props) => {
         cursor="pointer"
         onClick={() => {
           navigator(`/resource?id=${id}`);
-          // navigator(
-          //   `/resource?id=${id}&gid=${id}&gn=${groupName}&address=${address}&from=${encodeURIComponent(
-          //     JSON.stringify([props]),
-          //   )}`,
-          // );
         }}
+        position="relative"
       >
+        <Category bgColor={category.bgColor} color={category.color}>
+          {category.icon({
+            boxSize: 16,
+          })}
+        </Category>
         <Box h="240px">
           <Image url={imageUrl} />
         </Box>
@@ -58,13 +60,7 @@ export const SliderCard = (props: Props) => {
             <Address>{trimLongStr(address)}</Address>
           </Flex>
           <Box>
-            <Link
-              onClick={(e) => {
-                e.stopPropagation();
-                // e.preventDefault();
-              }}
-              to={`/profile?address=${address}`}
-            >
+            <Link to={`/profile?address=${address}`}>
               {address && <MetaMaskAvatar address={address} size={40} />}
             </Link>
           </Box>
@@ -125,15 +121,14 @@ const Image = styled(Box)<{ url: string }>`
 
 const Name = styled(Box)`
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 28px;
   color: #fff;
 `;
 
 const Address = styled(Box)`
   font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 24px;
   color: #c4c5cb;
 `;
@@ -144,12 +139,23 @@ const Value = styled(Box)`
   & > h2 {
     font-size: 16px;
     color: #c4c5cb;
-    font-weight: 400;
+    font-weight: 500;
   }
 
   & > p {
     font-size: 16px;
     color: #ffffff;
-    font-weight: 500;
+    font-weight: 600;
   }
+`;
+
+const Category = styled(Flex)`
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  top: 8px;
+  right: 8px;
+  border-radius: 50%;
 `;

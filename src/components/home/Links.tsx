@@ -132,7 +132,7 @@ export const Links = () => {
 const Cards = styled(Flex)`
   /* margin: 80px 0 114px; */
   background-color: #181a1e;
-  width: 1200px;
+  width: 1400px;
   /* height: 426px; */
   border-radius: 32px;
   border: 2px solid #1e2026;
