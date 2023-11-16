@@ -66,7 +66,7 @@ export const ListProcess = (props: ListProcessProps) => {
       setTitle(hasRole ? 'Finalize on BSC' : 'Approve on BSC');
       setStatus(1);
     }
-  }, [stateModal.modalState.initListStatus]);
+  }, [hasRole, stateModal.modalState.initListStatus]);
 
   const reset = useCallback(() => {
     setStep(0);
@@ -241,7 +241,11 @@ export const ListProcess = (props: ListProcessProps) => {
         {status == 2 && (
           <Button
             onClick={() => {
+              console.log(stateModal.modalState.callBack);
+              stateModal.modalState?.callBack();
+
               reset();
+
               stateModal.modalDispatch({ type: 'RESET' });
               handleOpen(false);
             }}

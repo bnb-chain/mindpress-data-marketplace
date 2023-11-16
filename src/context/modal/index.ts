@@ -64,6 +64,7 @@ export const ModalReducer = (initialState: any, action: any) => {
         ...initialState,
         openList: true,
         initInfo: action.initInfo,
+        callBack: action.callBack,
       };
     case 'CLOSE_LIST':
       return { ...initialState, openList: false };
@@ -73,6 +74,7 @@ export const ModalReducer = (initialState: any, action: any) => {
         openListProcess: true,
         openList: false,
         listData: action.listData,
+        callBack: action.callBack,
       };
     case 'CLOSE_LIST_PROCESS':
       return {
@@ -89,7 +91,7 @@ export const ModalReducer = (initialState: any, action: any) => {
         listData: action.listData || initialState.listData,
       };
     case 'OPEN_BUY':
-      console.log('initListStatus', initialState);
+      // console.log('initListStatus', initialState);
       return {
         ...initialState,
         openBuy: true,
@@ -107,10 +109,12 @@ export const ModalReducer = (initialState: any, action: any) => {
         openBuy: false,
       };
     case 'OPEN_DELIST':
+      // console.log('OPEN_DELIST', initialState, action.delistData);
       return {
         ...initialState,
         openDelist: true,
         delistData: action.delistData,
+        callBack: action.callBack,
       };
     case 'CLOSE_DELIST':
       return {

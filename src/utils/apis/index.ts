@@ -7,6 +7,8 @@ import {
   CategoriesResponse,
   SearchPurchaseRequest,
   SearchPurchaseResponse,
+  QueryPurchaseRequest,
+  QueryPurchaseResponse,
 } from './types';
 
 const instance = axios.create({
@@ -31,6 +33,14 @@ export const searchPurchase = async (
   return data.data.data;
 };
 
+export const queryPurchase = async (
+  params: QueryPurchaseRequest,
+): Promise<QueryPurchaseResponse> => {
+  const data = await instance.post('purchase/query', JSON.stringify(params));
+
+  return data.data.data;
+};
+
 export const getCategoryMap = async (): Promise<CategoriesResponse[]> => {
   const data = await instance.get('item/categories');
   return data?.data?.data?.categories || [];
@@ -51,6 +61,12 @@ export const getItemByObjectId = async (objectId: string): Promise<Item> => {
   const data = await instance.get(`item_by_object/${objectId}`);
 
   return data?.data?.data?.item || {};
+};
+
+export const getItemByObjectIds = async (ids: number[]): Promise<Item[]> => {
+  const data = await instance.post(`item_by_objects`, JSON.stringify({ ids }));
+
+  return data?.data?.data?.items || [];
 };
 
 export const getItemById = async (id: number): Promise<Item> => {

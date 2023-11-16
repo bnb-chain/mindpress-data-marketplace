@@ -344,6 +344,7 @@ export const ListModal = (props: ListModalProps) => {
                 modalData.modalDispatch({
                   type: 'OPEN_LIST_PROCESS',
                   listData,
+                  callBack: modalData.modalState.callBack,
                 });
               }}
               disabled={!available}

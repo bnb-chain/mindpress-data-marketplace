@@ -28,7 +28,7 @@ export const DelistModal = (props: any) => {
 
   const { object_name, create_at, bucket_name, groupId } = delistData;
 
-  const name = object_name || bucket_name;
+  const name = bucket_name;
   const type = object_name ? 'Data' : 'Collection';
 
   const { num } = useCollectionItems(name, false);
@@ -137,6 +137,8 @@ export const DelistModal = (props: any) => {
                 result: tmp,
               });
               setLoading(false);
+
+              modalData.modalState?.callBack();
             }}
             disabled={!BSC_FEE_SUFF || loading}
             isLoading={loading}

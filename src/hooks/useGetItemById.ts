@@ -14,6 +14,7 @@ export const DEFAULT_ITEM: Item = {
   groupId: 0,
   groupName: '',
   ownerAddress: '',
+  resourceId: 0,
   price: '',
   status: 'LISTED',
   totalSale: 0,

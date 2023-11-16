@@ -1,6 +1,5 @@
-import { useQueries, useQuery } from '@tanstack/react-query';
-import { client, getGroupInfoByName, getRandomSp } from '../utils/gfSDK';
-import { useAccount } from 'wagmi';
+import { useQuery } from '@tanstack/react-query';
+import { client, getRandomSp } from '../utils/gfSDK';
 
 interface Params {
   bucketName: string;
@@ -28,17 +27,27 @@ type ObjectInfo = {
   Visibility: number;
 };
 
-export type OBJECT_ITEM =
-  | {
-      type: 'file';
-      name: string;
-      data: ObjectInfo;
-    }
-  | {
-      type: 'folder';
-      name: string;
-      path: string;
-    };
+export type FILE_ITEM = {
+  type: 'file';
+  name: string;
+  data: ObjectInfo;
+  /**
+   * be list or not
+   */
+  isListed: boolean;
+  /**
+   * bought by me or not
+   */
+  isPurchasedByMe: boolean;
+};
+
+export type FOLDER_ITEM = {
+  type: 'folder';
+  name: string;
+  path: string;
+};
+
+export type OBJECT_ITEM = FOLDER_ITEM | FILE_ITEM;
 
 export const useGetObjectList = (params: Params) => {
   return useQuery({
@@ -49,6 +58,41 @@ export const useGetObjectList = (params: Params) => {
     gcTime: Infinity,
     staleTime: Infinity,
   });
+};
+
+export const objListMergeListedAndPurchased = (
+  objectList: OBJECT_ITEM[] | undefined | null,
+  listedList: number[] | undefined,
+  purchasedList: number[] | undefined,
+) => {
+  console.log(
+    'objListMergeListedAndPurchased objectList',
+    objectList,
+    listedList,
+    purchasedList,
+  );
+  if (!objectList) return [];
+  if (!listedList || !purchasedList) return objectList;
+
+  const res = objectList.map((item) => {
+    if (item.type === 'file') {
+      if (listedList.includes(item.data.Id)) {
+        item.isListed = true;
+      } else {
+        item.isListed = false;
+      }
+
+      if (purchasedList.includes(item.data.Id)) {
+        item.isPurchasedByMe = true;
+      } else {
+        item.isPurchasedByMe = false;
+      }
+    }
+
+    return item;
+  });
+
+  return res;
 };
 
 const getObjectList = async (params: Params) => {
@@ -68,7 +112,7 @@ const getObjectList = async (params: Params) => {
 
   if (!res || !res.body) return null;
 
-  console.log('res', bucketName, path, endpoint, res);
+  // console.log('res', bucketName, path, endpoint, res);
 
   const { CommonPrefixes, Objects } =
     res.body.GfSpListObjectsByBucketNameResponse;
@@ -89,16 +133,13 @@ const getObjectList = async (params: Params) => {
       type: 'file',
       name: file.ObjectInfo.ObjectName,
       data: file.ObjectInfo,
+      isListed: false,
+      isPurchasedByMe: false,
     };
   });
 
   return folderList.concat(fileList);
 };
-
-// type X = {
-//   groupName: string | undefined;
-//   // ownerAddress: string | undefined;
-// };
 
 // export const useGetGroupListInfo = (groupNameList: string[]) => {
 //   const { address } = useAccount();

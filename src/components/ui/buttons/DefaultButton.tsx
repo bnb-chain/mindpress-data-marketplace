@@ -24,7 +24,7 @@ export const BaseButton = styled(Button)`
   color: #181a1e;
   padding-left: 12px;
   padding-right: 12px;
-  /* height: 40px; */
+  height: 40px;
   line-height: 40px;
   border-radius: 8px;
 

@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { CardPocketIcon } from '@totejs/icons';
 import { Box, ColumnDef, Flex, Table } from '@totejs/uikit';
 import _ from 'lodash';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   createSearchParams,
   useNavigate,
@@ -13,9 +13,14 @@ import { DEFAULT_ITEM } from '../../../hooks/useGetItemById';
 import {
   useGetItemByObjId,
   useGetItemsByObjIds,
+  usePurchaseQueryByObjIds,
 } from '../../../hooks/useGetItemByObjId';
 import { ITEM_RELATION_ADDR } from '../../../hooks/useGetItemRelationWithAddr';
-import { OBJECT_ITEM, useGetObjectList } from '../../../hooks/useGetObjectList';
+import {
+  OBJECT_ITEM,
+  objListMergeListedAndPurchased,
+  useGetObjectList,
+} from '../../../hooks/useGetObjectList';
 import { useGlobal } from '../../../hooks/useGlobal';
 import { useModal } from '../../../hooks/useModal';
 import { usePagination } from '../../../hooks/usePagination';
@@ -33,6 +38,7 @@ import { QueryHeadBucketResponse } from '../../../utils/gfSDK';
 import { Loader } from '../../Loader';
 import { NoData } from '../../NoData';
 import { TableProps } from '../../ui/table/TableProps';
+import { ActionButtonGroup } from './ActionButtonGroup';
 
 interface Props {
   itemInfo: Item;
@@ -40,79 +46,54 @@ interface Props {
   relation: ITEM_RELATION_ADDR;
 }
 const CollectionList = (props: Props) => {
-  const state = useGlobal();
   const navigator = useNavigate();
-  const { itemInfo, bucketData, relation } = props;
+  const { itemInfo, bucketData } = props;
   const [p] = useSearchParams();
   const id = p.get('id') as string;
   const path = p.get('path') as string;
+  const { address } = useAccount();
 
-  const { data: objectList, isLoading } = useGetObjectList({
+  const {
+    data: objectList,
+    isLoading,
+    refetch: reloadObjectList,
+  } = useGetObjectList({
     bucketName: itemInfo?.name,
     path: path,
   });
 
-  console.log('objectList', objectList);
-
-  const oidList: string[] | undefined = objectList
+  const oidList: number[] | undefined = objectList
     ?.filter((item) => item.type === 'file')
     .map((item: any) => {
-      console.log('item', item);
-      return item.data.Id as string;
-      // return {
-      //   id: item.data.Id,
-      //   name: generateGroupName(itemInfo.name, item.name),
-      // };
+      return item.data.Id as number;
     });
   // console.log('oidList', oidList);
 
-  // const xx = useGetItemsByObjIds(oidList || []);
-  // console.log('xx', xx[0]);
+  const { data: objListedList, refetch: reloadListedList } =
+    useGetItemsByObjIds(oidList || []);
 
-  // const { list, loading } = useCollectionItems(
-  //   itemInfo.name,
-  //   itemInfo.status === 'LISTED',
-  // );
+  const { data: purchasedList, refetch: reloadPurchasedList } =
+    usePurchaseQueryByObjIds(address, oidList || []);
 
-  // console.log('list', list);
+  const reloadList = useCallback(() => {
+    reloadObjectList();
+    reloadListedList();
+    reloadPurchasedList();
+  }, [reloadListedList, reloadObjectList, reloadPurchasedList]);
 
-  const [selectObjectId, setSelectObjectId] = useState('');
-  const [selectBucketName, setBucketName] = useState('');
-  const { data: selectItem } = useGetItemByObjId(selectObjectId);
+  console.log('objListedList', objListedList);
+  console.log('purchasedList', purchasedList);
 
-  // TODO: if selectItem is null, the object is not listed, should go to bid or oid page
-  // console.log('selectItem', selectObjectId, selectItem);
-  useEffect(() => {
-    if (selectItem?.id === DEFAULT_ITEM.id) return;
+  const mergedList = objListMergeListedAndPurchased(
+    objectList,
+    objListedList,
+    purchasedList,
+  );
 
-    // console.log('selectItem', selectItem);
-    if (!_.isEmpty(selectItem)) {
-      console.log(`/resource?id=${selectItem.id}`);
-      navigator(`/resource?id=${selectItem.id}`);
-    } else {
-      // this item had not been listed yet
-      // only listed item can enter resource page
-      // return;
-      // console.log(`/resource?oid=${selectObjectId}`);
-      // navigator(`/detail?bn=${selectBucketName}`);
-    }
-  });
+  console.log('objectList', objectList);
+  console.log('mergedList', mergedList);
 
   const { handlePageChange, page } = usePagination();
-
-  const modalData = useModal();
-
-  const { address } = useAccount();
-
-  const navigate = useNavigate();
-
-  const bgn = '';
-  // if (bucketData.bucketInfo) {
-  //   const bucketId = bucketData.bucketInfo.id;
-  //   bgn = generateGroupName(bucketData.bucketInfo.bucketName);
-  //
-
-  // const { data: bucketIdData, refetch } = useGetBucketById(bucketId);
 
   const columns: ColumnDef<OBJECT_ITEM> = [
     {
@@ -120,33 +101,12 @@ const CollectionList = (props: Props) => {
       width: '200px',
       cell: (data: any) => {
         const { type, name } = data;
-        return (
-          <ImgContainer
-            alignItems={'center'}
-            justifyContent={'flex-start'}
-            gap={6}
-            onClick={() => {
-              // let list = state.globalState.breadList;
-              // console.log('list in from', list);
-              // if (
-              //   list.slice(-1)[0].name !== bucketData?.bucketInfo.bucketName
-              // ) {
-              //   const item = {
-              //     path: '/resource',
-              //     name: bucketData?.bucketInfo.bucketName || 'Collection',
-              //     query: p.toString(),
-              //   };
-              //   state.globalDispatch({
-              //     type: 'ADD_BREAD',
-              //     item,
-              //   });
-              //   list = list.concat([item]);
-              // }
 
-              // const from = encodeURIComponent(JSON.stringify(list));
-
-              if (type === 'folder') {
-                // console.log(data.name);
+        if (type === 'folder') {
+          return (
+            <ImgContainer
+              cursor="pointer"
+              onClick={() => {
                 const params = {
                   id: id,
                   path: data.name + '/',
@@ -155,37 +115,24 @@ const CollectionList = (props: Props) => {
                   pathname: '/resource',
                   search: `?${createSearchParams(params)}`,
                 });
-                // `/resourceid=${
-                //   bucketData?.bucketInfo.bucketId
-                // }&f=${encodeURIComponent(name)}&address=${item}&from=${from}`,
-                // navigator(
-                //   `/folder?bid=${
-                //     bucketData?.bucketInfo.bucketId
-                //   }&f=${encodeURIComponent(
-                //     name,
-                //   )}&address=${item}&from=${from}`,
-                // );
-              } else {
-                // console.log('data', data);
-                const id = String(data.data.Id);
-                setSelectObjectId(id);
-                setBucketName(data.data.BucketName);
-                // navigate(
-                //   `/resource?oid=${id}&bgn=${bgn}&address=${itemInfo.ownerAddress}&from=${from}`,
-                // );
-              }
-            }}
-          >
-            {type === 'folder' ? (
+              }}
+            >
               <IconCon alignItems={'center'} justifyContent={'center'}>
                 <CardPocketIcon color={'white'} />
               </IconCon>
-            ) : (
+              <Box title={name}>{trimLongStr(name, 15)}</Box>
+            </ImgContainer>
+          );
+        }
+
+        if (type === 'file') {
+          return (
+            <ImgContainer>
               <ImgCon src={defaultImg(name, 40)}></ImgCon>
-            )}
-            <Box title={name}>{trimLongStr(name, 15)}</Box>
-          </ImgContainer>
-        );
+              <Box title={name}>{trimLongStr(name, 15)}</Box>
+            </ImgContainer>
+          );
+        }
       },
     },
     {
@@ -243,42 +190,18 @@ const CollectionList = (props: Props) => {
     {
       header: '',
       cell: (data) => {
-        return <Box>{}</Box>;
+        console.log('data', data);
+        return (
+          data.type === 'file' && (
+            <ActionButtonGroup fileInfo={data} uploadFn={reloadList} />
+          )
+        );
       },
     },
     // {
     //   header: 'Action',
     //   cell: (data: any) => {
     //     const { object_info, listed, groupId, name } = data;
-    //     if (!object_info)
-    //       return (
-    //         <GoIcon
-    //           cursor={'pointer'}
-    //           color={'#AEB4BC'}
-    //           onClick={() => {
-    //             const list = state.globalState.breadList;
-    //             if (
-    //               list.slice(-1)[0].name !== bucketData?.bucketInfo.bucketName
-    //             ) {
-    //               // const item = {
-    //               //   path: '/resource',
-    //               //   name: bucketData?.bucketInfo.bucketName,
-    //               //   query: p.toString(),
-    //               // };
-    //               // state.globalDispatch({
-    //               //   type: 'ADD_BREAD',
-    //               //   item,
-    //               // });
-    //               // list = list.concat([item]);
-    //             }
-
-    //             // const from = encodeURIComponent(JSON.stringify(list));
-
-    //             // navigator(
-    //             //   `/folder?bid=${bucketId}&f=${name}&address=${ownerAddress}&collectionListed=${collectionListed}&from=${from}`,
-    //             // );
-    //           }}
-    //         />
     //       );
     //     const { owner, object_name, create_at } = object_info;
     //     return (
@@ -382,7 +305,7 @@ const CollectionList = (props: Props) => {
           onChange: handlePageChange,
         }}
         columns={columns}
-        data={objectList}
+        data={mergedList}
         loading={isLoading}
         {...TableProps}
       />
@@ -400,9 +323,11 @@ const Container = styled.div`
 
 const ImgContainer = styled(Flex)`
   gap: 16px;
-  cursor: pointer;
   color: #fff;
   font-size: 16px;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 6px;
 `;
 
 const ImgCon = styled.img`

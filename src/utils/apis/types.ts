@@ -10,6 +10,11 @@ export type Item = {
   groupName: string;
   ownerAddress: string;
   price: string;
+  /**
+   * resourceId may be bucketId or objectId
+   * depending on type
+   */
+  resourceId: number;
   status: 'LISTED' | 'PENDING' | 'BLOCKED';
   totalSale: number;
   totalVolume: string;
@@ -53,6 +58,22 @@ export interface SearchPurchaseRequest {
   limit: number;
 }
 export interface SearchPurchaseResponse {
+  purchases: Item[];
+  total: number;
+}
+
+export interface QueryPurchaseRequest {
+  filter: {
+    address?: string;
+    itemIds?: number[];
+    bucketIds?: number[];
+    objectIds?: number[];
+  };
+  sort: 'CREATION_ASC' | 'CREATION_DESC' | 'PRICE_ASC' | 'PRICE_DESC';
+  offset: number;
+  limit: number;
+}
+export interface QueryPurchaseResponse {
   purchases: Item[];
   total: number;
 }
