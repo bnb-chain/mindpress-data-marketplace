@@ -27,6 +27,8 @@ import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
 import { useGetObjectList } from '../../../hooks/useGetObjectList';
 import { Loader } from '../../Loader';
 import { FolderIcon } from '../../svgIcon/FolderIcon';
+import { useAccount } from 'wagmi';
+import { useWalletModal } from '../../../hooks/useWalletModal';
 
 interface Props {
   itemInfo: Item;
@@ -38,6 +40,8 @@ export const CollectionInfo = (props: Props) => {
   const [p] = useSearchParams();
   const { price: bnbPrice } = useBNBPrice();
   const path = p.get('path') as string;
+  const { isConnected, isConnecting } = useAccount();
+  const { handleModalOpen } = useWalletModal();
 
   const categroyInfo = useGetCategory(itemInfo.categoryId);
 
@@ -157,13 +161,39 @@ export const CollectionInfo = (props: Props) => {
                 color="#FFE900"
                 background="#665800"
                 onClick={() => {
-                  modalData.modalDispatch({
-                    type: 'OPEN_BUY',
-                    buyData: itemInfo,
-                  });
+                  if (!isConnected && !isConnecting) {
+                    handleModalOpen();
+                  } else {
+                    modalData.modalDispatch({
+                      type: 'OPEN_BUY',
+                      buyData: itemInfo,
+                    });
+                  }
                 }}
               >
                 Buy
+              </Button>
+            </Box>
+          )}
+
+          {relation === 'OWNER' && (
+            <Box>
+              <Button
+                color="#FFE900"
+                background="#665800"
+                onClick={() => {
+                  modalData.modalDispatch({
+                    type: 'OPEN_DELIST',
+                    delistData: {
+                      groupId: itemInfo.groupId,
+                      bucket_name: itemInfo.name,
+                      create_at: itemInfo.createdAt,
+                      owner: itemInfo.ownerAddress,
+                    },
+                  });
+                }}
+              >
+                Delist
               </Button>
             </Box>
           )}

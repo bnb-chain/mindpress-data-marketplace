@@ -87,28 +87,7 @@ const MyCollectionList = (props: ICollectionList) => {
             justifyContent={'flex-start'}
             gap={6}
             onClick={async () => {
-              // console.log('bucketId', bucketId);
-              // setSelectBucketId(bucketId);
               navigator(`/detail?bid=${bucketId}`);
-              // const xx = await refetch();
-              // console.log('xx', xx);
-
-              // const list = state.globalState.breadList;
-              // const item = {
-              //   path: '/profile',
-              //   name: 'My Collections',
-              //   query: p.toString(),
-              // };
-              // state.globalDispatch({
-              //   type: 'ADD_BREAD',
-              //   item,
-              // });
-
-              // navigator(
-              //   `/resource?&bid=${id}&address=${address}&tab=dataList&from=${encodeURIComponent(
-              //     JSON.stringify(list.concat([item])),
-              //   )}${groupId ? '&gid=' + groupId : ''}`,
-              // );
             }}
           >
             <ImgCon src={defaultImg(bucket_name, 40)}></ImgCon>

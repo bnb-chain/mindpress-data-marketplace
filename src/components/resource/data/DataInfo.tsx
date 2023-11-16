@@ -41,7 +41,7 @@ export const DataInfo = (props: Props) => {
 
   const modalData = useModal();
   const { handleModalOpen } = useWalletModal();
-  console.log(itemInfo.categoryId);
+  // console.log(itemInfo.categoryId);
 
   const categroyInfo = useGetCategory(itemInfo.categoryId);
 
@@ -156,6 +156,28 @@ export const DataInfo = (props: Props) => {
                 }}
               >
                 Buy
+              </Button>
+            </Box>
+          )}
+
+          {relation === 'OWNER' && (
+            <Box>
+              <Button
+                color="#FFE900"
+                background="#665800"
+                onClick={() => {
+                  modalData.modalDispatch({
+                    type: 'OPEN_DELIST',
+                    delistData: {
+                      groupId: itemInfo.groupId,
+                      bucket_name: itemInfo.name,
+                      create_at: itemInfo.createdAt,
+                      owner: itemInfo.ownerAddress,
+                    },
+                  });
+                }}
+              >
+                Delist
               </Button>
             </Box>
           )}

@@ -1,10 +1,11 @@
 import styled from '@emotion/styled';
-import { Box, Breadcrumb, BreadcrumbItem, Flex } from '@totejs/uikit';
+import { Box, Flex } from '@totejs/uikit';
 import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { Loader } from '../components/Loader';
 import { ImgCon } from '../components/resource/ImgCon';
+import { MyBreadcrumb } from '../components/resource/MyBreadcrumb';
 import Overview from '../components/resource/Overview';
 import { CollectionInfo } from '../components/resource/collection/CollectionInfo';
 import CollectionList from '../components/resource/collection/CollectionList';
@@ -19,10 +20,7 @@ import {
 } from '../hooks/useGetBucketOrObj';
 import { useGetItemById } from '../hooks/useGetItemById';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
-import { useGfGetObjInfo } from '../hooks/useGfGetObjInfo';
 import { reportEvent } from '../utils/ga';
-import { MyBreadcrumb } from '../components/resource/MyBreadcrumb';
-import { NoData } from '../components/NoData';
 
 /**
  * Have been listed

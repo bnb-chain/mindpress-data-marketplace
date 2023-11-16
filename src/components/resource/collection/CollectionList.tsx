@@ -64,10 +64,10 @@ const CollectionList = (props: Props) => {
       //   name: generateGroupName(itemInfo.name, item.name),
       // };
     });
-  console.log('oidList', oidList);
+  // console.log('oidList', oidList);
 
-  const xx = useGetItemsByObjIds(oidList || []);
-  console.log('xx', xx);
+  // const xx = useGetItemsByObjIds(oidList || []);
+  // console.log('xx', xx[0]);
 
   // const { list, loading } = useCollectionItems(
   //   itemInfo.name,

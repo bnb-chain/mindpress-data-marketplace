@@ -84,7 +84,7 @@ export const useBuy = (
       }
       return false;
     },
-    [status, BscBalanceVal, price, relayFee],
+    [status, price, relayFee, BscBalanceVal, state, address, navigator],
   );
   return { buy, relayFee };
 };

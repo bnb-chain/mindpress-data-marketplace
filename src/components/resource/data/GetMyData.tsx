@@ -87,8 +87,9 @@ export const GetMyData = (props: Props) => {
         )}
       </Flex>
 
-      {relation === 'NOT_PURCHASE' && <BuyData itemInfo={itemInfo} />}
-
+      {(relation === 'NOT_PURCHASE' || relation === 'UNKNOWN') && (
+        <BuyData itemInfo={itemInfo} />
+      )}
       {relation !== 'NOT_PURCHASE' && (
         <>
           <Hr mt="25px" mb="25px" />
