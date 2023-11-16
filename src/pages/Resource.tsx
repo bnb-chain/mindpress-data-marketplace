@@ -21,6 +21,8 @@ import { useGetItemById } from '../hooks/useGetItemById';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
 import { useGfGetObjInfo } from '../hooks/useGfGetObjInfo';
 import { reportEvent } from '../utils/ga';
+import { MyBreadcrumb } from '../components/resource/MyBreadcrumb';
+import { NoData } from '../components/NoData';
 
 /**
  * Have been listed
@@ -75,71 +77,21 @@ const Resource = () => {
 
   // console.log('itemInfo', itemInfo);
   // console.log('storageInfo', storageInfo);
-  console.log('groupData', groupData);
+  // console.log('groupData', groupData);
   // console.log('bucketData', bucketData);
   // console.log('objectData', objectData);
 
-  if (itemInfoLoading || !itemInfo) {
+  if (itemInfoLoading || !itemInfo || !bucketData) {
     return <Loader />;
   }
 
-  // const [breadItems, setBreadItems] = useState([]);
-
-  // const state = useGlobal();
-  // const showBuy = useMemo(() => {
-  //   const list = state.globalState.breadList;
-  //   console.log('state.globalState.breadList', list);
-  //   const fromPurchase =
-  //     list.findIndex((item) => item.name == 'My Purchase') > -1;
-  //   return (status == 1 || status == -1) && !fromPurchase;
-  // }, [status, address, state.globalState.breadList]);
-
-  /* useEffect(() => {
-    const list = state.globalState.breadList;
-    if (list.length && list[list.length - 1].name != title) {
-      setBreadItems(
-        list.concat([
-          {
-            name: title,
-            query: '',
-            path: '',
-          },
-        ]),
-      );
-    } else {
-      setBreadItems(list);
-    }
-  }, [state.globalState.breadList, title]); */
-
-  // const { num } = useCollectionItems(name, bucketListed);
-  // console.log('breadItems -=---->', breadItems);
-
   return (
     <Container>
-      {/* <MyBreadcrumb>
-        {breadItems.map((item: any, index: number) => {
-          return (
-            <MyBreadcrumbItem
-              key={index}
-              isCurrentPage={index === breadItems.length - 1}
-              onClick={() => {
-                state.globalDispatch({
-                  type: 'DEL_BREAD',
-                  name: item.name,
-                });
-              }}
-            >
-              <BreadcrumbLink fontSize="16px" as="span">
-                <Link
-                  to={`${item.path}` + (item.query ? '?' + item.query : '')}
-                >
-                  {item?.name?.replace('+', ' ')}
-                </Link>
-              </BreadcrumbLink>
-            </MyBreadcrumbItem>
-          );
-        })}
-      </MyBreadcrumb> */}
+      <MyBreadcrumb
+        root={{
+          bucketName: bucketData.bucketInfo.bucketName,
+        }}
+      />
 
       <ResourceInfo gap={100} padding="30px 0">
         <ImgCon relation={relation} itemInfo={itemInfo} />
@@ -188,16 +140,13 @@ const Resource = () => {
           )}
         </Info>
       </ResourceInfo>
-
       <Hr mb="55px" />
-
       <Overview
         itemInfo={itemInfo}
         relation={relation}
         bucketData={bucketData}
         groupData={groupData}
       />
-
       {itemInfo?.type === 'COLLECTION' && (
         <>
           <Hr mt="55px" />
@@ -231,18 +180,6 @@ const Hr = styled(Box)`
   height: 1px;
   background-color: #373943;
 `;
-
-const MyBreadcrumb = styled(Breadcrumb)`
-  /* background: #373943; */
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 18px;
-
-  color: #ffffff;
-`;
-
-const MyBreadcrumbItem = styled(BreadcrumbItem)``;
 
 const Info = styled(Flex)`
   padding-top: 50px;

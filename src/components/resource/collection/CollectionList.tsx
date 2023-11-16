@@ -85,7 +85,7 @@ const CollectionList = (props: Props) => {
   useEffect(() => {
     if (selectItem?.id === DEFAULT_ITEM.id) return;
 
-    console.log('selectItem', selectItem);
+    // console.log('selectItem', selectItem);
     if (!_.isEmpty(selectItem)) {
       console.log(`/resource?id=${selectItem.id}`);
       navigator(`/resource?id=${selectItem.id}`);
@@ -146,7 +146,7 @@ const CollectionList = (props: Props) => {
               // const from = encodeURIComponent(JSON.stringify(list));
 
               if (type === 'folder') {
-                console.log(data.name);
+                // console.log(data.name);
                 const params = {
                   id: id,
                   path: data.name + '/',
@@ -166,7 +166,7 @@ const CollectionList = (props: Props) => {
                 //   )}&address=${item}&from=${from}`,
                 // );
               } else {
-                console.log('data', data);
+                // console.log('data', data);
                 const id = String(data.data.Id);
                 setSelectObjectId(id);
                 setBucketName(data.data.BucketName);
@@ -192,7 +192,6 @@ const CollectionList = (props: Props) => {
       header: 'Format',
       width: 160,
       cell: (data: any) => {
-        const { type } = data;
         const content_type =
           data.type === 'folder'
             ? 'Folder'
@@ -241,6 +240,12 @@ const CollectionList = (props: Props) => {
     //     return <TotalVol groupId={groupId}></TotalVol>;
     //   },
     // },
+    {
+      header: '',
+      cell: (data) => {
+        return <Box>{}</Box>;
+      },
+    },
     // {
     //   header: 'Action',
     //   cell: (data: any) => {

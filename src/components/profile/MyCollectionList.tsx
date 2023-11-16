@@ -56,7 +56,7 @@ const MyCollectionList = (props: ICollectionList) => {
   const state = useGlobal();
   const [p] = useSearchParams();
 
-  console.log('modalData', modalData);
+  // console.log('modalData', modalData);
 
   // const [selectBucketId, setSelectBucketId] = useState<string>('');
   // const { data: selectItem } = useGetItemByBucketId(selectBucketId);
