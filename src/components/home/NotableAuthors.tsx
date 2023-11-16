@@ -62,4 +62,5 @@ const UserContainer = styled(Flex)`
 const Address = styled(Box)`
   color: #f7f7f8;
   font-size: 20px;
+  font-weight: 600;
 `;

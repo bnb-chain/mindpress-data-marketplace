@@ -89,7 +89,7 @@ const AdList = styled(Flex)`
 const AdItem = styled(Flex)`
   background-color: #373943;
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 600;
   border-radius: 100px;
   height: 56px;
   line-height: 56px;

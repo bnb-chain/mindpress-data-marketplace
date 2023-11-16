@@ -1,6 +1,6 @@
 import { Box, Flex } from '@totejs/uikit';
 import { reportEvent } from '../../utils/ga';
-import { BridgeIcon, DocIcon } from '@totejs/icons';
+import { DocIcon } from '@totejs/icons';
 import GithubIcon from '../svgIcon/GithubIcon';
 import { ExplorerIcon } from '../svgIcon/ExplorerIcon';
 import { EmailIcon } from '../svgIcon/EmailIcon';
@@ -8,6 +8,7 @@ import { TwitterIcon } from '../svgIcon/TwitterIcon';
 import { BlogIcon } from '../svgIcon/BlogIcon';
 import { DcellarIcon } from '../svgIcon/Dcellar';
 import styled from '@emotion/styled';
+import { BridgeIcon } from '../svgIcon/BridgeIcon';
 
 export const Links = () => {
   return (
@@ -120,7 +121,7 @@ export const Links = () => {
         >
           <CardItem alignItems={'center'} gap={16} flexDirection={'column'}>
             <DcellarIcon w={32} h={32} className="icon" />
-            <CardItemTitle className="title">dCellar</CardItemTitle>
+            <CardItemTitle className="title">DCellar</CardItemTitle>
           </CardItem>
         </Box>
       </CardCon>
@@ -140,7 +141,7 @@ const Cards = styled(Flex)`
 const TitleCon = styled(Flex)``;
 
 const CardTitle = styled.div`
-  font-size: 34px;
+  font-size: 32px;
   font-weight: 700;
   color: #ffffff;
 `;
@@ -149,13 +150,12 @@ const CardCon = styled(Flex)``;
 
 const CardItem = styled(Flex)`
   text-align: center;
-  width: 190px;
+  width: 256px;
   /* height: 140px; */
   border-radius: 8px;
   background-color: #1e2026;
   line-height: 28px;
-  padding-top: 24px;
-  padding-bottom: 24px;
+  padding: 24px 16px;
   .icon {
     color: #f7f7f8;
   }
