@@ -5,6 +5,8 @@ import {
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
+import { getItemByBucketId } from '../../utils/apis';
+import { getCollectionInfoByName } from '../../utils/gfSDK';
 
 interface Props {
   root: {
@@ -23,7 +25,7 @@ export const MyBreadcrumb = (props: Props) => {
   const bucketPath = path === '/' ? '' : path.split('/');
   const breadItems = [root.bucketName].concat(bucketPath);
 
-  console.log('props', breadItems.length - 1);
+  // console.log('props', breadItems.length - 1);
 
   return (
     <CustomBreadcrumb>
@@ -36,14 +38,18 @@ export const MyBreadcrumb = (props: Props) => {
             <BreadcrumbLink fontSize="16px" as="span">
               <NavLink
                 as="span"
-                onClick={() => {
-                  const params: Record<string, string> = {
-                    id: id,
-                  };
+                onClick={async () => {
+                  const params: Record<string, string> = {};
 
                   if (item !== root.bucketName) {
                     params.path = item + '/';
                   }
+
+                  const bucketData = await getCollectionInfoByName(item);
+                  const ItemInfo = await getItemByBucketId(
+                    bucketData.bucketInfo.id,
+                  );
+                  params.id = String(ItemInfo.id);
 
                   navigator({
                     pathname: '/resource',

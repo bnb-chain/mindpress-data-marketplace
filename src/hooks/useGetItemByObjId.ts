@@ -87,21 +87,24 @@ export const usePurchaseQueryByObjIds = (
       const res = await queryPurchase({
         filter: {
           address,
-          objectIds: ids.concat(178839),
+          objectIds: ids,
         },
         offset: 0,
         limit: 10,
         sort: 'CREATION_DESC',
       });
-      console.log('res --->', res);
 
-      return res.purchases
-        .filter((item) => {
-          return ids.includes(item.resourceId);
+      const { purchases } = res;
+
+      const xx = purchases
+        .filter((p) => {
+          return ids.includes(p.item.resourceId);
         })
-        .map((item) => {
-          return item.resourceId;
+        .map((p) => {
+          return p.item.resourceId;
         });
+
+      return xx;
     },
   });
 };

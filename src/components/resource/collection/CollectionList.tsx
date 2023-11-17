@@ -1,17 +1,14 @@
 import styled from '@emotion/styled';
 import { CardPocketIcon } from '@totejs/icons';
 import { Box, ColumnDef, Flex, Table } from '@totejs/uikit';
-import _ from 'lodash';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import {
   createSearchParams,
   useNavigate,
   useSearchParams,
 } from 'react-router-dom';
 import { useAccount } from 'wagmi';
-import { DEFAULT_ITEM } from '../../../hooks/useGetItemById';
 import {
-  useGetItemByObjId,
   useGetItemsByObjIds,
   usePurchaseQueryByObjIds,
 } from '../../../hooks/useGetItemByObjId';
@@ -21,18 +18,16 @@ import {
   objListMergeListedAndPurchased,
   useGetObjectList,
 } from '../../../hooks/useGetObjectList';
-import { useGlobal } from '../../../hooks/useGlobal';
-import { useModal } from '../../../hooks/useModal';
 import { usePagination } from '../../../hooks/usePagination';
 import { useSalesVolume } from '../../../hooks/useSalesVolume';
 import {
   contentTypeToExtension,
   defaultImg,
   formatDateUTC,
-  generateGroupName,
   parseFileSize,
   trimLongStr,
 } from '../../../utils';
+import { getItemByObjectId } from '../../../utils/apis';
 import { Item } from '../../../utils/apis/types';
 import { QueryHeadBucketResponse } from '../../../utils/gfSDK';
 import { Loader } from '../../Loader';
@@ -67,7 +62,6 @@ const CollectionList = (props: Props) => {
     .map((item: any) => {
       return item.data.Id as number;
     });
-  // console.log('oidList', oidList);
 
   const { data: objListedList, refetch: reloadListedList } =
     useGetItemsByObjIds(oidList || []);
@@ -81,8 +75,9 @@ const CollectionList = (props: Props) => {
     reloadPurchasedList();
   }, [reloadListedList, reloadObjectList, reloadPurchasedList]);
 
-  console.log('objListedList', objListedList);
-  console.log('purchasedList', purchasedList);
+  // console.log('oidList', oidList);
+  // console.log('objListedList', objListedList);
+  // console.log('purchasedList', purchasedList);
 
   const mergedList = objListMergeListedAndPurchased(
     objectList,
@@ -90,8 +85,8 @@ const CollectionList = (props: Props) => {
     purchasedList,
   );
 
-  console.log('objectList', objectList);
-  console.log('mergedList', mergedList);
+  // console.log('objectList', objectList);
+  // console.log('mergedList', mergedList);
 
   const { handlePageChange, page } = usePagination();
 
@@ -126,8 +121,17 @@ const CollectionList = (props: Props) => {
         }
 
         if (type === 'file') {
+          const { isListed } = data;
           return (
-            <ImgContainer>
+            <ImgContainer
+              cursor={isListed ? 'pointer' : 'inherit'}
+              onClick={async () => {
+                if (isListed) {
+                  const item = await getItemByObjectId(data.data.Id);
+                  navigator(`/resource?id=${item.id}`);
+                }
+              }}
+            >
               <ImgCon src={defaultImg(name, 40)}></ImgCon>
               <Box title={name}>{trimLongStr(name, 15)}</Box>
             </ImgContainer>
@@ -190,7 +194,7 @@ const CollectionList = (props: Props) => {
     {
       header: '',
       cell: (data) => {
-        console.log('data', data);
+        // console.log('data', data);
         return (
           data.type === 'file' && (
             <ActionButtonGroup fileInfo={data} uploadFn={reloadList} />

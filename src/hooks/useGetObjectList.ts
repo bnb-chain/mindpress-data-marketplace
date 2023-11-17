@@ -65,12 +65,6 @@ export const objListMergeListedAndPurchased = (
   listedList: number[] | undefined,
   purchasedList: number[] | undefined,
 ) => {
-  console.log(
-    'objListMergeListedAndPurchased objectList',
-    objectList,
-    listedList,
-    purchasedList,
-  );
   if (!objectList) return [];
   if (!listedList || !purchasedList) return objectList;
 

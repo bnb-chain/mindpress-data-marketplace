@@ -58,7 +58,13 @@ export interface SearchPurchaseRequest {
   limit: number;
 }
 export interface SearchPurchaseResponse {
-  purchases: Item[];
+  purchases: {
+    id: number;
+    buyerAddress: string;
+    price: number;
+    createdAt: number;
+    item: Item;
+  }[];
   total: number;
 }
 
@@ -74,6 +80,12 @@ export interface QueryPurchaseRequest {
   limit: number;
 }
 export interface QueryPurchaseResponse {
-  purchases: Item[];
+  purchases: {
+    id: number;
+    buyerAddress: string;
+    price: number;
+    createdAt: number;
+    item: Item;
+  }[];
   total: number;
 }

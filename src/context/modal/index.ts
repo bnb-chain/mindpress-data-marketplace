@@ -96,6 +96,7 @@ export const ModalReducer = (initialState: any, action: any) => {
         ...initialState,
         openBuy: true,
         buyData: action.buyData,
+        callBack: action.callBack,
       };
     case 'BUYING':
       return {

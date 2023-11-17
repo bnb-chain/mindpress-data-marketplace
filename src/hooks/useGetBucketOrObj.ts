@@ -93,11 +93,6 @@ export const useGetBOInfoFromGroup = (groupName?: string) => {
       // bucketName = _;
     }
 
-    console.log({
-      type: rType,
-      bucketName,
-      objectName,
-    });
     setBoInfo({
       type: rType,
       bucketName,

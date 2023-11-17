@@ -30,6 +30,7 @@ export const useGetItemById = (id: number) => {
   const [itemData, setItemData] = useState<Item>();
 
   const { data, isLoading, refetch } = useQuery({
+    enabled: !!id,
     queryKey: ['GET_ITEM', id],
     queryFn: () => getItemById(id),
     gcTime: 20000,
@@ -38,10 +39,10 @@ export const useGetItemById = (id: number) => {
   });
 
   useEffect(() => {
-    if (isLoading || !data) return;
+    if (isLoading || !data || !id) return;
 
     setItemData(data);
-  }, [data, isLoading]);
+  }, [data, id, isLoading]);
 
   return {
     data: itemData,
