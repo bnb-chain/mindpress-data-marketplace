@@ -85,8 +85,7 @@ const CollectionList = (props: Props) => {
     purchasedList,
   );
 
-  // console.log('objectList', objectList);
-  // console.log('mergedList', mergedList);
+  console.log('mergedList', mergedList);
 
   const { handlePageChange, page } = usePagination();
 
@@ -122,13 +121,24 @@ const CollectionList = (props: Props) => {
 
         if (type === 'file') {
           const { isListed } = data;
+          const isOwner = data.data.Owner === address;
+
           return (
             <ImgContainer
-              cursor={isListed ? 'pointer' : 'inherit'}
+              cursor={isListed || isOwner ? 'pointer' : 'inherit'}
               onClick={async () => {
                 if (isListed) {
                   const item = await getItemByObjectId(data.data.Id);
                   navigator(`/resource?id=${item.id}`);
+                  return;
+                }
+
+                if (!bucketData) return;
+                if (isOwner) {
+                  navigator(
+                    `/detail?bid=${bucketData.bucketInfo.id}&oid=${data.data.Id}`,
+                  );
+                  return;
                 }
               }}
             >

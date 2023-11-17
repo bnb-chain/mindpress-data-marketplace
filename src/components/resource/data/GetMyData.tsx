@@ -9,6 +9,7 @@ import { Copy } from '../../Copy';
 import { ViewIcon } from '../../svgIcon/ViewIcon';
 import { BuyData } from './BuyData';
 import { useGetDownloadUrl } from '../../../hooks/useGetDownloadUrl';
+import { useGetRandomSp } from '../../../hooks/useGetRandomSp';
 
 interface Props {
   bucketName?: string;
@@ -19,16 +20,18 @@ interface Props {
 export const GetMyData = (props: Props) => {
   const { itemInfo, bucketName, relation } = props;
 
-  const [domain, setDomain] = useState('');
+  // const [domain, setDomain] = useState('');
   // const downloadUrl = useMemo(() => {
   //   const str = `${domain}/download/${bucketName}/${itemInfo.name}`;
   //   return str;
   // }, [domain, bucketName, itemInfo.name]);
-  useEffect(() => {
-    getRandomSp().then((result) => {
-      setDomain(result);
-    });
-  }, []);
+  // useEffect(() => {
+  //   getRandomSp().then((result) => {
+  //     setDomain(result);
+  //   });
+  // }, []);
+
+  const { data: endpoint } = useGetRandomSp();
 
   const downloadUrl = useGetDownloadUrl({
     bucketName,
@@ -36,9 +39,9 @@ export const GetMyData = (props: Props) => {
   });
 
   const previewUrl = useMemo(() => {
-    const str = `${domain}/view/${bucketName}/${itemInfo.name}`;
+    const str = `${endpoint}/view/${bucketName}/${itemInfo.name}`;
     return str;
-  }, [domain, bucketName, itemInfo.name]);
+  }, [endpoint, bucketName, itemInfo.name]);
 
   const showButtonGroup = useMemo(() => {
     return relation === 'PURCHASED' || relation === 'OWNER';

@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import { getRandomSp } from '../utils/gfSDK';
+import { useGetRandomSp } from './useGetRandomSp';
 
 export const useGetDownloadUrl = ({
   bucketName,
@@ -8,15 +7,9 @@ export const useGetDownloadUrl = ({
   bucketName?: string;
   name: string;
 }) => {
-  const [domain, setDomain] = useState('');
-  const [downloadUrl, setDownloadUrl] = useState('');
+  const { data: endpint, isLoading } = useGetRandomSp();
 
-  useEffect(() => {
-    getRandomSp().then((result) => {
-      setDomain(result);
-      setDownloadUrl(`${domain}/download/${bucketName}/${name}`);
-    });
-  }, [bucketName, domain, name]);
+  if (isLoading) return '';
 
-  return downloadUrl;
+  return `${endpint}/download/${bucketName}/${name}`;
 };
