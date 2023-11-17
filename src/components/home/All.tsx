@@ -186,10 +186,6 @@ const AllList = () => {
   return (
     <Container>
       <Table
-        headerContent={`Latest ${Math.min(
-          20,
-          data.total,
-        )} Collections (Total of ${data.total})`}
         pagination={{
           current: page,
           pageSize: 10,

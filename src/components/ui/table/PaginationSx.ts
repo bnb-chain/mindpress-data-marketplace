@@ -1,4 +1,9 @@
 export const PaginationSx = {
+  '&': {
+    display: 'flex',
+    justifyContent: 'center',
+    width: '100%',
+  },
   '.ui-button': {
     color: '#F7F7F8',
     bg: '#373943',
