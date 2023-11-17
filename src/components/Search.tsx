@@ -3,10 +3,10 @@ import { SearchInput } from './SearchInput';
 
 import styled from '@emotion/styled';
 import { Box, Flex } from '@totejs/uikit';
-import ScrollSelect from './ScrollSelect';
 import { useDebounce } from '../hooks/useDebounce';
-import { searchKey } from '../utils/gfSDK';
 import { parseGroupName } from '../utils';
+import { searchKey } from '../utils/gfSDK';
+import ScrollSelect from './ScrollSelect';
 // import { multiCallFun } from '../base/contract/multiCall';
 // import { MarketPlaceContract } from '../base/contract/marketPlaceContract';
 import Web3 from 'web3';
@@ -64,6 +64,7 @@ const Search = (props: ISearch) => {
             return reg.test(name);
           }
         });
+        // console.log('searchList', groups);
         if (groups.length) {
           const res = await Promise.all(
             groups.map((item: any) => {
@@ -82,13 +83,14 @@ const Search = (props: ISearch) => {
           //   }),
           // );
           const list: any = groups
-            .map((item: string, index: number) => {
-              const { price } = res[index];
-              if (price.length > 1) {
-                return Object.assign(item, { price });
-              }
-              return false;
-            })
+            // .map((item: string, index: number) => {
+            //   const { price } = res[index];
+            //   console.log(res, price);
+            //   // if (price.length > 1) {
+            //   //   return Object.assign(item, { price });
+            //   // }
+            //   return false;
+            // })
             .filter((item: any) => !!item);
 
           setList(list);
@@ -110,7 +112,7 @@ const Search = (props: ISearch) => {
     const {
       group: { group_name, id, owner },
     } = item;
-    return `resource?gid=${id}&gn=${group_name}&address=${owner}&tab=dataList`;
+    return `/redirect?gid=${id}`;
   };
   const filteredData = useMemo(() => {
     if (searchValue) {
