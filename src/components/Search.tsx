@@ -193,7 +193,7 @@ const Search = (props: ISearch) => {
           boxShadow="4px 2px 8px rgba(0, 0, 0, 0.08)"
         >
           <Input
-            placeholder={'Search Data Names, Accounts'}
+            placeholder={'Search data, accounts'}
             value={searchValue}
             onChange={handleSearchChange}
             onConfirm={handleSearchChange}

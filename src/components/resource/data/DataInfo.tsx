@@ -6,6 +6,7 @@ import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { Link } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { useBNBPrice } from '../../../hooks/useBNBPrice';
+import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
 import { useGetItemRelationWithAddr } from '../../../hooks/useGetItemRelationWithAddr';
 import { useModal } from '../../../hooks/useModal';
 import { useWalletModal } from '../../../hooks/useWalletModal';
@@ -13,6 +14,7 @@ import {
   divide10Exp,
   formatDateDot,
   parseFileSize,
+  parseGroupName,
   roundFun,
   trimLongStr,
 } from '../../../utils';
@@ -21,10 +23,10 @@ import { QueryHeadObjectResponse } from '../../../utils/gfSDK';
 import { NoData } from '../../NoData';
 import BSCIcon from '../../svgIcon/BSCIcon';
 import { CategoryIcon } from '../../svgIcon/CategoryIcon';
+import { FolderIcon } from '../../svgIcon/FolderIcon';
 import { ShoppingIcon } from '../../svgIcon/ShoppingIcon';
 import { SizeIcon } from '../../svgIcon/SizeIcon';
-import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
-import { YellowButton } from '../../ui/buttons/YellowButton';
+import { BigYellowButton } from '../../ui/buttons/YellowButton';
 
 interface Props {
   itemInfo: Item;
@@ -36,13 +38,14 @@ export const DataInfo = (props: Props) => {
 
   const { price, ownerAddress, createdAt } = itemInfo;
 
+  const { bucketName } = parseGroupName(itemInfo.groupName);
+
   const { address, isConnected, isConnecting } = useAccount();
   const { price: bnbPrice } = useBNBPrice();
   const relation = useGetItemRelationWithAddr(address, itemInfo);
 
   const modalData = useModal();
   const { handleModalOpen } = useWalletModal();
-  // console.log(itemInfo.categoryId);
 
   const categroyInfo = useGetCategory(itemInfo.categoryId);
 
@@ -54,9 +57,10 @@ export const DataInfo = (props: Props) => {
     <Box>
       <Flex mt="16px" mb="32px" alignItems="center">
         <Box color="#F7F7F8" fontSize="16px" fontWeight="600">
-          {/* <Link to={`${collection.path}?${collection.query || ''}`}>
-            {collection?.name?.replace('+', ' ')}
-          </Link> */}
+          <FolderIcon color="#8C8F9B" mr="5px" />
+          <Box as="span" textDecoration="underline">
+            {bucketName}
+          </Box>
         </Box>
         <Box fontWeight="16px" color="#C4C5CB" ml="8px" mr="16px">
           created by
@@ -65,7 +69,7 @@ export const DataInfo = (props: Props) => {
           <Flex
             bg="#1E2026"
             border="1px solid #373943"
-            borderRadius="16px"
+            borderRadius="24px"
             p="8px"
             _hover={{
               background: '#373943',
@@ -119,10 +123,10 @@ export const DataInfo = (props: Props) => {
         <ActionBox>
           <Flex alignItems="center" justifyContent="space-between">
             <Box p="8px" bg="#373943" borderRadius="32px" mr="8px">
-              <BSCIcon color="#F0B90B" w={16} h={16} />
+              <BSCIcon color="#F0B90B" w={22} h={22} />
             </Box>
 
-            <Flex gap="8px" alignItems="center">
+            <Flex gap="8px" alignItems="baseline">
               <BNB>{divide10Exp(new BN(price, 10), 18)} BNB</BNB>
               <Dollar>
                 $
@@ -139,7 +143,7 @@ export const DataInfo = (props: Props) => {
 
           {(relation === 'NOT_PURCHASE' || relation === 'UNKNOWN') && (
             <Box>
-              <YellowButton
+              <BigYellowButton
                 onClick={() => {
                   console.log('relation', relation, isConnecting, isConnected);
                   if (relation === 'UNKNOWN') {
@@ -155,7 +159,7 @@ export const DataInfo = (props: Props) => {
                 }}
               >
                 Buy
-              </YellowButton>
+              </BigYellowButton>
             </Box>
           )}
 
@@ -239,6 +243,6 @@ const BNB = styled(Box)`
 `;
 
 const Dollar = styled(Box)`
-  color: #c4c5cb;
+  color: #f7f7f8;
   font-size: 14px;
 `;

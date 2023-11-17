@@ -145,8 +145,14 @@ const SearchBox = styled.div<{
       ? `1px solid ${props.theme.colors.scene.primary.active}`
       : `1px solid ${props.theme.colors.readable.border}`;
   }};
+
   :hover {
-    border: 1px solid ${(props: any) => props.theme.colors.scene.primary.active};
+    outline: 1px solid #5c5f6a;
+    background: #373943;
+  }
+
+  :focus-within {
+    outline: 2px solid #ffe900;
   }
   input {
     height: 100%;
@@ -175,5 +181,5 @@ const StyledIcon = styled(SearchIcon)`
   min-width: 24px;
   height: 24px;
   cursor: pointer;
-  color: ${(props: any) => props.theme.colors.readable?.normal} !important;
+  color: #8c8f9b;
 `;

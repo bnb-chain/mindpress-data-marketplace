@@ -52,12 +52,12 @@ export const CollectionInfo = (props: Props) => {
     <Box>
       <Flex mt="16px" mb="32px" alignItems="center">
         <Box color="#F7F7F8" fontSize="16px" fontWeight="600">
-          <FolderIcon color="#D9D9D9" mr="5px" />
-          <Link to={`/resource?id=${itemInfo.id}&path=/`}>
-            <Box as="span" textDecoration="underline">
-              {trimLongStr(itemInfo.name)}
-            </Box>
-          </Link>
+          <FolderIcon color="#8C8F9B" mr="5px" />
+          {/* <Link to={`/resource?id=${itemInfo.id}&path=/`}> */}
+          <Box as="span" textDecoration="underline">
+            Collection
+          </Box>
+          {/* </Link> */}
         </Box>
         <Box fontWeight="16px" color="#C4C5CB" ml="8px" mr="16px">
           created by
@@ -66,7 +66,7 @@ export const CollectionInfo = (props: Props) => {
           <Flex
             bg="#1E2026"
             border="1px solid #373943"
-            borderRadius="16px"
+            borderRadius="24px"
             p="8px"
             _hover={{
               background: '#373943',
@@ -131,10 +131,10 @@ export const CollectionInfo = (props: Props) => {
         <ActionBox>
           <Flex alignItems="center" justifyContent="space-between">
             <Box p="8px" bg="#373943" borderRadius="32px" mr="8px">
-              <BSCIcon color="#F0B90B" w={16} h={16} />
+              <BSCIcon color="#F0B90B" w={22} h={22} />
             </Box>
 
-            <Flex gap="8px" alignItems="center">
+            <Flex gap="8px" alignItems="baseline">
               <BNB>{divide10Exp(new BN(itemInfo.price, 10), 18)} BNB</BNB>
               <Dollar>
                 $
@@ -250,6 +250,6 @@ const BNB = styled(Box)`
 `;
 
 const Dollar = styled(Box)`
-  color: #c4c5cb;
+  color: #f7f7f8;
   font-size: 14px;
 `;

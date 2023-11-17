@@ -324,10 +324,10 @@ const CollectionList = (props: Props) => {
         Data in this collection ({Math.min(20, objectList.length)})
       </Title>
       <Table
-        headerContent={`Latest ${Math.min(
-          20,
-          objectList.length,
-        )}  Data (Total of ${objectList.length})`}
+        // headerContent={`Latest ${Math.min(
+        //   20,
+        //   objectList.length,
+        // )}  Data (Total of ${objectList.length})`}
         pagination={{
           current: page,
           pageSize: 20,
@@ -348,7 +348,7 @@ export default CollectionList;
 
 const Container = styled.div`
   background: #181a1e;
-  padding: 4px 20px;
+  /* padding: 4px 20px; */
   /* width: 1123px; */
 `;
 

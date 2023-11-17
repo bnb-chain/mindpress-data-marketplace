@@ -80,8 +80,8 @@ const Container = styled.div`
 
   img {
     object-fit: cover;
-    width: 500px;
-    height: 500px;
+    width: 486px;
+    height: 486px;
 
     background-color: #d9d9d9;
     border-radius: 8px;

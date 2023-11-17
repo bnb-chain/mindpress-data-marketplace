@@ -37,7 +37,7 @@ export const GetMyData = (props: Props) => {
 
   return (
     <Box>
-      <Flex alignItems="center" justifyContent="space-between">
+      <Flex h="32px" alignItems="baseline" justifyContent="space-between">
         <Title>Get my Data</Title>
         {showButtonGroup && (
           <ButtonGroup>
@@ -129,6 +129,7 @@ const ButtonGroup = styled(Flex)`
 const Title = styled(Box)`
   color: #fff;
   font-size: 24px;
+  font-weight: 600;
 `;
 
 const Hr = styled(Box)`

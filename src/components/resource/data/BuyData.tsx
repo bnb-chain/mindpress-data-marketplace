@@ -25,7 +25,7 @@ export const BuyData = (props: Props) => {
           justifyContent="center"
           alignItems="center"
           borderRadius="88px"
-          border="20px solid #373943"
+          border="15px solid #373943"
         >
           <LockIcon w={32} h={32} />
         </Flex>

@@ -29,7 +29,7 @@ const Overview = (props: IOverView) => {
   return (
     <Container justifyContent="space-between">
       <Box flex="1">
-        <Title as="h2" mb="30px" mt="10px">
+        <Title as="h2" mb="30px">
           Description
         </Title>
         <DescBox alignItems={'center'} justifyItems={'center'}>
@@ -68,6 +68,7 @@ const DescBox = styled(Box)`
 const Title = styled(Box)`
   color: #fff;
   font-size: 24px;
+  font-weight: 600;
 `;
 
 const GetMyDataBox = styled(Box)`

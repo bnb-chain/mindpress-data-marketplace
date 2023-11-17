@@ -40,6 +40,8 @@ import { CheckIcon } from '../svgIcon/CheckIcon';
 import { SellIcon } from '../svgIcon/SellIcon';
 import { TowerIcon } from '../svgIcon/TowerIcon';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
+import { SignOutIcon } from '../svgIcon/SignOutIcon';
+import { MyDataCollectionIcon } from '../svgIcon/MyDataCollectionIcon';
 
 const CustomMenuButton = forwardRef(
   (props: { children: ReactNode }, ref: ForwardedRef<HTMLButtonElement>) => {
@@ -73,7 +75,11 @@ const CustomMenuButton = forwardRef(
       >
         <TowerIcon color="#00FF67" w={16} />
         <Flex align={'center'}>{children}</Flex>
-        <MenuCloseIcon className="close-icon" transitionDuration="normal" />
+        <MenuCloseIcon
+          w={16}
+          className="close-icon"
+          transitionDuration="normal"
+        />
       </Button>
     );
   },
@@ -128,6 +134,7 @@ const Header = () => {
       <RightFunCon alignItems={'center'} justifyContent={'center'} gap={18}>
         <>
           <DefaultButton
+            fontWeight={600}
             h="40px"
             as="button"
             onClick={() => {
@@ -217,10 +224,14 @@ const Header = () => {
               <ProfileWrapper
                 ml={3}
                 gap={10}
-                justifyContent={'flex-start'}
+                // justifyContent={'flex-start'}
                 // w={158}
               >
-                <Profile>
+                <Profile
+                  outline={
+                    dropDownOpen ? '1px solid #FFE900' : '1px solid #373943'
+                  }
+                >
                   {address && <MetaMaskAvatar address={address} size={32} />}
                 </Profile>
               </ProfileWrapper>
@@ -249,7 +260,7 @@ const Header = () => {
                   navigate('/profile?tab=collections');
                 }}
               >
-                <SaverIcon mr={8} width={24} height={24} />
+                <MyDataCollectionIcon mr={8} width={24} height={24} />
                 My Data Collections
               </MenuElement>
               <MenuElement
@@ -273,13 +284,13 @@ const Header = () => {
                   navigate('/');
                 }}
               >
-                <WithdrawIcon
+                <SignOutIcon
                   mr={8}
                   width={24}
                   height={24}
                   style={{ transform: 'rotate(-90deg)' }}
                 />{' '}
-                Disconnect
+                Sign Out
               </MenuElement>
             </DropDown>
           )}
@@ -374,10 +385,12 @@ const ProfileWrapper = styled(Flex)`
 const Profile = styled(Flex)`
   align-items: center;
   justify-content: center;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  border: 1px solid ${(props: any) => props.theme.colors.readable.border};
+  border-radius: 100%;
+  padding: 4px;
+  /* width: 36px;
+  height: 36px; */
+  /* outline: 1px solid ${(props: any) =>
+    props.theme.colors.readable.border}; */
 `;
 
 const MenuElement = styled(Flex)`
@@ -407,8 +420,8 @@ const ConnectProfile = styled(Flex)`
   font-size: 14px;
   font-weight: 500;
   line-height: 24px;
-  border-radius: 200px;
-  border: 1px solid ${(props: any) => props.theme.colors.readable.border};
+  /* border-radius: 200px;
+  border: 1px solid ${(props: any) => props.theme.colors.readable.border}; */
   &:hover {
     background: ${(props: any) => props.theme.colors.read?.normal};
   }
