@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
 import { Button, Flex, Table } from '@totejs/uikit';
-import { usePagination } from '../../hooks/usePagination';
+import { useNavigate } from 'react-router-dom';
 import { useAccount, useSwitchNetwork } from 'wagmi';
 import { GF_CHAIN_ID } from '../../env';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { usePagination } from '../../hooks/usePagination';
 import {
   defaultImg,
   divide10Exp,
@@ -14,15 +14,13 @@ import {
 import { useCollectionList } from '../../hooks/useCollectionList';
 import { useModal } from '../../hooks/useModal';
 // import { useSalesVolume } from '../../hooks/useSalesVolume';
-import { useListedStatus } from '../../hooks/useListedStatus';
 import { BN } from 'bn.js';
-import { useGlobal } from '../../hooks/useGlobal';
-import CollNoData from './CollNoData';
-import { Dispatch, useEffect, useMemo, useState } from 'react';
+import { Dispatch, useMemo } from 'react';
+import { useListedStatus } from '../../hooks/useListedStatus';
 import { reportEvent } from '../../utils/ga';
+import { PaginationSx } from '../ui/table/PaginationSx';
 import { TableProps } from '../ui/table/TableProps';
-import { useGetBucketById } from '../../hooks/useGetBucketOrObj';
-import { useGetItemByBucketId } from '../../hooks/useGetItemByBucketId';
+import CollNoData from './CollNoData';
 
 const PriceCon = (props: { groupId: string }) => {
   const { groupId } = props;
@@ -43,7 +41,6 @@ const MyCollectionList = (props: ICollectionList) => {
 
   const { handlePageChange, page } = usePagination();
   const { setShowButton } = props;
-  const { address } = useAccount();
   const modalData = useModal();
   // const { list, loading, total } = useCollectionList(page, pageSize, modalData.modalState.result);
   const { list, loading, total } = useCollectionList(
@@ -53,20 +50,6 @@ const MyCollectionList = (props: ICollectionList) => {
   );
   const { switchNetwork } = useSwitchNetwork();
   const navigator = useNavigate();
-  const state = useGlobal();
-  const [p] = useSearchParams();
-
-  // console.log('modalData', modalData);
-
-  // const [selectBucketId, setSelectBucketId] = useState<string>('');
-  // const { data: selectItem } = useGetItemByBucketId(selectBucketId);
-  // TODO: if selectItem is null, the bucket is not listed, should go to bid or oid page
-  // console.log('selectItem', selectItem);
-
-  // useEffect(() => {
-  //   if (!selectBucketId) return;
-  //   navigator(`/detail?bid=${selectBucketId}`);
-  // }, [navigator, selectBucketId]);
 
   const showNoData = useMemo(() => {
     const show = !loading && !list.length;
@@ -154,35 +137,6 @@ const MyCollectionList = (props: ICollectionList) => {
             >
               {!listed ? 'List' : 'Delist'}
             </Button>
-            {/* <Button
-              onClick={() => {
-                const {
-                  groupId,
-                  bucket_info: { id },
-                } = data;
-
-                const list = state.globalState.breadList;
-                const item = {
-                  path: '/profile',
-                  name: 'My Collections',
-                  query: p.toString(),
-                };
-                state.globalDispatch({
-                  type: 'ADD_BREAD',
-                  item,
-                });
-
-                navigator(
-                  `/resource?&bid=${id}&address=${address}&tab=dataList&from=${encodeURIComponent(
-                    JSON.stringify(list.concat([item])),
-                  )}${groupId ? '&gid=' + groupId : ''}`,
-                );
-              }}
-              size={'sm'}
-              style={{ marginLeft: '6px' }}
-            >
-              View detail
-            </Button> */}
           </div>
         );
       },
@@ -201,6 +155,7 @@ const MyCollectionList = (props: ICollectionList) => {
           pageSize: pageSize,
           total: total,
           onChange: handlePageChange,
+          sx: PaginationSx,
         }}
         columns={columns}
         data={list}

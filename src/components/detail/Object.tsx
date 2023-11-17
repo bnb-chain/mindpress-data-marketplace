@@ -1,11 +1,17 @@
 import styled from '@emotion/styled';
 import { SendIcon } from '@totejs/icons';
-import { Box, Button, Flex } from '@totejs/uikit';
+import { Button, Flex } from '@totejs/uikit';
+import _ from 'lodash';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
-import { Loader } from '../../components/Loader';
 import { NoData } from '../../components/NoData';
+import { DCELLAR_URL, GF_EXPLORER_URL } from '../../env';
+import { useCollectionItems } from '../../hooks/useCollectionItems';
 import { useGetBucketById } from '../../hooks/useGetBucketOrObj';
+import { useGetItemByObjId } from '../../hooks/useGetItemByObjId';
+import { useGfGetObjInfo } from '../../hooks/useGfGetObjInfo';
+import { useModal } from '../../hooks/useModal';
+import { useStatus } from '../../hooks/useStatus';
 import {
   defaultImg,
   formatDateUTC,
@@ -13,16 +19,6 @@ import {
   parseFileSize,
   trimLongStr,
 } from '../../utils';
-import { useGetItemByBucketId } from '../../hooks/useGetItemByBucketId';
-import _ from 'lodash';
-import { DCELLAR_URL, GF_EXPLORER_URL } from '../../env';
-import { id, tr } from 'date-fns/locale';
-import { useModal } from '../../hooks/useModal';
-import { useCollectionItems } from '../../hooks/useCollectionItems';
-import List from '../../components/detail/List';
-import { useStatus } from '../../hooks/useStatus';
-import { useGfGetObjInfo } from '../../hooks/useGfGetObjInfo';
-import { useGetItemByObjId } from '../../hooks/useGetItemByObjId';
 
 /**
  * Have not been listed
@@ -42,16 +38,10 @@ export const Object = () => {
   // means this object is not listed
   const { data: objectItemInfo } = useGetItemByObjId(objectId);
 
-  console.log('objectItemInfo', objectItemInfo);
+  // console.log('objectItemInfo', objectItemInfo);
 
   const { address } = useAccount();
   const { num } = useCollectionItems(bucketData?.bucketInfo.bucketName, false);
-
-  const { status } = useStatus(
-    generateGroupName(bucketData?.bucketInfo.bucketName || ''),
-    bucketData?.bucketInfo.owner || '',
-    address || '',
-  );
 
   if (!_.isEmpty(objectItemInfo)) {
     navigator(`/resource?id=${objectItemInfo.id}`, {
@@ -224,16 +214,6 @@ const OwnCon = styled(Flex)`
   }
 `;
 
-const MarketInfo = styled(Flex)`
-  font-size: 32px;
-  color: #f0b90b;
-`;
-
-const Price = styled.div`
-  font-size: 20px;
-  color: #f0b90b;
-`;
-
 const ActionGroup = styled(Flex)``;
 
 const FileSize = styled.div`
@@ -245,15 +225,4 @@ const FileSize = styled.div`
   line-height: 18px;
 
   color: #ffffff;
-`;
-
-const NoDataCon = styled(Flex)``;
-
-const NoDataTitle = styled.div`
-  font-size: 32px;
-  font-weight: 600;
-`;
-
-const NoDataSub = styled.div`
-  font-size: 20px;
 `;

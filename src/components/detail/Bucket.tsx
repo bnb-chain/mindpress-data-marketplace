@@ -1,26 +1,23 @@
 import styled from '@emotion/styled';
 import { SendIcon } from '@totejs/icons';
 import { Box, Button, Flex } from '@totejs/uikit';
+import _ from 'lodash';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
-import { Loader } from '../../components/Loader';
 import { NoData } from '../../components/NoData';
+import List from '../../components/detail/List';
+import { DCELLAR_URL, GF_EXPLORER_URL } from '../../env';
+import { useCollectionItems } from '../../hooks/useCollectionItems';
 import { useGetBucketById } from '../../hooks/useGetBucketOrObj';
+import { useGetItemByBucketId } from '../../hooks/useGetItemByBucketId';
+import { useModal } from '../../hooks/useModal';
+import { useStatus } from '../../hooks/useStatus';
 import {
   defaultImg,
   formatDateUTC,
   generateGroupName,
   trimLongStr,
 } from '../../utils';
-import { useGetItemByBucketId } from '../../hooks/useGetItemByBucketId';
-import _ from 'lodash';
-import { DCELLAR_URL, GF_EXPLORER_URL } from '../../env';
-import { id, tr } from 'date-fns/locale';
-import { useModal } from '../../hooks/useModal';
-import { useCollectionItems } from '../../hooks/useCollectionItems';
-import List from '../../components/detail/List';
-import { useStatus } from '../../hooks/useStatus';
-import { useGfGetObjInfo } from '../../hooks/useGfGetObjInfo';
 
 /**
  * Have not been listed

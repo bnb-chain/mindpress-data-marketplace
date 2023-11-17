@@ -1,34 +1,30 @@
 import styled from '@emotion/styled';
-import { Box, Button, Flex } from '@totejs/uikit';
+import { CalendarIcon } from '@totejs/icons';
+import { Box, Flex } from '@totejs/uikit';
 import BN from 'bn.js';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { Link, useSearchParams } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 import { useBNBPrice } from '../../../hooks/useBNBPrice';
-import { ITEM_STATUS } from '../../../hooks/useItemStatus';
+import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
+import { ITEM_RELATION_ADDR } from '../../../hooks/useGetItemRelationWithAddr';
+import { useGetObjectList } from '../../../hooks/useGetObjectList';
 import { useModal } from '../../../hooks/useModal';
+import { useWalletModal } from '../../../hooks/useWalletModal';
 import {
   divide10Exp,
   formatDateDot,
-  formatDateUTC,
-  parseFileSize,
   roundFun,
   trimLongStr,
 } from '../../../utils';
-import BSCIcon from '../../svgIcon/BSCIcon';
-import { SizeIcon } from '../../svgIcon/SizeIcon';
-import { CategoryIcon } from '../../svgIcon/CategoryIcon';
-import { CalendarIcon } from '@totejs/icons';
-import { ShoppingIcon } from '../../svgIcon/ShoppingIcon';
-import { useCollectionItems } from '../../../hooks/useCollectionItems';
-import { CountIcon } from '../../svgIcon/CountIcon';
 import { Item } from '../../../utils/apis/types';
-import { ITEM_RELATION_ADDR } from '../../../hooks/useGetItemRelationWithAddr';
-import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
-import { useGetObjectList } from '../../../hooks/useGetObjectList';
 import { Loader } from '../../Loader';
+import BSCIcon from '../../svgIcon/BSCIcon';
+import { CategoryIcon } from '../../svgIcon/CategoryIcon';
+import { CountIcon } from '../../svgIcon/CountIcon';
 import { FolderIcon } from '../../svgIcon/FolderIcon';
-import { useAccount } from 'wagmi';
-import { useWalletModal } from '../../../hooks/useWalletModal';
+import { ShoppingIcon } from '../../svgIcon/ShoppingIcon';
+import { BigYellowButton } from '../../ui/buttons/YellowButton';
 
 interface Props {
   itemInfo: Item;
@@ -59,7 +55,7 @@ export const CollectionInfo = (props: Props) => {
           <FolderIcon color="#D9D9D9" mr="5px" />
           <Link to={`/resource?id=${itemInfo.id}&path=/`}>
             <Box as="span" textDecoration="underline">
-              {itemInfo.name}
+              {trimLongStr(itemInfo.name)}
             </Box>
           </Link>
         </Box>
@@ -157,9 +153,7 @@ export const CollectionInfo = (props: Props) => {
 
           {(relation === 'NOT_PURCHASE' || relation === 'UNKNOWN') && (
             <Box>
-              <Button
-                color="#FFE900"
-                background="#665800"
+              <BigYellowButton
                 onClick={() => {
                   if (!isConnected && !isConnecting) {
                     handleModalOpen();
@@ -172,15 +166,13 @@ export const CollectionInfo = (props: Props) => {
                 }}
               >
                 Buy
-              </Button>
+              </BigYellowButton>
             </Box>
           )}
 
           {relation === 'OWNER' && (
             <Box>
-              <Button
-                color="#FFE900"
-                background="#665800"
+              <BigYellowButton
                 onClick={() => {
                   modalData.modalDispatch({
                     type: 'OPEN_DELIST',
@@ -194,7 +186,7 @@ export const CollectionInfo = (props: Props) => {
                 }}
               >
                 Delist
-              </Button>
+              </BigYellowButton>
             </Box>
           )}
         </ActionBox>

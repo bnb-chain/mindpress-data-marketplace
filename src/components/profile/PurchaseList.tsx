@@ -1,27 +1,20 @@
 import styled from '@emotion/styled';
 import { Flex, Table } from '@totejs/uikit';
-import { usePagination } from '../../hooks/usePagination';
+import BN from 'bn.js';
 import { useAccount } from 'wagmi';
+import { usePagination } from '../../hooks/usePagination';
+import { useUserPurchased } from '../../hooks/useUserPurchased';
 import {
   defaultImg,
   divide10Exp,
   formatDateUTC,
   trimLongStr,
 } from '../../utils';
-import { useUserPurchased } from '../../hooks/useUserPurchased';
-import BN from 'bn.js';
-// import { useSalesVolume } from '../../hooks/useSalesVolume';
+import { Link, useNavigate } from 'react-router-dom';
 import { OwnActionCom } from '../OwnActionCom';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { CollectionLogo } from '../svgIcon/CollectionLogo';
-import { useGlobal } from '../../hooks/useGlobal';
+import { PaginationSx } from '../ui/table/PaginationSx';
 import { TableProps } from '../ui/table/TableProps';
-
-// const TotalVol = (props: any) => {
-//   const { groupId } = props;
-//   const { salesVolume } = useSalesVolume(groupId);
-//   return <div>{Number(salesVolume) || '-'}</div>;
-// };
 
 const PurchaseList = () => {
   const { handlePageChange, page } = usePagination();
@@ -30,8 +23,6 @@ const PurchaseList = () => {
   const { list, loading, total } = useUserPurchased(page, pageSize);
   const { address } = useAccount();
   const navigator = useNavigate();
-  const state = useGlobal();
-  const [p] = useSearchParams();
 
   const breadInfo = {
     name: 'My Purchase',
@@ -50,31 +41,6 @@ const PurchaseList = () => {
             gap={6}
             onClick={() => {
               navigator(`/resource?id=${id}`);
-              // let from = '';
-              // if (breadInfo) {
-              //   const list = state.globalState.breadList;
-              //   const item = {
-              //     path: (breadInfo as any).path,
-              //     name: (breadInfo as any).name,
-              //     query: p.toString(),
-              //   };
-              //   state.globalDispatch({
-              //     type: 'ADD_BREAD',
-              //     item,
-              //   });
-
-              //   from = encodeURIComponent(JSON.stringify(list.concat([item])));
-              // }
-              // const _from = from ? `&from=${from}` : '';
-              // if (groupName) {
-              //   navigator(
-              //     `/resource?gid=${id}&gn=${groupName}&address=${ownerAddress}&type=collection&tab=dataList${_from}`,
-              //   );
-              // } else {
-              //   navigator(
-              //     `/resource?oid=${oid}&address=${ownerAddress}&type=collection&tab=dataList${_from}`,
-              //   );
-              // }
             }}
           >
             <ImgCon src={url || defaultImg(name, 40)}></ImgCon>
@@ -157,6 +123,7 @@ const PurchaseList = () => {
           pageSize: pageSize,
           total,
           onChange: handlePageChange,
+          sx: PaginationSx,
         }}
         columns={columns}
         data={list}

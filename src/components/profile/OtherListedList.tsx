@@ -16,6 +16,7 @@ import { CollectionLogo } from '../svgIcon/CollectionLogo';
 import { TableProps } from '../ui/table/TableProps';
 import { Item } from '../../utils/apis/types';
 import { useAccount } from 'wagmi';
+import { PaginationSx } from '../ui/table/PaginationSx';
 
 interface IOtherListedList {
   realAddress: string;
@@ -56,9 +57,7 @@ const OtherListedList = (props: IOtherListedList) => {
             justifyContent={'flex-start'}
             gap={6}
             onClick={() => {
-              navigator(
-                `/resource?gid=${id}&gn=${groupName}&address=${ownerAddress}&tab=dataList&from=otherAddress`,
-              );
+              navigator(`/resource?id=${id}`);
             }}
           >
             <ImgCon src={url || defaultImg(name, 40)}></ImgCon>
@@ -128,6 +127,7 @@ const OtherListedList = (props: IOtherListedList) => {
           pageSize: pageSize,
           total: itemData.total,
           onChange: handlePageChange,
+          sx: PaginationSx,
         }}
         columns={columns}
         data={itemData.items}

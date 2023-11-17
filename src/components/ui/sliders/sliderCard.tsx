@@ -29,10 +29,11 @@ export const SliderCard = (props: Props) => {
 
   const navigator = useNavigate();
 
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const category = CATEGORY_MAP[categoryId!];
 
   return (
-    <Box boxSizing="border-box" pb="80px" transform="translateX(32px)">
+    <Box boxSizing="border-box" pb="80px" /* transform="translateX(32px)" */>
       <MainContainer
         h="408px"
         direction="column"
@@ -74,7 +75,7 @@ export const SliderCard = (props: Props) => {
         >
           <Value mr="60px">
             <Box as="h2">Volumn</Box>
-            <p>{volumn}</p>
+            <p>{volumn || 0}</p>
           </Value>
 
           <Value>

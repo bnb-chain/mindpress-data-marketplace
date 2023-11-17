@@ -1,18 +1,20 @@
-import { Box, Button } from '@totejs/uikit';
-import { FILE_ITEM } from '../../../hooks/useGetObjectList';
-import { useAccount } from 'wagmi';
+import { DownloadIcon } from '@totejs/icons';
+import { Box } from '@totejs/uikit';
 import { useMemo } from 'react';
-import { useModal } from '../../../hooks/useModal';
+import { useAccount } from 'wagmi';
 import {
   useGetBucketByName,
   useGetGroupByName,
   useGetObject,
 } from '../../../hooks/useGetBucketOrObj';
-import { generateGroupName } from '../../../utils';
-import { useGetItemById } from '../../../hooks/useGetItemById';
-import { getItemById, getItemByObjectId } from '../../../utils/apis';
 import { useGetDownloadUrl } from '../../../hooks/useGetDownloadUrl';
-import { DownloadIcon } from '@totejs/icons';
+import { FILE_ITEM } from '../../../hooks/useGetObjectList';
+import { useGetPurchaseList } from '../../../hooks/useGetPurchaseList';
+import { useModal } from '../../../hooks/useModal';
+import { generateGroupName } from '../../../utils';
+import { getItemByObjectId } from '../../../utils/apis';
+import { BlackButton } from '../../ui/buttons/BlackButton';
+import { YellowButton } from '../../ui/buttons/YellowButton';
 
 interface Props {
   fileInfo: FILE_ITEM;
@@ -21,7 +23,7 @@ interface Props {
 
 export const ActionButtonGroup = (props: Props) => {
   const { fileInfo, uploadFn } = props;
-  const { name, type, data, isListed, isPurchasedByMe } = fileInfo;
+  const { data, isListed, isPurchasedByMe } = fileInfo;
   const { BucketName, ObjectName } = data;
   const { address } = useAccount();
   const modalData = useModal();
@@ -33,30 +35,39 @@ export const ActionButtonGroup = (props: Props) => {
     data.Owner,
   );
 
+  const { data: bucketPurchased } = useGetPurchaseList({
+    filter: {
+      address,
+      bucketId: Number(bucketData?.bucketInfo.id),
+    },
+    limit: 10,
+    offset: 0,
+    sort: 'CREATION_DESC',
+  });
+
+  const isCollectionPurchasedByMe =
+    bucketPurchased && bucketPurchased.purchases?.length > 0;
+
   const downloadUrl = useGetDownloadUrl({
     bucketName: BucketName,
     name: ObjectName,
   });
 
+  /* bought collection can view every data in this collection */
+  /* if user only buy data can download too*/
+  const showDownload = useMemo(() => {
+    if (isCollectionPurchasedByMe) return true;
+    if (isListed && isPurchasedByMe) return true;
+    return false;
+  }, [isCollectionPurchasedByMe, isListed, isPurchasedByMe]);
+
   return (
     <Box>
       {/* only owner can delist */}
       {isListed && data.Owner === address && (
-        <Button
-          size={'sm'}
-          background="#665800"
-          color="#FFE900"
-          h="32px"
-          fontSize="14px"
-          p="8px 16px"
+        <YellowButton
           onClick={() => {
             if (!objectData || !groupData) return;
-
-            // console.log(
-            //   'generateGroupName(BucketName, ObjectName)',
-            //   generateGroupName(BucketName, ObjectName),
-            // );
-
             modalData.modalDispatch({
               type: 'OPEN_DELIST',
               delistData: {
@@ -73,18 +84,12 @@ export const ActionButtonGroup = (props: Props) => {
           }}
         >
           delist
-        </Button>
+        </YellowButton>
       )}
 
       {/* only owner can list */}
       {!isListed && data.Owner === address && (
-        <Button
-          size={'sm'}
-          background="#665800"
-          color="#FFE900"
-          h="32px"
-          fontSize="14px"
-          p="8px 16px"
+        <YellowButton
           onClick={() => {
             if (!bucketData || !objectData) return;
 
@@ -104,22 +109,11 @@ export const ActionButtonGroup = (props: Props) => {
           }}
         >
           list
-        </Button>
+        </YellowButton>
       )}
 
-      {/* only buyer can download */}
-      {isListed && isPurchasedByMe && (
-        <Button
-          h="32px"
-          bg="none"
-          color="#F1F2F3"
-          border="1px solid #F1F2F3"
-          fontSize="14px"
-          p="8px 16px"
-          _hover={{
-            background: '#E1E2E5',
-            color: '#181A1E',
-          }}
+      {showDownload && (
+        <BlackButton
           onClick={() => {
             window.open(downloadUrl);
           }}
@@ -128,18 +122,12 @@ export const ActionButtonGroup = (props: Props) => {
           <Box as="span" ml="8px">
             Download
           </Box>
-        </Button>
+        </BlackButton>
       )}
 
       {/* haven't bought can buy excepy owner */}
       {isListed && !isPurchasedByMe && data.Owner !== address && (
-        <Button
-          size={'sm'}
-          background="#665800"
-          color="#FFE900"
-          h="32px"
-          fontSize="14px"
-          p="8px 16px"
+        <YellowButton
           onClick={async () => {
             // console.log('isPurchasedByMe', isPurchasedByMe);
             if (!objectData) return;
@@ -155,7 +143,7 @@ export const ActionButtonGroup = (props: Props) => {
           }}
         >
           Only Buy This
-        </Button>
+        </YellowButton>
       )}
     </Box>
   );

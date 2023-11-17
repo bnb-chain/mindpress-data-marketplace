@@ -17,7 +17,6 @@ interface Props {
 export const MyBreadcrumb = (props: Props) => {
   const [p] = useSearchParams();
   const path = (p.get('path') as string) || '/';
-  const id = p.get('id') as string;
   const navigator = useNavigate();
 
   const { root } = props;

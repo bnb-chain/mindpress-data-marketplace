@@ -61,7 +61,7 @@ const Container = styled(Box)`
     width: 40px;
     height: 40px;
     display: block;
-    right: 100px;
+    right: 0px;
     top: 48px;
   }
 

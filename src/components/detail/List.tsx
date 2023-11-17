@@ -19,6 +19,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useGlobal } from '../../hooks/useGlobal';
 import { GoIcon, CardPocketIcon } from '@totejs/icons';
 import { OwnActionCom } from '../OwnActionCom';
+import { PaginationSx } from '../ui/table/PaginationSx';
 
 const TotalVol = (props: any) => {
   const { groupId } = props;
@@ -266,6 +267,7 @@ const ProfileList = (props: any) => {
           pageSize: 20,
           total: list.length,
           onChange: handlePageChange,
+          sx: PaginationSx,
         }}
         columns={columns}
         data={list}

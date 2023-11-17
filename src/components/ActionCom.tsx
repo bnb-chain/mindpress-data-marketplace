@@ -1,13 +1,12 @@
 import styled from '@emotion/styled';
-import { Button, Flex } from '@totejs/uikit';
+import { Flex } from '@totejs/uikit';
 import { useAccount } from 'wagmi';
-import { BuyData } from '../context/modal';
-import { useModal } from '../hooks/useModal';
-import { useStatus } from '../hooks/useStatus';
-import { useWalletModal } from '../hooks/useWalletModal';
-import { OwnActionCom } from './OwnActionCom';
-import { Item } from '../utils/apis/types';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
+import { useModal } from '../hooks/useModal';
+import { useWalletModal } from '../hooks/useWalletModal';
+import { Item } from '../utils/apis/types';
+import { OwnActionCom } from './OwnActionCom';
+import { YellowButton } from './ui/buttons/YellowButton';
 
 interface IActionCom {
   data: Item;
@@ -26,16 +25,8 @@ export const ActionCom = (obj: IActionCom) => {
   return (
     <ButtonCon gap={6}>
       {relation == 'NOT_PURCHASE' && (
-        <Button
-          size={'sm'}
-          background="#665800"
-          color="#FFE900"
-          h="32px"
-          fontSize="14px"
-          p="8px 16px"
+        <YellowButton
           onClick={async () => {
-            // if (from === 'home')
-            //   reportEvent({ name: 'dm.main.list.buy.click' });
             modalData.modalDispatch({
               type: 'OPEN_BUY',
               buyData: data,
@@ -43,7 +34,7 @@ export const ActionCom = (obj: IActionCom) => {
           }}
         >
           Buy
-        </Button>
+        </YellowButton>
       )}
       {(relation == 'OWNER' || relation == 'PURCHASED') && (
         <OwnActionCom
@@ -57,19 +48,13 @@ export const ActionCom = (obj: IActionCom) => {
         ></OwnActionCom>
       )}
       {relation === 'UNKNOWN' && (
-        <Button
-          size={'sm'}
-          background="#665800"
-          color="#FFE900"
-          h="32px"
-          fontSize="14px"
-          p="8px 16px"
+        <YellowButton
           onClick={() => {
             if (!isConnected && !isConnecting) handleModalOpen();
           }}
         >
           Buy
-        </Button>
+        </YellowButton>
       )}
     </ButtonCon>
   );

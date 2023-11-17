@@ -8,9 +8,9 @@ export const useGetPurchaseList = (
   pageSize = 10,
 ) => {
   return useQuery({
+    // enabled: !!params.filter.address,
     queryKey: ['SEARCH_PURCHASE', page, pageSize, params],
     queryFn: () => searchPurchase(params),
     staleTime: 10000,
-    gcTime: 20000,
   });
 };

@@ -128,6 +128,7 @@ const Header = () => {
       <RightFunCon alignItems={'center'} justifyContent={'center'} gap={18}>
         <>
           <DefaultButton
+            h="40px"
             as="button"
             onClick={() => {
               reportEvent({ name: 'dm.main.header.list_my_data.click' });

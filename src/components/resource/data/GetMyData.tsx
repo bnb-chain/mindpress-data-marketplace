@@ -1,15 +1,14 @@
 import styled from '@emotion/styled';
 import { DownloadIcon } from '@totejs/icons';
 import { Box, Button, Flex } from '@totejs/uikit';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
+import { useGetDownloadUrl } from '../../../hooks/useGetDownloadUrl';
 import { ITEM_RELATION_ADDR } from '../../../hooks/useGetItemRelationWithAddr';
+import { useGetRandomSp } from '../../../hooks/useGetRandomSp';
 import { Item } from '../../../utils/apis/types';
-import { getRandomSp } from '../../../utils/gfSDK';
 import { Copy } from '../../Copy';
 import { ViewIcon } from '../../svgIcon/ViewIcon';
 import { BuyData } from './BuyData';
-import { useGetDownloadUrl } from '../../../hooks/useGetDownloadUrl';
-import { useGetRandomSp } from '../../../hooks/useGetRandomSp';
 
 interface Props {
   bucketName?: string;
@@ -19,17 +18,6 @@ interface Props {
 
 export const GetMyData = (props: Props) => {
   const { itemInfo, bucketName, relation } = props;
-
-  // const [domain, setDomain] = useState('');
-  // const downloadUrl = useMemo(() => {
-  //   const str = `${domain}/download/${bucketName}/${itemInfo.name}`;
-  //   return str;
-  // }, [domain, bucketName, itemInfo.name]);
-  // useEffect(() => {
-  //   getRandomSp().then((result) => {
-  //     setDomain(result);
-  //   });
-  // }, []);
 
   const { data: endpoint } = useGetRandomSp();
 

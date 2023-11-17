@@ -48,7 +48,7 @@ const Folder = () => {
         ]),
       );
     }
-  }, [state.globalState.breadList, title]);
+  }, [folder, state.globalState.breadList, title]);
 
   if (loading) return <Loader></Loader>;
 

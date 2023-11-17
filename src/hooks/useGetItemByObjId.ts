@@ -1,13 +1,10 @@
-import { useQueries, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import {
   getItemByObjectId,
   getItemByObjectIds,
   queryPurchase,
-  searchPurchase,
 } from '../utils/apis';
 import { DEFAULT_ITEM } from './useGetItemById';
-import _ from 'lodash';
-import { useAccount } from 'wagmi';
 
 /**
  *
@@ -82,7 +79,7 @@ export const usePurchaseQueryByObjIds = (
 ) => {
   return useQuery({
     enabled: !!address && ids.length !== 0,
-    queryKey: ['PURCHARGE_QUERY', address],
+    queryKey: ['PURCHARGE_QUERY_IDS', address, ids],
     queryFn: async () => {
       const res = await queryPurchase({
         filter: {

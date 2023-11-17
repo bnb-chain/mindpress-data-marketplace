@@ -32,6 +32,7 @@ import { Item } from '../../../utils/apis/types';
 import { QueryHeadBucketResponse } from '../../../utils/gfSDK';
 import { Loader } from '../../Loader';
 import { NoData } from '../../NoData';
+import { PaginationSx } from '../../ui/table/PaginationSx';
 import { TableProps } from '../../ui/table/TableProps';
 import { ActionButtonGroup } from './ActionButtonGroup';
 
@@ -75,17 +76,16 @@ const CollectionList = (props: Props) => {
     reloadPurchasedList();
   }, [reloadListedList, reloadObjectList, reloadPurchasedList]);
 
-  // console.log('oidList', oidList);
-  // console.log('objListedList', objListedList);
-  // console.log('purchasedList', purchasedList);
-
   const mergedList = objListMergeListedAndPurchased(
     objectList,
     objListedList,
     purchasedList,
   );
 
-  console.log('mergedList', mergedList);
+  // console.log('oidList', oidList);
+  // console.log('objListedList', objListedList);
+  // console.log('purchasedList', purchasedList);
+  // console.log('mergedList', mergedList);
 
   const { handlePageChange, page } = usePagination();
 
@@ -333,6 +333,7 @@ const CollectionList = (props: Props) => {
           pageSize: 20,
           total: objectList.length,
           onChange: handlePageChange,
+          sx: PaginationSx,
         }}
         columns={columns}
         data={mergedList}
@@ -377,9 +378,3 @@ const Title = styled(Box)`
   color: #fff;
   font-size: 24px;
 `;
-
-const TotalVol = (props: any) => {
-  const { groupId } = props;
-  const { salesVolume } = useSalesVolume(groupId);
-  return <div>{Number(salesVolume) || '-'}</div>;
-};

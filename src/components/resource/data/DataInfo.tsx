@@ -24,6 +24,7 @@ import { CategoryIcon } from '../../svgIcon/CategoryIcon';
 import { ShoppingIcon } from '../../svgIcon/ShoppingIcon';
 import { SizeIcon } from '../../svgIcon/SizeIcon';
 import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
+import { YellowButton } from '../../ui/buttons/YellowButton';
 
 interface Props {
   itemInfo: Item;
@@ -138,9 +139,7 @@ export const DataInfo = (props: Props) => {
 
           {(relation === 'NOT_PURCHASE' || relation === 'UNKNOWN') && (
             <Box>
-              <Button
-                color="#FFE900"
-                background="#665800"
+              <YellowButton
                 onClick={() => {
                   console.log('relation', relation, isConnecting, isConnected);
                   if (relation === 'UNKNOWN') {
@@ -156,15 +155,13 @@ export const DataInfo = (props: Props) => {
                 }}
               >
                 Buy
-              </Button>
+              </YellowButton>
             </Box>
           )}
 
           {relation === 'OWNER' && (
             <Box>
               <Button
-                color="#FFE900"
-                background="#665800"
                 onClick={() => {
                   modalData.modalDispatch({
                     type: 'OPEN_DELIST',

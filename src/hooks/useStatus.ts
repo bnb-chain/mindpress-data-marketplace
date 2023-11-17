@@ -30,7 +30,7 @@ export const useStatus = (
           setLoading(false);
         });
     }
-  }, [groupName, address]);
+  }, [groupName, address, groupOwner, member]);
 
   return { loading, status };
 };

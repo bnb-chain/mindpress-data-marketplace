@@ -1,4 +1,13 @@
 import {
+  GRNToString,
+  ISimulateGasFee,
+  PermissionTypes,
+  newGroupGRN,
+  newObjectGRN,
+} from '@bnb-chain/greenfield-js-sdk';
+import { useCallback, useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
+import {
   CreateGroup,
   QueryHeadGroupResponse,
   getGroupInfoByName,
@@ -8,22 +17,12 @@ import {
   putObjectPolicy,
   updateGroupInfo,
 } from '../utils/gfSDK';
-import {
-  ISimulateGasFee,
-  PermissionTypes,
-  GRNToString,
-  newGroupGRN,
-  newObjectGRN,
-} from '@bnb-chain/greenfield-js-sdk';
-import { useCallback, useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
 
 import { MarketPlaceContract } from '../base/contract/marketPlaceContract';
-import { useModal } from './useModal';
-import { delay, parseGroupName } from '../utils';
-import { BSC_SEND_GAS_FEE } from '../env';
 import { OwnBuyContract } from '../base/contract/ownBuyContract';
-import { IHeadGroup } from '../utils/type';
+import { BSC_SEND_GAS_FEE } from '../env';
+import { delay, parseGroupName } from '../utils';
+import { useModal } from './useModal';
 
 export interface IList {
   groupName: string;

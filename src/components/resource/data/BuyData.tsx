@@ -11,7 +11,7 @@ interface Props {
 
 export const BuyData = (props: Props) => {
   const { itemInfo } = props;
-  const { address, isConnected, isConnecting } = useAccount();
+  const { isConnected, isConnecting } = useAccount();
   const { handleModalOpen } = useWalletModal();
   const modalData = useModal();
 

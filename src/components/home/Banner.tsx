@@ -21,7 +21,7 @@ export const Banner = (props: Props) => {
       name: item.name,
       groupName: item.groupName,
       address: item.ownerAddress,
-      volumn: String(item.totalSale) || '0',
+      volumn: String(item.totalSale || '0'),
       price: divide10Exp(new BN(item.price, 10), 18),
       categoryId: item.categoryId,
     };

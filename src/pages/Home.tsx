@@ -11,12 +11,12 @@ import { BANNER_IDS } from '../env';
 const Home = () => {
   return (
     <Container flexDirection={'column'} alignItems={'center'}>
-      <CardBox mt="35px" w="1400px">
+      <CardBox mt="35px" pl="100px">
         <Banner itemIds={BANNER_IDS} />
       </CardBox>
 
       <CardBox mt="20px">
-        <BoxWithArrow>
+        <BoxWithArrow pl="100px" pr="100px">
           <Box p="50px 32px">
             <TableTitle>Latest</TableTitle>
             <Box mt="30px">
@@ -26,7 +26,7 @@ const Home = () => {
         </BoxWithArrow>
       </CardBox>
       <CardBox mt="20px">
-        <BoxWithArrow>
+        <BoxWithArrow pl="100px">
           <Box pt="50px" pb="50px">
             <TableTitle pl="32px">Popular</TableTitle>
             <Box>
@@ -35,12 +35,14 @@ const Home = () => {
           </Box>
         </BoxWithArrow>
       </CardBox>
-      <CardBox mt="20px" w="1400px">
+      <CardBox mt="20px" w="1400px" pl="100px" pr="100px">
         <NotableAuthors />
       </CardBox>
       <CardBox
         mt="20px"
         w="1400px"
+        pl="100px"
+        pr="100px"
         boxShadow="0px 24px 64px 0px rgba(0, 0, 0, 0.48), 0px 4px 0px 0px #ffe900"
       >
         <Ad />
@@ -78,6 +80,9 @@ const BoxWithArrow = styled(Box)`
 `;
 
 const CardBox = styled(Box)`
+  width: 1400px;
+  /* padding-left: 100px;
+  padding-right: 100px; */
   border-radius: 32px;
   border: 1px solid #1e2026;
   background: #181a1e;

@@ -11,7 +11,7 @@ const Route = ({ children }: any) => {
         type: 'RESET',
       });
     }
-  }, [location]);
+  }, [location, state]);
 
   return children;
 };

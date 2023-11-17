@@ -1,15 +1,14 @@
-import { format, utcToZonedTime } from 'date-fns-tz';
-import ReactDOM from 'react-dom';
-import BN from 'bn.js';
-import Identicon from 'identicon.js';
-import sha265 from 'sha256';
 import { toast } from '@totejs/uikit';
+import BN from 'bn.js';
+import { format, utcToZonedTime } from 'date-fns-tz';
+import Identicon from 'identicon.js';
+import ReactDOM from 'react-dom';
+import sha265 from 'sha256';
 
-import { AxiosResponse } from 'axios';
 import { IReturnOffChainAuthKeyPairAndUpload } from '@bnb-chain/greenfield-js-sdk';
-import { getUtcZeroTimestamp } from './time';
+import { AxiosResponse } from 'axios';
 import { DAPP_NAME } from '../env';
-import { Item } from './apis/types';
+import { getUtcZeroTimestamp } from './time';
 
 // import ProgressBarToast from '../components/ProgressBarToast';
 

@@ -20,6 +20,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useGlobal } from '../../hooks/useGlobal';
 import { GoIcon } from '@totejs/icons';
 import { TableProps } from '../ui/table/TableProps';
+import { PaginationSx } from '../ui/table/PaginationSx';
 
 const TotalVol = (props: any) => {
   const { groupId } = props;
@@ -228,6 +229,7 @@ const List = (props: any) => {
           pageSize: 20,
           total: folderList.length,
           onChange: handlePageChange,
+          sx: PaginationSx,
         }}
         columns={columns}
         data={folderList}

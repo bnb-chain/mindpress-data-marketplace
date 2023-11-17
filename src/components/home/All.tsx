@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Box, ColumnDef, Flex, Pagination, Table } from '@totejs/uikit';
 import BN from 'bn.js';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, createSearchParams, useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
 import { useGetItemList } from '../../hooks/useGetItemList';
@@ -17,6 +17,8 @@ import { CollectionLogo } from '../svgIcon/CollectionLogo';
 import { TableProps } from '../ui/table/TableProps';
 import { Loader } from '../Loader';
 import { Item } from '../../utils/apis/types';
+import { PaginationSx } from '../ui/table/PaginationSx';
+import { GoIcon } from '@totejs/icons';
 
 const PAGE_SIZE = 10;
 
@@ -52,9 +54,6 @@ const AllList = () => {
     {
       header: '#',
       cell: (data: any) => {
-        // console.log('index', yy ?? yy + 1);
-        // // if (!index) return;
-        // return <Box key={index}>{index}</Box>;
         return <Box>{data.rank}</Box>;
       },
       width: 80,
@@ -73,23 +72,6 @@ const AllList = () => {
               reportEvent({ name: 'dm.main.list.item_name.click' });
 
               navigator(`/resource?id=${data.id}&path=/`);
-
-              const item = {
-                path: '/',
-                name: 'Data MarketPlace',
-                query: 'tab=trending',
-              };
-              state.globalDispatch({
-                type: 'UPDATE_BREAD',
-                index: 0,
-                item,
-              });
-
-              // navigator(
-              //   `/resource?gid=${id}&gn=${groupName}&address=${ownerAddress}&from=${encodeURIComponent(
-              //     JSON.stringify([item]),
-              //   )}`,
-              // );
             }}
           >
             <ImgCon src={url || defaultImg(name, 40)}></ImgCon>
@@ -163,13 +145,36 @@ const AllList = () => {
     {
       header: 'Action',
       cell: (data) => {
-        return (
-          <ActionCom
-            data={data}
-            address={address as string}
-            from="home"
-          ></ActionCom>
-        );
+        const { type } = data;
+
+        if (type === 'OBJECT') {
+          return (
+            <ActionCom
+              data={data}
+              address={address as string}
+              from="home"
+            ></ActionCom>
+          );
+        }
+
+        if (type === 'COLLECTION') {
+          return (
+            <GoIcon
+              cursor={'pointer'}
+              color={'#AEB4BC'}
+              onClick={() => {
+                const params = {
+                  id: String(data.id),
+                  path: '/',
+                };
+                navigator({
+                  pathname: '/resource',
+                  search: `?${createSearchParams(params)}`,
+                });
+              }}
+            />
+          );
+        }
       },
     },
   ];
@@ -185,23 +190,17 @@ const AllList = () => {
           20,
           data.total,
         )} Collections (Total of ${data.total})`}
-        // pagination={{
-        //   current: page,
-        //   pageSize: 10,
-        //   total: data.total,
-        //   onChange: handlePageChange,
-        //   color: 'red',
-        // }}
+        pagination={{
+          current: page,
+          pageSize: 10,
+          total: data.total,
+          onChange: handlePageChange,
+          sx: PaginationSx,
+        }}
         columns={columns}
         data={list}
         loading={isLoading}
         {...TableProps}
-      />
-      <Pagination
-        current={page}
-        pageSize={10}
-        total={data.total}
-        onChange={handlePageChange}
       />
     </Container>
   );

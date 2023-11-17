@@ -13,7 +13,7 @@ const ITEMS_COUNT = 3;
 const settings = {
   // lazyload: true,
   nav: false,
-  mouseDrag: false,
+  // mouseDrag: true,
   loop: false,
   items: ITEMS_COUNT,
   gutter: 16,
@@ -43,7 +43,7 @@ export const Sliders = (props: Props) => {
   const [index, setIndex] = useState(0);
 
   return (
-    <Box position="relative">
+    <Box position="relative" pl="32px">
       <TinySlider
         settings={settings}
         ref={(ts) => {
@@ -58,7 +58,7 @@ export const Sliders = (props: Props) => {
             name={item.name}
             categoryId={item.categoryId}
             price={item.price}
-            volumn={item.volumn}
+            volumn={item.volumn || '0'}
             id={item.id}
           />
         ))}
@@ -69,15 +69,14 @@ export const Sliders = (props: Props) => {
           <DefaultButton
             as="button"
             title="Previous"
+            h="50px"
             onClick={() => {
               setIndex(index - 1);
               ref.current.slider.goTo('prev');
             }}
             disabled={index === 0}
           >
-            <Box w="30px" h="30px" lineHeight="30px">
-              <LeftArrow w={18} color="#1C1B1F" />
-            </Box>
+            <LeftArrow w={18} color="#1C1B1F" />
           </DefaultButton>
           <DefaultButton
             as="button"
@@ -88,9 +87,7 @@ export const Sliders = (props: Props) => {
             }}
             disabled={index === data.length - 2}
           >
-            <Box w="30px" h="30px" lineHeight="30px">
-              <RightArrow w={18} color="#1C1B1F" />
-            </Box>
+            <RightArrow w={18} color="#1C1B1F" />
           </DefaultButton>
         </ButtonGroup>
       )}
