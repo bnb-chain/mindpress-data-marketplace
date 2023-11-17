@@ -24,7 +24,7 @@ export const NotableAuthors = () => {
       <Flex wrap="wrap" justifyContent="space-between" gap="24px">
         {USER_ADDRESS_LIST.map((item) => {
           return (
-            <Link to={`/profile?address=${item}`}>
+            <Link key={item} to={`/profile?address=${item}`}>
               <UserContainer
                 _hover={{
                   background: '#373943',

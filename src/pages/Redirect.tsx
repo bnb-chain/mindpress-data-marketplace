@@ -13,10 +13,12 @@ export const Redirect = () => {
   const { data: itemInfo, isLoading } = useGetItemByGroupId(groupId);
 
   useEffect(() => {
+    console.log(itemInfo);
+    if (!itemInfo) return;
     navigator(`/resource?id=${itemInfo.id}`, {
       replace: true,
     });
-  }, [itemInfo.id, navigator]);
+  }, [itemInfo, navigator]);
 
   if (isLoading) {
     return <Loader />;
