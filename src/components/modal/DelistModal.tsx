@@ -138,7 +138,9 @@ export const DelistModal = (props: any) => {
               });
               setLoading(false);
 
-              modalData.modalState?.callBack();
+              if (modalData.modalState.callBack) {
+                modalData.modalState.callBack();
+              }
             }}
             disabled={!BSC_FEE_SUFF || loading}
             isLoading={loading}

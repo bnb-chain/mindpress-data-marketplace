@@ -241,8 +241,9 @@ export const ListProcess = (props: ListProcessProps) => {
         {status == 2 && (
           <Button
             onClick={() => {
-              console.log(stateModal.modalState.callBack);
-              stateModal.modalState?.callBack();
+              if (stateModal.modalState.callBack) {
+                stateModal.modalState.callBack();
+              }
 
               reset();
 
