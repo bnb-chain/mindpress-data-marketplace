@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { CardPocketIcon } from '@totejs/icons';
+import { CardPocketIcon, GoIcon } from '@totejs/icons';
 import { Box, ColumnDef, Flex, Table } from '@totejs/uikit';
 import { useCallback } from 'react';
 import {
@@ -204,12 +204,28 @@ const CollectionList = (props: Props) => {
     {
       header: '',
       cell: (data) => {
-        // console.log('data', data);
-        return (
-          data.type === 'file' && (
-            <ActionButtonGroup fileInfo={data} uploadFn={reloadList} />
-          )
-        );
+        if (data.type === 'file') {
+          return <ActionButtonGroup fileInfo={data} uploadFn={reloadList} />;
+        }
+
+        if (data.type === 'folder') {
+          return (
+            <GoIcon
+              cursor={'pointer'}
+              color={'#AEB4BC'}
+              onClick={() => {
+                const params = {
+                  id: id,
+                  path: data.name + '/',
+                };
+                navigator({
+                  pathname: '/resource',
+                  search: `?${createSearchParams(params)}`,
+                });
+              }}
+            />
+          );
+        }
       },
     },
     // {

@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Box, ColumnDef, Flex, Table } from '@totejs/uikit';
+import { Box, ColumnDef, Flex, Pagination, Table } from '@totejs/uikit';
 import BN from 'bn.js';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { Link, useNavigate } from 'react-router-dom';
@@ -37,13 +37,25 @@ const AllList = () => {
     page,
     PAGE_SIZE,
   );
+
   const state = useGlobal();
   const categoryies = useGetCatoriesMap();
+
+  if (!data) return <Loader />;
+
+  const list = data.items.map((item: any, index) => {
+    item.rank = (page - 1) * PAGE_SIZE + index + 1;
+    return item;
+  });
+
   const columns: ColumnDef<Item> = [
     {
       header: '#',
-      cell: (data) => {
-        return <Box>{data.id}</Box>;
+      cell: (data: any) => {
+        // console.log('index', yy ?? yy + 1);
+        // // if (!index) return;
+        // return <Box key={index}>{index}</Box>;
+        return <Box>{data.rank}</Box>;
       },
       width: 80,
     },
@@ -173,16 +185,23 @@ const AllList = () => {
           20,
           data.total,
         )} Collections (Total of ${data.total})`}
-        pagination={{
-          current: page,
-          pageSize: 10,
-          total: data.total,
-          onChange: handlePageChange,
-        }}
+        // pagination={{
+        //   current: page,
+        //   pageSize: 10,
+        //   total: data.total,
+        //   onChange: handlePageChange,
+        //   color: 'red',
+        // }}
         columns={columns}
-        data={data.items}
+        data={list}
         loading={isLoading}
         {...TableProps}
+      />
+      <Pagination
+        current={page}
+        pageSize={10}
+        total={data.total}
+        onChange={handlePageChange}
       />
     </Container>
   );

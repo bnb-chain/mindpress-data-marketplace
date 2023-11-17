@@ -18,7 +18,7 @@ const Home = () => {
       <CardBox mt="20px">
         <BoxWithArrow>
           <Box p="50px 32px">
-            <TableTitle>Lastest</TableTitle>
+            <TableTitle>Latest</TableTitle>
             <Box mt="30px">
               <AllList />
             </Box>
