@@ -53,13 +53,15 @@ export const ActionButtonGroup = (props: Props) => {
     name: ObjectName,
   });
 
+  /* not login account can't show */
   /* bought collection can view every data in this collection */
   /* if user only buy data can download too*/
   const showDownload = useMemo(() => {
+    if (!address) return false;
     if (isCollectionPurchasedByMe) return true;
     if (isListed && isPurchasedByMe) return true;
     return false;
-  }, [isCollectionPurchasedByMe, isListed, isPurchasedByMe]);
+  }, [address, isCollectionPurchasedByMe, isListed, isPurchasedByMe]);
 
   return (
     <Box>
