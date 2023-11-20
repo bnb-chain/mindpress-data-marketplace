@@ -1,0 +1,92 @@
+name: Mindpress Testnet Docker Image CI # rename Github Action ###
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+env:
+  IMAGE_NAME: ghcr.io/${{ github.repository }}
+  IMAGE_SOURCE: https://github.com/${{ github.repository }}
+  CI: false
+  ### IMPORTANT !!!! ###
+  ### The following three need to be modified according to your project ###
+  APP_NAME: mindpress ### your application name
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # if: "contains(github.event.head_commit.message, 'aptos-trace')"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
+      
+      - uses: ./.github/actions/ci-setup
+
+      - name: Build React App
+        env:
+          REACT_APP_NET_ENV: TESTNET
+          REACT_APP_BANNER_IDS: "22,23,13,16,6"
+          PUBLIC_URL: https://testnet-marketplace.mindpress.io
+          GENERATE_SOURCEMAP: false
+          REACT_APP_GF_EXPLORER_URL: https://testnet.greenfieldscan.com/
+          REACT_APP_BSC_EXPLORER_URL: https://testnet.bscscan.com/
+          REACT_APP_DCELLAR_URL: https://testnet.dcellar.io/
+
+          REACT_APP_GF_CHAIN_ID: 5600
+          REACT_APP_GF_RPC_URL: https://gnfd-testnet-fullnode-tendermint-us.bnbchain.org
+          REACT_APP_BSC_RPC_URL: https://data-seed-prebsc-1-s1.binance.org:8545
+          REACT_APP_BSC_CHAIN_ID: 97
+          REACT_APP_MARKETPLACE_CONTRACT_ADDRESS: "0xaa80E8Ee052BaA700c3Ca5b35ce5F02EeF02368d"
+          REACT_APP_GROUP_HUB_CONTRACT_ADDRESS: "0x50B3BF0d95a8dbA57B58C82dFDB5ff6747Cc1a9E"
+          REACT_APP_MULTI_CALL_CONTRACT_ADDRESS: "0x50f6210b85d38F5d0E660D6C8978C9bdCd12F130"
+          REACT_APP_ERC1155_TRANSFER_CONTRACT_ADDRESS: "0x43bdF3d63e6318A2831FE1116cBA69afd0F05267"
+          REACT_APP_ERC721_TRANSFER_CONTRACT_ADDRESS: "0x7fC61D6FCA8D6Ea811637bA58eaf6aB17d50c4d1"
+          REACT_APP_NETWORK: Testnet
+          REACT_APP_DAPP_NAME: mindt1020
+          G_TAG: G-SHLTDD3YG4
+          REACT_APP_API_DOMAIN: https://gnfd-testnet-marketplace.bnbchain.org/v1/
+          REACT_APP_CROSS_CHAIN_FEE: 0.000001
+          REACT_APP_INITIATE_LIST_FEE: 0.00003
+          REACT_APP_LIST_FEE_ON_GF: 0.0000036
+          REACT_APP_LIST_ESTIMATE_FEE_ON_BSC: 0.0000036
+          REACT_APP_BSC_SEND_GAS_FEE: 10000000000
+        run: |
+          pnpm run build
+
+      - name: Build Image
+        run: |
+          docker build . \
+          --label "org.opencontainers.image.source=${IMAGE_SOURCE}" \
+          --label "org.opencontainers.image.revision=$(git rev-parse HEAD)" \
+          --label "org.opencontainers.image.version=$(git describe --tags --abbrev=0)" \
+          --label "org.opencontainers.image.licenses=AGPL-3.0" \
+          -f ./Dockerfile -t "${IMAGE_NAME}"
+    
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push image
+        run: |
+          # Strip git ref prefix from version
+          # VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # VERSION = ${GITHUB_SHA::8}
+          # Strip "v" prefix from tag name
+          # [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Use Docker `latest` tag convention
+          # [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_NAME=$IMAGE_NAME
+          echo VERSION=${GITHUB_SHA::8}
+          # docker tag $IMAGE_NAME $IMAGE_NAME:${GITHUB_SHA::8}
+          docker tag $IMAGE_NAME $IMAGE_NAME:testnet
+          # docker push $IMAGE_NAME:${GITHUB_SHA::8}
+          docker push $IMAGE_NAME:testnet
