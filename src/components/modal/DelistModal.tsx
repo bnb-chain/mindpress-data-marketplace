@@ -1,27 +1,35 @@
+import styled from '@emotion/styled';
 import {
   Box,
   Button,
   Flex,
+  Modal,
   ModalBody,
   ModalCloseButton,
-  ModalHeader,
   ModalFooter,
-  Modal,
+  ModalHeader,
 } from '@totejs/uikit';
-import styled from '@emotion/styled';
-import { useMemo, useState } from 'react';
-import { useNetwork, useSwitchNetwork } from 'wagmi';
-import { BSC_CHAIN_ID, LIST_ESTIMATE_FEE_ON_BSC, NETWORK } from '../../env';
-import { defaultImg, formatDateUTC, roundFun } from '../../utils';
-import { useCollectionItems } from '../../hooks/useCollectionItems';
-import { useChainBalance } from '../../hooks/useChainBalance';
-import { useHasRole } from '../../hooks/useHasRole';
+import BN from 'bn.js';
+import { useEffect, useMemo, useState } from 'react';
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
+import { MarketPlaceContract } from '../../base/contract/marketPlaceContract';
+import {
+  BSC_CHAIN_ID,
+  BSC_SEND_GAS_FEE,
+  LIST_ESTIMATE_FEE_ON_BSC,
+  NETWORK,
+} from '../../env';
 import { useApprove } from '../../hooks/useApprove';
-import { useModal } from '../../hooks/useModal';
+import { useChainBalance } from '../../hooks/useChainBalance';
+import { useCollectionItems } from '../../hooks/useCollectionItems';
 import { useDelist } from '../../hooks/useDelist';
+import { useHasRole } from '../../hooks/useHasRole';
+import { useModal } from '../../hooks/useModal';
+import { defaultImg, divide10Exp, formatDateUTC, roundFun } from '../../utils';
 
 export const DelistModal = (props: any) => {
   const modalData = useModal();
+  const { address } = useAccount();
   const { isOpen, handleOpen } = props;
 
   const { delistData }: { delistData: any } = modalData.modalState;
@@ -49,6 +57,30 @@ export const DelistModal = (props: any) => {
   const BSC_FEE_SUFF = useMemo(() => {
     return Number(BscBalanceVal) >= LIST_ESTIMATE_FEE_ON_BSC;
   }, [BscBalanceVal]);
+
+  const [estimateGas, setEstimateGas] = useState('0');
+  useEffect(() => {
+    console.log('groupId', groupId);
+    if (!groupId) return;
+
+    const estimate = async () => {
+      const gasPrice = BSC_SEND_GAS_FEE || '';
+      const gasLimit = await MarketPlaceContract()
+        .methods.delist(groupId)
+        .estimateGas({
+          from: address,
+          gas: BSC_SEND_GAS_FEE,
+        });
+
+      const tmp = BigInt(gasPrice) * BigInt(gasLimit);
+      const estimateGasRes = divide10Exp(new BN(tmp.toString(), 10), 18);
+      console.log('estimateGas', estimateGasRes);
+
+      setEstimateGas(estimateGasRes);
+    };
+
+    estimate();
+  }, [address, groupId]);
 
   return (
     <Container isOpen={isOpen} onClose={handleOpen}>
@@ -88,8 +120,8 @@ export const DelistModal = (props: any) => {
         <Box h={10}></Box>
         <BuyInfo>
           <ItemCon justifyContent={'space-between'}>
-            <ItemTitle>Gas fee</ItemTitle>
-            <ItemVal>{LIST_ESTIMATE_FEE_ON_BSC} BNB</ItemVal>
+            <ItemTitle>Estimate Gas</ItemTitle>
+            <ItemVal>{estimateGas} BNB</ItemVal>
           </ItemCon>
           <ItemCon alignItems={'flex-end'} justifyContent={'space-between'}>
             <ItemTitle>Balance on BSC {NETWORK}</ItemTitle>
