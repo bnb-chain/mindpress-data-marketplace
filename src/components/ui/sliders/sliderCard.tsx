@@ -56,8 +56,8 @@ export const SliderCard = (props: Props) => {
 
         {/* address and name */}
         <ContainerAddress justifyContent="space-between" mt="8px" mb="8px">
-          <Flex direction="column">
-            <Name>{name}</Name>
+          <Flex direction="column" flex={1}>
+            <Name>{trimLongStr(name)}</Name>
             <Address>{trimLongStr(address)}</Address>
           </Flex>
           <Box>
@@ -125,6 +125,10 @@ const Name = styled(Box)`
   font-weight: 600;
   line-height: 28px;
   color: #fff;
+  /* width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap; */
 `;
 
 const Address = styled(Box)`

@@ -1,6 +1,5 @@
 import { Box } from '@totejs/uikit';
 import { BN } from 'bn.js';
-import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
 import { useGetItemList } from '../../hooks/useGetItemList';
 import { defaultImg, divide10Exp } from '../../utils';
 import { Loader } from '../Loader';
@@ -32,7 +31,7 @@ export const Popular = () => {
       name: item.name,
       categoryId: item.categoryId,
       address: item.ownerAddress,
-      volumn: String(item.totalSale) || '0',
+      volumn: String(item.totalSale || '0'),
       price: divide10Exp(new BN(item.price, 10), 18),
     };
   });
