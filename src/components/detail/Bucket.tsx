@@ -2,7 +2,12 @@ import styled from '@emotion/styled';
 import { SendIcon } from '@totejs/icons';
 import { Box, Button, Flex } from '@totejs/uikit';
 import _ from 'lodash';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { NoData } from '../../components/NoData';
 import List from '../../components/detail/List';
@@ -18,14 +23,15 @@ import {
   generateGroupName,
   trimLongStr,
 } from '../../utils';
+import { useCallback, useEffect } from 'react';
 
 /**
  * Have not been listed
  * Show bucket or object detail info
  */
 export const Bucket = () => {
-  const navigator = useNavigate();
   const [p] = useSearchParams();
+  const { search } = useLocation();
 
   const bucketId = p.get('bid') as string;
   const modalData = useModal();
@@ -45,21 +51,29 @@ export const Bucket = () => {
     address || '',
   );
 
-  if (!_.isEmpty(bucketItemInfo)) {
-    navigator(`/resource?id=${bucketItemInfo.id}`, {
-      replace: true,
-    });
-  }
+  const openListModal = useCallback(() => {
+    if (!bucketData) return;
 
-  // if (isLoading) {
-  //   return <Loader />;
-  // }
+    const initInfo = {
+      bucket_name: bucketData.bucketInfo.bucketName,
+      create_at: bucketData.bucketInfo.createAt.low,
+    };
+    modalData.modalDispatch({
+      type: 'OPEN_LIST',
+      initInfo,
+    });
+  }, [bucketData?.bucketInfo.bucketName, bucketData?.bucketInfo.createAt.low]);
+
+  // auto open list modal
+  useEffect(() => {
+    const needOpenModal = p.get('openModal') as string;
+    if (!needOpenModal) return;
+    openListModal();
+  }, [p, bucketData]);
 
   if (!bucketData) {
     return <NoData />;
   }
-
-  console.log('bucketItemInfo', bucketItemInfo);
 
   return (
     <>
@@ -116,19 +130,7 @@ export const Bucket = () => {
           <ActionGroup gap={10} alignItems={'center'}>
             {address === bucketData.bucketInfo.owner &&
               _.isEmpty(bucketItemInfo) && (
-                <Button
-                  size={'sm'}
-                  onClick={async () => {
-                    const initInfo = {
-                      bucket_name: bucketData.bucketInfo.bucketName,
-                      create_at: bucketData.bucketInfo.createAt.low,
-                    };
-                    modalData.modalDispatch({
-                      type: 'OPEN_LIST',
-                      initInfo,
-                    });
-                  }}
-                >
+                <Button size={'sm'} onClick={openListModal}>
                   List
                 </Button>
               )}
@@ -225,36 +227,4 @@ const OwnCon = styled(Flex)`
   }
 `;
 
-const MarketInfo = styled(Flex)`
-  font-size: 32px;
-  color: #f0b90b;
-`;
-
-const Price = styled.div`
-  font-size: 20px;
-  color: #f0b90b;
-`;
-
 const ActionGroup = styled(Flex)``;
-
-const FileSize = styled.div`
-  margin-right: 6px;
-
-  font-style: normal;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 18px;
-
-  color: #ffffff;
-`;
-
-const NoDataCon = styled(Flex)``;
-
-const NoDataTitle = styled.div`
-  font-size: 32px;
-  font-weight: 600;
-`;
-
-const NoDataSub = styled.div`
-  font-size: 20px;
-`;

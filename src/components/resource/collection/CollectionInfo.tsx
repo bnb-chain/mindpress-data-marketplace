@@ -3,7 +3,7 @@ import { CalendarIcon } from '@totejs/icons';
 import { Box, Flex } from '@totejs/uikit';
 import BN from 'bn.js';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { useBNBPrice } from '../../../hooks/useBNBPrice';
 import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
@@ -38,6 +38,7 @@ export const CollectionInfo = (props: Props) => {
   const path = p.get('path') as string;
   const { isConnected, isConnecting } = useAccount();
   const { handleModalOpen } = useWalletModal();
+  const navigator = useNavigate();
 
   const categroyInfo = useGetCategory(itemInfo.categoryId);
 
@@ -181,6 +182,9 @@ export const CollectionInfo = (props: Props) => {
                       bucket_name: itemInfo.name,
                       create_at: itemInfo.createdAt,
                       owner: itemInfo.ownerAddress,
+                    },
+                    callBack: () => {
+                      navigator(`/profile?tab=collections`);
                     },
                   });
                 }}

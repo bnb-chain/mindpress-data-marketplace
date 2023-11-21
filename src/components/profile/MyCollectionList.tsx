@@ -21,6 +21,8 @@ import { reportEvent } from '../../utils/ga';
 import { PaginationSx } from '../ui/table/PaginationSx';
 import { TableProps } from '../ui/table/TableProps';
 import CollNoData from './CollNoData';
+import { getItemByBucketId } from '../../utils/apis';
+import _ from 'lodash';
 
 const PriceCon = (props: { groupId: string }) => {
   const { groupId } = props;
@@ -70,7 +72,13 @@ const MyCollectionList = (props: ICollectionList) => {
             justifyContent={'flex-start'}
             gap={6}
             onClick={async () => {
-              navigator(`/detail?bid=${bucketId}`);
+              const item = await getItemByBucketId(bucketId);
+
+              if (!_.isEmpty(item)) {
+                navigator(`/resource?id=${item.id}`);
+              } else {
+                navigator(`/detail?bid=${bucketId}`);
+              }
             }}
           >
             <ImgCon src={defaultImg(bucket_name, 40)}></ImgCon>

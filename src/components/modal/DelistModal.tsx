@@ -60,7 +60,6 @@ export const DelistModal = (props: any) => {
 
   const [estimateGas, setEstimateGas] = useState('0');
   useEffect(() => {
-    console.log('groupId', groupId);
     if (!groupId) return;
 
     const estimate = async () => {

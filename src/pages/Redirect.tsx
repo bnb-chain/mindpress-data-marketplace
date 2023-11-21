@@ -1,9 +1,9 @@
 import { Box } from '@totejs/uikit';
-import { Loader } from '../components/Loader';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useGetItemByGroupId } from '../hooks/useGetItemByGroupId';
-import { NoData } from '../components/NoData';
 import { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Loader } from '../components/Loader';
+import { NoData } from '../components/NoData';
+import { useGetItemByGroupId } from '../hooks/useGetItemByGroupId';
 
 export const Redirect = () => {
   const [p] = useSearchParams();
@@ -13,7 +13,6 @@ export const Redirect = () => {
   const { data: itemInfo, isLoading } = useGetItemByGroupId(groupId);
 
   useEffect(() => {
-    console.log(itemInfo);
     if (!itemInfo) return;
     navigator(`/resource?id=${itemInfo.id}`, {
       replace: true,

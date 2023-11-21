@@ -16,6 +16,7 @@ import { Route, Routes, HashRouter } from 'react-router-dom';
 import { ModalProvider } from './context/modal';
 import { GlobalProvider } from './context/global';
 import { WalletModalProvider } from './context/walletModal';
+import NiceModal from '@ebay/nice-modal-react';
 
 import './base/global.css';
 
@@ -27,6 +28,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import React from 'react';
 import { Detail } from './pages/Detail';
 import { Redirect } from './pages/Redirect';
+import { R } from './pages/R';
 
 export interface IRoute {
   children?: Array<IRoute>;
@@ -61,6 +63,10 @@ const routes: Array<IRoute> = [
   {
     path: '/redirect',
     element: <Redirect />,
+  },
+  {
+    path: '/r',
+    element: <R />,
   },
   {
     path: '/folder',
@@ -173,25 +179,27 @@ function App() {
       <ThemeProvider theme={theme}>
         <QueryClientProvider client={queryClient}>
           <GlobalProvider>
-            <ModalProvider>
-              <WalletModalProvider>
-                <HashRouter>
-                  <Layout>
-                    <Routes>
-                      {routes.map((item: IRoute) => {
-                        return (
-                          <Route
-                            key={item.path}
-                            path={item.path}
-                            element={<RouteGuard>{item.element}</RouteGuard>}
-                          />
-                        );
-                      })}
-                    </Routes>
-                  </Layout>
-                </HashRouter>
-              </WalletModalProvider>
-            </ModalProvider>
+            <NiceModal.Provider>
+              <ModalProvider>
+                <WalletModalProvider>
+                  <HashRouter>
+                    <Layout>
+                      <Routes>
+                        {routes.map((item: IRoute) => {
+                          return (
+                            <Route
+                              key={item.path}
+                              path={item.path}
+                              element={<RouteGuard>{item.element}</RouteGuard>}
+                            />
+                          );
+                        })}
+                      </Routes>
+                    </Layout>
+                  </HashRouter>
+                </WalletModalProvider>
+              </ModalProvider>
+            </NiceModal.Provider>
           </GlobalProvider>
 
           <ReactQueryDevtools initialIsOpen />

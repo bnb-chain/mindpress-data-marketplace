@@ -6,6 +6,7 @@
     "@babel/core": "^7.22.1",
     "@bnb-chain/greenfield-js-sdk": "1.0.3",
     "@dopex-io/web3-multicall": "^0.1.9",
+    "@ebay/nice-modal-react": "^1.2.13",
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",

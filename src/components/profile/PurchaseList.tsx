@@ -33,7 +33,7 @@ const PurchaseList = () => {
       header: 'Data',
       width: 200,
       cell: (data: any) => {
-        const { id, groupName, ownerAddress, url, type, oid, name } = data;
+        const { id, url, type, name } = data;
         return (
           <ImgContainer
             alignItems={'center'}

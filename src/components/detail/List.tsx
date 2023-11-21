@@ -44,8 +44,6 @@ const ProfileList = (props: any) => {
 
   const { address } = useAccount();
 
-  const navigate = useNavigate();
-
   const [p] = useSearchParams();
   let bucketId = p.getAll('bid')[0];
   const ownerAddress = p.getAll('address')[0];
@@ -74,31 +72,8 @@ const ProfileList = (props: any) => {
             justifyContent={'flex-start'}
             gap={6}
             onClick={() => {
-              // let list = state.globalState.breadList;
-              if (list.slice(-1)[0].name !== bucketName) {
-                // const item = {
-                //   path: '/resource',
-                //   name: bucketName || 'Collection',
-                //   query: p.toString(),
-                // };
-                // state.globalDispatch({
-                //   type: 'ADD_BREAD',
-                //   item,
-                // });
-                // list = list.concat([item]);
-              }
-
-              const from = encodeURIComponent(JSON.stringify(list));
-              if (!object_info) {
-                navigator(
-                  `/folder?bid=${bucketId}&f=${encodeURIComponent(
-                    name,
-                  )}&address=${ownerAddress}&from=${from}`,
-                );
-              } else {
-                const { id } = object_info;
-                navigate(`/detail?bid=${bucketId}&oid=${id}`);
-              }
+              const { id } = object_info;
+              navigator(`/detail?bid=${bucketId}&oid=${id}`);
             }}
           >
             {data.children ? (
@@ -231,7 +206,7 @@ const ProfileList = (props: any) => {
                   );
 
                   const { id } = object_info;
-                  navigate(
+                  navigator(
                     `/resource?oid=${id}&bgn=${bgn}&address=${ownerAddress}&tab=dataList&from=${from}`,
                   );
                 }}

@@ -19,6 +19,7 @@ import {
   parseFileSize,
   trimLongStr,
 } from '../../utils';
+import { useCallback, useEffect } from 'react';
 
 /**
  * Have not been listed
@@ -43,15 +44,32 @@ export const Object = () => {
   const { address } = useAccount();
   const { num } = useCollectionItems(bucketData?.bucketInfo.bucketName, false);
 
+  const openListModal = useCallback(() => {
+    if (!bucketData || !objectData) return;
+    const initInfo = {
+      bucket_name: bucketData.bucketInfo.bucketName,
+      object_name: objectData.objectInfo.objectName,
+      create_at: bucketData.bucketInfo.createAt.low,
+      payload_size: objectData.objectInfo.payloadSize.low,
+    };
+    modalData.modalDispatch({
+      type: 'OPEN_LIST',
+      initInfo,
+    });
+  }, [bucketData, modalData, objectData]);
+
+  // auto open list modal
+  useEffect(() => {
+    const needOpenModal = p.get('openModal') as string;
+    if (!needOpenModal) return;
+    openListModal();
+  }, [p, bucketData, objectData]);
+
   if (!_.isEmpty(objectItemInfo)) {
     navigator(`/resource?id=${objectItemInfo.id}`, {
       replace: true,
     });
   }
-
-  // if (isLoading) {
-  //   return <Loader />;
-  // }
 
   if (!objectData || !bucketData) {
     return <NoData />;
@@ -112,21 +130,7 @@ export const Object = () => {
           <ActionGroup gap={10} alignItems={'center'}>
             {address === objectData.objectInfo.owner &&
               _.isEmpty(objectItemInfo) && (
-                <Button
-                  size={'sm'}
-                  onClick={async () => {
-                    const initInfo = {
-                      bucket_name: bucketData.bucketInfo.bucketName,
-                      object_name: objectData.objectInfo.objectName,
-                      create_at: bucketData.bucketInfo.createAt.low,
-                      payload_size: objectData.objectInfo.payloadSize.low,
-                    };
-                    modalData.modalDispatch({
-                      type: 'OPEN_LIST',
-                      initInfo,
-                    });
-                  }}
-                >
+                <Button size={'sm'} onClick={openListModal}>
                   List
                 </Button>
               )}

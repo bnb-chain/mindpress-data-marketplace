@@ -112,13 +112,6 @@ export const useGetItemByObjId = (objectId: string) => {
     queryKey: ['GET_ITEM_BY_OBJECT_ID', objectId],
     queryFn: async () => {
       const res = await getItemByObjectId(objectId);
-      // console.log('res', res);
-      // if (!res) {
-      // console.log('running', objectId);
-      // const objectInfo = await getObjectInfo(objectId);
-      // console.log('running222');
-      // console.log('objectInfo', objectInfo);
-      // }
       return res;
     },
     // gcTime: Infinity,

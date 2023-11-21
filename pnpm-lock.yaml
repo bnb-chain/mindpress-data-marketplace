@@ -14,6 +14,9 @@ dependencies:
   '@dopex-io/web3-multicall':
     specifier: ^0.1.9
     version: 0.1.9(web3@1.10.0)
+  '@ebay/nice-modal-react':
+    specifier: ^1.2.13
+    version: 1.2.13(react-dom@18.2.0)(react@18.2.0)
   '@emotion/react':
     specifier: ^11.11.0
     version: 11.11.0(@types/react@18.2.7)(react@18.2.0)
@@ -2272,6 +2275,16 @@ packages:
       web3: ^1.0.0
     dependencies:
       web3: 1.10.0
+    dev: false
+
+  /@ebay/nice-modal-react@1.2.13(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-jx8xIWe/Up4tpNuM02M+rbnLoxdngTGk3Y8LjJsLGXXcSoKd/+eZStZcAlIO/jwxyz/bhPZnpqPJZWAmhOofuA==}
+    peerDependencies:
+      react: '>16.8.0'
+      react-dom: '>16.8.0'
+    dependencies:
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /@emotion/babel-plugin@11.11.0:
