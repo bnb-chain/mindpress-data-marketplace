@@ -23,14 +23,14 @@ export const R = () => {
 
   const { handleModalOpen } = useWalletModal();
 
-  console.log(
-    'status',
-    accountStatus,
-    resourceBid,
-    resourceOid,
-    detailBid,
-    detailOid,
-  );
+  // console.log(
+  //   'status',
+  //   accountStatus,
+  //   resourceBid,
+  //   resourceOid,
+  //   detailBid,
+  //   detailOid,
+  // );
 
   const bucketIsListed = useMemo(() => {
     return !_.isEmpty(resourceBid);
@@ -52,7 +52,6 @@ export const R = () => {
       } else {
         if (!_.isEmpty(detailBid)) {
           if (detailBid.bucketInfo && !detailOid?.objectInfo) {
-            console.log('xx', bucketIsListed);
             url = `/detail?bid=${detailBid.bucketInfo.id}`;
 
             if (!bucketIsListed) {
@@ -68,10 +67,13 @@ export const R = () => {
       }
     }
 
-    navigator(url, {
-      replace: true,
-    });
-    console.log('url', url);
+    if (url) {
+      navigator(url, {
+        replace: true,
+      });
+      return;
+    }
+    // console.log('url', url);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     detailBid?.bucketInfo.id,
@@ -83,7 +85,7 @@ export const R = () => {
   useEffect(() => {
     if (accountStatus === 'NOT_LOGIN') {
       handleModalOpen();
-      return;
+      // return;
     }
     if (accountStatus === 'ACCOUNT_IS_NOT_SAME') {
       NiceModal.show(Tips, {
@@ -92,7 +94,7 @@ export const R = () => {
           <SwitchCorrectAccount>{trimLongStr(account)}</SwitchCorrectAccount>
         ),
       });
-      return;
+      // return;
     }
 
     if (accountStatus === 'SAME_ACCOUNT') {
@@ -103,8 +105,9 @@ export const R = () => {
         });
       } else {
         // ...
+        // alert(1);
       }
-      return;
+      // return;
     }
   }, [account, accountStatus]);
 
