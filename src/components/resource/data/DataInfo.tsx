@@ -26,7 +26,7 @@ import { CategoryIcon } from '../../svgIcon/CategoryIcon';
 import { FolderIcon } from '../../svgIcon/FolderIcon';
 import { ShoppingIcon } from '../../svgIcon/ShoppingIcon';
 import { SizeIcon } from '../../svgIcon/SizeIcon';
-import { BigYellowButton } from '../../ui/buttons/YellowButton';
+import { BigYellowButton, YellowButton } from '../../ui/buttons/YellowButton';
 
 interface Props {
   itemInfo: Item;
@@ -165,7 +165,7 @@ export const DataInfo = (props: Props) => {
 
           {relation === 'OWNER' && (
             <Box>
-              <Button
+              <BigYellowButton
                 onClick={() => {
                   modalData.modalDispatch({
                     type: 'OPEN_DELIST',
@@ -179,7 +179,7 @@ export const DataInfo = (props: Props) => {
                 }}
               >
                 Delist
-              </Button>
+              </BigYellowButton>
             </Box>
           )}
         </ActionBox>
@@ -189,7 +189,7 @@ export const DataInfo = (props: Props) => {
 };
 
 const Value = styled(Box)`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   line-height: 32px;
   color: #f7f7f8;

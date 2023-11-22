@@ -147,34 +147,36 @@ const AllList = () => {
       cell: (data) => {
         const { type } = data;
 
-        if (type === 'OBJECT') {
-          return (
-            <ActionCom
-              data={data}
-              address={address as string}
-              from="home"
-            ></ActionCom>
-          );
-        }
+        // if (type === 'OBJECT') {
+        //   return (
+        return (
+          <ActionCom
+            data={data}
+            address={address as string}
+            from="home"
+          ></ActionCom>
+        );
+        //   );
+        // }
 
-        if (type === 'COLLECTION') {
-          return (
-            <GoIcon
-              cursor={'pointer'}
-              color={'#AEB4BC'}
-              onClick={() => {
-                const params = {
-                  id: String(data.id),
-                  path: '/',
-                };
-                navigator({
-                  pathname: '/resource',
-                  search: `?${createSearchParams(params)}`,
-                });
-              }}
-            />
-          );
-        }
+        // if (type === 'COLLECTION') {
+        //   return (
+        //     <GoIcon
+        //       cursor={'pointer'}
+        //       color={'#AEB4BC'}
+        //       onClick={() => {
+        //         const params = {
+        //           id: String(data.id),
+        //           path: '/',
+        //         };
+        //         navigator({
+        //           pathname: '/resource',
+        //           search: `?${createSearchParams(params)}`,
+        //         });
+        //       }}
+        //     />
+        //   );
+        // }
       },
     },
   ];

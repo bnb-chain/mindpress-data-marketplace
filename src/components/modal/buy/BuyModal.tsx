@@ -17,6 +17,7 @@ import { useBuy } from '../../../hooks/useBuy';
 import { useChainBalance } from '../../../hooks/useChainBalance';
 import { useModal } from '../../../hooks/useModal';
 import { defaultImg, divide10Exp, roundFun } from '../../../utils';
+import { BigYellowButton } from '../../ui/buttons/YellowButton';
 
 export const BuyModal = (props: any) => {
   const modalData = useModal();
@@ -129,7 +130,7 @@ export const BuyModal = (props: any) => {
       {!BSC_FEE_SUFF && <BalanceWarn>Insufficient Balance</BalanceWarn>}
       <QDrawerFooter>
         {chain && chain.id === BSC_CHAIN_ID && (
-          <Button
+          <BigYellowButton
             width={'50%'}
             onClick={() => {
               buy(groupId);
@@ -138,7 +139,7 @@ export const BuyModal = (props: any) => {
             disabled={!BSC_FEE_SUFF}
           >
             Buy
-          </Button>
+          </BigYellowButton>
         )}
         {chain && chain.id !== BSC_CHAIN_ID ? (
           <Button

@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import { BackIcon, GoIcon } from '@totejs/icons';
 import { Box, Flex } from '@totejs/uikit';
+import SearchNoData from '../images/search_no_data.svg';
 
 import React, {
   forwardRef,
@@ -193,15 +194,22 @@ export default function ScrollSelect({
     return (
       <NoDataCon direction="column" alignItems="center" maxHeight="inherit">
         <Box height={105}></Box>
-        <NoData />
+        {/* <NoData /> */}
+        <img src={SearchNoData} width={48} height={48} />
         <Box height={22}> </Box>
-        <EmptyTxt>No Result for</EmptyTxt>
+        <EmptyTxt>No result found</EmptyTxt>
         <Box h={4}></Box>
         <Flex direction="column" alignItems="center" maxWidth={330}>
-          <EmptyTxt>{`'${searchValue}'`}</EmptyTxt>
+          {/* <EmptyTxt>{`'${searchValue}'`}</EmptyTxt> */}
           <Box h={8} />
-          <Box color="readable.secondary" fontWeight={500} textAlign="center">
-            We couldn't find anything matching your search.
+          <Box
+            color="readable.secondary"
+            fontWeight={500}
+            textAlign="center"
+            fontSize="14pxs"
+            lineHeight="20px"
+          >
+            Try adjusting your search request to find what you’re looking for
           </Box>
         </Flex>
         <Box height={116}></Box>
@@ -366,7 +374,7 @@ const Title = styled.div`
   padding: 8px 24px;
   font-weight: 600;
   font-size: 12px;
-  color: ${(props: any) => props.theme.colors.scene.primary.normal};
+  color: #ffe900;
   background: ${(props: any) => props.theme.colors.bg.bottom};
   position: sticky;
 
@@ -401,8 +409,8 @@ const SelectTxt = styled.span`
 `;
 
 const EmptyTxt = styled.div`
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 20px;
   word-break: break-all;
   text-align: center;
 `;

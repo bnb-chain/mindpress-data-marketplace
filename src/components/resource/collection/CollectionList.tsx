@@ -377,4 +377,5 @@ const IconCon = styled(Flex)`
 const Title = styled(Box)`
   color: #fff;
   font-size: 24px;
+  font-weight: 600;
 `;

@@ -14,6 +14,8 @@ interface Props {
   };
 }
 
+const HOMEPAGE_NAME = 'Data Marketplace';
+
 export const MyBreadcrumb = (props: Props) => {
   const [p] = useSearchParams();
   const path = (p.get('path') as string) || '/';
@@ -22,9 +24,9 @@ export const MyBreadcrumb = (props: Props) => {
   const { root } = props;
 
   const bucketPath = path === '/' ? '' : path.split('/');
-  const breadItems = [root.bucketName].concat(bucketPath);
+  const breadItems = [HOMEPAGE_NAME, root.bucketName].concat(bucketPath);
 
-  // console.log('props', breadItems.length - 1);
+  // console.log('props', breadItems);
 
   return (
     <CustomBreadcrumb>
@@ -34,11 +36,20 @@ export const MyBreadcrumb = (props: Props) => {
             key={index}
             isCurrentPage={index === breadItems.length - 2}
           >
-            <BreadcrumbLink fontSize="16px" as="span">
+            <BreadcrumbLink
+              fontSize="16px"
+              as="span"
+              // _hover={{ color: '#FFE900' }}
+            >
               <NavLink
                 as="span"
                 onClick={async () => {
                   const params: Record<string, string> = {};
+
+                  if (item === HOMEPAGE_NAME) {
+                    navigator('/');
+                    return;
+                  }
 
                   if (item !== root.bucketName) {
                     params.path = item + '/';

@@ -7,7 +7,7 @@ import { Model3DIcon } from '../svgIcon/Model3D';
 import { MovieIcon } from '../svgIcon/MovieIcon';
 import { PhotoIcon } from '../svgIcon/PhototIcon';
 import { SourceCodeIcon } from '../svgIcon/SourceCodeIcon';
-import LinkArrow from '../../images/link_arrow.png';
+import LinkArrow from '../../images/link_arrow.svg';
 
 export const Ad = () => {
   const navigate = useNavigate();

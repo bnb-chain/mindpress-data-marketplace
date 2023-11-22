@@ -17,6 +17,7 @@ import {
 import { useList, IList } from '../../hooks/useList';
 import { useApprove } from '../../hooks/useApprove';
 import { useHasRole } from '../../hooks/useHasRole';
+import { BigYellowButton } from '../ui/buttons/YellowButton';
 interface ListProcessProps {
   isOpen: boolean;
   handleOpen: (show: boolean) => void;
@@ -168,13 +169,13 @@ export const ListProcess = (props: ListProcessProps) => {
         {((hasRole && step == 2) || (!hasRole && step == 1)) &&
           chain &&
           chain.id !== BSC_CHAIN_ID && (
-            <Button
+            <BigYellowButton
               onClick={() => {
                 switchNetwork?.(BSC_CHAIN_ID);
               }}
             >
               Switch to BSC {NETWORK} Network
-            </Button>
+            </BigYellowButton>
           )}
         {step == 2 &&
           chain &&
@@ -182,7 +183,7 @@ export const ListProcess = (props: ListProcessProps) => {
           hasRole &&
           status == 1 &&
           !loading && (
-            <Button
+            <BigYellowButton
               onClick={async () => {
                 setTitle('Finalize Listing');
                 setLoading(true);
@@ -217,14 +218,14 @@ export const ListProcess = (props: ListProcessProps) => {
               }}
             >
               List to BSC {NETWORK}
-            </Button>
+            </BigYellowButton>
           )}
         {step == 1 &&
           chain &&
           chain.id === BSC_CHAIN_ID &&
           !hasRole &&
           !loading && (
-            <Button
+            <BigYellowButton
               onClick={async () => {
                 setLoading(true);
                 setTitle('Wait for Approve');
@@ -236,10 +237,10 @@ export const ListProcess = (props: ListProcessProps) => {
               }}
             >
               Approve
-            </Button>
+            </BigYellowButton>
           )}
         {status == 2 && (
-          <Button
+          <BigYellowButton
             onClick={() => {
               if (stateModal.modalState.callBack) {
                 stateModal.modalState.callBack();
@@ -252,7 +253,7 @@ export const ListProcess = (props: ListProcessProps) => {
             }}
           >
             Got it
-          </Button>
+          </BigYellowButton>
         )}
       </Flex>
     </Container>

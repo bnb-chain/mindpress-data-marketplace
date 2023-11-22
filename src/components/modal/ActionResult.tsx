@@ -1,5 +1,6 @@
 import styled from '@emotion/styled';
 import { Button, StateModal, StateModalVariantType } from '@totejs/uikit';
+import { BigYellowButton } from '../ui/buttons/YellowButton';
 
 interface IActionResult {
   isOpen: boolean;
@@ -17,7 +18,7 @@ export const ActionResult = (props: IActionResult) => {
       onClose={handleOpen}
       description={description || 'buy error'}
     >
-      <Button
+      <BigYellowButton
         width={'100%'}
         onClick={() => {
           callBack?.();
@@ -25,7 +26,7 @@ export const ActionResult = (props: IActionResult) => {
         }}
       >
         Got it
-      </Button>
+      </BigYellowButton>
     </Container>
   );
 };

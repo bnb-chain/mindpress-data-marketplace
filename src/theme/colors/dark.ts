@@ -27,7 +27,7 @@ export const dark = {
     scene: {
       primary: {
         normal: '#E1A325',
-        active: '#f39d53',
+        active: '#FFE900',
         opacity: rgba('#B845FF', 0.1),
         semiOpacity: rgba('#E1A325', 0.15),
       },

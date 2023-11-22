@@ -55,9 +55,7 @@ export const CollectionInfo = (props: Props) => {
         <Box color="#F7F7F8" fontSize="16px" fontWeight="600">
           <FolderIcon color="#8C8F9B" mr="5px" />
           {/* <Link to={`/resource?id=${itemInfo.id}&path=/`}> */}
-          <Box as="span" textDecoration="underline">
-            Collection
-          </Box>
+          <Box as="span">Collection</Box>
           {/* </Link> */}
         </Box>
         <Box fontWeight="16px" color="#C4C5CB" ml="8px" mr="16px">
@@ -200,7 +198,7 @@ export const CollectionInfo = (props: Props) => {
 };
 
 const Value = styled(Box)`
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   line-height: 32px;
   color: #f7f7f8;
