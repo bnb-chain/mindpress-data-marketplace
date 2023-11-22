@@ -26,6 +26,7 @@ import { useDelist } from '../../hooks/useDelist';
 import { useHasRole } from '../../hooks/useHasRole';
 import { useModal } from '../../hooks/useModal';
 import { defaultImg, divide10Exp, formatDateUTC, roundFun } from '../../utils';
+import { getWeb3 } from '../../base/contract/getWeb3';
 
 export const DelistModal = (props: any) => {
   const modalData = useModal();
@@ -63,13 +64,17 @@ export const DelistModal = (props: any) => {
     if (!groupId) return;
 
     const estimate = async () => {
-      const gasPrice = BSC_SEND_GAS_FEE || '';
+      const web3 = getWeb3();
+      const gasPrice = await web3.eth.getGasPrice();
+      // const gasPrice = BSC_SEND_GAS_FEE || '';
+      console.log('gasPrice', gasPrice);
       const gasLimit = await MarketPlaceContract()
         .methods.delist(groupId)
         .estimateGas({
           from: address,
-          gas: BSC_SEND_GAS_FEE,
+          // gas: BSC_SEND_GAS_FEE,
         });
+      console.log('gasLimit', gasLimit);
 
       const tmp = BigInt(gasPrice) * BigInt(gasLimit);
       const estimateGasRes = divide10Exp(new BN(tmp.toString(), 10), 18);

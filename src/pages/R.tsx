@@ -42,9 +42,12 @@ export const R = () => {
 
   useEffect(() => {
     let url = '';
-    if (accountStatus !== 'SAME_ACCOUNT') {
+    if (accountStatus === 'ACCOUNT_IS_NOT_SAME') {
       url = '/';
-    } else {
+    } else if (
+      accountStatus === 'NOT_LOGIN' ||
+      accountStatus === 'SAME_ACCOUNT'
+    ) {
       if (!_.isEmpty(resourceBid)) {
         url = `/resource?id=${resourceBid.id}`;
       } else if (!_.isEmpty(resourceOid) && resourceOid.id !== 0) {
@@ -54,12 +57,12 @@ export const R = () => {
           if (detailBid.bucketInfo && !detailOid?.objectInfo) {
             url = `/detail?bid=${detailBid.bucketInfo.id}`;
 
-            if (!bucketIsListed) {
+            if (!bucketIsListed && accountStatus === 'SAME_ACCOUNT') {
               url += '&openModal=1';
             }
           } else {
             url = `/detail?bid=${detailBid.bucketInfo.id}&oid=${detailOid?.objectInfo.id}`;
-            if (!objectIsListed) {
+            if (!objectIsListed && accountStatus === 'SAME_ACCOUNT') {
               url += '&openModal=1';
             }
           }
