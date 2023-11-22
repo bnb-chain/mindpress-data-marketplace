@@ -17,7 +17,7 @@ import { useBuy } from '../../../hooks/useBuy';
 import { useChainBalance } from '../../../hooks/useChainBalance';
 import { useModal } from '../../../hooks/useModal';
 import { defaultImg, divide10Exp, roundFun } from '../../../utils';
-import { BigYellowButton } from '../../ui/buttons/YellowButton';
+import { BigYellowButton, YellowButton } from '../../ui/buttons/YellowButton';
 
 export const BuyModal = (props: any) => {
   const modalData = useModal();
@@ -142,14 +142,14 @@ export const BuyModal = (props: any) => {
           </BigYellowButton>
         )}
         {chain && chain.id !== BSC_CHAIN_ID ? (
-          <Button
+          <YellowButton
             width={'100%'}
             onClick={() => {
               switchNetwork?.(BSC_CHAIN_ID);
             }}
           >
             Switch to BSC {NETWORK}
-          </Button>
+          </YellowButton>
         ) : null}
         <Cancel width={'50%'} onClick={handleOpen} variant="ghost">
           Cancel
