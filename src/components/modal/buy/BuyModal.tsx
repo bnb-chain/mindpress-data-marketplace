@@ -142,14 +142,14 @@ export const BuyModal = (props: any) => {
           </BigYellowButton>
         )}
         {chain && chain.id !== BSC_CHAIN_ID ? (
-          <YellowButton
+          <BigYellowButton
             width={'100%'}
             onClick={() => {
               switchNetwork?.(BSC_CHAIN_ID);
             }}
           >
             Switch to BSC {NETWORK}
-          </YellowButton>
+          </BigYellowButton>
         ) : null}
         <Cancel width={'50%'} onClick={handleOpen} variant="ghost">
           Cancel
