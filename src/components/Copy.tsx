@@ -66,7 +66,7 @@ export const Copy = ({
       >
         {children || (
           <CopyIcon
-            color="#FFE900"
+            color="readable.secondary"
             _hover={{ color: 'scene.primary.active' }}
             h={size.h}
             w={size.w}
