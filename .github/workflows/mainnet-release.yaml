@@ -50,7 +50,7 @@ jobs:
           REACT_APP_NETWORK: Mainnet
           REACT_APP_DAPP_NAME: mindv05
           G_TAG: G-VRYHWMVQ50
-          REACT_APP_API_DOMAIN: https://api-marketplace.mindpress.io/v1/
+          REACT_APP_API_DOMAIN: https://gnfd-testnet-marketplace.mindpress.io/v1/
           REACT_APP_CROSS_CHAIN_FEE: 0.000001
           REACT_APP_INITIATE_LIST_FEE: 0.00003
           REACT_APP_LIST_FEE_ON_GF: 0.0000036
