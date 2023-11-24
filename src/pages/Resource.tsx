@@ -21,6 +21,7 @@ import {
 import { useGetItemById } from '../hooks/useGetItemById';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
 import { reportEvent } from '../utils/ga';
+import { NoData } from '../components/NoData';
 
 /**
  * Have been listed
@@ -29,25 +30,12 @@ import { reportEvent } from '../utils/ga';
  */
 const Resource = () => {
   const [p] = useSearchParams();
-  // const groupId = p.getAll('gid')[0];
-  // const cid = p.getAll('cid')[0];
-  // const objectId = p.get('oid') as string;
-  // const gName = p.getAll('gn')[0];
-  // const bGroupName = p.getAll('bgn')[0];
   const itemId = p.get('id') as string;
-  // const bucketId = p.getAll('bid')[0]
-
   const { address } = useAccount();
 
   const { data: itemInfo, isLoading: itemInfoLoading } = useGetItemById(
     parseInt(itemId),
   );
-
-  // console.log('p.getAll(oid)', p.get('oid'), p.get('id'));
-  // console.log('objectId: ', objectId);
-
-  // const { data: xx } = useGfGetObjInfo(objectId);
-  // console.log('xx', xx);
 
   const relation = useGetItemRelationWithAddr(address, itemInfo);
 
@@ -73,14 +61,12 @@ const Resource = () => {
       : `${bucketData.bucketInfo.bucketName} #${itemInfo?.name}`;
   }, [bucketData, itemInfo, storageInfo]);
 
-  // console.log('itemInfo', itemInfo);
-  // console.log('storageInfo', storageInfo);
-  // console.log('groupData', groupData);
-  // console.log('bucketData', bucketData);
-  // console.log('objectData', objectData);
-
-  if (itemInfoLoading || !itemInfo || !bucketData) {
+  if (itemInfoLoading) {
     return <Loader />;
+  }
+
+  if (!itemInfo || !bucketData) {
+    return <NoData />;
   }
 
   return (
