@@ -152,7 +152,7 @@ const SearchBox = styled.div<{
   }
 
   :focus-within {
-    outline: 2px solid #ffe900;
+    outline: 2px solid #5c5f6a;
   }
   input {
     height: 100%;
@@ -181,5 +181,5 @@ const StyledIcon = styled(SearchIcon)`
   min-width: 24px;
   height: 24px;
   cursor: pointer;
-  color: #8c8f9b;
+  color: #f7f7f8;
 `;

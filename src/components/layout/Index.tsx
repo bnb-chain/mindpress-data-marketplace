@@ -99,10 +99,10 @@ export default function Layout({ children }: { children: ReactNode }) {
 }
 
 const Main = styled.main`
-  display: flex;
-  flex: 1 1 0%;
-  justify-content: center;
-  margin-top: 80px;
+  /* display: flex; */
+  /* flex: 1 1 0%; */
+  /* justify-content: center; */
+  /* margin-top: 80px; */
 `;
 
 const Container = styled(Flex)`

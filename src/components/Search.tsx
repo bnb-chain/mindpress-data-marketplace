@@ -193,7 +193,7 @@ const Search = (props: ISearch) => {
           boxShadow="4px 2px 8px rgba(0, 0, 0, 0.08)"
         >
           <Input
-            placeholder={'Search data, accounts'}
+            placeholder={'Search high quality images'}
             value={searchValue}
             onChange={handleSearchChange}
             onConfirm={handleSearchChange}
@@ -230,6 +230,9 @@ export default Search;
 
 const Input = styled(SearchInput)`
   height: 56px;
+  color: #f7f7f8;
+  font-size: 16px;
+  border: 1px solid #5c5f6a;
 `;
 
 const Container = styled.div`

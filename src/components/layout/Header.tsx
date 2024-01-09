@@ -1,23 +1,8 @@
 import styled from '@emotion/styled';
-import {
-  Box,
-  Button,
-  Flex,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
-  useDisclosure,
-  useOutsideClick,
-} from '@totejs/uikit';
+import { Box, Button, Flex, useOutsideClick } from '@totejs/uikit';
 import { useWalletModal } from '../../hooks/useWalletModal';
 
-import {
-  MenuCloseIcon,
-  SaverIcon,
-  // BookmarkIcon,
-  WithdrawIcon,
-} from '@totejs/icons';
+import { MenuCloseIcon } from '@totejs/icons';
 import {
   ForwardedRef,
   ReactNode,
@@ -27,21 +12,20 @@ import {
   useState,
 } from 'react';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { useNavigate } from 'react-router-dom';
-import { useAccount, useDisconnect, useNetwork, useSwitchNetwork } from 'wagmi';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAccount, useDisconnect } from 'wagmi';
 import Search from '../../components/Search';
-import { BSC_CHAIN_ID, GF_CHAIN_ID, NET_ENV } from '../../env';
-import MainNetLogo from '../../images/logo.svg';
+import { NET_ENV } from '../../env';
 import TestNetLogo from '../../images/logo-testnet.svg';
+import MainNetLogo from '../../images/logo.svg';
 import { trimLongStr } from '../../utils';
 import { reportEvent } from '../../utils/ga';
 import { Copy } from '../Copy';
-import { CheckIcon } from '../svgIcon/CheckIcon';
+import { MyDataCollectionIcon } from '../svgIcon/MyDataCollectionIcon';
 import { SellIcon } from '../svgIcon/SellIcon';
+import { SignOutIcon } from '../svgIcon/SignOutIcon';
 import { TowerIcon } from '../svgIcon/TowerIcon';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
-import { SignOutIcon } from '../svgIcon/SignOutIcon';
-import { MyDataCollectionIcon } from '../svgIcon/MyDataCollectionIcon';
 
 const CustomMenuButton = forwardRef(
   (props: { children: ReactNode }, ref: ForwardedRef<HTMLButtonElement>) => {
@@ -107,10 +91,12 @@ const Header = () => {
   });
 
   const navigate = useNavigate();
-  const { onClose, onToggle } = useDisclosure();
-  const { switchNetwork } = useSwitchNetwork();
+  const location = useLocation();
 
-  const { chain } = useNetwork();
+  // const { onClose, onToggle } = useDisclosure();
+  // const { switchNetwork } = useSwitchNetwork();
+
+  // const { chain } = useNetwork();
 
   return (
     <HeaderFlex
@@ -128,7 +114,7 @@ const Header = () => {
           src={NET_ENV === 'TESTNET' ? TestNetLogo : MainNetLogo}
           alt="logo"
         />
-        <Search width="380px" height="40px"></Search>
+        {location.pathname !== '/' && <Search width="380px" height="40px" />}
       </LeftCon>
 
       <RightFunCon alignItems={'center'} justifyContent={'center'} gap={18}>
@@ -143,11 +129,12 @@ const Header = () => {
               navigate('/profile');
             }}
           >
-            List Item
+            Upload Images
           </DefaultButton>
         </>
 
-        {address && (
+        {/* switch chain */}
+        {/* {address && (
           <Menu placement="bottom-end">
             <MenuButton
               onClick={() => {
@@ -198,11 +185,14 @@ const Header = () => {
               </MenuItem>
             </MenuList>
           </Menu>
-        )}
+        )} */}
 
         <ButtonWrapper>
           {!isConnected && !isConnecting ? (
             <StyledButton
+              bg="#F1F2F3"
+              color="#181A1E"
+              fontWeight="800"
               onClick={() => {
                 reportEvent({ name: 'dm.main.header.connect_wallet.click' });
                 handleModalOpen();
@@ -307,8 +297,7 @@ const HeaderFlex = styled(Flex)`
   left: 0;
   right: 0;
   z-index: 10;
-  background-color: #181a1e;
-  border-bottom: 1px #1e2026 solid;
+  background-color: transparent;
   padding: 0 40px;
 `;
 const LeftCon = styled(Flex)`
@@ -319,15 +308,13 @@ const LeftCon = styled(Flex)`
   }
 `;
 
-const StyledButton = styled(Button)`
+const StyledButton = styled(DefaultButton)`
   width: 100%;
   max-width: 158px;
   height: 44px;
-
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 700;
   line-height: 24px;
-  border-radius: 200px;
   &.connected {
     font-style: normal;
     font-weight: 500;
@@ -420,11 +407,9 @@ const ConnectProfile = styled(Flex)`
   font-size: 14px;
   font-weight: 500;
   line-height: 24px;
-  /* border-radius: 200px;
-  border: 1px solid ${(props: any) => props.theme.colors.readable.border}; */
-  &:hover {
+  /* &:hover {
     background: ${(props: any) => props.theme.colors.read?.normal};
-  }
+  } */
 `;
 
 const Hr = styled(Box)`

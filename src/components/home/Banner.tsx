@@ -1,77 +1,56 @@
 import styled from '@emotion/styled';
 import { Box } from '@totejs/uikit';
-import BN from 'bn.js';
-import { useGetItems } from '../../hooks/useGetItems';
-import MindPress from '../../images/mindpress.png';
-import { defaultImg, divide10Exp } from '../../utils';
-import { Loader } from '../Loader';
-import { Sliders } from '../ui/sliders';
+import Search from '../Search';
 
-interface Props {
-  itemIds: number[];
-}
-
-export const Banner = (props: Props) => {
-  const { data, isLoading } = useGetItems(props.itemIds);
-
-  const bannerData = data?.map((item) => {
-    return {
-      id: item.id,
-      imgUrl: item?.url || defaultImg(item.name, 300),
-      name: item.name,
-      groupName: item.groupName,
-      address: item.ownerAddress,
-      volumn: String(item.totalSale || '0'),
-      price: divide10Exp(new BN(item.price, 10), 18),
-      categoryId: item.categoryId,
-    };
-  });
-
+export const Banner = () => {
   return (
-    <Box>
-      <BannerBox>
-        <Box
-          pl="32px"
-          pr="16px"
-          background={`url(${MindPress}) no-repeat right 32px`}
-          backgroundSize="600px auto"
-        >
-          <Title>Sell & Collect Data</Title>
-          <Desc mt="16px">in Decentralized Data Marketplace</Desc>
-          <Line mt="32px" />
-        </Box>
+    <Container>
+      <BigImageBg>
+        <Title>
+          Unleash your creativity on{' '}
+          <Box as="span" color="#FFE900">
+            MindPress
+          </Box>
+          .
+        </Title>
+        <Desc mt="6px">
+          The leading decentralized marketplace for borderless creativity.
+        </Desc>
 
-        <Box mt="50px">
-          {isLoading && <Loader />}
-          {bannerData && <Sliders data={bannerData} />}
+        <Box w="800px" mt="40px" ml="auto" mr="auto">
+          <Search width="800px" />
         </Box>
-      </BannerBox>
-    </Box>
+      </BigImageBg>
+    </Container>
   );
 };
 
-const BannerBox = styled(Box)`
+const Container = styled(Box)`
   /* margin-top: 32px; */
   /* padding: 32px; */
-  background: #181a1e;
-  border-radius: 32px;
+  width: 100vw;
+  height: 510px;
+  padding: 160px 0 130px 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
+    url(https://picsum.photos/1800/600) no-repeat center center;
+  background-size: cover;
 `;
+
+const BigImageBg = styled(Box)``;
 
 const Title = styled(Box)`
   font-size: 48px;
   font-weight: 600;
   line-height: 56px;
   padding-top: 32px;
-  color: #ffe900;
-`;
-
-const Line = styled(Box)`
-  height: 1px;
-  background: #373943;
+  color: #f7f7f8;
+  text-align: center;
 `;
 
 const Desc = styled(Box)`
-  font-size: 32px;
+  font-size: 20px;
   font-weight: 400;
   color: #fff;
+  text-align: center;
+  margin-top: 12px;
 `;
