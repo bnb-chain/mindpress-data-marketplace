@@ -9,7 +9,7 @@ const Footer = () => {
       alignItems={'center'}
       justifyContent={'center'}
     >
-      © 2023 MindPress. All rights reserved.
+      © 2024 MindPress. All rights reserved.
     </FooterCon>
   );
 };

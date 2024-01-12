@@ -42,7 +42,7 @@
   "typescript.preferences.importModuleSpecifier": "relative",
   "editor.formatOnSave": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "editor.wordWrap": "on",
   "cSpell.words": [

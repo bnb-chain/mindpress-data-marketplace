@@ -1,49 +1,24 @@
 import styled from '@emotion/styled';
 import { Box, Flex } from '@totejs/uikit';
-import { Ad } from '../components/home/Ad';
-import AllList from '../components/home/All';
+
 import { Banner } from '../components/home/Banner';
+import { CateList } from '../components/home/CateList';
 import { Links } from '../components/home/Links';
-import { NotableAuthors } from '../components/home/NotableAuthors';
-import { Popular } from '../components/home/Popular';
+import { Trending } from '../components/home/Trending';
 
 const Home = () => {
   return (
     <Container flexDirection={'column'} alignItems={'center'}>
       <Banner />
 
-      <CardBox mt="20px">
-        <BoxWithArrow pl="100px" pr="100px">
-          <Box p="50px 32px">
-            <TableTitle>Latest</TableTitle>
-            <Box mt="30px">
-              <AllList />
-            </Box>
-          </Box>
-        </BoxWithArrow>
-      </CardBox>
-      <CardBox mt="20px">
-        <BoxWithArrow pl="100px">
-          <Box pt="50px" pb="50px">
-            <TableTitle pl="32px">Popular</TableTitle>
-            <Box>
-              <Popular />
-            </Box>
-          </Box>
-        </BoxWithArrow>
-      </CardBox>
-      <CardBox mt="20px" w="1400px" pl="100px" pr="100px">
-        <NotableAuthors />
-      </CardBox>
-      <CardBox
-        mt="20px"
-        w="1400px"
-        pl="100px"
-        pr="100px"
-        boxShadow="0px 24px 64px 0px rgba(0, 0, 0, 0.48), 0px 4px 0px 0px #ffe900"
-      >
-        <Ad />
-      </CardBox>
+      <Box mt="40px" mb="40px">
+        <CateList />
+      </Box>
+
+      <Box w="1440px" ml="auto" mr="auto">
+        <Trending />
+      </Box>
+
       <Links />
     </Container>
   );
