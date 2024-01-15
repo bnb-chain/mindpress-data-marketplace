@@ -1,23 +1,31 @@
 import styled from '@emotion/styled';
+import { ColoredInfoIcon } from '@totejs/icons';
 import {
   Box,
   Button,
   Flex,
+  Popover,
+  PopoverArrow,
+  PopoverContent,
+  PopoverTrigger,
   QDrawer,
   QDrawerBody,
   QDrawerCloseButton,
   QDrawerFooter,
   QDrawerHeader,
+  Stack,
 } from '@totejs/uikit';
 import { BN } from 'bn.js';
 import { useMemo } from 'react';
+import { formatUnits, parseUnits } from 'viem';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { BSC_CHAIN_ID, NETWORK } from '../../../env';
+import { useBNBPrice } from '../../../hooks/useBNBPrice';
 import { useBuy } from '../../../hooks/useBuy';
 import { useChainBalance } from '../../../hooks/useChainBalance';
 import { useModal } from '../../../hooks/useModal';
-import { defaultImg, divide10Exp, roundFun } from '../../../utils';
-import { BigYellowButton, YellowButton } from '../../ui/buttons/YellowButton';
+import { divide10Exp, roundFun } from '../../../utils';
+import { BigYellowButton } from '../../ui/buttons/YellowButton';
 
 export const BuyModal = (props: any) => {
   const modalData = useModal();
@@ -30,6 +38,7 @@ export const BuyModal = (props: any) => {
   const { buy, relayFee } = useBuy(groupName, ownerAddress, price);
 
   const { BscBalanceVal } = useChainBalance();
+  const { price: bnbPrice } = useBNBPrice();
 
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
@@ -56,82 +65,77 @@ export const BuyModal = (props: any) => {
     return Number(BscBalanceVal) >= TotalPrice;
   }, [BscBalanceVal, TotalPrice]);
 
+  const totalDollar = useMemo(() => {
+    const fee =
+      parseUnits(String(TotalPrice), 9) * parseUnits(String(bnbPrice), 9);
+    console.log(fee);
+
+    return formatUnits(fee, 18);
+  }, [TotalPrice, bnbPrice]);
+
   return (
     <Container
       isOpen={isOpen}
       onClose={handleOpen}
-      background={'#ffffff'}
+      background={'#1e2026'}
+      color="#FFF"
       w={395}
     >
-      <QDrawerCloseButton />
-      <Header>Checking out</Header>
+      <QDrawerCloseButton color="#C4C5CB" w="28px" h="28px" top="31px" />
+      <Header>Order Summary</Header>
       <CustomBody>
-        <InfoCon gap={12} justifyContent={'flex-start'} alignItems={'center'}>
-          <ImgCon>
-            <img src={defaultImg(name, 80)} alt="" />
-          </ImgCon>
-          <BaseInfo
-            alignItems={'center'}
-            justifyContent={'space-between'}
-            flex={1}
-          >
-            <LeftInfo>
-              <ResourceNameCon
-                alignItems={'flex-start'}
-                flexDirection={'column'}
-              >
-                {name}
-                {type === 'COLLECTION' ? (
-                  <Tag justifyContent={'center'} alignItems={'center'}>
-                    Collection
-                  </Tag>
-                ) : null}
-              </ResourceNameCon>
-              {/* {type !== 'Collection' ? (
-                <FileInfo gap={12}>
-                  <div>
-                    Collection <span>{groupName}</span>
-                  </div>
-                </FileInfo>
-              ) : (
-                <ResourceNum gap={4}>
-                  {num} Items listed at
-                  {listTime ? (
-                    <CreateTime>{formatDateUTC(listTime * 1000)}</CreateTime>
-                  ) : null}
-                </ResourceNum>
-              )} */}
-            </LeftInfo>
-            <ItemPrice>{priceBNB} BNB</ItemPrice>
-          </BaseInfo>
-        </InfoCon>
         <BuyInfo>
+          <ItemCon justifyContent={'space-between'}>
+            <ItemTitle>Price</ItemTitle>
+            <ItemVal>{priceBNB} BNB</ItemVal>
+          </ItemCon>
+          <ItemCon justifyContent={'space-between'}>
+            <ItemTitle>
+              Service fee
+              <Popover placement="right" trigger="hover">
+                <PopoverTrigger trigger="hover">
+                  <ColoredInfoIcon
+                    ml="3px"
+                    color="#8C8F9B"
+                    w="16px"
+                    cursor="pointer"
+                  />
+                </PopoverTrigger>
+                <PopoverContent p="0">
+                  <PopoverArrow bg="#F7F7F8" />
+                  <Box bg="#F7F7F8" borderRadius="4px" p="8px" color="#181A1E">
+                    Price x 1%
+                  </Box>
+                </PopoverContent>
+              </Popover>
+            </ItemTitle>
+            <ItemVal>{earing} BNB</ItemVal>
+          </ItemCon>
           <ItemCon justifyContent={'space-between'}>
             <ItemTitle>Gas fee</ItemTitle>
             <ItemVal>{relayFeeBNB} BNB</ItemVal>
           </ItemCon>
-          <ItemCon justifyContent={'space-between'}>
-            <ItemTitle>Service fee</ItemTitle>
-            <ItemVal>1%</ItemVal>
-          </ItemCon>
-          <Box h={6}></Box>
-          <Box h={1} border={'0.1px #181a1e solid'}></Box>
-          <Box h={6}></Box>
-          <ItemCon alignItems={'flex-end'} justifyContent={'space-between'}>
+          <Box w="100%" h="1px" bg="#5C5F6A"></Box>
+          <ItemCon alignItems={'flex-start'} justifyContent={'space-between'}>
             <ItemTitle>Total</ItemTitle>
-            <ItemVal> {TotalPrice} BNB </ItemVal>
+            <ItemVal>
+              <Box>{TotalPrice} BNB</Box>
+              <Box textAlign="right" color="#8C8F9B" fontSize="12px">
+                ${totalDollar}
+              </Box>
+            </ItemVal>
           </ItemCon>
-          <ItemCon alignItems={'flex-end'} justifyContent={'space-between'}>
+          {/* <ItemCon alignItems={'flex-end'} justifyContent={'space-between'}>
             <ItemTitle>Balance on BSC {NETWORK}</ItemTitle>
             <ItemVal> {roundFun(BscBalanceVal, 4)} BNB </ItemVal>
-          </ItemCon>
+          </ItemCon> */}
         </BuyInfo>
       </CustomBody>
       {!BSC_FEE_SUFF && <BalanceWarn>Insufficient Balance</BalanceWarn>}
       <QDrawerFooter>
         {chain && chain.id === BSC_CHAIN_ID && (
           <BigYellowButton
-            width={'50%'}
+            width={'100%'}
             onClick={() => {
               buy(groupId);
               modalData.modalDispatch({ type: 'BUYING' });
@@ -151,9 +155,9 @@ export const BuyModal = (props: any) => {
             Switch to BSC {NETWORK}
           </BigYellowButton>
         ) : null}
-        <Cancel width={'50%'} onClick={handleOpen} variant="ghost">
+        {/* <Cancel width={'50%'} onClick={handleOpen} variant="ghost">
           Cancel
-        </Cancel>
+        </Cancel> */}
       </QDrawerFooter>
     </Container>
   );
@@ -161,14 +165,11 @@ export const BuyModal = (props: any) => {
 
 const Container = styled(QDrawer)`
   color: red;
-  .ui-drawer-content {
-    background: #ffffff;
-  }
 `;
 
 const Header = styled(QDrawerHeader)`
   font-style: normal;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 20px;
   line-height: 28px;
 
@@ -176,7 +177,7 @@ const Header = styled(QDrawerHeader)`
   align-items: center;
   text-align: center;
 
-  color: #000000;
+  color: #f7f7f8;
 `;
 
 const CustomBody = styled(QDrawerBody)`
@@ -197,7 +198,7 @@ const ItemPrice = styled.div`
   font-size: 16px;
   line-height: 24px;
 
-  color: #5f6368;
+  color: #c4c5cb;
 `;
 
 const ImgCon = styled.div`
@@ -232,28 +233,28 @@ const Tag = styled(Flex)`
   border-radius: 16px;
 `;
 
-const BuyInfo = styled.div`
-  margin-top: 60px;
+const BuyInfo = styled(Stack)`
+  /* margin-top: 60px; */
+  gap: 12px;
 `;
 
-const ItemCon = styled(Flex)``;
+const ItemCon = styled(Flex)`
+  font-size: 14px;
+  line-height: 16px;
+`;
 
 const ItemTitle = styled.div`
   font-style: normal;
   font-weight: 600;
-  font-size: 12px;
   line-height: 18px;
 
-  color: #1e2026;
+  color: #c4c5cb;
 `;
 
 const ItemVal = styled.div`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
+  font-weight: 700;
   line-height: 18px;
-
-  color: #1e2026;
+  color: #f7f7f8;
 `;
 
 const BalanceWarn = styled(Flex)`
