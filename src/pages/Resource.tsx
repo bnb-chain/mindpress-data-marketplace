@@ -1,27 +1,34 @@
 import styled from '@emotion/styled';
-import { Box, Flex } from '@totejs/uikit';
-import { useMemo } from 'react';
+import { LinkArrowIcon } from '@totejs/icons';
+import { Box, Flex, Link, Stack } from '@totejs/uikit';
+import BN from 'bn.js';
+import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useSearchParams } from 'react-router-dom';
-import { useAccount } from 'wagmi';
 import { Loader } from '../components/Loader';
-import { ImgCon } from '../components/resource/ImgCon';
-import { MyBreadcrumb } from '../components/resource/MyBreadcrumb';
-import Overview from '../components/resource/Overview';
-import { CollectionInfo } from '../components/resource/collection/CollectionInfo';
-import CollectionList from '../components/resource/collection/CollectionList';
-import { DataInfo } from '../components/resource/data/DataInfo';
-import { BscTraceIcon } from '../components/svgIcon/BscTraceIcon';
+import { NoData } from '../components/NoData';
+import BSCIcon from '../components/svgIcon/BSCIcon';
+import { YellowButton } from '../components/ui/buttons/YellowButton';
 import { GF_EXPLORER_URL } from '../env';
+import { useBNBPrice } from '../hooks/useBNBPrice';
 import {
   useGetBOInfoFromGroup,
   useGetBucketByName,
-  useGetGroupByName,
   useGetObject,
 } from '../hooks/useGetBucketOrObj';
 import { useGetItemById } from '../hooks/useGetItemById';
+import {
+  contentTypeToExtension,
+  divide10Exp,
+  formatDateDot,
+  parseFileSize,
+  roundFun,
+  trimLongStr,
+} from '../utils';
+import { useAccount } from 'wagmi';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
-import { reportEvent } from '../utils/ga';
-import { NoData } from '../components/NoData';
+import { useWalletModal } from '../hooks/useWalletModal';
+import { useModal } from '../hooks/useModal';
+import { Carousel } from '../components/ui/carousel';
 
 /**
  * Have been listed
@@ -31,12 +38,12 @@ import { NoData } from '../components/NoData';
 const Resource = () => {
   const [p] = useSearchParams();
   const itemId = p.get('id') as string;
-  const { address } = useAccount();
-
   const { data: itemInfo, isLoading: itemInfoLoading } = useGetItemById(
     parseInt(itemId),
   );
+  const { price: bnbPrice } = useBNBPrice();
 
+  const { address, isConnected, isConnecting } = useAccount();
   const relation = useGetItemRelationWithAddr(address, itemInfo);
 
   const storageInfo = useGetBOInfoFromGroup(itemInfo?.groupName);
@@ -48,101 +55,144 @@ const Resource = () => {
     storageInfo?.objectName,
   );
 
-  const { data: groupData } = useGetGroupByName(
-    itemInfo?.groupName,
-    itemInfo?.ownerAddress,
-  );
-
-  const resourceName = useMemo(() => {
-    if (!storageInfo || !bucketData || !itemInfo) return;
-
-    return storageInfo.type === 'COLLECTION'
-      ? itemInfo?.name
-      : `${bucketData.bucketInfo.bucketName} #${itemInfo?.name}`;
-  }, [bucketData, itemInfo, storageInfo]);
+  const modalData = useModal();
+  const { handleModalOpen } = useWalletModal();
 
   if (itemInfoLoading) {
     return <Loader />;
   }
 
-  if (!itemInfo || !bucketData) {
+  if (!itemInfo || !bucketData || !objectData) {
     return <NoData />;
   }
 
   return (
     <Container>
-      <MyBreadcrumb
-        root={{
-          bucketName: bucketData.bucketInfo.bucketName,
-        }}
-      />
+      <ResourceInfo>
+        <ImageContainer>
+          <img src={itemInfo.url} />
+        </ImageContainer>
 
-      <ResourceInfo gap={100} padding="30px 0">
-        <ImgCon relation={relation} itemInfo={itemInfo} />
+        <Info>
+          <Stack gap="24px">
+            <UserNameContainer
+              gap={8}
+              alignItems={'center'}
+              justifyContent={'flex-start'}
+            >
+              <MetaMaskAvatar size={40} address={itemInfo.ownerAddress} />
+              <UserName>{trimLongStr(itemInfo.ownerAddress)}</UserName>
+            </UserNameContainer>
 
-        <Info flexDirection="column" flex="1">
-          <NameCon gap={4} alignItems={'center'} justifyContent={'flex-start'}>
-            <Name>
-              {resourceName || (
-                <Loader
-                  style={{ width: '38px', height: '38px' }}
-                  minHeight={38}
-                />
-              )}
-            </Name>
-            <BscTraceIcon
-              color="#53EAA1"
-              width={24}
-              height={20}
-              cursor={'pointer'}
-              marginLeft={6}
-              onClick={() => {
-                if (!storageInfo) return;
-                const o =
-                  itemInfo?.type == 'COLLECTION'
-                    ? bucketData?.bucketInfo
-                    : objectData?.objectInfo;
+            <Box>
+              <ResourceName>{itemInfo.name}</ResourceName>
+              {itemInfo.description && <Desc>{itemInfo.description}</Desc>}
+            </Box>
 
-                reportEvent({
-                  name: 'dm.detail.overview.view_in_explorer.click',
-                });
-                window.open(
-                  `${GF_EXPLORER_URL}${
-                    itemInfo?.type == 'COLLECTION' ? 'bucket' : 'object'
-                  }/0x${Number(o?.id).toString(16).padStart(64, '0')}`,
-                );
-              }}
-            />
-          </NameCon>
+            <Stack gap="10px">
+              <Option>
+                <Box className="field">Object ID:</Box>
+                <Link
+                  target="_blank"
+                  href={`${GF_EXPLORER_URL}object/0x${Number(
+                    objectData?.objectInfo.id,
+                  )
+                    .toString(16)
+                    .padStart(64, '0')}`}
+                >
+                  GreenfieldScan
+                  <LinkArrowIcon w="16px" verticalAlign="text-top" />
+                </Link>
+              </Option>
+              <Option>
+                <Box className="field">Media type:</Box>
+                <Box className="value">
+                  {contentTypeToExtension(objectData?.objectInfo.contentType)}
+                </Box>
+              </Option>
+              <Option>
+                <Box className="field">Size</Box>
+                <Box className="value">
+                  {parseFileSize(objectData.objectInfo.payloadSize.low || 0)}
+                </Box>
+              </Option>
+              <Option>
+                <Box className="field">Publish date:</Box>
+                <Box className="value">
+                  {formatDateDot(itemInfo.createdAt * 1000)}
+                </Box>
+              </Option>
+            </Stack>
+          </Stack>
 
-          {itemInfo?.type === 'OBJECT' && (
-            <DataInfo itemInfo={itemInfo} objectData={objectData} />
-          )}
+          <Stack gap="24px">
+            <Flex gap="8px" alignItems="center">
+              <BSCIcon color="#F0B90B" w={24} h={24} />
+              <BNB>{divide10Exp(new BN(itemInfo.price, 10), 18)} BNB</BNB>
+              <Dollar>
+                $
+                {roundFun(
+                  divide10Exp(
+                    new BN(itemInfo.price, 10).mul(
+                      new BN(Number(bnbPrice), 10),
+                    ),
+                    18,
+                  ).toString(),
+                  8,
+                )}
+              </Dollar>
+            </Flex>
 
-          {itemInfo?.type == 'COLLECTION' && (
-            <CollectionInfo itemInfo={itemInfo} relation={relation} />
-          )}
+            {(relation === 'NOT_PURCHASE' || relation === 'UNKNOWN') && (
+              <YellowButton
+                h="48px"
+                onClick={() => {
+                  console.log('relation', relation, isConnecting, isConnected);
+                  if (relation === 'UNKNOWN') {
+                    if (!isConnected && !isConnecting) {
+                      handleModalOpen();
+                    }
+                  } else {
+                    modalData.modalDispatch({
+                      type: 'OPEN_BUY',
+                      buyData: itemInfo,
+                    });
+                  }
+                }}
+              >
+                Buy
+              </YellowButton>
+            )}
+
+            {relation === 'OWNER' && (
+              <YellowButton
+                h="48px"
+                onClick={() => {
+                  console.log('itemInfo', itemInfo);
+                  modalData.modalDispatch({
+                    type: 'OPEN_DELIST',
+                    delistData: {
+                      groupId: itemInfo.groupId,
+                      bucket_name: storageInfo?.bucketName,
+                      create_at: itemInfo.createdAt,
+                      owner: itemInfo.ownerAddress,
+                    },
+                  });
+                }}
+              >
+                Delist
+              </YellowButton>
+            )}
+          </Stack>
         </Info>
       </ResourceInfo>
-      <Hr mb="55px" />
-      <Overview
-        itemInfo={itemInfo}
-        relation={relation}
-        bucketData={bucketData}
-        groupData={groupData}
-      />
-      {itemInfo?.type === 'COLLECTION' && (
-        <>
-          <Hr mt="55px" />
-          <Box mt="50px">
-            <CollectionList
-              itemInfo={itemInfo}
-              bucketData={bucketData}
-              relation={relation}
-            />
-          </Box>
-        </>
-      )}
+
+      <Box mt="40px">
+        <Box mb="15px" fontSize="20px" fontWeight={600}>
+          Related images
+        </Box>
+        <Carousel />
+      </Box>
     </Container>
   );
 };
@@ -150,34 +200,91 @@ const Resource = () => {
 export default Resource;
 
 const Container = styled(Box)`
-  margin-top: 20px;
   width: 1400px;
-  background-color: #181a1e;
-  border-radius: 16px;
-  border: 1px solid #1e2026;
-  padding: 80px 100px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 120px;
 `;
 
-const ResourceInfo = styled(Flex)``;
+const ImageContainer = styled(Box)`
+  /* width: 744px; */
+  height: 500px;
+  flex: 1;
+  /* background-color: rgba(120, 21, 26, 0.1); */
 
-const Hr = styled(Box)`
-  height: 1px;
-  background-color: #373943;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+  }
+`;
+
+const ResourceInfo = styled(Flex)`
+  gap: 24px;
 `;
 
 const Info = styled(Flex)`
-  padding-top: 50px;
-  padding-bottom: 50px;
+  /* padding-top: 50px;
+  padding-bottom: 50px; */
+  flex-direction: column;
+  gap: 24px;
+  width: 432px;
+  justify-content: space-between;
 `;
 
-const NameCon = styled(Flex)``;
+const UserNameContainer = styled(Flex)``;
 
-const Name = styled.div`
-  font-style: normal;
+const UserName = styled.div`
   font-weight: 600;
-  font-size: 32px;
+  font-size: 16px;
   line-height: 38px;
-  /* identical to box height, or 119% */
-
   color: #f7f7f8;
+`;
+
+const ResourceName = styled(Box)`
+  color: #f7f7f8;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 20px;
+`;
+
+const Desc = styled(Box)`
+  color: #c4c5cb;
+  font-size: 14px;
+  line-height: 20px;
+`;
+
+const Option = styled(Flex)`
+  --field-color: #8c8f9b;
+  --val-color: #c4c5cb;
+  justify-content: space-between;
+  font-size: 14px;
+  line-height: 16px;
+
+  a {
+    text-decoration: underline;
+    color: var(--val-color);
+  }
+
+  .field {
+    color: var(--field-color);
+    font-weight: 700;
+  }
+
+  .value {
+    color: var(--val-color);
+  }
+`;
+
+const BNB = styled(Box)`
+  color: #f7f7f8;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 600;
+`;
+
+const Dollar = styled(Box)`
+  color: #c4c5cb;
+  font-size: 14px;
 `;

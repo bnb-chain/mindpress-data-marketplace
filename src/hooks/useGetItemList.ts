@@ -22,7 +22,7 @@ export const useInfiniteGetItemList = () => {
   const query = useInfiniteQuery({
     queryKey: ['SEARCH_ITEM_LIST'],
     queryFn: async ({ pageParam }) => {
-      console.log('pageParam', pageParam);
+      // console.log('pageParam', pageParam);
       return await searchItems({
         filter: {
           address: '',

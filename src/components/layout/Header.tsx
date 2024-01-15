@@ -105,7 +105,7 @@ const Header = () => {
       padding={'0px 24px 0'}
       height={80}
     >
-      <LeftCon h="50px" gap={90} alignItems={'center'}>
+      <LeftCon h="50px" gap={40} alignItems={'center'}>
         <img
           title="market place"
           onClick={() => {
@@ -297,7 +297,7 @@ const HeaderFlex = styled(Flex)`
   left: 0;
   right: 0;
   z-index: 10;
-  background-color: transparent;
+  background-color: #181a1e;
   padding: 0 40px;
 `;
 const LeftCon = styled(Flex)`

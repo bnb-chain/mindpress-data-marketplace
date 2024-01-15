@@ -106,6 +106,6 @@ const Main = styled.main`
 `;
 
 const Container = styled(Flex)`
-  background-color: #000000;
+  background-color: #14151a;
   min-height: 100vh;
 `;
