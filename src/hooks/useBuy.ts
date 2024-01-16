@@ -64,9 +64,9 @@ export const useBuy = (
             tmp = {
               variant: 'success',
               description: success ? 'Buy successful' : 'pending',
-              callBack: () => {
-                navigator('/profile?tab=purchase');
-              },
+              // callBack: () => {
+              //   navigator('/profile?tab=purchase');
+              // },
             };
           } catch (e: any) {
             tmp = {
@@ -84,7 +84,7 @@ export const useBuy = (
       }
       return false;
     },
-    [status, price, relayFee, BscBalanceVal, state, address, navigator],
+    [status, price, relayFee, BscBalanceVal, state, address],
   );
   return { buy, relayFee };
 };

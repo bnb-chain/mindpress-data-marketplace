@@ -27,6 +27,7 @@ import { useHasRole } from '../../hooks/useHasRole';
 import { useModal } from '../../hooks/useModal';
 import { defaultImg, divide10Exp, formatDateUTC, roundFun } from '../../utils';
 import { getWeb3 } from '../../base/contract/getWeb3';
+import { BlackButton } from '../ui/buttons/YellowButton';
 
 export const DelistModal = (props: any) => {
   const modalData = useModal();
@@ -185,14 +186,14 @@ export const DelistModal = (props: any) => {
           </Button>
         )}
         {chain && chain.id !== BSC_CHAIN_ID ? (
-          <Button
+          <BlackButton
             width={'100%'}
             onClick={() => {
               switchNetwork?.(BSC_CHAIN_ID);
             }}
           >
             Switch to Bsc {NETWORK}
-          </Button>
+          </BlackButton>
         ) : null}
         <Cancel width={'50%'} onClick={handleOpen} variant="ghost">
           Cancel
@@ -332,6 +333,6 @@ const BalanceWarn = styled(Flex)`
 const Cancel = styled(Button)`
   color: #1e2026;
   &:hover {
-    color: ${(props: any) => props.theme.colors.readable.normal};
+    color: #fff;
   }
 `;

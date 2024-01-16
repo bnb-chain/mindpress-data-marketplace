@@ -68,7 +68,6 @@ export const BuyModal = (props: any) => {
   const totalDollar = useMemo(() => {
     const fee =
       parseUnits(String(TotalPrice), 9) * parseUnits(String(bnbPrice), 9);
-    console.log(fee);
 
     return formatUnits(fee, 18);
   }, [TotalPrice, bnbPrice]);
