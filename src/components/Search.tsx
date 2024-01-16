@@ -23,13 +23,15 @@ const Group = (props: any) => {
 interface ISearch {
   width?: string;
   height?: string;
+  kw?: string;
 }
 
 const Search = (props: ISearch) => {
-  let { width, height } = props;
+  let { width, height, kw } = props;
   width = width || '420px';
   height = height || '56px';
-  const [searchValue, setSearchValue] = useState('');
+  kw = kw || '';
+  const [searchValue, setSearchValue] = useState(kw);
 
   const [loading, setLoading] = useState(false);
   const [list, setList] = useState([]);
@@ -43,7 +45,7 @@ const Search = (props: ISearch) => {
   }, []);
 
   const searchList = useDebounce(async () => {
-    if (searchValue) {
+    if (searchValue && !kw) {
       setShow(true);
       setList([]);
       setLoading(true);

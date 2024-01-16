@@ -3,6 +3,7 @@ import { ColoredErrorIcon, SearchIcon } from '@totejs/icons';
 import { BaseSyntheticEvent, useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 import { mobileMedia } from '../hooks/useResponsive';
+import { useNavigate } from 'react-router-dom';
 
 export interface SearchInputProps {
   value: string;
@@ -37,6 +38,7 @@ export function SearchInput({
 }: SearchInputProps) {
   const [innerValue, setInnerValue] = useState<string>('');
   const [isFocus, setIsFocus] = useState(false);
+  const navigator = useNavigate();
 
   const handleChange = useCallback(
     (v: any) => {
@@ -58,11 +60,12 @@ export function SearchInput({
   );
 
   const handleSearchConfirm = useCallback(() => {
+    navigator(`/search?kw=${innerValue}`);
     onConfirm?.(innerValue);
     // clean the input text after searching
     handleChange('');
     setInnerValue('');
-  }, [innerValue, onConfirm, handleChange]);
+  }, [navigator, innerValue, onConfirm, handleChange]);
 
   const handleKeyDown = useCallback(
     (e: any) => {

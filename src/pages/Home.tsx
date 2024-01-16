@@ -31,32 +31,3 @@ const Container = styled(Flex)`
   /* width: 100%; */
   /* background-color: #1e2026; */
 `;
-
-const TableTitle = styled(Box)`
-  font-size: 32px;
-  font-weight: 600;
-  line-height: 40px; /* 125% */
-`;
-
-const BoxWithArrow = styled(Box)`
-  width: 1400px;
-  /* justify-content: center;
-  align-items: center; */
-  /* padding-top: 50px;
-  padding-bottom: 50px;
-  padding-left: 32px;
-  padding-right: 32px; */
-  background: #181a1e;
-  border: 1px solid #1e2026;
-  border-radius: 16px;
-`;
-
-const CardBox = styled(Box)`
-  width: 1400px;
-  /* padding-left: 100px;
-  padding-right: 100px; */
-  border-radius: 32px;
-  border: 1px solid #1e2026;
-  background: #181a1e;
-  overflow: hidden;
-`;

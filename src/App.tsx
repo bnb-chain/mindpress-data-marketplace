@@ -29,6 +29,7 @@ import React from 'react';
 import { Detail } from './pages/Detail';
 import { Redirect } from './pages/Redirect';
 import { R } from './pages/R';
+import Search from './pages/Search';
 
 export interface IRoute {
   children?: Array<IRoute>;
@@ -47,6 +48,10 @@ const routes: Array<IRoute> = [
   {
     path: '/',
     element: <Home></Home>,
+  },
+  {
+    path: '/search',
+    element: <Search />,
   },
   {
     path: '/profile',

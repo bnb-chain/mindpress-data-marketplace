@@ -203,7 +203,7 @@ const Container = styled(Box)`
   width: 1400px;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 120px;
+  margin-top: 40px;
 `;
 
 const ImageContainer = styled(Box)`

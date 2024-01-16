@@ -12,7 +12,7 @@ import {
   useState,
 } from 'react';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccount, useDisconnect } from 'wagmi';
 import Search from '../../components/Search';
 import { NET_ENV } from '../../env';
@@ -70,6 +70,8 @@ const CustomMenuButton = forwardRef(
 );
 
 const Header = () => {
+  const [p] = useSearchParams();
+  const kw = p.get('kw') as string;
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const { address, isConnecting, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
@@ -114,7 +116,9 @@ const Header = () => {
           src={NET_ENV === 'TESTNET' ? TestNetLogo : MainNetLogo}
           alt="logo"
         />
-        {location.pathname !== '/' && <Search width="380px" height="40px" />}
+        {location.pathname !== '/' && (
+          <Search width="380px" height="40px" kw={kw} />
+        )}
       </LeftCon>
 
       <RightFunCon alignItems={'center'} justifyContent={'center'} gap={18}>

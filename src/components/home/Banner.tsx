@@ -30,7 +30,7 @@ const Container = styled(Box)`
   /* padding: 32px; */
   width: 100vw;
   height: 510px;
-  padding: 160px 0 130px 0;
+  padding: 80px 0 130px 0;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
     url(https://picsum.photos/1800/600) no-repeat center center;
   background-size: cover;
