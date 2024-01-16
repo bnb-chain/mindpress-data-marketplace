@@ -18,19 +18,14 @@ export const useGetItemList = (
 
 const PAGE_SIZE = 10;
 
-export const useInfiniteGetItemList = () => {
+export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
   const query = useInfiniteQuery({
-    queryKey: ['SEARCH_ITEM_LIST'],
+    queryKey: ['SEARCH_ITEM_LIST', params],
     queryFn: async ({ pageParam }) => {
       // console.log('pageParam', pageParam);
       return await searchItems({
-        filter: {
-          address: '',
-          keyword: '',
-        },
+        ...params,
         offset: pageParam * PAGE_SIZE,
-        limit: PAGE_SIZE,
-        sort: 'CREATION_DESC',
       });
     },
     initialPageParam: 0,
@@ -40,7 +35,7 @@ export const useInfiniteGetItemList = () => {
       // console.log('lastPageParam', lastPageParam);
       // console.log('allPageParams', allPageParams);
 
-      if (lastPage.total > lastPageParam * PAGE_SIZE) {
+      if (lastPage.total > (lastPageParam + 1) * PAGE_SIZE) {
         return lastPageParam + 1;
       }
       return undefined;
@@ -52,8 +47,13 @@ export const useInfiniteGetItemList = () => {
     return query.data?.pages?.flatMap((page) => page.items);
   }, [query.data]);
 
+  const total = useMemo(() => {
+    return query.data?.pages[0].total || 0;
+  }, [query.data?.pages]);
+
   return {
     ...query,
     flatData,
+    total,
   };
 };
