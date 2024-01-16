@@ -1,14 +1,9 @@
 import styled from '@emotion/styled';
-import { Box, Flex, VStack } from '@totejs/uikit';
-import { MetaMaskAvatar } from 'react-metamask-avatar';
-import Masonry from 'react-responsive-masonry';
-import { useInfiniteGetItemList } from '../../hooks/useGetItemList';
-import { trimLongStr } from '../../utils';
-import { Loader } from '../Loader';
-import { DefaultButton } from '../ui/buttons/DefaultButton';
-import { useNavigate } from 'react-router-dom';
-import { MindPressMasmonry } from '../ui/masmonry';
+import { Box } from '@totejs/uikit';
 import { useCallback } from 'react';
+import { useInfiniteGetItemList } from '../../hooks/useGetItemList';
+import { Loader } from '../Loader';
+import { MindPressMasmonry } from '../ui/masmonry';
 
 export const Trending = () => {
   const {

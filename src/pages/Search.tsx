@@ -29,8 +29,6 @@ const Search = () => {
     fetchNextPage();
   }, [fetchNextPage]);
 
-  console.log('searchList', searchList);
-
   if (!kw) return null;
 
   if (total === 0 && searchList?.length == 0) {

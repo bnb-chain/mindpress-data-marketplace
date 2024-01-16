@@ -1,45 +1,35 @@
 import styled from '@emotion/styled';
-import { Box, Flex } from '@totejs/uikit';
-
-const DATA = [
-  {
-    name: 'Lifestyle',
-    imageUrl: 'https://picsum.photos/190/190',
-  },
-  {
-    name: 'Landscape',
-    imageUrl: 'https://picsum.photos/190/191',
-  },
-  {
-    name: 'AI Generated',
-    imageUrl: 'https://picsum.photos/191/190',
-  },
-  {
-    name: 'Beauty & Fashion',
-    imageUrl: 'https://picsum.photos/180/190',
-  },
-  {
-    name: 'Technology',
-    imageUrl: 'https://picsum.photos/190/180',
-  },
-  {
-    name: 'Sport',
-    imageUrl: 'https://picsum.photos/192/190',
-  },
-];
+import { Box, Flex, Link as ChakraLink, LinkProps } from '@totejs/uikit';
+import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
+import { Loader } from '../Loader';
+import { Link as ReactRouterLink } from 'react-router-dom';
 
 export const CateList = () => {
+  const { data: cates, isLoading } = useGetCatoriesMap();
+
+  if (isLoading || !cates) {
+    return <Loader />;
+  }
+
   return (
     <CateContainer>
-      {DATA.map((item) => (
-        <CateItem
-          key={item.name}
-          bg={`linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${item.imageUrl}) center center`}
-          bgSize="cover"
-        >
-          {item.name}
-        </CateItem>
-      ))}
+      {cates.slice(0, 6).map((category) => {
+        const imageUrl = `https://picsum.photos/seed/${category.name.replaceAll(
+          ' ',
+          '',
+        )}/200/200`;
+        return (
+          <CateItem
+            as={ReactRouterLink}
+            key={category.id}
+            bg={`linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${imageUrl}) center center`}
+            bgSize="cover"
+            to={`/search?c=${category.id}`}
+          >
+            {category.name}
+          </CateItem>
+        );
+      })}
     </CateContainer>
   );
 };
@@ -49,7 +39,8 @@ const CateContainer = styled(Flex)`
   gap: 24px;
 `;
 
-const CateItem = styled(Box)`
+const CateItem = styled(ChakraLink)`
+  color: #f7f7f8;
   width: 180px;
   height: 180px;
   line-height: 180px;
@@ -57,4 +48,8 @@ const CateItem = styled(Box)`
   font-weight: 800;
   text-align: center;
   border-radius: 8px;
+
+  &:hover {
+    color: rgba(247, 247, 248, 0.8);
+  }
 `;
