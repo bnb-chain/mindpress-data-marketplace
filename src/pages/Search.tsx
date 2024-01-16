@@ -5,10 +5,15 @@ import { useInfiniteGetItemList } from '../hooks/useGetItemList';
 import { MindPressMasmonry } from '../components/ui/masmonry';
 import { useCallback } from 'react';
 import NoData from '../images/NoData.svg';
+import { useGetCategory } from '../hooks/useGetCatoriesMap';
 
 const Search = () => {
   const [p] = useSearchParams();
-  const kw = p.get('kw') as string;
+  // search keyword
+  const kw = (p.get('kw') as string) || '';
+  // search category id
+  const c = (p.get('c') as string) || '-1';
+  const category = useGetCategory(Number(c));
 
   const {
     fetchNextPage,
@@ -19,6 +24,7 @@ const Search = () => {
     filter: {
       address: '',
       keyword: kw,
+      categoryId: Number(c),
     },
     offset: 0,
     limit: 10,
@@ -29,7 +35,7 @@ const Search = () => {
     fetchNextPage();
   }, [fetchNextPage]);
 
-  if (!kw) return null;
+  // if (!kw || !c) return null;
 
   if (total === 0 && searchList?.length == 0) {
     return (
@@ -60,7 +66,7 @@ const Search = () => {
 
   return (
     <Container>
-      <Keyword>{kw}</Keyword>
+      <Keyword>{kw || category?.name}</Keyword>
       <Desc>{total} building stock photos are available royalty-free</Desc>
 
       <Box mt="40px">
