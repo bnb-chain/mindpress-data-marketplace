@@ -32,6 +32,7 @@ import {
   roundFun,
   trimLongStr,
 } from '../utils';
+import { MPLink } from '../components/ui/MPLink';
 
 /**
  * Have been listed
@@ -88,6 +89,8 @@ const Resource = () => {
         <Info>
           <Stack gap="24px">
             <UserNameContainer
+              as={MPLink}
+              to={`/profile?address=${itemInfo.ownerAddress}`}
               gap={8}
               alignItems={'center'}
               justifyContent={'flex-start'}

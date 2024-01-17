@@ -42,7 +42,7 @@ const Profile = () => {
 export default Profile;
 
 const Container = styled.div`
-  width: 1000px;
+  width: 1200px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 40px;

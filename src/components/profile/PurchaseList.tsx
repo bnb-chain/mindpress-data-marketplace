@@ -1,35 +1,46 @@
 import styled from '@emotion/styled';
 import { LinkArrowIcon } from '@totejs/icons';
-import { Box, Flex, Grid, Image, Stack } from '@totejs/uikit';
+import {
+  Box,
+  Flex,
+  Grid,
+  Image,
+  Pagination,
+  Stack,
+  VStack,
+} from '@totejs/uikit';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { GF_EXPLORER_URL } from '../../env';
+import { useGetBOInfoFromGroup } from '../../hooks/useGetBucketOrObj';
+import { useGetDownloadUrl } from '../../hooks/useGetDownloadUrl';
 import { useGetUserPurchasedList } from '../../hooks/useUserPurchased';
 import { contentTypeToExtension } from '../../utils';
+import { Item } from '../../utils/apis/types';
 import { Loader } from '../Loader';
 import { MPLink } from '../ui/MPLink';
+import { DefaultButton } from '../ui/buttons/DefaultButton';
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 12;
 
 interface IProps {
   address: string;
 }
 
 const PurchaseList = ({ address }: IProps) => {
-  // const { address } = useAccount();
-  // const { handlePageChange, page } = usePagination();
-
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
 
   // const { list, loading, total } = useUserPurchased(page, pageSize);
-
   const { data: list, isLoading } = useGetUserPurchasedList(
     address as string,
-    page,
+    page - 1,
     PAGE_SIZE,
   );
-
-  const navigator = useNavigate();
+  const [activeItem, setActiveItem] = useState<Item | null>(null);
+  const storageInfo = useGetBOInfoFromGroup(activeItem?.groupName);
+  const downloadUrl = useGetDownloadUrl({
+    bucketName: storageInfo?.bucketName,
+    name: activeItem?.name || '',
+  });
 
   if (isLoading) {
     return <Loader />;
@@ -43,7 +54,11 @@ const PurchaseList = ({ address }: IProps) => {
             const { item } = purResource;
             return (
               <Card key={item.id}>
-                <ImageBox>
+                <ImageBox
+                  onMouseEnter={() => {
+                    setActiveItem(item);
+                  }}
+                >
                   <Image
                     src={item.url}
                     fallbackSrc={`https://picsum.photos/seed/${item.name.replaceAll(
@@ -52,7 +67,20 @@ const PurchaseList = ({ address }: IProps) => {
                     )}/400/400`}
                   />
 
-                  <Box className="layer"></Box>
+                  <VStack className="layer" justifyContent="center">
+                    <DefaultButton
+                      h="48px"
+                      bg="#F1F2F3"
+                      color="#181A1E"
+                      fontWeight="800"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        window.open(downloadUrl);
+                      }}
+                    >
+                      Download
+                    </DefaultButton>
+                  </VStack>
                 </ImageBox>
                 <Info>
                   <InfoItem>
@@ -87,6 +115,18 @@ const PurchaseList = ({ address }: IProps) => {
             );
           })}
       </Grid>
+
+      <Flex justifyContent="center" mt="40px" mb="40px">
+        <StyledPagination
+          current={page}
+          pageSize={PAGE_SIZE}
+          total={list?.total}
+          showQuickJumper={false}
+          onChange={(p) => {
+            setPage(p);
+          }}
+        />
+      </Flex>
     </Container>
   );
 };
@@ -94,7 +134,7 @@ const PurchaseList = ({ address }: IProps) => {
 export default PurchaseList;
 
 const Container = styled.div`
-  /* padding: '4px 20px'; */
+  width: 1200px;
 `;
 
 const Card = styled(Stack)`
@@ -139,6 +179,7 @@ const ImageBox = styled(Box)`
   }
 
   .layer {
+    display: none;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -147,10 +188,32 @@ const ImageBox = styled(Box)`
   }
 
   &:hover .layer {
+    display: flex;
     background: radial-gradient(
       50% 50% at 50% 50%,
       rgba(0, 0, 0, 0.24) 0%,
       rgba(0, 0, 0, 0.6) 100%
     );
+  }
+`;
+
+const StyledPagination = styled(Pagination)`
+  .ui-button {
+    background: #373943;
+    color: #f7f7f8;
+    font-size: 14px;
+    width: 32px;
+    height: 32px;
+  }
+  .current[data-selected] {
+    background: #1e2026;
+    color: #8c8f9b;
+    cursor: not-allowed;
+  }
+
+  .ui-icon-button {
+    width: 32px;
+    height: 32px;
+    color: #f7f7f8;
   }
 `;

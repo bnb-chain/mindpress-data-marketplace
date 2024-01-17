@@ -5,6 +5,7 @@ export const DefaultButton = (props: ButtonProps) => {
   return (
     <BaseButton
       variant="ghost"
+      fontWeight={600}
       _disabled={{
         color: 'rgba(24, 26, 30, 0.45)',
         background: 'rgba(247, 247, 248, 0.45)',
