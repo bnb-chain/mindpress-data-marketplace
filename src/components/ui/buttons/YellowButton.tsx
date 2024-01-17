@@ -41,31 +41,3 @@ export const YellowButton = (props: ButtonProps) => {
     />
   );
 };
-
-const BlackProps = {
-  background: '#14151A',
-  color: '#FFF',
-  _hover: {
-    bg: 'rgba(20, 21, 26, 0.9)',
-    color: '#FFF',
-  },
-  _active: {
-    bg: 'rgba(20, 21, 26, 0.9)',
-    color: '#FFF',
-  },
-};
-
-export const BlackButton = (props: ButtonProps) => {
-  return (
-    <Button
-      size={'sm'}
-      h="48px"
-      fontSize="14px"
-      p="8px 16px"
-      fontWeight={600}
-      borderRadius="8px"
-      {...BlackProps}
-      {...props}
-    />
-  );
-};

@@ -1,11 +1,13 @@
 import styled from '@emotion/styled';
 import { LinkArrowIcon } from '@totejs/icons';
-import { Box, Flex, Link, Stack } from '@totejs/uikit';
+import { Box, Button, Flex, Link, Stack } from '@totejs/uikit';
 import BN from 'bn.js';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useSearchParams } from 'react-router-dom';
+import { useAccount } from 'wagmi';
 import { Loader } from '../components/Loader';
 import { NoData } from '../components/NoData';
+import { RelatedImage } from '../components/resource/RelatedImage';
 import BSCIcon from '../components/svgIcon/BSCIcon';
 import { YellowButton } from '../components/ui/buttons/YellowButton';
 import { GF_EXPLORER_URL } from '../env';
@@ -15,7 +17,11 @@ import {
   useGetBucketByName,
   useGetObject,
 } from '../hooks/useGetBucketOrObj';
+import { useGetCategory } from '../hooks/useGetCatoriesMap';
 import { useGetItemById } from '../hooks/useGetItemById';
+import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
+import { useModal } from '../hooks/useModal';
+import { useWalletModal } from '../hooks/useWalletModal';
 import {
   contentTypeToExtension,
   divide10Exp,
@@ -24,11 +30,9 @@ import {
   roundFun,
   trimLongStr,
 } from '../utils';
-import { useAccount } from 'wagmi';
-import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
-import { useWalletModal } from '../hooks/useWalletModal';
-import { useModal } from '../hooks/useModal';
-import { Carousel } from '../components/ui/carousel';
+import { MPLink } from '../components/ui/MPLink';
+import { useGetDownloadUrl } from '../hooks/useGetDownloadUrl';
+import { DefaultButton } from '../components/ui/buttons/DefaultButton';
 
 /**
  * Have been listed
@@ -42,6 +46,7 @@ const Resource = () => {
     parseInt(itemId),
   );
   const { price: bnbPrice } = useBNBPrice();
+  const category = useGetCategory(itemInfo?.categoryId || 100);
 
   const { address, isConnected, isConnecting } = useAccount();
   const relation = useGetItemRelationWithAddr(address, itemInfo);
@@ -54,6 +59,11 @@ const Resource = () => {
     storageInfo?.bucketName,
     storageInfo?.objectName,
   );
+
+  const downloadUrl = useGetDownloadUrl({
+    bucketName: storageInfo?.bucketName,
+    name: itemInfo?.name || '',
+  });
 
   const modalData = useModal();
   const { handleModalOpen } = useWalletModal();
@@ -88,6 +98,12 @@ const Resource = () => {
               <ResourceName>{itemInfo.name}</ResourceName>
               {itemInfo.description && <Desc>{itemInfo.description}</Desc>}
             </Box>
+
+            <Flex gap="8px">
+              <Box bg="#373943" borderRadius="40px" color="#C4C5CB" p="4px 8px">
+                {category?.name}
+              </Box>
+            </Flex>
 
             <Stack gap="10px">
               <Option>
@@ -168,7 +184,6 @@ const Resource = () => {
               <YellowButton
                 h="48px"
                 onClick={() => {
-                  console.log('itemInfo', itemInfo);
                   modalData.modalDispatch({
                     type: 'OPEN_DELIST',
                     delistData: {
@@ -183,15 +198,32 @@ const Resource = () => {
                 Delist
               </YellowButton>
             )}
+
+            {relation === 'PURCHASED' && (
+              <DefaultButton
+                h="48px"
+                bg="#F1F2F3"
+                color="#181A1E"
+                onClick={() => {
+                  window.open(downloadUrl);
+                }}
+              >
+                Download
+              </DefaultButton>
+            )}
           </Stack>
         </Info>
       </ResourceInfo>
 
       <Box mt="40px">
-        <Box mb="15px" fontSize="20px" fontWeight={600}>
-          Related images
-        </Box>
-        <Carousel />
+        <Flex alignItems="center" justifyContent="space-between">
+          <Box mb="15px" fontSize="20px" fontWeight={600}>
+            Related images
+          </Box>
+          <SeeAll to={`/search?c=${category?.id}`}>See All</SeeAll>
+        </Flex>
+
+        <RelatedImage categoryId={category?.id || 100} />
       </Box>
     </Container>
   );
@@ -287,4 +319,13 @@ const BNB = styled(Box)`
 const Dollar = styled(Box)`
   color: #c4c5cb;
   font-size: 14px;
+`;
+
+const SeeAll = styled(MPLink)`
+  color: #f7f7f8;
+  font-size: 16px;
+  font-weight: 700;
+  &:hover {
+    color: rgba(247, 247, 248, 0.8);
+  }
 `;

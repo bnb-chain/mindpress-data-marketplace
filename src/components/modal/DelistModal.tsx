@@ -27,7 +27,7 @@ import { useHasRole } from '../../hooks/useHasRole';
 import { useModal } from '../../hooks/useModal';
 import { defaultImg, divide10Exp, formatDateUTC, roundFun } from '../../utils';
 import { getWeb3 } from '../../base/contract/getWeb3';
-import { BlackButton } from '../ui/buttons/YellowButton';
+import { BlackButton } from '../ui/buttons/BlackButton';
 
 export const DelistModal = (props: any) => {
   const modalData = useModal();

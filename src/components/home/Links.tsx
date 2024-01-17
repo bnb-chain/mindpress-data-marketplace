@@ -33,7 +33,10 @@ export const Links = () => {
               <StorageIcon w={32} h={32} />
             </Box>
             <CardItemTitle>Decentralized Storage</CardItemTitle>
-            <Box className="desc">Derivatives, AMMs, Lending Options</Box>
+            <Box className="desc">
+              All your files are storage on BNB Greenfield decentralized storage
+              network Ownership on Blockchain
+            </Box>
           </CardItem>
         </Box>
         <Box
@@ -46,7 +49,10 @@ export const Links = () => {
               <CopyrightIcon w={32} h={32} />
             </Box>
             <CardItemTitle>Copyright on Blockchain</CardItemTitle>
-            <Box className="desc">Derivatives, AMMs, Lending Options</Box>
+            <Box className="desc">
+              Fully ownership and permission control managed by decentralized
+              blockchain Data Security
+            </Box>
           </CardItem>
         </Box>
         <Box
@@ -62,7 +68,9 @@ export const Links = () => {
               <LockIcon w={32} h={32} color="#FFE900" />
             </Box>
             <CardItemTitle>Data Security</CardItemTitle>
-            <Box className="desc">Derivatives, AMMs, Lending Options</Box>
+            <Box className="desc">
+              Data is stored in a decentralized way with backups User Experience
+            </Box>
           </CardItem>
         </Box>
         <Box
@@ -75,7 +83,9 @@ export const Links = () => {
               <UserIcon w={32} h={32} />
             </Box>
             <CardItemTitle>Seamless User Experience</CardItemTitle>
-            <Box className="desc">Derivatives, AMMs, Lending Options</Box>
+            <Box className="desc">
+              Seamless user experience to boost photo trading
+            </Box>
           </CardItem>
         </Box>
       </CardCon>

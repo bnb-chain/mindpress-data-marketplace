@@ -5,29 +5,14 @@ import { useRef, useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
+import { Item } from '../../../utils/apis/types';
+import { MPLink } from '../MPLink';
 
-const DATA = [
-  {
-    imageUrl: 'https://picsum.photos/500/200',
-  },
-  {
-    imageUrl: 'https://picsum.photos/400/200',
-  },
-  {
-    imageUrl: 'https://picsum.photos/300/150',
-  },
-  {
-    imageUrl: 'https://picsum.photos/300/150',
-  },
-  {
-    imageUrl: 'https://picsum.photos/200/150',
-  },
-  {
-    imageUrl: 'https://picsum.photos/200/450',
-  },
-];
+interface IProps {
+  list: Item[];
+}
 
-export const Carousel = () => {
+export const Carousel = ({ list }: IProps) => {
   const ref = useRef() as any;
   const [index, setIndex] = useState(0);
 
@@ -51,11 +36,15 @@ export const Carousel = () => {
           ref.current = ts;
         }}
       >
-        {DATA.map((item, i) => (
-          <Card key={i}>
-            <img src={`${item.imageUrl}?${i}`} />
-          </Card>
-        ))}
+        {list.map((item) => {
+          const imageUrl =
+            item.url || `https://picsum.photos/500/200?${item.id}`;
+          return (
+            <Card key={item.id} to={`/resource?id=${item.id}&path=/`}>
+              <img src={imageUrl} />
+            </Card>
+          );
+        })}
       </Slider>
 
       <Arrows>
@@ -95,7 +84,7 @@ const Container = styled(Box)`
   position: relative;
 `;
 
-const Card = styled(Box)`
+const Card = styled(MPLink)`
   padding-right: 20px;
   width: 300px;
 
