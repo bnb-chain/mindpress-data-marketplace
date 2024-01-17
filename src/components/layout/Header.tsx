@@ -249,21 +249,17 @@ const Header = () => {
 
               <MenuElement
                 onClick={async (e: React.MouseEvent<HTMLElement>) => {
-                  reportEvent({ name: 'dm.account.my_data.my_data.click' });
                   e.preventDefault();
-                  navigate('/profile?tab=collections');
+                  navigate('/profile?tab=uploaded');
                 }}
               >
                 <MyDataCollectionIcon mr={8} width={24} height={24} />
-                My Data Collections
+                My Uploaded
               </MenuElement>
               <MenuElement
                 onClick={async (e: React.MouseEvent<HTMLElement>) => {
-                  reportEvent({
-                    name: 'dm.account.my_purchase.my_purchase.click',
-                  });
                   e.preventDefault();
-                  navigate('/profile?tab=purchase');
+                  navigate('/profile?tab=purchased');
                 }}
               >
                 <SellIcon mr={8} w={24} height={24} />

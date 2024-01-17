@@ -113,6 +113,7 @@ const Container = styled(Box)`
 const Keyword = styled(Flex)`
   color: #f7f7f8;
   font-size: 32px;
+  font-weight: 700;
   background-color: #14151a;
 `;
 
@@ -121,4 +122,5 @@ const Desc = styled(Box)`
   color: #8c8f9b;
   font-size: 16px;
   line-height: 24px;
+  font-weight: 500;
 `;

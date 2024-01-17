@@ -7,6 +7,7 @@ import { useAccount } from 'wagmi';
 // import { headGroupNFT } from '../utils/gfSDK';
 import { parseGroupName } from '../utils';
 import { searchPurchase } from '../utils/apis';
+import { useQuery } from '@tanstack/react-query';
 
 // export const useUserPurchased = (page: number, pageSize = 10) => {
 //   const [list, setList] = useState(<any>[]);
@@ -114,4 +115,26 @@ export const useUserPurchased = (page: number, pageSize = 10) => {
       });
   }, [address, page, pageSize]);
   return { loading, list, total };
+};
+
+export const useGetUserPurchasedList = (
+  address: string,
+  page: number,
+  pageSize: number,
+) => {
+  return useQuery({
+    enabled: !!address,
+    queryKey: ['PURCHASE_LIST', address, page, pageSize],
+    staleTime: 60_000,
+    queryFn: async () => {
+      return await searchPurchase({
+        filter: {
+          address,
+        },
+        offset: page * pageSize,
+        limit: pageSize,
+        sort: 'CREATION_DESC',
+      });
+    },
+  });
 };

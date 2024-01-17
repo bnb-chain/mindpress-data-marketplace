@@ -35,14 +35,15 @@ const PriceCon = (props: { groupId: string }) => {
   return <div>{balance}</div>;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ICollectionList {
-  setShowButton: Dispatch<boolean>;
+  // setShowButton: Dispatch<boolean>;
 }
 const MyCollectionList = (props: ICollectionList) => {
   const pageSize = 10;
 
   const { handlePageChange, page } = usePagination();
-  const { setShowButton } = props;
+  // const { setShowButton } = props;
   const modalData = useModal();
   // const { list, loading, total } = useCollectionList(page, pageSize, modalData.modalState.result);
   const { list, loading, total } = useCollectionList(
@@ -55,9 +56,9 @@ const MyCollectionList = (props: ICollectionList) => {
 
   const showNoData = useMemo(() => {
     const show = !loading && !list.length;
-    setShowButton(!show);
+    // setShowButton(!show);
     return show;
-  }, [loading, list.length, setShowButton]);
+  }, [loading, list.length]);
 
   const columns = [
     {

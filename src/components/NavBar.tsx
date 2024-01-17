@@ -74,6 +74,18 @@ const NavContainer = styled.div`
   }
   -ms-overflow-style: none;
   scrollbar-width: none;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #373943;
+    z-index: 1;
+  }
 `;
 
 const Nav = styled.nav<INavProps>`
@@ -93,9 +105,8 @@ const Nav = styled.nav<INavProps>`
     width: 100%;
     height: 4px;
     background: ${(props: any) =>
-      props.isActive
-        ? props.theme.colors.scene.primary.normal
-        : props.theme.readable?.border};
+      props.isActive ? '#FFF15C' : props.theme.readable?.border};
+    z-index: 2;
     border-radius: 10px;
   }
 `;
@@ -106,7 +117,8 @@ const InlineContainer = styled.div`
   font-size: 16px;
   white-space: nowrap;
   width: 100%;
-  border-bottom: 1px solid ${(props: any) => props.theme.colors.readable.border};
+  /* border-bottom: 1px solid ${(props: any) =>
+    props.theme.colors.readable.border}; */
   width: 100%;
   overflow: scroll;
   &::-webkit-scrollbar {
@@ -132,7 +144,6 @@ const InlineNav = styled.nav<INavProps>`
     left: 0;
     width: 100%;
     height: 2px;
-    background: ${(props: any) =>
-      props.isActive ? props.theme.colors.scene.primary.normal : 'none'};
+    background: ${(props: any) => (props.isActive ? '#FFF15C' : 'none')};
   }
 `;

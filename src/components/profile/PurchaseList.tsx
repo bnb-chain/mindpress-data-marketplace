@@ -1,135 +1,91 @@
 import styled from '@emotion/styled';
-import { Flex, Table } from '@totejs/uikit';
-import BN from 'bn.js';
+import { Box, Flex, Grid, Image, Stack } from '@totejs/uikit';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
-import { usePagination } from '../../hooks/usePagination';
-import { useUserPurchased } from '../../hooks/useUserPurchased';
-import {
-  defaultImg,
-  divide10Exp,
-  formatDateUTC,
-  trimLongStr,
-} from '../../utils';
-import { Link, useNavigate } from 'react-router-dom';
-import { OwnActionCom } from '../OwnActionCom';
-import { CollectionLogo } from '../svgIcon/CollectionLogo';
-import { PaginationSx } from '../ui/table/PaginationSx';
-import { TableProps } from '../ui/table/TableProps';
+import { useGetUserPurchasedList } from '../../hooks/useUserPurchased';
+import { contentTypeToExtension } from '../../utils';
+import { Loader } from '../Loader';
+import { GF_EXPLORER_URL } from '../../env';
+import { LinkArrowIcon } from '@totejs/icons';
+import { MPLink } from '../ui/MPLink';
+
+const PAGE_SIZE = 10;
 
 const PurchaseList = () => {
-  const { handlePageChange, page } = usePagination();
-
-  const pageSize = 10;
-  const { list, loading, total } = useUserPurchased(page, pageSize);
   const { address } = useAccount();
+  // const { handlePageChange, page } = usePagination();
+
+  const [page, setPage] = useState(0);
+
+  // const { list, loading, total } = useUserPurchased(page, pageSize);
+
+  const { data: list, isLoading } = useGetUserPurchasedList(
+    address as string,
+    page,
+    PAGE_SIZE,
+  );
+
   const navigator = useNavigate();
 
-  const breadInfo = {
-    name: 'My Purchase',
-    path: '/profile',
-  };
-  const columns = [
-    {
-      header: 'Data',
-      width: 200,
-      cell: (data: any) => {
-        const { id, url, type, name } = data;
-        return (
-          <ImgContainer
-            alignItems={'center'}
-            justifyContent={'flex-start'}
-            gap={6}
-            onClick={() => {
-              navigator(`/resource?id=${id}`);
-            }}
-          >
-            <ImgCon src={url || defaultImg(name, 40)}></ImgCon>
-            {trimLongStr(data.name)}
-            {type === 'Collection' && (
-              <CollectionLogo
-                style={{ width: '10px', height: '10px' }}
-              ></CollectionLogo>
-            )}
-          </ImgContainer>
-        );
-      },
-    },
-    {
-      header: 'Type',
-      cell: (data: any) => {
-        const { type } = data;
-        return <div>{type}</div>;
-      },
-    },
-    {
-      header: 'Current List Price',
-      width: 160,
-      cell: (data: any) => {
-        const { price } = data;
-        const balance = divide10Exp(new BN(price, 10), 18);
-        return <div>{balance} BNB</div>;
-      },
-    },
-    {
-      header: 'Data Listed',
-      width: 160,
-      cell: (data: any) => {
-        const { listTime } = data;
-        return <div>{formatDateUTC(listTime * 1000)}</div>;
-      },
-    },
-    {
-      header: 'Total Vol',
-      width: 120,
-      cell: (data: any) => {
-        const { totalVol } = data;
-        return <div>{totalVol}</div>;
-      },
-    },
-    {
-      header: 'Creator',
-      width: 120,
-      cell: (data: any) => {
-        const { ownerAddress } = data;
-        return (
-          <MyLink to={`/profile?address=${ownerAddress}`}>
-            {trimLongStr(ownerAddress)}
-          </MyLink>
-        );
-      },
-    },
-    {
-      header: 'Action',
-      cell: (data: any) => {
-        return (
-          <OwnActionCom
-            data={data}
-            address={address as string}
-            breadInfo={breadInfo}
-          ></OwnActionCom>
-        );
-      },
-    },
-  ];
+  console.log('list', list);
+
+  if (isLoading) {
+    return <Loader />;
+  }
+
   return (
     <Container>
-      <Table
-        headerContent={`Latest ${Math.min(
-          pageSize,
-          list.length,
-        )}  Collections (Total of ${list.length})`}
-        pagination={{
-          current: page,
-          pageSize: pageSize,
-          total,
-          onChange: handlePageChange,
-          sx: PaginationSx,
-        }}
-        columns={columns}
-        data={list}
-        loading={loading}
-        {...TableProps}
-      />
+      <Grid templateColumns="repeat(3, 1fr)" gap="24px">
+        {list &&
+          list.purchases.map((purResource) => {
+            const { item } = purResource;
+            return (
+              <Card key={item.id}>
+                <ImageBox>
+                  <Image
+                    src={item.url}
+                    fallbackSrc={`https://picsum.photos/seed/${item.name.replaceAll(
+                      ' ',
+                      '',
+                    )}/400/400`}
+                  />
+
+                  <Box className="layer"></Box>
+                </ImageBox>
+                <Info>
+                  <InfoItem>
+                    <Field>Object ID:</Field>
+                    <Value>
+                      <MPLink
+                        color="#C4C5CB"
+                        // _hover={{
+                        //   color: '#C4C5CB',
+                        // }}
+                        textDecoration="underline"
+                        target="_blank"
+                        to={`${GF_EXPLORER_URL}object/0x${Number(
+                          item.resourceId,
+                        )
+                          .toString(16)
+                          .padStart(64, '0')}`}
+                      >
+                        GreenfieldScan
+                        <LinkArrowIcon w="16px" verticalAlign="middle" />
+                      </MPLink>
+                    </Value>
+                  </InfoItem>
+                  <InfoItem>
+                    <Field>Media Type:</Field>
+                    <Value>{contentTypeToExtension('', item.groupName)}</Value>
+                  </InfoItem>
+
+                  {/* Size: {parseFileSize(item.)} */}
+                </Info>
+              </Card>
+            );
+          })}
+      </Grid>
     </Container>
   );
 };
@@ -137,24 +93,63 @@ const PurchaseList = () => {
 export default PurchaseList;
 
 const Container = styled.div`
-  width: 1123px;
-  background: #181a1e;
   padding: '4px 20px';
 `;
 
-const ImgContainer = styled(Flex)`
-  cursor: pointer;
-  color: ${(props: any) => props.theme.colors.scene.primary.normal};
+const Card = styled(Stack)`
+  background-color: #1e2026;
+  border-radius: 16px;
+  overflow: hidden;
+  gap: 24px;
+  padding-bottom: 16px;
 `;
 
-const ImgCon = styled.img`
-  width: 40px;
-  height: 40px;
-
-  background: #d9d9d9;
-  border-radius: 8px;
+const Info = styled(Stack)`
+  padding: 0 24px;
 `;
 
-const MyLink = styled(Link)`
-  color: ${(props: any) => props.theme.colors.scene.primary.normal};
+const InfoItem = styled(Flex)`
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const Field = styled(Box)`
+  color: #8c8f9b;
+  font-weight: 800;
+  font-size: 14px;
+  line-height: 16px;
+`;
+
+const Value = styled(Box)`
+  color: #c4c5cb;
+  font-size: 14px;
+`;
+
+const ImageBox = styled(Box)`
+  position: relative;
+  width: 384px;
+  height: 216px;
+  /* aspect-ratio: 1 / 1; */
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .layer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  &:hover .layer {
+    background: radial-gradient(
+      50% 50% at 50% 50%,
+      rgba(0, 0, 0, 0.24) 0%,
+      rgba(0, 0, 0, 0.6) 100%
+    );
+  }
 `;
