@@ -15,6 +15,8 @@ const Search = () => {
   const c = (p.get('c') as string) || '-1';
   const category = useGetCategory(Number(c));
 
+  console.log('category', category);
+
   const {
     fetchNextPage,
     hasNextPage,
@@ -44,7 +46,7 @@ const Search = () => {
           <Box color="#F7F7F8" fontSize="32px" fontWeight="800">
             {`We couldn\'t find anything for "`}
             <Box as="span" color="#FFE900">
-              {kw}
+              {kw || category?.name}
             </Box>
             {`".`}
           </Box>

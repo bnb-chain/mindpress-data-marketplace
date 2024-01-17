@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
-import { Box, Flex, Link as ChakraLink, LinkProps } from '@totejs/uikit';
+import { Flex } from '@totejs/uikit';
 import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
 import { Loader } from '../Loader';
-import { Link as ReactRouterLink } from 'react-router-dom';
+import { MPLink } from '../ui/MPLink';
 
 export const CateList = () => {
   const { data: cates, isLoading } = useGetCatoriesMap();
@@ -20,7 +20,6 @@ export const CateList = () => {
         )}/200/200`;
         return (
           <CateItem
-            as={ReactRouterLink}
             key={category.id}
             bg={`linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${imageUrl}) center center`}
             bgSize="cover"
@@ -39,7 +38,7 @@ const CateContainer = styled(Flex)`
   gap: 24px;
 `;
 
-const CateItem = styled(ChakraLink)`
+const CateItem = styled(MPLink)`
   color: #f7f7f8;
   width: 180px;
   height: 180px;

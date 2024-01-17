@@ -1,8 +1,13 @@
 import styled from '@emotion/styled';
-import { Box } from '@totejs/uikit';
+import { Box, Flex } from '@totejs/uikit';
 import Search from '../Search';
+import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
+import { MPLink } from '../ui/MPLink';
+import { SearchIcon } from '@totejs/icons';
 
 export const Banner = () => {
+  const { data: cates } = useGetCatoriesMap();
+
   return (
     <Container>
       <BigImageBg>
@@ -19,6 +24,40 @@ export const Banner = () => {
 
         <Box w="800px" mt="40px" ml="auto" mr="auto">
           <Search width="800px" />
+
+          {cates && (
+            <Flex
+              mt="24px"
+              color="#FFF"
+              fontSize="14px"
+              fontWeight="800"
+              gap="12px"
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Box>Trending:</Box>
+              {cates.slice(0, 4).map((category) => {
+                return (
+                  <MPLink
+                    to={`/search?c=${category.id}`}
+                    key={category.id}
+                    bg="#5C5F6A"
+                    p="4px 8px"
+                    color="#F7F7F8"
+                    borderRadius="4px"
+                    _hover={{
+                      bgColor: 'rgba(92, 95, 106, 0.89)',
+                    }}
+                  >
+                    <SearchIcon w="16px" h="16px" verticalAlign="sub" />
+                    <Box as="span" ml="4px">
+                      {category.name}
+                    </Box>
+                  </MPLink>
+                );
+              })}
+            </Flex>
+          )}
         </Box>
       </BigImageBg>
     </Container>
