@@ -1,12 +1,16 @@
 import styled from '@emotion/styled';
 import { BackIcon, GoIcon } from '@totejs/icons';
-import { Box, Flex, Image } from '@totejs/uikit';
+import { Box, Flex, Image, Stack } from '@totejs/uikit';
 import { useRef, useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import { Item } from '../../../utils/apis/types';
 import { MPLink } from '../MPLink';
+import { MetaMaskAvatar } from 'react-metamask-avatar';
+import { useNavigate } from 'react-router-dom';
+import { trimLongStr } from '../../../utils';
+import { HoverStatus } from '../../HoverStatus';
 
 interface IProps {
   list: Item[];
@@ -15,6 +19,8 @@ interface IProps {
 export const Carousel = ({ list }: IProps) => {
   const ref = useRef() as any;
   const [index, setIndex] = useState(0);
+  const navigator = useNavigate();
+  const [activeItem, setActiveItem] = useState<Item | null>(null);
 
   const settings = {
     // dots: true,
@@ -38,12 +44,21 @@ export const Carousel = ({ list }: IProps) => {
       >
         {list.map((item) => {
           return (
-            <Card key={item.id} to={`/resource?id=${item.id}&path=/`}>
+            <Card
+              key={item.id}
+              to={`/resource?id=${item.id}&path=/`}
+              onMouseEnter={() => {
+                setActiveItem(item);
+              }}
+            >
               <Image
                 src={item.url}
                 fallbackSrc={`https://picsum.photos/500/200?${item.id}`}
               />
-              <Box className="layer"></Box>
+
+              {activeItem && (
+                <HoverStatus className="hover-layer" item={activeItem} />
+              )}
             </Card>
           );
         })}
@@ -97,7 +112,8 @@ const Card = styled(MPLink)`
     object-fit: contain;
   }
 
-  .layer {
+  .hover-layer {
+    display: none;
     position: absolute;
     top: 0;
     bottom: 0;
@@ -105,7 +121,8 @@ const Card = styled(MPLink)`
     right: 0;
   }
 
-  &:hover .layer {
+  &:hover .hover-layer {
+    display: flex;
     background: radial-gradient(
       50% 50% at 50% 50%,
       rgba(0, 0, 0, 0.24) 0%,
@@ -130,4 +147,11 @@ const Arrow = styled(Box)`
   &:hover {
     background: rgb(54, 56, 60, 0.8);
   }
+`;
+
+const UserInfo = styled(Flex)`
+  align-items: center;
+  gap: 8px;
+  font-weight: 800;
+  color: #f7f7f8;
 `;
