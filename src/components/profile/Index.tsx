@@ -49,7 +49,11 @@ const ProfileList = (props: IProfileList) => {
         />
       </NavCon>
 
-      {currentTab === Type.Purchased ? <PurchaseList /> : <MyCollectionList />}
+      {currentTab === Type.Purchased ? (
+        <PurchaseList address={address} />
+      ) : (
+        <MyCollectionList />
+      )}
 
       {/* {self ? (
         currentTab === Type.Collections ? (

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { BackIcon, GoIcon } from '@totejs/icons';
-import { Box, Flex } from '@totejs/uikit';
+import { Box, Flex, Image } from '@totejs/uikit';
 import { useRef, useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
@@ -37,11 +37,13 @@ export const Carousel = ({ list }: IProps) => {
         }}
       >
         {list.map((item) => {
-          const imageUrl =
-            item.url || `https://picsum.photos/500/200?${item.id}`;
           return (
             <Card key={item.id} to={`/resource?id=${item.id}&path=/`}>
-              <img src={imageUrl} />
+              <Image
+                src={item.url}
+                fallbackSrc={`https://picsum.photos/500/200?${item.id}`}
+              />
+              <Box className="layer"></Box>
             </Card>
           );
         })}
@@ -85,6 +87,7 @@ const Container = styled(Box)`
 `;
 
 const Card = styled(MPLink)`
+  position: relative;
   padding-right: 20px;
   /* width: 300px; */
 
@@ -92,6 +95,22 @@ const Card = styled(MPLink)`
     /* width: 300px; */
     height: 200px;
     object-fit: contain;
+  }
+
+  .layer {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+
+  &:hover .layer {
+    background: radial-gradient(
+      50% 50% at 50% 50%,
+      rgba(0, 0, 0, 0.24) 0%,
+      rgba(0, 0, 0, 0.6) 100%
+    );
   }
 `;
 

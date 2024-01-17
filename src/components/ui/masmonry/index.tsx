@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
-import { DefaultButton } from '../buttons/DefaultButton';
+import { Box, Flex, Image, VStack } from '@totejs/uikit';
+import { MetaMaskAvatar } from 'react-metamask-avatar';
 import Masonry from 'react-responsive-masonry';
 import { useNavigate } from 'react-router-dom';
-import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { trimLongStr } from '../../../utils';
-import { Box, Flex, VStack } from '@totejs/uikit';
 import { Item } from '../../../utils/apis/types';
+import { DefaultButton } from '../buttons/DefaultButton';
 
 interface IProps {
   list?: Item[];
@@ -34,16 +34,19 @@ export const MindPressMasmonry = ({
               }}
             >
               <CardHover className="hover-layer">
-                <UserInfo>
+                <UserInfo
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigator(`/profile?address=${item.ownerAddress}`);
+                  }}
+                >
                   <MetaMaskAvatar size={24} address={item.ownerAddress} />
                   <Box>{trimLongStr(item.ownerAddress)}</Box>
                 </UserInfo>
               </CardHover>
-              <img
-                src={
-                  item.url ||
-                  `https://picsum.photos/seed/${item.groupName}/400/600`
-                }
+              <Image
+                src={item.url}
+                fallbackSrc={`https://picsum.photos/seed/${item.groupName}/400/600`}
               />
             </Card>
           );
@@ -72,7 +75,8 @@ const Card = styled(Box)`
   cursor: pointer;
 
   & > img {
-    /* width: 384px; */
+    width: 100%;
+    height: 100%;
     object-fit: cover;
   }
 
@@ -105,6 +109,7 @@ const UserInfo = styled(Flex)`
 
 const MasmonryContainer = styled(Box)`
   position: relative;
+  width: 1440px;
 `;
 
 const LoadMoreContainer = styled(VStack)`

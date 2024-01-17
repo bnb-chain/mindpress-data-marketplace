@@ -1,19 +1,22 @@
 import styled from '@emotion/styled';
+import { LinkArrowIcon } from '@totejs/icons';
 import { Box, Flex, Grid, Image, Stack } from '@totejs/uikit';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAccount } from 'wagmi';
+import { GF_EXPLORER_URL } from '../../env';
 import { useGetUserPurchasedList } from '../../hooks/useUserPurchased';
 import { contentTypeToExtension } from '../../utils';
 import { Loader } from '../Loader';
-import { GF_EXPLORER_URL } from '../../env';
-import { LinkArrowIcon } from '@totejs/icons';
 import { MPLink } from '../ui/MPLink';
 
 const PAGE_SIZE = 10;
 
-const PurchaseList = () => {
-  const { address } = useAccount();
+interface IProps {
+  address: string;
+}
+
+const PurchaseList = ({ address }: IProps) => {
+  // const { address } = useAccount();
   // const { handlePageChange, page } = usePagination();
 
   const [page, setPage] = useState(0);
@@ -27,8 +30,6 @@ const PurchaseList = () => {
   );
 
   const navigator = useNavigate();
-
-  console.log('list', list);
 
   if (isLoading) {
     return <Loader />;
@@ -93,7 +94,7 @@ const PurchaseList = () => {
 export default PurchaseList;
 
 const Container = styled.div`
-  padding: '4px 20px';
+  /* padding: '4px 20px'; */
 `;
 
 const Card = styled(Stack)`

@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { LinkArrowIcon } from '@totejs/icons';
-import { Box, Button, Flex, Link, Stack } from '@totejs/uikit';
+import { Box, Flex, Image, Link, Stack } from '@totejs/uikit';
 import BN from 'bn.js';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useSearchParams } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { Loader } from '../components/Loader';
 import { NoData } from '../components/NoData';
 import { RelatedImage } from '../components/resource/RelatedImage';
 import BSCIcon from '../components/svgIcon/BSCIcon';
+import { DefaultButton } from '../components/ui/buttons/DefaultButton';
 import { YellowButton } from '../components/ui/buttons/YellowButton';
 import { GF_EXPLORER_URL } from '../env';
 import { useBNBPrice } from '../hooks/useBNBPrice';
@@ -18,6 +19,7 @@ import {
   useGetObject,
 } from '../hooks/useGetBucketOrObj';
 import { useGetCategory } from '../hooks/useGetCatoriesMap';
+import { useGetDownloadUrl } from '../hooks/useGetDownloadUrl';
 import { useGetItemById } from '../hooks/useGetItemById';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
 import { useModal } from '../hooks/useModal';
@@ -30,9 +32,6 @@ import {
   roundFun,
   trimLongStr,
 } from '../utils';
-import { MPLink } from '../components/ui/MPLink';
-import { useGetDownloadUrl } from '../hooks/useGetDownloadUrl';
-import { DefaultButton } from '../components/ui/buttons/DefaultButton';
 
 /**
  * Have been listed
@@ -80,7 +79,10 @@ const Resource = () => {
     <Container>
       <ResourceInfo>
         <ImageContainer>
-          <img src={itemInfo.url} />
+          <Image
+            src={itemInfo.url}
+            fallbackSrc={`https://picsum.photos/seed/${itemInfo.id}/400/600`}
+          />
         </ImageContainer>
 
         <Info>

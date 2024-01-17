@@ -29,7 +29,7 @@ export const Trending = () => {
   if (!trendingList) return <Loader />;
 
   return (
-    <CardContainer>
+    <Container>
       <Title as="h2">Trending Images</Title>
 
       <MindPressMasmonry
@@ -37,53 +37,11 @@ export const Trending = () => {
         list={trendingList}
         handleLoadMore={handleNextPage}
       />
-      {/* <MasmonryContainer>
-        <Masonry columnsCount={3} gutter="24px">
-          {trendingList &&
-            trendingList.map((item) => {
-              return (
-                <Card
-                  key={item.id}
-                  onClick={() => {
-                    navigator(`/resource?id=${item.id}&path=/`);
-                  }}
-                >
-                  <CardHover className="hover-layer">
-                    <UserInfo>
-                      <MetaMaskAvatar size={24} address={item.ownerAddress} />
-                      <Box>{trimLongStr(item.ownerAddress)}</Box>
-                    </UserInfo>
-                  </CardHover>
-                  <img
-                    src={
-                      item.url ||
-                      `https://picsum.photos/seed/${item.groupName}/400/600`
-                    }
-                  />
-                </Card>
-              );
-            })}
-        </Masonry>
-
-        <LoadMoreContainer>
-          <LoadMore
-            disabled={!hasNextPage}
-            onClick={() => {
-              handleNextPage();
-            }}
-          >
-            Discover More
-          </LoadMore>
-        </LoadMoreContainer>
-      </MasmonryContainer> */}
-    </CardContainer>
+    </Container>
   );
 };
 
-const CardContainer = styled(Box)`
-  padding-left: 120px;
-  padding-right: 120px;
-`;
+const Container = styled(Box)``;
 
 const Title = styled(Box)`
   margin-bottom: 40px;
