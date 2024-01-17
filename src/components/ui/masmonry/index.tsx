@@ -68,11 +68,11 @@ export const MindPressMasmonry = ({
 
 const Card = styled(Box)`
   position: relative;
-  width: 384px;
+  /* width: 384px; */
   cursor: pointer;
 
   & > img {
-    width: 384px;
+    /* width: 384px; */
     object-fit: cover;
   }
 

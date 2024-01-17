@@ -6,6 +6,7 @@ import { MindPressMasmonry } from '../components/ui/masmonry';
 import { useCallback } from 'react';
 import NoData from '../images/NoData.svg';
 import { useGetCategory } from '../hooks/useGetCatoriesMap';
+import { RelatedImage } from '../components/resource/RelatedImage';
 
 const Search = () => {
   const [p] = useSearchParams();
@@ -29,7 +30,7 @@ const Search = () => {
       categoryId: Number(c),
     },
     offset: 0,
-    limit: 10,
+    limit: 20,
     sort: 'CREATION_DESC',
   });
 
@@ -39,7 +40,7 @@ const Search = () => {
 
   // if (!kw || !c) return null;
 
-  if (total === 0 && searchList?.length == 0) {
+  if (total === 0) {
     return (
       <Container>
         <Box flexDirection="column" mt="40px" gap="40px">
@@ -62,6 +63,14 @@ const Search = () => {
             </Box>
           </Center>
         </Box>
+
+        <Box mt="40px">
+          <RelatedImage
+            title="Images you might be interested in"
+            categoryId={100}
+            allUrl={`/search?c=100`}
+          />
+        </Box>
       </Container>
     );
   }
@@ -78,6 +87,16 @@ const Search = () => {
           handleLoadMore={handleNextPage}
         />
       </Box>
+
+      {total < 20 && (
+        <Box mt="40px">
+          <RelatedImage
+            title="Images you might be interested in"
+            categoryId={100}
+            allUrl={`/search?c=100`}
+          />
+        </Box>
+      )}
     </Container>
   );
 };

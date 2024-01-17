@@ -86,12 +86,12 @@ const Container = styled(Box)`
 
 const Card = styled(MPLink)`
   padding-right: 20px;
-  width: 300px;
+  /* width: 300px; */
 
   img {
-    width: 300px;
+    /* width: 300px; */
     height: 200px;
-    object-fit: cover;
+    object-fit: contain;
   }
 `;
 

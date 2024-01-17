@@ -216,14 +216,11 @@ const Resource = () => {
       </ResourceInfo>
 
       <Box mt="40px">
-        <Flex alignItems="center" justifyContent="space-between">
-          <Box mb="15px" fontSize="20px" fontWeight={600}>
-            Related images
-          </Box>
-          <SeeAll to={`/search?c=${category?.id}`}>See All</SeeAll>
-        </Flex>
-
-        <RelatedImage categoryId={category?.id || 100} />
+        <RelatedImage
+          title="Related images"
+          categoryId={category?.id || 100}
+          allUrl={`/search?c=${category?.id}`}
+        />
       </Box>
     </Container>
   );
@@ -239,10 +236,9 @@ const Container = styled(Box)`
 `;
 
 const ImageContainer = styled(Box)`
-  /* width: 744px; */
   height: 500px;
   flex: 1;
-  /* background-color: rgba(120, 21, 26, 0.1); */
+  background-color: rgba(0, 0, 0, 0.8);
 
   img {
     width: 100%;
@@ -319,13 +315,4 @@ const BNB = styled(Box)`
 const Dollar = styled(Box)`
   color: #c4c5cb;
   font-size: 14px;
-`;
-
-const SeeAll = styled(MPLink)`
-  color: #f7f7f8;
-  font-size: 16px;
-  font-weight: 700;
-  &:hover {
-    color: rgba(247, 247, 248, 0.8);
-  }
 `;

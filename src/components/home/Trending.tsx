@@ -16,7 +16,7 @@ export const Trending = () => {
       keyword: '',
     },
     offset: 0,
-    limit: 10,
+    limit: 20,
     sort: 'CREATION_DESC',
   });
 
