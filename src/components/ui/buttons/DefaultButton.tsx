@@ -26,9 +26,12 @@ export const BaseButton = styled(Button)`
   border-radius: 8px;
   border: 1px solid #f1f2f3;
 
+  background: rgb(241, 242, 243);
+  color: rgb(24, 26, 30);
+
   &:hover {
-    background: #f1f2f3;
-    color: #181a1e;
+    background: rgba(241, 242, 243, 0.9);
+    color: rgb(24, 26, 30);
   }
 
   &:active {

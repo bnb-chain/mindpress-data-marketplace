@@ -16,7 +16,7 @@ const Search = () => {
   const c = (p.get('c') as string) || '-1';
   const category = useGetCategory(Number(c));
 
-  console.log('category', category);
+  // console.log('category', category);
 
   const {
     fetchNextPage,
@@ -104,7 +104,7 @@ const Search = () => {
 export default Search;
 
 const Container = styled(Box)`
-  width: 1400px;
+  width: 1200px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 40px;
