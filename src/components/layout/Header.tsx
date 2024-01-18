@@ -1,7 +1,11 @@
 import styled from '@emotion/styled';
+// 👇 Import walletkit styles here.
+import '@node-real/walletkit/styles.css';
+
 import { Box, Button, Flex, useOutsideClick } from '@totejs/uikit';
 import { useWalletModal } from '../../hooks/useWalletModal';
 
+import { WalletKitButton } from '@node-real/walletkit';
 import { MenuCloseIcon } from '@totejs/icons';
 import {
   ForwardedRef,
@@ -193,17 +197,26 @@ const Header = () => {
 
         <ButtonWrapper>
           {!isConnected && !isConnecting ? (
-            <StyledButton
-              bg="#F1F2F3"
-              color="#181A1E"
-              fontWeight="800"
-              onClick={() => {
-                reportEvent({ name: 'dm.main.header.connect_wallet.click' });
-                handleModalOpen();
+            // <WalletKitButton />
+            <WalletKitButton.Custom>
+              {({
+                show,
+                hide,
+                isConnecting,
+                isConnected,
+                address,
+                truncatedAddress,
+              }) => {
+                // if (isConnected) {
+                //   return <div>{address}</div>;
+                // } else if (isConnecting) {
+                //   return <div>connecting</div>;
+                // } else {
+                return (
+                  <StyledButton onClick={show}>Connect Wallet</StyledButton>
+                );
               }}
-            >
-              Connect Wallet
-            </StyledButton>
+            </WalletKitButton.Custom>
           ) : (
             <ConnectProfile
               onClick={() => {
@@ -308,13 +321,19 @@ const LeftCon = styled(Flex)`
   }
 `;
 
-const StyledButton = styled(DefaultButton)`
+const StyledButton = styled(Button)`
+  background: rgba(0, 0, 0, 1);
+  color: rgb(230, 232, 234);
   width: 100%;
   max-width: 158px;
   height: 44px;
   font-size: 14px;
   font-weight: 700;
   line-height: 24px;
+  &:hover {
+    background: rgba(241, 242, 243, 0.9);
+    color: rgb(24, 26, 30);
+  }
   &.connected {
     font-style: normal;
     font-weight: 500;
@@ -322,7 +341,8 @@ const StyledButton = styled(DefaultButton)`
     line-height: 24px;
     background: ${(props: any) => props.theme.colors.bg?.middle};
     color: ${(props: any) => props.theme.colors.readable.normal};
-    border: 1px solid ${(props: any) => props.theme.colors.readable.border};
+    /* border: 1px solid ${(props: any) =>
+      props.theme.colors.readable.border}; */
     &:hover {
       background: ${(props: any) => props.theme.colors.bg?.bottom};
     }
