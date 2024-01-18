@@ -64,6 +64,8 @@ export const useBuy = (
             tmp = {
               variant: 'success',
               description: success ? 'Buy successful' : 'pending',
+              type: 'BUY',
+              groupId,
               // callBack: () => {
               //   navigator('/profile?tab=purchase');
               // },
