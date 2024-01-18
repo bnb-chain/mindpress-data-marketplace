@@ -52,7 +52,7 @@ const ProfileList = (props: IProfileList) => {
       {currentTab === Type.Purchased ? (
         <PurchaseList address={address} />
       ) : (
-        <MyCollectionList />
+        <MyCollectionList address={address} />
       )}
 
       {/* {self ? (
