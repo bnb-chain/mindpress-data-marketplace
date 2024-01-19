@@ -167,6 +167,7 @@ const Resource = () => {
             {(relation === 'NOT_PURCHASE' || relation === 'UNKNOWN') && (
               <YellowButton
                 h="48px"
+                borderRadius="8px"
                 onClick={() => {
                   console.log('relation', relation, isConnecting, isConnected);
                   if (relation === 'UNKNOWN') {

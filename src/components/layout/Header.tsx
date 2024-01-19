@@ -1,20 +1,12 @@
 import styled from '@emotion/styled';
-// 👇 Import walletkit styles here.
 import '@node-real/walletkit/styles.css';
+import { useWindowScroll } from '@uidotdev/usehooks';
 
 import { Box, Button, Flex, useOutsideClick } from '@totejs/uikit';
 import { useWalletModal } from '../../hooks/useWalletModal';
 
 import { WalletKitButton } from '@node-real/walletkit';
-import { MenuCloseIcon } from '@totejs/icons';
-import {
-  ForwardedRef,
-  ReactNode,
-  forwardRef,
-  useCallback,
-  useRef,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccount, useDisconnect } from 'wagmi';
@@ -28,50 +20,9 @@ import { Copy } from '../Copy';
 import { MyDataCollectionIcon } from '../svgIcon/MyDataCollectionIcon';
 import { SellIcon } from '../svgIcon/SellIcon';
 import { SignOutIcon } from '../svgIcon/SignOutIcon';
-import { TowerIcon } from '../svgIcon/TowerIcon';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
 
-const CustomMenuButton = forwardRef(
-  (props: { children: ReactNode }, ref: ForwardedRef<HTMLButtonElement>) => {
-    const { children, ...restProps } = props;
-
-    return (
-      <Button
-        ref={ref}
-        w={194}
-        h={40}
-        background={'#373943'}
-        variant="ghost"
-        justifyContent="space-between"
-        px={12}
-        fontWeight={600}
-        fontSize={14}
-        lineHeight={'17px'}
-        border="1px solid #5C5F6A"
-        borderColor={'none'}
-        mr={1}
-        borderRadius={8}
-        _hover={{
-          background: 'bg.top.normal',
-        }}
-        _expanded={{
-          '.close-icon': {
-            transform: 'rotate(-180deg)',
-          },
-        }}
-        {...restProps}
-      >
-        <TowerIcon color="#00FF67" w={16} />
-        <Flex align={'center'}>{children}</Flex>
-        <MenuCloseIcon
-          w={16}
-          className="close-icon"
-          transitionDuration="normal"
-        />
-      </Button>
-    );
-  },
-);
+const BG_COLOR = '#181a1e';
 
 const Header = () => {
   const [p] = useSearchParams();
@@ -83,21 +34,22 @@ const Header = () => {
   const handleShowDropDown = useCallback(() => {
     setDropDownOpen((preState) => !preState);
   }, []);
-  const ref = useRef(null);
-
-  useOutsideClick({
-    ref,
-    handler: () => {
-      if (dropDownOpen) {
-        setTimeout(() => {
-          setDropDownOpen(false);
-        }, 50);
-      }
-    },
-  });
+  const ref = useRef<HTMLDivElement>(null);
+  const [{ x, y }] = useWindowScroll();
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    if (!ref.current) return;
+    if (location.pathname !== '/') return;
+
+    if (y && y > 30) {
+      ref.current.style.backgroundColor = BG_COLOR;
+    } else {
+      ref.current.style.backgroundColor = 'transparent';
+    }
+  }, [location.pathname, y]);
 
   // const { onClose, onToggle } = useDisclosure();
   // const { switchNetwork } = useSwitchNetwork();
@@ -110,6 +62,8 @@ const Header = () => {
       alignItems={'center'}
       padding={'0px 24px 0'}
       height={80}
+      bg={location.pathname !== '/' ? BG_COLOR : 'transparent'}
+      ref={ref}
     >
       <LeftCon h="50px" gap={40} alignItems={'center'}>
         <img
@@ -127,10 +81,18 @@ const Header = () => {
 
       <RightFunCon alignItems={'center'} justifyContent={'center'} gap={18}>
         <>
-          <DefaultButton
+          <Button
+            variant="ghost"
+            bg="transparent"
+            color="#F1F2F3"
+            borderColor="#F1F2F3"
+            borderRadius="8px"
             fontWeight={600}
             h="40px"
-            as="button"
+            _hover={{
+              background: 'rgba(241, 242, 243, 0.9)',
+              color: 'rgb(24, 26, 30)',
+            }}
             onClick={() => {
               reportEvent({ name: 'dm.main.header.list_my_data.click' });
               if (!isConnecting && !isConnected) handleModalOpen();
@@ -138,7 +100,7 @@ const Header = () => {
             }}
           >
             Upload Images
-          </DefaultButton>
+          </Button>
         </>
 
         {/* switch chain */}
@@ -213,7 +175,9 @@ const Header = () => {
                 //   return <div>connecting</div>;
                 // } else {
                 return (
-                  <StyledButton onClick={show}>Connect Wallet</StyledButton>
+                  <StyledButton h="40px" onClick={show}>
+                    Connect Wallet
+                  </StyledButton>
                 );
               }}
             </WalletKitButton.Custom>
@@ -310,8 +274,8 @@ const HeaderFlex = styled(Flex)`
   left: 0;
   right: 0;
   z-index: 10;
-  background-color: #181a1e;
   padding: 0 40px;
+  transition: background 0.3s ease-in-out;
 `;
 const LeftCon = styled(Flex)`
   img {
@@ -322,11 +286,10 @@ const LeftCon = styled(Flex)`
 `;
 
 const StyledButton = styled(Button)`
-  background: rgba(0, 0, 0, 1);
-  color: rgb(230, 232, 234);
+  background: #f1f2f3;
+  color: #181a1e;
   width: 100%;
   max-width: 158px;
-  height: 44px;
   font-size: 14px;
   font-weight: 700;
   line-height: 24px;

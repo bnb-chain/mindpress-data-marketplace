@@ -27,7 +27,7 @@ const Home = () => {
 export default Home;
 
 const Container = styled(Flex)`
-  /* margin-top: -80px; */
+  margin-top: -80px;
   /* width: 100%; */
   /* background-color: #1e2026; */
 `;

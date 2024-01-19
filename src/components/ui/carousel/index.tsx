@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { BackIcon, GoIcon } from '@totejs/icons';
-import { Box, Flex, Image, Stack } from '@totejs/uikit';
+import { Box, Center, Flex, Image, Stack } from '@totejs/uikit';
 import { useRef, useState } from 'react';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
@@ -65,33 +65,37 @@ export const Carousel = ({ list }: IProps) => {
       </Slider>
 
       <Arrows>
-        <Arrow
-          as="button"
-          title="Previous"
-          // style={{
-          //   visibility: index === 0 ? 'hidden' : 'visible',
-          // }}
-          onClick={() => {
-            setIndex(index - 1);
-            ref.current?.slickPrev();
-          }}
-        >
-          <BackIcon w={18} color="#F7F7F8" />
-        </Arrow>
+        <ArrowBox>
+          <Arrow
+            as="button"
+            title="Previous"
+            // style={{
+            //   visibility: index === 0 ? 'hidden' : 'visible',
+            // }}
+            onClick={() => {
+              setIndex(index - 1);
+              ref.current?.slickPrev();
+            }}
+          >
+            <BackIcon w={18} color="#F7F7F8" />
+          </Arrow>
+        </ArrowBox>
 
-        <Arrow
-          as="button"
-          title="Next"
-          onClick={() => {
-            setIndex(index + 1);
-            ref.current?.slickNext();
-          }}
-          // style={{
-          //   visibility: index === DATA.length - 1 ? 'hidden' : 'visible',
-          // }}
-        >
-          <GoIcon w={18} color="#F7F7F8" />
-        </Arrow>
+        <ArrowBox>
+          <Arrow
+            as="button"
+            title="Next"
+            onClick={() => {
+              setIndex(index + 1);
+              ref.current?.slickNext();
+            }}
+            // style={{
+            //   visibility: index === DATA.length - 1 ? 'hidden' : 'visible',
+            // }}
+          >
+            <GoIcon w={18} color="#F7F7F8" />
+          </Arrow>
+        </ArrowBox>
       </Arrows>
     </Container>
   );
@@ -133,10 +137,22 @@ const Card = styled(MPLink)`
 
 const Arrows = styled(Flex)`
   justify-content: space-between;
+  align-items: center;
   position: absolute;
   top: 0;
+  bottom: 0;
   left: 0;
   right: 0;
+`;
+
+const ArrowBox = styled(Center)`
+  height: 100%;
+  background: linear-gradient(
+    270deg,
+    #181a1e 0%,
+    rgba(20, 21, 26, 0.8) 40%,
+    rgba(20, 21, 26, 0) 100%
+  );
 `;
 
 const Arrow = styled(Box)`
@@ -147,11 +163,4 @@ const Arrow = styled(Box)`
   &:hover {
     background: rgb(54, 56, 60, 0.8);
   }
-`;
-
-const UserInfo = styled(Flex)`
-  align-items: center;
-  gap: 8px;
-  font-weight: 800;
-  color: #f7f7f8;
 `;

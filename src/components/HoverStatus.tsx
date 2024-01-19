@@ -45,6 +45,7 @@ export const HoverStatus = ({ item, className }: IProps) => {
         <Stack alignItems="center">
           {(relation === 'PURCHASED' || relation === 'OWNER') && (
             <DefaultButton
+              minW="120px"
               h="48px"
               bg="#F1F2F3"
               color="#181A1E"
@@ -59,6 +60,7 @@ export const HoverStatus = ({ item, className }: IProps) => {
           )}
           {(relation === 'NOT_PURCHASE' || relation === 'UNKNOWN') && (
             <YellowButton
+              minW="120px"
               h="48px"
               onClick={(e) => {
                 e.stopPropagation();

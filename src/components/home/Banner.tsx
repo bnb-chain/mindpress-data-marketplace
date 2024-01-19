@@ -65,8 +65,8 @@ export const Banner = () => {
 };
 
 const Container = styled(Box)`
-  /* margin-top: 32px; */
-  /* padding: 32px; */
+  /* margin-top: 112px; */
+  padding: 112px;
   width: 100vw;
   height: 510px;
   padding: 80px 0 130px 0;
