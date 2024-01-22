@@ -20,6 +20,7 @@ import { useGlobal } from '../../hooks/useGlobal';
 import { GoIcon, CardPocketIcon } from '@totejs/icons';
 import { OwnActionCom } from '../OwnActionCom';
 import { PaginationSx } from '../ui/table/PaginationSx';
+import { YellowButton } from '../ui/buttons/YellowButton';
 
 const TotalVol = (props: any) => {
   const { groupId } = props;
@@ -83,7 +84,9 @@ const ProfileList = (props: any) => {
             ) : (
               <ImgCon src={defaultImg(object_name, 40)}></ImgCon>
             )}
-            {trimLongStr(object_name, 15)}
+            <Box as="span" color="#FFE900" fontWeight={700}>
+              {trimLongStr(object_name, 15)}
+            </Box>
           </ImgContainer>
         );
       },
@@ -161,7 +164,7 @@ const ProfileList = (props: any) => {
         return (
           <div>
             {owner === address && !collectionListed && (
-              <Button
+              <YellowButton
                 size={'sm'}
                 onClick={async () => {
                   sessionStorage.setItem('resource_type', '1');
@@ -184,7 +187,7 @@ const ProfileList = (props: any) => {
                 }}
               >
                 {!listed ? 'List' : 'Delist'}
-              </Button>
+              </YellowButton>
             )}
             {owner === address && collectionListed && (
               <GoIcon
@@ -257,6 +260,8 @@ export default ProfileList;
 
 const Container = styled.div`
   width: 996px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const ImgContainer = styled(Flex)`

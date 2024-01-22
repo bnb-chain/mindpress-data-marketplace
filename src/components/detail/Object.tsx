@@ -20,6 +20,8 @@ import {
   trimLongStr,
 } from '../../utils';
 import { useCallback, useEffect } from 'react';
+import { YellowButton } from '../ui/buttons/YellowButton';
+import { BlackButton } from '../ui/buttons/BlackButton';
 
 /**
  * Have not been listed
@@ -130,12 +132,12 @@ export const Object = () => {
           <ActionGroup gap={10} alignItems={'center'}>
             {address === objectData.objectInfo.owner &&
               _.isEmpty(objectItemInfo) && (
-                <Button size={'sm'} onClick={openListModal}>
+                <YellowButton size={'sm'} onClick={openListModal}>
                   List
-                </Button>
+                </YellowButton>
               )}
 
-            <Button
+            <BlackButton
               size={'sm'}
               onClick={() => {
                 window.open(
@@ -145,7 +147,7 @@ export const Object = () => {
               variant="ghost"
             >
               View in Dcellar
-            </Button>
+            </BlackButton>
           </ActionGroup>
         </Info>
       </ResourceInfo>
@@ -184,7 +186,7 @@ const Name = styled.div`
   line-height: 38px;
   /* identical to box height, or 119% */
 
-  color: #f0b90b;
+  color: #ffe900;
 `;
 
 const Tag = styled(Flex)`
@@ -214,7 +216,7 @@ const OwnCon = styled(Flex)`
 
   span {
     margin: 0 4px;
-    color: #f0b90b;
+    color: #ffe900;
   }
 `;
 

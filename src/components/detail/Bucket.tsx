@@ -24,6 +24,7 @@ import {
   trimLongStr,
 } from '../../utils';
 import { useCallback, useEffect } from 'react';
+import { BlackButton } from '../ui/buttons/BlackButton';
 
 /**
  * Have not been listed
@@ -128,14 +129,14 @@ export const Bucket = () => {
           </OwnCon>
 
           <ActionGroup gap={10} alignItems={'center'}>
-            {address === bucketData.bucketInfo.owner &&
+            {/* {address === bucketData.bucketInfo.owner &&
               _.isEmpty(bucketItemInfo) && (
                 <Button size={'sm'} onClick={openListModal}>
                   List
                 </Button>
-              )}
+              )} */}
 
-            <Button
+            <BlackButton
               size={'sm'}
               onClick={() => {
                 window.open(
@@ -145,7 +146,7 @@ export const Bucket = () => {
               variant="ghost"
             >
               View in Dcellar
-            </Button>
+            </BlackButton>
           </ActionGroup>
         </Info>
       </ResourceInfo>
@@ -164,6 +165,9 @@ export const Bucket = () => {
 
 const ResourceInfo = styled(Flex)`
   margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1200px;
 `;
 
 const ImgCon = styled.div`
@@ -193,7 +197,7 @@ const Name = styled.div`
   line-height: 38px;
   /* identical to box height, or 119% */
 
-  color: #f0b90b;
+  color: #ffe900;
 `;
 
 const Tag = styled(Flex)`
@@ -223,7 +227,7 @@ const OwnCon = styled(Flex)`
 
   span {
     margin: 0 4px;
-    color: #f0b90b;
+    color: #ffe900;
   }
 `;
 

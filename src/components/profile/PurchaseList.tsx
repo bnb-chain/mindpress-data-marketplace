@@ -1,132 +1,135 @@
 import styled from '@emotion/styled';
-import { LinkArrowIcon } from '@totejs/icons';
+import { Flex, Table } from '@totejs/uikit';
+import BN from 'bn.js';
+import { useAccount } from 'wagmi';
+import { usePagination } from '../../hooks/usePagination';
+import { useUserPurchased } from '../../hooks/useUserPurchased';
 import {
-  Box,
-  Flex,
-  Grid,
-  Image,
-  Pagination,
-  Stack,
-  VStack,
-} from '@totejs/uikit';
-import { useState } from 'react';
-import { GF_EXPLORER_URL } from '../../env';
-import { useGetBOInfoFromGroup } from '../../hooks/useGetBucketOrObj';
-import { useGetDownloadUrl } from '../../hooks/useGetDownloadUrl';
-import { useGetUserPurchasedList } from '../../hooks/useUserPurchased';
-import { contentTypeToExtension } from '../../utils';
-import { Item } from '../../utils/apis/types';
-import { Loader } from '../Loader';
-import { MPLink } from '../ui/MPLink';
-import { DefaultButton } from '../ui/buttons/DefaultButton';
+  defaultImg,
+  divide10Exp,
+  formatDateUTC,
+  trimLongStr,
+} from '../../utils';
+import { Link, useNavigate } from 'react-router-dom';
+import { OwnActionCom } from '../OwnActionCom';
+import { CollectionLogo } from '../svgIcon/CollectionLogo';
+import { PaginationSx } from '../ui/table/PaginationSx';
+import { TableProps } from '../ui/table/TableProps';
 
-const PAGE_SIZE = 12;
+const PurchaseList = () => {
+  const { handlePageChange, page } = usePagination();
 
-interface IProps {
-  address: string;
-}
+  const pageSize = 10;
+  const { list, loading, total } = useUserPurchased(page, pageSize);
+  const { address } = useAccount();
+  const navigator = useNavigate();
 
-const PurchaseList = ({ address }: IProps) => {
-  const [page, setPage] = useState(1);
-
-  // const { list, loading, total } = useUserPurchased(page, pageSize);
-  const { data: list, isLoading } = useGetUserPurchasedList(
-    address as string,
-    page - 1,
-    PAGE_SIZE,
-  );
-  const [activeItem, setActiveItem] = useState<Item | null>(null);
-  const storageInfo = useGetBOInfoFromGroup(activeItem?.groupName);
-  const downloadUrl = useGetDownloadUrl({
-    bucketName: storageInfo?.bucketName,
-    name: activeItem?.name || '',
-  });
-
-  if (isLoading) {
-    return <Loader />;
-  }
-
+  const breadInfo = {
+    name: 'My Purchase',
+    path: '/profile',
+  };
+  const columns = [
+    {
+      header: 'Data',
+      width: 200,
+      cell: (data: any) => {
+        const { id, url, type, name } = data;
+        return (
+          <ImgContainer
+            alignItems={'center'}
+            justifyContent={'flex-start'}
+            gap={6}
+            onClick={() => {
+              navigator(`/resource?id=${id}`);
+            }}
+          >
+            <ImgCon src={url || defaultImg(name, 40)}></ImgCon>
+            {trimLongStr(data.name)}
+            {type === 'Collection' && (
+              <CollectionLogo
+                style={{ width: '10px', height: '10px' }}
+              ></CollectionLogo>
+            )}
+          </ImgContainer>
+        );
+      },
+    },
+    {
+      header: 'Type',
+      cell: (data: any) => {
+        const { type } = data;
+        return <div>{type}</div>;
+      },
+    },
+    {
+      header: 'Current List Price',
+      width: 160,
+      cell: (data: any) => {
+        const { price } = data;
+        const balance = divide10Exp(new BN(price, 10), 18);
+        return <div>{balance} BNB</div>;
+      },
+    },
+    {
+      header: 'Data Listed',
+      width: 160,
+      cell: (data: any) => {
+        const { listTime } = data;
+        return <div>{formatDateUTC(listTime * 1000)}</div>;
+      },
+    },
+    {
+      header: 'Total Vol',
+      width: 120,
+      cell: (data: any) => {
+        const { totalVol } = data;
+        return <div>{totalVol}</div>;
+      },
+    },
+    {
+      header: 'Creator',
+      width: 120,
+      cell: (data: any) => {
+        const { ownerAddress } = data;
+        return (
+          <MyLink to={`/profile?address=${ownerAddress}`}>
+            {trimLongStr(ownerAddress)}
+          </MyLink>
+        );
+      },
+    },
+    {
+      header: 'Action',
+      cell: (data: any) => {
+        return (
+          <OwnActionCom
+            data={data}
+            address={address as string}
+            breadInfo={breadInfo}
+          ></OwnActionCom>
+        );
+      },
+    },
+  ];
   return (
     <Container>
-      <Grid templateColumns="repeat(3, 1fr)" gap="24px">
-        {list &&
-          list.purchases.map((purResource) => {
-            const { item } = purResource;
-            return (
-              <Card key={item.id}>
-                <ImageBox
-                  onMouseEnter={() => {
-                    setActiveItem(item);
-                  }}
-                >
-                  <Image
-                    src={item.url}
-                    fallbackSrc={`https://picsum.photos/seed/${item.name.replaceAll(
-                      ' ',
-                      '',
-                    )}/400/400`}
-                  />
-
-                  <VStack className="layer" justifyContent="center">
-                    <DefaultButton
-                      h="48px"
-                      bg="#F1F2F3"
-                      color="#181A1E"
-                      fontWeight="800"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        window.open(downloadUrl);
-                      }}
-                    >
-                      Download
-                    </DefaultButton>
-                  </VStack>
-                </ImageBox>
-                <Info>
-                  <InfoItem>
-                    <Field>Object ID:</Field>
-                    <Value>
-                      <MPLink
-                        color="#C4C5CB"
-                        // _hover={{
-                        //   color: '#C4C5CB',
-                        // }}
-                        textDecoration="underline"
-                        target="_blank"
-                        to={`${GF_EXPLORER_URL}object/0x${Number(
-                          item.resourceId,
-                        )
-                          .toString(16)
-                          .padStart(64, '0')}`}
-                      >
-                        GreenfieldScan
-                        <LinkArrowIcon w="16px" verticalAlign="middle" />
-                      </MPLink>
-                    </Value>
-                  </InfoItem>
-                  <InfoItem>
-                    <Field>Media Type:</Field>
-                    <Value>{contentTypeToExtension('', item.groupName)}</Value>
-                  </InfoItem>
-
-                  {/* Size: {parseFileSize(item.)} */}
-                </Info>
-              </Card>
-            );
-          })}
-      </Grid>
-
-      <Flex justifyContent="center" mt="40px" mb="40px">
-        <StyledPagination
-          current={page}
-          pageSize={PAGE_SIZE}
-          total={list?.total}
-          showQuickJumper={false}
-          onChange={(p) => {
-            setPage(p);
-          }}
-        />
-      </Flex>
+      <Table
+        headerContent={`Latest ${Math.min(
+          pageSize,
+          list.length,
+        )}  Collections (Total of ${list.length})`}
+        pagination={{
+          current: page,
+          pageSize: pageSize,
+          total,
+          onChange: handlePageChange,
+          sx: PaginationSx,
+        }}
+        columns={columns}
+        data={list}
+        loading={loading}
+        {...TableProps}
+      />
     </Container>
   );
 };
@@ -134,86 +137,25 @@ const PurchaseList = ({ address }: IProps) => {
 export default PurchaseList;
 
 const Container = styled.div`
-  width: 1200px;
+  /* width: 1123px; */
+  background: #181a1e;
+  padding: '4px 20px';
 `;
 
-const Card = styled(Stack)`
-  background-color: #1e2026;
-  border-radius: 16px;
-  overflow: hidden;
-  gap: 24px;
-  padding-bottom: 16px;
+const ImgContainer = styled(Flex)`
+  cursor: pointer;
+  /* color: ${(props: any) => props.theme.colors.scene.primary.normal}; */
+  color: #ffe900;
 `;
 
-const Info = styled(Stack)`
-  padding: 0 24px;
+const ImgCon = styled.img`
+  width: 40px;
+  height: 40px;
+
+  background: #d9d9d9;
+  border-radius: 8px;
 `;
 
-const InfoItem = styled(Flex)`
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const Field = styled(Box)`
-  color: #8c8f9b;
-  font-weight: 800;
-  font-size: 14px;
-  line-height: 16px;
-`;
-
-const Value = styled(Box)`
-  color: #c4c5cb;
-  font-size: 14px;
-`;
-
-const ImageBox = styled(Box)`
-  position: relative;
-  width: 384px;
-  height: 216px;
-  /* aspect-ratio: 1 / 1; */
-
-  img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-
-  .layer {
-    display: none;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-
-  &:hover .layer {
-    display: flex;
-    background: radial-gradient(
-      50% 50% at 50% 50%,
-      rgba(0, 0, 0, 0.24) 0%,
-      rgba(0, 0, 0, 0.6) 100%
-    );
-  }
-`;
-
-const StyledPagination = styled(Pagination)`
-  .ui-button {
-    background: #373943;
-    color: #f7f7f8;
-    font-size: 14px;
-    width: 32px;
-    height: 32px;
-  }
-  .current[data-selected] {
-    background: #1e2026;
-    color: #8c8f9b;
-    cursor: not-allowed;
-  }
-
-  .ui-icon-button {
-    width: 32px;
-    height: 32px;
-    color: #f7f7f8;
-  }
+const MyLink = styled(Link)`
+  color: #ffe900;
 `;

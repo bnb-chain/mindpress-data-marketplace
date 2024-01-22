@@ -1,43 +1,66 @@
 import styled from '@emotion/styled';
-import { Button, Flex } from '@totejs/uikit';
-import { useCallback } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import { NavBar } from '../NavBar';
+import { useCallback, useEffect, useState } from 'react';
+import { Box, Button, Flex } from '@totejs/uikit';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import MyCollectionList from './MyCollectionList';
 import PurchaseList from './PurchaseList';
+import OtherListedList from './OtherListedList';
+import { DCELLAR_URL } from '../../env';
+import { reportEvent } from '../../utils/ga';
 
 enum Type {
-  Purchased = 'purchased',
-  Uploaded = 'uploaded',
+  Collections = 'collections',
+  Purchase = 'purchase',
 }
-const navItems = [
+const _navItems = [
   {
-    name: 'Purchased Images',
-    key: Type.Purchased,
+    name: 'My Data Collections',
+    key: Type.Collections,
   },
   {
-    name: 'Uploaded Images',
-    key: Type.Uploaded,
+    name: 'My Purchases',
+    key: Type.Purchase,
   },
 ];
 
 interface IProfileList {
-  address: string;
+  realAddress: string;
+  self: boolean;
 }
 const ProfileList = (props: IProfileList) => {
   const [p] = useSearchParams();
   const tab = p.getAll('tab')[0];
 
   const navigator = useNavigate();
-  const { address } = props;
+  const { realAddress, self } = props;
 
-  const currentTab = tab ? tab : Type.Purchased;
+  const [navItems, setNavItems] = useState(_navItems);
+
+  useEffect(() => {
+    if (!self) {
+      const cp = JSON.parse(JSON.stringify(_navItems));
+      cp.splice(1, 1);
+      cp[0].name = 'Data List';
+      setNavItems(cp);
+    } else {
+      setNavItems(_navItems);
+    }
+  }, [realAddress, self]);
+
+  const currentTab = tab ? tab : Type.Collections;
   const handleTabChange = useCallback(
     (tab: any) => {
+      if (tab === 'collections')
+        reportEvent({ name: 'dm.profile.my_data.my_data.click' });
+      if (tab === 'purchase')
+        reportEvent({ name: 'dm.profile.my_purchase.my_purchase.click' });
       navigator(`/profile?tab=${tab}`);
     },
     [navigator],
   );
+
+  const [showButton, setShowButton] = useState(false);
 
   return (
     <Container>
@@ -47,15 +70,28 @@ const ProfileList = (props: IProfileList) => {
           onChange={handleTabChange}
           items={navItems}
         />
+        {self && showButton && (
+          <MyButton
+            onClick={() => {
+              window.open(`${DCELLAR_URL}`);
+            }}
+            size={'sm'}
+            style={{ marginLeft: '6px' }}
+            bg="#FFE900"
+            color="#181A1E"
+            fontWeight="800"
+            _hover={{
+              bg: '#EBD600',
+              color: '#181A1E',
+            }}
+          >
+            Upload Data in DCellar
+          </MyButton>
+        )}
       </NavCon>
 
-      {currentTab === Type.Purchased ? (
-        <PurchaseList address={address} />
-      ) : (
-        <MyCollectionList address={address} />
-      )}
-
-      {/* {self ? (
+      <Box h={20} />
+      {self ? (
         currentTab === Type.Collections ? (
           <MyCollectionList setShowButton={setShowButton}></MyCollectionList>
         ) : (
@@ -66,7 +102,7 @@ const ProfileList = (props: IProfileList) => {
           realAddress={realAddress}
           self={self}
         ></OtherListedList>
-      )} */}
+      )}
     </Container>
   );
 };
@@ -74,10 +110,15 @@ const ProfileList = (props: IProfileList) => {
 export default ProfileList;
 
 const Container = styled.div`
-  /* width: 1000px; */
+  margin-top: 30px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 1200px;
 `;
 
-const NavCon = styled(Flex)`
-  margin-top: 40px;
-  margin-bottom: 40px;
+const NavCon = styled(Flex)``;
+const MyButton = styled(Button)`
+  width: 200px;
+  height: 40px;
+  border-radius: 8px;
 `;

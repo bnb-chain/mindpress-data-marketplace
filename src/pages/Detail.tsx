@@ -24,4 +24,6 @@ export const Detail = () => {
 const Container = styled.div`
   padding-top: 60px;
   width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
 `;
