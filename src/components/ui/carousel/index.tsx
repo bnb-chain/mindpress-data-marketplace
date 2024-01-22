@@ -147,12 +147,24 @@ const Arrows = styled(Flex)`
 
 const ArrowBox = styled(Center)`
   height: 100%;
-  background: linear-gradient(
-    270deg,
-    #181a1e 0%,
-    rgba(20, 21, 26, 0.8) 40%,
-    rgba(20, 21, 26, 0) 100%
-  );
+
+  &:nth-of-type(1) {
+    background: linear-gradient(
+      90deg,
+      #181a1e 0%,
+      rgba(20, 21, 26, 0.8) 40%,
+      rgba(20, 21, 26, 0) 100%
+    );
+  }
+
+  &:nth-of-type(2) {
+    background: linear-gradient(
+      270deg,
+      #181a1e 0%,
+      rgba(20, 21, 26, 0.8) 40%,
+      rgba(20, 21, 26, 0) 100%
+    );
+  }
 `;
 
 const Arrow = styled(Box)`
