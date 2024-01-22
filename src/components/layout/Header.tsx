@@ -42,7 +42,7 @@ const Header = () => {
 
   useEffect(() => {
     if (!ref.current) return;
-    if (location.pathname !== '/') return;
+    // if (location.pathname !== '/') return;
 
     if (y && y > 30) {
       ref.current.style.backgroundColor = BG_COLOR;
@@ -99,7 +99,8 @@ const Header = () => {
               navigate('/profile');
             }}
           >
-            Upload Images
+            {/* Upload Images */}
+            List Images
           </Button>
         </>
 
