@@ -20,16 +20,7 @@ export const Links = () => {
         <CardTitle>What Makes Us Different?</CardTitle>
       </TitleCon>
       <CardCon gap={24}>
-        <CardItem
-          gap={16}
-          flexDirection={'column'}
-          // onClick={() => {
-          //   window.open(
-          //     'https://docs.bnbchain.org/greenfield-docs/docs/guide/home',
-          //     '_blank',
-          //   );
-          // }}
-        >
+        <CardItem gap={16} flexDirection={'column'}>
           <Box className="icon">
             <StorageIcon w={32} h={32} />
           </Box>
@@ -39,13 +30,7 @@ export const Links = () => {
             network Ownership on Blockchain
           </Box>
         </CardItem>
-        <CardItem
-          gap={16}
-          flexDirection={'column'}
-          // onClick={() => {
-          //   window.open('https://github.com/bnb-chain/greenfield', '_blank');
-          // }}
-        >
+        <CardItem gap={16} flexDirection={'column'}>
           <Box className="icon">
             <CopyrightIcon w={32} h={32} />
           </Box>
@@ -55,16 +40,7 @@ export const Links = () => {
             blockchain Data Security
           </Box>
         </CardItem>
-        <CardItem
-          gap={16}
-          flexDirection={'column'}
-          // onClick={() => {
-          //   window.open(
-          //     'https://greenfield.bnbchain.org/en/bridge?type=transfer-in',
-          //     '_blank',
-          //   );
-          // }}
-        >
+        <CardItem gap={16} flexDirection={'column'}>
           <Box className="icon">
             <LockIcon w={32} h={32} color="#FFE900" />
           </Box>
@@ -73,13 +49,7 @@ export const Links = () => {
             Data is stored in a decentralized way with backups User Experience
           </Box>
         </CardItem>
-        <CardItem
-          gap={16}
-          flexDirection={'column'}
-          // onClick={() => {
-          //   window.open('https://discord.com/invite/QRTQvfhADQ', '_blank');
-          // }}
-        >
+        <CardItem gap={16} flexDirection={'column'}>
           <Box className="icon">
             <UserIcon w={32} h={32} />
           </Box>
@@ -131,8 +101,9 @@ const CardItem = styled(Flex)`
   } */
 `;
 
-const CardItemTitle = styled.div`
+const CardItemTitle = styled(Box)`
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 500;
   color: #f7f7f8;
+  -webkit-text-stroke: 1px #f7f7f8;
 `;

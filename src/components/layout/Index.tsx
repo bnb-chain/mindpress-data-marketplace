@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
-import { Flex, useMediaQuery } from '@totejs/uikit';
-import { useFavicon } from '@uidotdev/usehooks';
+import { Flex } from '@totejs/uikit';
 import { ReactNode, useCallback } from 'react';
 import { useModal } from '../../hooks/useModal';
 import { useWalletModal } from '../../hooks/useWalletModal';
@@ -17,10 +16,6 @@ export default function Layout({ children }: { children: ReactNode }) {
   const modalData = useModal();
   const { modalData: walletModalData, handleModalClose } = useWalletModal();
   const walletModalOpen = walletModalData.modalState?.open;
-
-  const [isDark] = useMediaQuery('(prefers-color-scheme: dark)');
-  const favicon = isDark ? './favicon_dark.svg' : './favicon_light.svg';
-  useFavicon(favicon);
 
   const {
     openList,
