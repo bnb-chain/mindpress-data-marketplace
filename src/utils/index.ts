@@ -15,8 +15,8 @@ import { getUtcZeroTimestamp } from './time';
 export const trimLongStr = (
   str: string,
   maxLength = 14,
-  headLen = 4,
-  footLen = 8,
+  headLen = 6,
+  footLen = 4,
 ) => {
   if (!str) {
     return '';
