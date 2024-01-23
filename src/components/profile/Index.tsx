@@ -15,7 +15,7 @@ enum Type {
 }
 const _navItems = [
   {
-    name: 'My Data Collections',
+    name: 'My Uploaded',
     key: Type.Collections,
   },
   {

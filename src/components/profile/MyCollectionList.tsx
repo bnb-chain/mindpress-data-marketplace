@@ -1,8 +1,7 @@
 import styled from '@emotion/styled';
-import { Box, Button, Flex, Table } from '@totejs/uikit';
+import { Box, Flex, Table } from '@totejs/uikit';
 import { useNavigate } from 'react-router-dom';
-import { useAccount, useSwitchNetwork } from 'wagmi';
-import { GF_CHAIN_ID } from '../../env';
+import { useSwitchNetwork } from 'wagmi';
 import { usePagination } from '../../hooks/usePagination';
 import {
   defaultImg,
@@ -15,15 +14,14 @@ import { useCollectionList } from '../../hooks/useCollectionList';
 import { useModal } from '../../hooks/useModal';
 // import { useSalesVolume } from '../../hooks/useSalesVolume';
 import { BN } from 'bn.js';
+import _ from 'lodash';
 import { Dispatch, useMemo } from 'react';
 import { useListedStatus } from '../../hooks/useListedStatus';
-import { reportEvent } from '../../utils/ga';
+import { getItemByBucketId } from '../../utils/apis';
+import { YellowButton } from '../ui/buttons/YellowButton';
 import { PaginationSx } from '../ui/table/PaginationSx';
 import { TableProps } from '../ui/table/TableProps';
 import CollNoData from './CollNoData';
-import { getItemByBucketId } from '../../utils/apis';
-import _ from 'lodash';
-import { YellowButton } from '../ui/buttons/YellowButton';
 
 const PriceCon = (props: { groupId: string }) => {
   const { groupId } = props;
@@ -51,7 +49,6 @@ const MyCollectionList = (props: ICollectionList) => {
     pageSize,
     modalData.modalState.result,
   );
-  const { switchNetwork } = useSwitchNetwork();
   const navigator = useNavigate();
 
   const showNoData = useMemo(() => {
