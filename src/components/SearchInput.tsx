@@ -63,9 +63,9 @@ export function SearchInput({
     navigator(`/search?kw=${innerValue}`);
     onConfirm?.(innerValue);
     // clean the input text after searching
-    handleChange('');
-    setInnerValue('');
-  }, [navigator, innerValue, onConfirm, handleChange]);
+    // handleChange('');
+    // setInnerValue('');
+  }, [navigator, innerValue, onConfirm]);
 
   const handleKeyDown = useCallback(
     (e: any) => {
