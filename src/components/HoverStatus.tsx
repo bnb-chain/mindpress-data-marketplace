@@ -40,7 +40,8 @@ export const HoverStatus = ({ item, className }: IProps) => {
         <Box>{trimLongStr(item.ownerAddress)}</Box>
       </UserInfo>
       {relationisLoading ? (
-        <Loader />
+        // <Loader />
+        <Box></Box>
       ) : (
         <Stack alignItems="center">
           {(relation === 'PURCHASED' || relation === 'OWNER') && (
