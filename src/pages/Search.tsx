@@ -78,7 +78,9 @@ const Search = () => {
   return (
     <Container>
       <Keyword>{kw || category?.name}</Keyword>
-      <Desc>{total} building stock photos are available royalty-free</Desc>
+      <Desc>
+        {total} phtots found for "{kw || category?.name}".
+      </Desc>
 
       <Box mt="40px">
         <MindPressMasmonry
