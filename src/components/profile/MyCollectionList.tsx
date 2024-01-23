@@ -116,42 +116,52 @@ const MyCollectionList = (props: ICollectionList) => {
         return <div>{totalVol || 0}</div>;
       },
     },
-    // {
-    //   header: 'Action',
-    //   cell: (data: any) => {
-    //     const { bucket_info, listed, groupId } = data;
-    //     return (
-    //       <div>
-    //         <YellowButton
-    //           size={'sm'}
-    //           onClick={async () => {
-    //             if (!listed) {
-    //               reportEvent({ name: 'dm.profile.list.list.click' });
-    //               await switchNetwork?.(GF_CHAIN_ID);
-    //               modalData.modalDispatch({
-    //                 type: 'OPEN_LIST',
-    //                 initInfo: bucket_info,
-    //               });
-    //             } else {
-    //               const { bucket_name, create_at, owner } = bucket_info;
-    //               modalData.modalDispatch({
-    //                 type: 'OPEN_DELIST',
-    //                 delistData: {
-    //                   groupId,
-    //                   bucket_name,
-    //                   create_at,
-    //                   owner,
-    //                 },
-    //               });
-    //             }
-    //           }}
-    //         >
-    //           {!listed ? 'List' : 'Delist'}
-    //         </YellowButton>
-    //       </div>
-    //     );
-    //   },
-    // },
+    {
+      header: 'Action',
+      cell: (data: any) => {
+        const {
+          bucket_info: { bucket_name, id: bucketId },
+        } = data;
+        return (
+          <div>
+            <YellowButton
+              size={'sm'}
+              onClick={async () => {
+                // if (!listed) {
+                //   reportEvent({ name: 'dm.profile.list.list.click' });
+                //   await switchNetwork?.(GF_CHAIN_ID);
+                //   modalData.modalDispatch({
+                //     type: 'OPEN_LIST',
+                //     initInfo: bucket_info,
+                //   });
+                // } else {
+                //   const { bucket_name, create_at, owner } = bucket_info;
+                //   modalData.modalDispatch({
+                //     type: 'OPEN_DELIST',
+                //     delistData: {
+                //       groupId,
+                //       bucket_name,
+                //       create_at,
+                //       owner,
+                //     },
+                //   });
+                // }
+                const item = await getItemByBucketId(bucketId);
+
+                if (!_.isEmpty(item)) {
+                  navigator(`/resource?id=${item.id}`);
+                } else {
+                  navigator(`/detail?bid=${bucketId}`);
+                }
+              }}
+            >
+              {/* {!listed ? 'List' : 'Delist'} */}
+              list objects
+            </YellowButton>
+          </div>
+        );
+      },
+    },
   ];
   return (
     <Container>
