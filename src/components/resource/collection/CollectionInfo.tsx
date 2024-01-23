@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { CalendarIcon } from '@totejs/icons';
 import { Box, Flex } from '@totejs/uikit';
 import BN from 'bn.js';
@@ -10,7 +11,6 @@ import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
 import { ITEM_RELATION_ADDR } from '../../../hooks/useGetItemRelationWithAddr';
 import { useGetObjectList } from '../../../hooks/useGetObjectList';
 import { useModal } from '../../../hooks/useModal';
-import { useWalletModal } from '../../../hooks/useWalletModal';
 import {
   divide10Exp,
   formatDateDot,
@@ -37,7 +37,7 @@ export const CollectionInfo = (props: Props) => {
   const { price: bnbPrice } = useBNBPrice();
   const path = p.get('path') as string;
   const { isConnected, isConnecting } = useAccount();
-  const { handleModalOpen } = useWalletModal();
+  const { onOpen } = useWalletKitModal();
   const navigator = useNavigate();
 
   const categroyInfo = useGetCategory(itemInfo.categoryId);
@@ -155,7 +155,7 @@ export const CollectionInfo = (props: Props) => {
               <BigYellowButton
                 onClick={() => {
                   if (!isConnected && !isConnecting) {
-                    handleModalOpen();
+                    onOpen();
                   } else {
                     modalData.modalDispatch({
                       type: 'OPEN_BUY',

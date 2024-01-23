@@ -1,7 +1,7 @@
+import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { Box, Flex } from '@totejs/uikit';
 import { useAccount } from 'wagmi';
 import { useModal } from '../../../hooks/useModal';
-import { useWalletModal } from '../../../hooks/useWalletModal';
 import { Item } from '../../../utils/apis/types';
 import { LockIcon } from '../../svgIcon/LockIcon';
 
@@ -12,8 +12,8 @@ interface Props {
 export const BuyData = (props: Props) => {
   const { itemInfo } = props;
   const { isConnected, isConnecting } = useAccount();
-  const { handleModalOpen } = useWalletModal();
   const modalData = useModal();
+  const { onOpen } = useWalletKitModal();
 
   return (
     <Box bg="#1E2026" w="590px" borderRadius="16px">
@@ -43,7 +43,7 @@ export const BuyData = (props: Props) => {
             color="#FFE900"
             onClick={() => {
               if (!isConnected && !isConnecting) {
-                handleModalOpen();
+                onOpen();
               } else {
                 modalData.modalDispatch({
                   type: 'OPEN_BUY',

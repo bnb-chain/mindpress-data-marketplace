@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
+import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { CalendarIcon } from '@totejs/icons';
-import { Box, Button, Flex } from '@totejs/uikit';
+import { Box, Flex } from '@totejs/uikit';
 import BN from 'bn.js';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { Link } from 'react-router-dom';
@@ -9,7 +10,6 @@ import { useBNBPrice } from '../../../hooks/useBNBPrice';
 import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
 import { useGetItemRelationWithAddr } from '../../../hooks/useGetItemRelationWithAddr';
 import { useModal } from '../../../hooks/useModal';
-import { useWalletModal } from '../../../hooks/useWalletModal';
 import {
   divide10Exp,
   formatDateDot,
@@ -26,7 +26,7 @@ import { CategoryIcon } from '../../svgIcon/CategoryIcon';
 import { FolderIcon } from '../../svgIcon/FolderIcon';
 import { ShoppingIcon } from '../../svgIcon/ShoppingIcon';
 import { SizeIcon } from '../../svgIcon/SizeIcon';
-import { BigYellowButton, YellowButton } from '../../ui/buttons/YellowButton';
+import { BigYellowButton } from '../../ui/buttons/YellowButton';
 
 interface Props {
   itemInfo: Item;
@@ -45,7 +45,7 @@ export const DataInfo = (props: Props) => {
   const relation = useGetItemRelationWithAddr(address, itemInfo);
 
   const modalData = useModal();
-  const { handleModalOpen } = useWalletModal();
+  const { onOpen } = useWalletKitModal();
 
   const categroyInfo = useGetCategory(itemInfo.categoryId);
 
@@ -148,7 +148,7 @@ export const DataInfo = (props: Props) => {
                   console.log('relation', relation, isConnecting, isConnected);
                   if (relation === 'UNKNOWN') {
                     if (!isConnected && !isConnecting) {
-                      handleModalOpen();
+                      onOpen();
                     }
                   } else {
                     modalData.modalDispatch({

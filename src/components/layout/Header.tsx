@@ -3,9 +3,8 @@ import '@node-real/walletkit/styles.css';
 import { useWindowScroll } from '@uidotdev/usehooks';
 
 import { Box, Button, Flex, useOutsideClick } from '@totejs/uikit';
-import { useWalletModal } from '../../hooks/useWalletModal';
 
-import { WalletKitButton } from '@node-real/walletkit';
+import { WalletKitButton, useModal } from '@node-real/walletkit';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
@@ -15,12 +14,10 @@ import { NET_ENV } from '../../env';
 import TestNetLogo from '../../images/logo-testnet.svg';
 import MainNetLogo from '../../images/logo.svg';
 import { trimLongStr } from '../../utils';
-import { reportEvent } from '../../utils/ga';
 import { Copy } from '../Copy';
 import { MyDataCollectionIcon } from '../svgIcon/MyDataCollectionIcon';
 import { SellIcon } from '../svgIcon/SellIcon';
 import { SignOutIcon } from '../svgIcon/SignOutIcon';
-import { DefaultButton } from '../ui/buttons/DefaultButton';
 
 const BG_COLOR = '#181a1e';
 
@@ -30,7 +27,7 @@ const Header = () => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const { address, isConnecting, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
-  const { handleModalOpen } = useWalletModal();
+  const { onOpen } = useModal();
   const handleShowDropDown = useCallback(() => {
     setDropDownOpen((preState) => !preState);
   }, []);
@@ -105,8 +102,10 @@ const Header = () => {
               color: 'rgb(24, 26, 30)',
             }}
             onClick={() => {
-              reportEvent({ name: 'dm.main.header.list_my_data.click' });
-              if (!isConnecting && !isConnected) handleModalOpen();
+              if (!isConnecting && !isConnected) {
+                onOpen();
+                return;
+              }
               navigate('/profile');
             }}
           >

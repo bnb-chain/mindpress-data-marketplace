@@ -1,16 +1,16 @@
 import styled from '@emotion/styled';
+import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { Box, Flex, Stack } from '@totejs/uikit';
-import { useNavigate } from 'react-router-dom';
-import { Item } from '../utils/apis/types';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { trimLongStr } from '../utils';
-import { useGetRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
+import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import { useGetRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
+import { useModal } from '../hooks/useModal';
+import { trimLongStr } from '../utils';
+import { Item } from '../utils/apis/types';
 import { Loader } from './Loader';
 import { DefaultButton } from './ui/buttons/DefaultButton';
 import { YellowButton } from './ui/buttons/YellowButton';
-import { useModal } from '../hooks/useModal';
-import { useWalletModal } from '../hooks/useWalletModal';
 
 interface IProps {
   item: Item;
@@ -26,7 +26,7 @@ export const HoverStatus = ({ item, className }: IProps) => {
     downloadUrl,
   } = useGetRelationWithAddr(address, item);
   const modalData = useModal();
-  const { handleModalOpen } = useWalletModal();
+  const { onOpen } = useWalletKitModal();
 
   return (
     <CardHover className={className}>
@@ -66,7 +66,7 @@ export const HoverStatus = ({ item, className }: IProps) => {
                 e.stopPropagation();
                 if (relation === 'UNKNOWN') {
                   if (!isConnected && !isConnecting) {
-                    handleModalOpen();
+                    onOpen();
                   }
                 } else {
                   modalData.modalDispatch({

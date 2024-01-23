@@ -48,7 +48,7 @@ export const config = createConfig(
     walletConnectProjectId: '80adccc73d399805828036182bf2e594',
 
     chains,
-    connectors: [trustWallet(), metaMask()],
+    connectors: [trustWallet(), metaMask(), walletConnect()],
   }),
 );
 

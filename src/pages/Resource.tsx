@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { LinkArrowIcon } from '@totejs/icons';
 import { Box, Flex, Image, Link, Stack } from '@totejs/uikit';
 import BN from 'bn.js';
@@ -9,6 +10,7 @@ import { Loader } from '../components/Loader';
 import { NoData } from '../components/NoData';
 import { RelatedImage } from '../components/resource/RelatedImage';
 import BSCIcon from '../components/svgIcon/BSCIcon';
+import { MPLink } from '../components/ui/MPLink';
 import { DefaultButton } from '../components/ui/buttons/DefaultButton';
 import { YellowButton } from '../components/ui/buttons/YellowButton';
 import { GF_EXPLORER_URL } from '../env';
@@ -23,7 +25,6 @@ import { useGetDownloadUrl } from '../hooks/useGetDownloadUrl';
 import { useGetItemById } from '../hooks/useGetItemById';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
 import { useModal } from '../hooks/useModal';
-import { useWalletModal } from '../hooks/useWalletModal';
 import {
   contentTypeToExtension,
   divide10Exp,
@@ -32,7 +33,6 @@ import {
   roundFun,
   trimLongStr,
 } from '../utils';
-import { MPLink } from '../components/ui/MPLink';
 
 /**
  * Have been listed
@@ -66,7 +66,7 @@ const Resource = () => {
   });
 
   const modalData = useModal();
-  const { handleModalOpen } = useWalletModal();
+  const { onOpen } = useWalletKitModal();
 
   if (itemInfoLoading) {
     return <Loader />;
@@ -172,7 +172,7 @@ const Resource = () => {
                   console.log('relation', relation, isConnecting, isConnected);
                   if (relation === 'UNKNOWN') {
                     if (!isConnected && !isConnecting) {
-                      handleModalOpen();
+                      onOpen();
                     }
                   } else {
                     modalData.modalDispatch({

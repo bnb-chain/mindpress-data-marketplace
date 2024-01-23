@@ -6,6 +6,7 @@ import { Loader } from '../components/Loader';
 import { useRedirectFromExternal } from '../hooks/useRedirectFromExternal';
 import { useWalletModal } from '../hooks/useWalletModal';
 import NiceModal from '@ebay/nice-modal-react';
+import { useModal } from '@node-real/walletkit';
 import { Tips } from '../components/modal/Tips';
 import { trimLongStr } from '../utils';
 import styled from '@emotion/styled';
@@ -21,7 +22,7 @@ export const R = () => {
     detailOid,
   } = useRedirectFromExternal();
 
-  const { handleModalOpen } = useWalletModal();
+  const { onOpen } = useModal();
 
   // console.log(
   //   'status',
@@ -87,7 +88,7 @@ export const R = () => {
 
   useEffect(() => {
     if (accountStatus === 'NOT_LOGIN') {
-      handleModalOpen();
+      onOpen();
       // return;
     }
     if (accountStatus === 'ACCOUNT_IS_NOT_SAME') {

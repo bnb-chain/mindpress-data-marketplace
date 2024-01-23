@@ -1,9 +1,9 @@
 import styled from '@emotion/styled';
+import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { Flex } from '@totejs/uikit';
 import { useAccount } from 'wagmi';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
 import { useModal } from '../hooks/useModal';
-import { useWalletModal } from '../hooks/useWalletModal';
 import { Item } from '../utils/apis/types';
 import { OwnActionCom } from './OwnActionCom';
 import { YellowButton } from './ui/buttons/YellowButton';
@@ -19,7 +19,7 @@ export const ActionCom = (obj: IActionCom) => {
   const { isConnected, isConnecting } = useAccount();
   const relation = useGetItemRelationWithAddr(address, data);
 
-  const { handleModalOpen } = useWalletModal();
+  const { onOpen } = useWalletKitModal();
 
   const modalData = useModal();
   return (
@@ -50,7 +50,7 @@ export const ActionCom = (obj: IActionCom) => {
       {relation === 'UNKNOWN' && (
         <YellowButton
           onClick={() => {
-            if (!isConnected && !isConnecting) handleModalOpen();
+            if (!isConnected && !isConnecting) onOpen();
           }}
         >
           Buy

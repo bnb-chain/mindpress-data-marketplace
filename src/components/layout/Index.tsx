@@ -2,20 +2,16 @@ import styled from '@emotion/styled';
 import { Flex } from '@totejs/uikit';
 import { ReactNode, useCallback } from 'react';
 import { useModal } from '../../hooks/useModal';
-import { useWalletModal } from '../../hooks/useWalletModal';
 import { ActionResult } from '../modal/ActionResult';
 import { DelistModal } from '../modal/DelistModal';
 import { ListModal } from '../modal/ListModal';
 import { ListProcess } from '../modal/ListProcess';
 import { BuyIndex } from '../modal/buy/Index';
-import { WalletConnectModal } from '../wallet/WalletConnectModal';
 import Footer from './Footer';
 import Header from './Header';
 
 export default function Layout({ children }: { children: ReactNode }) {
   const modalData = useModal();
-  const { modalData: walletModalData, handleModalClose } = useWalletModal();
-  const walletModalOpen = walletModalData.modalState?.open;
 
   const {
     openList,
@@ -87,13 +83,6 @@ export default function Layout({ children }: { children: ReactNode }) {
         callBack={callBack}
         {...result}
       ></ActionResult>
-
-      <WalletConnectModal
-        isOpen={walletModalOpen}
-        onClose={() => {
-          handleModalClose();
-        }}
-      />
     </>
   );
 }
