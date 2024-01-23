@@ -73,7 +73,7 @@ const Resource = () => {
   }
 
   if (!itemInfo || !bucketData || !objectData) {
-    return <NoData />;
+    return <Loader />;
   }
 
   return (
