@@ -79,16 +79,16 @@ const BigImageBg = styled(Box)``;
 
 const Title = styled(Box)`
   font-size: 48px;
-  font-weight: 600;
+  font-weight: 900;
   line-height: 56px;
-  padding-top: 32px;
+  padding-top: 80px;
   color: #f7f7f8;
   text-align: center;
 `;
 
 const Desc = styled(Box)`
   font-size: 20px;
-  font-weight: 400;
+  font-weight: 500;
   color: #fff;
   text-align: center;
   margin-top: 12px;

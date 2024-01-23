@@ -149,10 +149,10 @@ const SearchBox = styled.div<{
       : `1px solid ${props.theme.colors.readable.border}`;
   }};
 
-  :hover {
+  /* :hover {
     outline: 1px solid #5c5f6a;
     background: #373943;
-  }
+  } */
 
   :focus-within {
     outline: 2px solid #5c5f6a;
@@ -165,7 +165,8 @@ const SearchBox = styled.div<{
     padding: 0;
     margin-left: 4px;
     ::placeholder {
-      color: ${(props: any) => props.theme.colors.readable.secondary};
+      color: #5c5f6a;
+      font-weight: 600;
       :hover {
         color: ${(props: any) => props.theme.colors.readable.disabled};
       }

@@ -232,9 +232,11 @@ export default Search;
 
 const Input = styled(SearchInput)`
   height: 56px;
-  color: #f7f7f8;
+  color: #5c5f6a;
   font-size: 16px;
+  font-weight: 600;
   border: 1px solid #5c5f6a;
+  background-color: #14151a;
 `;
 
 const Container = styled.div`
