@@ -35,10 +35,16 @@ const Header = () => {
     setDropDownOpen((preState) => !preState);
   }, []);
   const ref = useRef<HTMLDivElement>(null);
-  const [{ x, y }] = useWindowScroll();
+  const ref2 = useRef<HTMLDivElement>(null);
+  const [{ y }] = useWindowScroll();
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  useOutsideClick({
+    ref: ref2,
+    handler: () => setDropDownOpen(false),
+  });
 
   useEffect(() => {
     if (!ref.current) return;
@@ -79,7 +85,12 @@ const Header = () => {
         )}
       </LeftCon>
 
-      <RightFunCon alignItems={'center'} justifyContent={'center'} gap={18}>
+      <RightFunCon
+        alignItems={'center'}
+        justifyContent={'center'}
+        gap={18}
+        ref={ref2}
+      >
         <>
           <Button
             variant="ghost"
@@ -245,9 +256,6 @@ const Header = () => {
               </MenuElement>
               <MenuElement
                 onClick={async () => {
-                  reportEvent({
-                    name: 'dm.account.disconnect.disconnect.click',
-                  });
                   await disconnect();
                   navigate('/');
                 }}
