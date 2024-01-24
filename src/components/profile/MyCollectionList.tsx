@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Flex, Table } from '@totejs/uikit';
 import { useNavigate } from 'react-router-dom';
-import { useSwitchNetwork } from 'wagmi';
 import { usePagination } from '../../hooks/usePagination';
 import {
   defaultImg,
@@ -117,32 +116,13 @@ const MyCollectionList = (props: ICollectionList) => {
       header: 'Action',
       cell: (data: any) => {
         const {
-          bucket_info: { bucket_name, id: bucketId },
+          bucket_info: { id: bucketId },
         } = data;
         return (
           <div>
             <YellowButton
               size={'sm'}
               onClick={async () => {
-                // if (!listed) {
-                //   reportEvent({ name: 'dm.profile.list.list.click' });
-                //   await switchNetwork?.(GF_CHAIN_ID);
-                //   modalData.modalDispatch({
-                //     type: 'OPEN_LIST',
-                //     initInfo: bucket_info,
-                //   });
-                // } else {
-                //   const { bucket_name, create_at, owner } = bucket_info;
-                //   modalData.modalDispatch({
-                //     type: 'OPEN_DELIST',
-                //     delistData: {
-                //       groupId,
-                //       bucket_name,
-                //       create_at,
-                //       owner,
-                //     },
-                //   });
-                // }
                 const item = await getItemByBucketId(bucketId);
 
                 if (!_.isEmpty(item)) {
@@ -152,7 +132,6 @@ const MyCollectionList = (props: ICollectionList) => {
                 }
               }}
             >
-              {/* {!listed ? 'List' : 'Delist'} */}
               list objects
             </YellowButton>
           </div>

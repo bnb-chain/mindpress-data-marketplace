@@ -1,34 +1,25 @@
 import styled from '@emotion/styled';
-import { Box, Button, Flex, Table } from '@totejs/uikit';
-import { usePagination } from '../../hooks/usePagination';
+import { CardPocketIcon, GoIcon } from '@totejs/icons';
+import { Box, Flex, Table } from '@totejs/uikit';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import { useCollectionItems } from '../../hooks/useCollectionItems';
+import { useGlobal } from '../../hooks/useGlobal';
+import { useModal } from '../../hooks/useModal';
+import { usePagination } from '../../hooks/usePagination';
 import {
   contentTypeToExtension,
   defaultImg,
-  divide10Exp,
   formatDateUTC,
   generateGroupName,
   parseFileSize,
   trimLongStr,
 } from '../../utils';
-import { useCollectionItems } from '../../hooks/useCollectionItems';
-import { useSalesVolume } from '../../hooks/useSalesVolume';
-import { useModal } from '../../hooks/useModal';
-import { BN } from 'bn.js';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { useGlobal } from '../../hooks/useGlobal';
-import { GoIcon, CardPocketIcon } from '@totejs/icons';
 import { OwnActionCom } from '../OwnActionCom';
-import { PaginationSx } from '../ui/table/PaginationSx';
 import { YellowButton } from '../ui/buttons/YellowButton';
+import { PaginationSx } from '../ui/table/PaginationSx';
 
-const TotalVol = (props: any) => {
-  const { groupId } = props;
-  const { salesVolume } = useSalesVolume(groupId);
-  return <div>{Number(salesVolume) || '-'}</div>;
-};
-
-const ProfileList = (props: any) => {
+const List = (props: any) => {
   const {
     name,
     bucketName,
@@ -63,7 +54,7 @@ const ProfileList = (props: any) => {
       header: 'Data',
       width: '200px',
       cell: (data: any) => {
-        const { object_info, name } = data;
+        const { object_info } = data;
         const object_name =
           data._type === 'folder' ? data.name : data?.object_info?.object_name;
 
@@ -169,6 +160,7 @@ const ProfileList = (props: any) => {
                 onClick={async () => {
                   sessionStorage.setItem('resource_type', '1');
                   if (!listed) {
+                    console.log('object_info', object_info);
                     modalData.modalDispatch({
                       type: 'OPEN_LIST',
                       initInfo: object_info,
@@ -256,7 +248,7 @@ const ProfileList = (props: any) => {
   );
 };
 
-export default ProfileList;
+export default List;
 
 const Container = styled.div`
   width: 996px;
