@@ -81,8 +81,8 @@ export const ModalReducer = (initialState: any, action: any) => {
         ...initialState,
         openListProcess: false,
       };
-    case 'UPDATE_LIST_DATA':
-      return { ...initialState, listData: action.listData };
+    // case 'UPDATE_LIST_DATA':
+    //   return { ...initialState, listData: action.listData };
     case 'UPDATE_LIST_STATUS':
       return {
         ...initialState,
