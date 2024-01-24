@@ -8,7 +8,6 @@ import Layout from './components/layout/Index';
 import { GlobalProvider } from './context/global';
 import { ModalProvider } from './context/modal';
 import { WalletModalProvider } from './context/walletModal';
-import Folder from './pages/Folder';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Resource from './pages/Resource';
@@ -69,10 +68,10 @@ const routes: Array<IRoute> = [
     path: '/r',
     element: <R />,
   },
-  {
-    path: '/folder',
-    element: <Folder></Folder>,
-  },
+  // {
+  //   path: '/folder',
+  //   element: <Folder></Folder>,
+  // },
 ];
 
 const ReactQueryDevtoolsProduction = React.lazy(() =>
