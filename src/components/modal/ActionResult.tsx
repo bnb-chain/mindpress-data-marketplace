@@ -137,7 +137,7 @@ export const ActionResult = (props: IActionResult) => {
       variant={variant}
       isOpen={isOpen}
       onClose={handleOpen}
-      icon={<CustomSuccessIcon />}
+      // icon={<CustomSuccessIcon />}
       description={description || 'buy error'}
     >
       <BigYellowButton

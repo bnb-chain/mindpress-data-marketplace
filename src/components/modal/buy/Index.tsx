@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
-import { BuyModal } from './BuyModal';
-import { BuyProcess } from './BuyProcess';
 import { useModal } from '../../../hooks/useModal';
+import { BuyModal } from './BuyModal';
 
 export const BuyIndex = () => {
   const state = useModal();
@@ -14,8 +13,6 @@ export const BuyIndex = () => {
   return (
     <>
       <BuyModal isOpen={openBuy} handleOpen={handleBuyOpen}></BuyModal>
-      {/* )} */}
-      <BuyProcess isOpen={buying}></BuyProcess>
     </>
   );
 };

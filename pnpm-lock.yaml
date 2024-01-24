@@ -161,6 +161,9 @@ dependencies:
   jest-watch-typeahead:
     specifier: ^1.1.0
     version: 1.1.0(jest@27.5.1)
+  jotai:
+    specifier: ^2.6.2
+    version: 2.6.2(@types/react@18.2.7)(react@18.2.0)
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
@@ -10134,6 +10137,22 @@ packages:
   /jiti@1.21.0:
     resolution: {integrity: sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==}
     hasBin: true
+    dev: false
+
+  /jotai@2.6.2(@types/react@18.2.7)(react@18.2.0):
+    resolution: {integrity: sha512-kl4KguU1Fr+tFiLi3A3h9qPEzhvLTTDA10DO3QZAz6k7BEaQJ+qvSBwolzonnfNI4QzEovyQfUqVgnRxfnnQVQ==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=17.0.0'
+      react: '>=17.0.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
+    dependencies:
+      '@types/react': 18.2.7
+      react: 18.2.0
     dev: false
 
   /jquery@3.7.1:

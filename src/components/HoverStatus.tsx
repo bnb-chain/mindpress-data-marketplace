@@ -8,7 +8,6 @@ import { useGetRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
 import { useModal } from '../hooks/useModal';
 import { trimLongStr } from '../utils';
 import { Item } from '../utils/apis/types';
-import { Loader } from './Loader';
 import { DefaultButton } from './ui/buttons/DefaultButton';
 import { YellowButton } from './ui/buttons/YellowButton';
 

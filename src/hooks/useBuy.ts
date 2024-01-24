@@ -1,15 +1,17 @@
-import { useCallback } from 'react';
-import { useAccount } from 'wagmi';
-import { useStatus } from './useStatus';
-import { useChainBalance } from './useChainBalance';
-import { MarketPlaceContract } from '../base/contract/marketPlaceContract';
 import BN from 'bn.js';
-import { useRelayFee } from './useRelayFee';
-import { delay, divide10Exp } from '../utils';
-import { useModal } from './useModal';
+import { useAtom } from 'jotai';
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BSC_SEND_GAS_FEE } from '../env';
+import { useAccount } from 'wagmi';
+import { buyAtom } from '../atoms/buyAtom';
+import { MarketPlaceContract } from '../base/contract/marketPlaceContract';
 import { OwnContract } from '../base/contract/ownContract';
+import { BSC_SEND_GAS_FEE } from '../env';
+import { delay, divide10Exp } from '../utils';
+import { useChainBalance } from './useChainBalance';
+import { useModal } from './useModal';
+import { useRelayFee } from './useRelayFee';
+import { useStatus } from './useStatus';
 
 export const useBuy = (
   groupName: string,
@@ -24,6 +26,7 @@ export const useBuy = (
   const { status } = useStatus(groupName, groupOwner, address as string);
 
   const { relayFee } = useRelayFee();
+  const [buys, setBuys] = useAtom(buyAtom);
 
   const state = useModal();
 
@@ -76,6 +79,9 @@ export const useBuy = (
               description: e.message ? e.message : 'Buy failed',
             };
           }
+          setBuys({
+            buying: false,
+          });
           state.modalDispatch({
             type: 'OPEN_RESULT',
             result: tmp,

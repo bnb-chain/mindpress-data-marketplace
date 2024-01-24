@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 import { ColoredInfoIcon } from '@totejs/icons';
 import {
   Box,
-  Button,
   Flex,
   Popover,
   PopoverArrow,
@@ -16,20 +15,24 @@ import {
   Stack,
 } from '@totejs/uikit';
 import { BN } from 'bn.js';
+import { useAtom } from 'jotai';
 import { useMemo } from 'react';
 import { formatUnits, parseUnits } from 'viem';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
+import { buyAtom } from '../../../atoms/buyAtom';
 import { BSC_CHAIN_ID, NETWORK } from '../../../env';
 import { useBNBPrice } from '../../../hooks/useBNBPrice';
 import { useBuy } from '../../../hooks/useBuy';
 import { useChainBalance } from '../../../hooks/useChainBalance';
 import { useModal } from '../../../hooks/useModal';
 import { divide10Exp, roundFun } from '../../../utils';
+import { Loader } from '../../Loader';
 import { BigYellowButton } from '../../ui/buttons/YellowButton';
 
 export const BuyModal = (props: any) => {
   const modalData = useModal();
   const { isOpen, handleOpen } = props;
+  const [buys, setBuys] = useAtom(buyAtom);
 
   const { buyData } = modalData.modalState;
 
@@ -75,7 +78,9 @@ export const BuyModal = (props: any) => {
   return (
     <Container
       isOpen={isOpen}
-      onClose={handleOpen}
+      onClose={() => {
+        handleOpen();
+      }}
       background={'#1e2026'}
       color="#FFF"
       w={395}
@@ -134,12 +139,17 @@ export const BuyModal = (props: any) => {
       <QDrawerFooter>
         {chain && chain.id === BSC_CHAIN_ID && (
           <BigYellowButton
+            isLoading={buys.buying}
+            loadingText={<Loader size={30} />}
             width={'100%'}
             onClick={() => {
               buy(groupId);
-              modalData.modalDispatch({ type: 'BUYING' });
+              setBuys({
+                // openDrawer: true,
+                buying: true,
+              });
             }}
-            disabled={!BSC_FEE_SUFF}
+            disabled={!BSC_FEE_SUFF || buys.buying}
           >
             Buy
           </BigYellowButton>
@@ -154,9 +164,6 @@ export const BuyModal = (props: any) => {
             Switch to BSC {NETWORK}
           </BigYellowButton>
         ) : null}
-        {/* <Cancel width={'50%'} onClick={handleOpen} variant="ghost">
-          Cancel
-        </Cancel> */}
       </QDrawerFooter>
     </Container>
   );
@@ -183,53 +190,6 @@ const CustomBody = styled(QDrawerBody)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-`;
-
-const InfoCon = styled(Flex)``;
-
-const BaseInfo = styled(Flex)``;
-
-const LeftInfo = styled.div``;
-
-const ItemPrice = styled.div`
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-
-  color: #c4c5cb;
-`;
-
-const ImgCon = styled.div`
-  width: 80px;
-  height: 80px;
-
-  img {
-    background: #d9d9d9;
-    border-radius: 8px;
-  }
-`;
-const ResourceNameCon = styled(Flex)`
-  font-style: normal;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 28px;
-
-  color: #5f6368;
-`;
-
-const Tag = styled(Flex)`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 8px;
-  line-height: 28px;
-
-  width: 60px;
-  height: 16px;
-
-  background: #d9d9d9;
-
-  border-radius: 16px;
 `;
 
 const BuyInfo = styled(Stack)`
@@ -266,11 +226,4 @@ const BalanceWarn = styled(Flex)`
   /* identical to box height, or 180% */
   bottom: 90px;
   color: #ff6058;
-`;
-
-const Cancel = styled(Button)`
-  color: #1e2026;
-  &:hover {
-    color: ${(props: any) => props.theme.colors.readable.normal};
-  }
 `;
