@@ -164,6 +164,9 @@ dependencies:
   jotai:
     specifier: ^2.6.2
     version: 2.6.2(@types/react@18.2.7)(react@18.2.0)
+  jotai-immer:
+    specifier: ^0.3.0
+    version: 0.3.0(immer@9.0.21)(jotai@2.6.2)(react@18.2.0)
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
@@ -262,7 +265,7 @@ dependencies:
     version: 1.21.4(typescript@4.9.5)
   wagmi:
     specifier: ^1.4.13
-    version: 1.4.13(@types/react@18.2.7)(react-dom@18.2.0)(react@18.2.0)(typescript@4.9.5)(viem@1.21.4)
+    version: 1.4.13(@types/react@18.2.7)(immer@9.0.21)(react-dom@18.2.0)(react@18.2.0)(typescript@4.9.5)(viem@1.21.4)
   web3:
     specifier: ^1.10.0
     version: 1.10.0
@@ -3128,7 +3131,7 @@ packages:
       react: 18.2.0
       react-dom: 18.2.0(react@18.2.0)
       viem: 1.21.4(typescript@4.9.5)
-      wagmi: 1.4.13(@types/react@18.2.7)(react-dom@18.2.0)(react@18.2.0)(typescript@4.9.5)(viem@1.21.4)
+      wagmi: 1.4.13(@types/react@18.2.7)(immer@9.0.21)(react-dom@18.2.0)(react@18.2.0)(typescript@4.9.5)(viem@1.21.4)
     transitivePeerDependencies:
       - '@particle-network/auth'
       - debug
@@ -4690,7 +4693,7 @@ packages:
       - zod
     dev: false
 
-  /@wagmi/core@1.4.13(@types/react@18.2.7)(react@18.2.0)(typescript@4.9.5)(viem@1.21.4):
+  /@wagmi/core@1.4.13(@types/react@18.2.7)(immer@9.0.21)(react@18.2.0)(typescript@4.9.5)(viem@1.21.4):
     resolution: {integrity: sha512-ytMCvXbBOgfDu9Qw67279wq/jNEe7EZLjLyekX7ROnvHRADqFr3lwZI6ih41UmtRZAmXAx8Ghyuqy154EjB5mQ==}
     peerDependencies:
       typescript: '>=5.0.4'
@@ -4704,7 +4707,7 @@ packages:
       eventemitter3: 4.0.7
       typescript: 4.9.5
       viem: 1.21.4(typescript@4.9.5)
-      zustand: 4.4.7(@types/react@18.2.7)(react@18.2.0)
+      zustand: 4.4.7(@types/react@18.2.7)(immer@9.0.21)(react@18.2.0)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -9110,7 +9113,6 @@ packages:
 
   /immer@9.0.21:
     resolution: {integrity: sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==}
-    dev: true
 
   /import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
@@ -10137,6 +10139,18 @@ packages:
   /jiti@1.21.0:
     resolution: {integrity: sha512-gFqAIbuKyyso/3G2qhiO2OM6shY6EPP/R0+mkDbyspxKazh8BXDC5FiFsUjlczgdNz/vfra0da2y+aHrusLG/Q==}
     hasBin: true
+    dev: false
+
+  /jotai-immer@0.3.0(immer@9.0.21)(jotai@2.6.2)(react@18.2.0):
+    resolution: {integrity: sha512-k+o4rWfWWLyHfucHAdoiN+l8flxMrKC/bEFvJA98znj+kbPW5R90EPa1u8mhWLJTABW3xjAp7Z3kyD3FVi0Hgw==}
+    peerDependencies:
+      immer: '*'
+      jotai: '>=2.0.0'
+      react: '>=17.0.0'
+    dependencies:
+      immer: 9.0.21
+      jotai: 2.6.2(@types/react@18.2.7)(react@18.2.0)
+      react: 18.2.0
     dev: false
 
   /jotai@2.6.2(@types/react@18.2.7)(react@18.2.0):
@@ -15139,7 +15153,7 @@ packages:
       xml-name-validator: 3.0.0
     dev: false
 
-  /wagmi@1.4.13(@types/react@18.2.7)(react-dom@18.2.0)(react@18.2.0)(typescript@4.9.5)(viem@1.21.4):
+  /wagmi@1.4.13(@types/react@18.2.7)(immer@9.0.21)(react-dom@18.2.0)(react@18.2.0)(typescript@4.9.5)(viem@1.21.4):
     resolution: {integrity: sha512-AScVYFjqNt1wMgL99Bob7MLdhoTZ3XKiOZL5HVBdy4W1sh7QodA3gQ8IsmTuUrQ7oQaTxjiXEhwg7sWNrPBvJA==}
     peerDependencies:
       react: '>=17.0.0'
@@ -15152,7 +15166,7 @@ packages:
       '@tanstack/query-sync-storage-persister': 4.36.1
       '@tanstack/react-query': 4.36.1(react-dom@18.2.0)(react@18.2.0)
       '@tanstack/react-query-persist-client': 4.36.1(@tanstack/react-query@4.36.1)
-      '@wagmi/core': 1.4.13(@types/react@18.2.7)(react@18.2.0)(typescript@4.9.5)(viem@1.21.4)
+      '@wagmi/core': 1.4.13(@types/react@18.2.7)(immer@9.0.21)(react@18.2.0)(typescript@4.9.5)(viem@1.21.4)
       abitype: 0.8.7(typescript@4.9.5)
       react: 18.2.0
       typescript: 4.9.5
@@ -16138,7 +16152,7 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  /zustand@4.4.7(@types/react@18.2.7)(react@18.2.0):
+  /zustand@4.4.7(@types/react@18.2.7)(immer@9.0.21)(react@18.2.0):
     resolution: {integrity: sha512-QFJWJMdlETcI69paJwhSMJz7PPWjVP8Sjhclxmxmxv/RYI7ZOvR5BHX+ktH0we9gTWQMxcne8q1OY8xxz604gw==}
     engines: {node: '>=12.7.0'}
     peerDependencies:
@@ -16154,6 +16168,7 @@ packages:
         optional: true
     dependencies:
       '@types/react': 18.2.7
+      immer: 9.0.21
       react: 18.2.0
       use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false

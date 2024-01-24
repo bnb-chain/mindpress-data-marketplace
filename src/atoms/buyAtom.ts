@@ -1,11 +1,14 @@
-import { atom } from 'jotai';
+import { atomWithImmer } from 'jotai-immer';
+import { Item } from '../utils/apis/types';
 
 interface IBuyAtom {
-  // openDrawer: boolean;
+  openDrawer: boolean;
   buying: boolean;
+  buyData: Item;
 }
 
-export const buyAtom = atom<IBuyAtom>({
-  // openDrawer: false,
+export const buyAtom = atomWithImmer<IBuyAtom>({
+  openDrawer: false,
   buying: false,
+  buyData: {} as Item,
 });

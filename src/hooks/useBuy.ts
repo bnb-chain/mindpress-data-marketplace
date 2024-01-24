@@ -1,5 +1,5 @@
 import BN from 'bn.js';
-import { useAtom } from 'jotai';
+import { useImmerAtom } from 'jotai-immer';
 import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
@@ -26,7 +26,7 @@ export const useBuy = (
   const { status } = useStatus(groupName, groupOwner, address as string);
 
   const { relayFee } = useRelayFee();
-  const [buys, setBuys] = useAtom(buyAtom);
+  const [buys, setBuys] = useImmerAtom(buyAtom);
 
   const state = useModal();
 
@@ -79,8 +79,10 @@ export const useBuy = (
               description: e.message ? e.message : 'Buy failed',
             };
           }
-          setBuys({
-            buying: false,
+
+          setBuys((draft) => {
+            draft.openDrawer = false;
+            draft.buying = false;
           });
           state.modalDispatch({
             type: 'OPEN_RESULT',

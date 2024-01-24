@@ -15,28 +15,23 @@ import {
   Stack,
 } from '@totejs/uikit';
 import { BN } from 'bn.js';
-import { useAtom } from 'jotai';
+import { useImmerAtom } from 'jotai-immer';
 import { useMemo } from 'react';
 import { formatUnits, parseUnits } from 'viem';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
-import { buyAtom } from '../../../atoms/buyAtom';
-import { BSC_CHAIN_ID, NETWORK } from '../../../env';
-import { useBNBPrice } from '../../../hooks/useBNBPrice';
-import { useBuy } from '../../../hooks/useBuy';
-import { useChainBalance } from '../../../hooks/useChainBalance';
-import { useModal } from '../../../hooks/useModal';
-import { divide10Exp, roundFun } from '../../../utils';
-import { Loader } from '../../Loader';
-import { BigYellowButton } from '../../ui/buttons/YellowButton';
+import { buyAtom } from '../../atoms/buyAtom';
+import { BSC_CHAIN_ID, NETWORK } from '../../env';
+import { useBNBPrice } from '../../hooks/useBNBPrice';
+import { useBuy } from '../../hooks/useBuy';
+import { useChainBalance } from '../../hooks/useChainBalance';
+import { divide10Exp, roundFun } from '../../utils';
+import { Loader } from '../Loader';
+import { BigYellowButton } from '../ui/buttons/YellowButton';
 
-export const BuyModal = (props: any) => {
-  const modalData = useModal();
-  const { isOpen, handleOpen } = props;
-  const [buys, setBuys] = useAtom(buyAtom);
+export const BuyModal = () => {
+  const [buys, setBuys] = useImmerAtom(buyAtom);
 
-  const { buyData } = modalData.modalState;
-
-  const { name, id, groupId, price, type, groupName, ownerAddress } = buyData;
+  const { groupId, price, groupName, ownerAddress } = buys.buyData;
 
   const { buy, relayFee } = useBuy(groupName, ownerAddress, price);
 
@@ -77,9 +72,12 @@ export const BuyModal = (props: any) => {
 
   return (
     <Container
-      isOpen={isOpen}
+      isOpen={buys.openDrawer}
       onClose={() => {
-        handleOpen();
+        setBuys((draft) => {
+          draft.openDrawer = false;
+          draft.buying = false;
+        });
       }}
       background={'#1e2026'}
       color="#FFF"
@@ -144,9 +142,9 @@ export const BuyModal = (props: any) => {
             width={'100%'}
             onClick={() => {
               buy(groupId);
-              setBuys({
-                // openDrawer: true,
-                buying: true,
+              setBuys((draft) => {
+                draft.openDrawer = true;
+                draft.buying = true;
               });
             }}
             disabled={!BSC_FEE_SUFF || buys.buying}
@@ -170,7 +168,7 @@ export const BuyModal = (props: any) => {
 };
 
 const Container = styled(QDrawer)`
-  color: red;
+  /* color: red; */
 `;
 
 const Header = styled(QDrawerHeader)`

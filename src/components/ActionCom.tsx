@@ -1,9 +1,10 @@
 import styled from '@emotion/styled';
 import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { Flex } from '@totejs/uikit';
+import { useImmerAtom } from 'jotai-immer';
 import { useAccount } from 'wagmi';
+import { buyAtom } from '../atoms/buyAtom';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
-import { useModal } from '../hooks/useModal';
 import { Item } from '../utils/apis/types';
 import { OwnActionCom } from './OwnActionCom';
 import { YellowButton } from './ui/buttons/YellowButton';
@@ -18,18 +19,19 @@ export const ActionCom = (obj: IActionCom) => {
   const { id, groupName, ownerAddress, type } = data;
   const { isConnected, isConnecting } = useAccount();
   const relation = useGetItemRelationWithAddr(address, data);
+  const [, setBuy] = useImmerAtom(buyAtom);
 
   const { onOpen } = useWalletKitModal();
 
-  const modalData = useModal();
   return (
     <ButtonCon gap={6}>
       {relation == 'NOT_PURCHASE' && (
         <YellowButton
           onClick={async () => {
-            modalData.modalDispatch({
-              type: 'OPEN_BUY',
-              buyData: data,
+            setBuy((draft) => {
+              draft.openDrawer = true;
+              draft.buying = false;
+              draft.buyData = data;
             });
           }}
         >

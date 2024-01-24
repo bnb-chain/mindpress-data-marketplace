@@ -33,6 +33,9 @@ import {
   roundFun,
   trimLongStr,
 } from '../utils';
+import { useSetAtom } from 'jotai';
+import { buyAtom } from '../atoms/buyAtom';
+import { useImmerAtom } from 'jotai-immer';
 
 /**
  * Have been listed
@@ -47,6 +50,7 @@ const Resource = () => {
   );
   const { price: bnbPrice } = useBNBPrice();
   const category = useGetCategory(itemInfo?.categoryId || 100);
+  const [, setBuy] = useImmerAtom(buyAtom);
 
   const { address, isConnected, isConnecting } = useAccount();
   const relation = useGetItemRelationWithAddr(address, itemInfo);
@@ -175,9 +179,10 @@ const Resource = () => {
                       onOpen();
                     }
                   } else {
-                    modalData.modalDispatch({
-                      type: 'OPEN_BUY',
-                      buyData: itemInfo,
+                    setBuy((draft) => {
+                      draft.openDrawer = true;
+                      draft.buying = false;
+                      draft.buyData = itemInfo;
                     });
                   }
                 }}

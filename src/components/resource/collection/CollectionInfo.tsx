@@ -25,6 +25,9 @@ import { CountIcon } from '../../svgIcon/CountIcon';
 import { FolderIcon } from '../../svgIcon/FolderIcon';
 import { ShoppingIcon } from '../../svgIcon/ShoppingIcon';
 import { BigYellowButton } from '../../ui/buttons/YellowButton';
+import { useSetAtom } from 'jotai';
+import { buyAtom } from '../../../atoms/buyAtom';
+import { useImmerAtom } from 'jotai-immer';
 
 interface Props {
   itemInfo: Item;
@@ -39,6 +42,7 @@ export const CollectionInfo = (props: Props) => {
   const { isConnected, isConnecting } = useAccount();
   const { onOpen } = useWalletKitModal();
   const navigator = useNavigate();
+  const [, setBuy] = useImmerAtom(buyAtom);
 
   const categroyInfo = useGetCategory(itemInfo.categoryId);
 
@@ -157,9 +161,10 @@ export const CollectionInfo = (props: Props) => {
                   if (!isConnected && !isConnecting) {
                     onOpen();
                   } else {
-                    modalData.modalDispatch({
-                      type: 'OPEN_BUY',
-                      buyData: itemInfo,
+                    setBuy((draft) => {
+                      draft.openDrawer = true;
+                      draft.buying = false;
+                      draft.buyData = itemInfo;
                     });
                   }
                 }}

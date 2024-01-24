@@ -90,25 +90,6 @@ export const ModalReducer = (initialState: any, action: any) => {
         initListResult: action.initListResult,
         listData: action.listData || initialState.listData,
       };
-    case 'OPEN_BUY':
-      // console.log('initListStatus', initialState);
-      return {
-        ...initialState,
-        openBuy: true,
-        buyData: action.buyData,
-        callBack: action.callBack,
-      };
-    case 'BUYING':
-      return {
-        ...initialState,
-        buying: true,
-        openBuy: false,
-      };
-    case 'CLOSE_BUY':
-      return {
-        ...initialState,
-        openBuy: false,
-      };
     case 'OPEN_DELIST':
       // console.log('OPEN_DELIST', initialState, action.delistData);
       return {

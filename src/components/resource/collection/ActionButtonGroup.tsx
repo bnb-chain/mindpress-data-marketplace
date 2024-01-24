@@ -15,6 +15,9 @@ import { generateGroupName } from '../../../utils';
 import { getItemByObjectId } from '../../../utils/apis';
 import { BlackButton } from '../../ui/buttons/BlackButton';
 import { YellowButton } from '../../ui/buttons/YellowButton';
+import { useSetAtom } from 'jotai';
+import { buyAtom } from '../../../atoms/buyAtom';
+import { useImmerAtom } from 'jotai-immer';
 
 interface Props {
   fileInfo: FILE_ITEM;
@@ -27,6 +30,7 @@ export const ActionButtonGroup = (props: Props) => {
   const { BucketName, ObjectName } = data;
   const { address } = useAccount();
   const modalData = useModal();
+  const [, setBuy] = useImmerAtom(buyAtom);
 
   const { data: bucketData } = useGetBucketByName(BucketName);
   const { data: objectData } = useGetObject(BucketName, ObjectName);
@@ -135,12 +139,11 @@ export const ActionButtonGroup = (props: Props) => {
             if (!objectData) return;
 
             const itemInfo = await getItemByObjectId(objectData.objectInfo.id);
-            modalData.modalDispatch({
-              type: 'OPEN_BUY',
-              buyData: itemInfo,
-              callBack: () => {
-                uploadFn();
-              },
+
+            setBuy((draft) => {
+              draft.openDrawer = true;
+              draft.buying = false;
+              draft.buyData = itemInfo;
             });
           }}
         >

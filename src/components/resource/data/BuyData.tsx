@@ -4,6 +4,9 @@ import { useAccount } from 'wagmi';
 import { useModal } from '../../../hooks/useModal';
 import { Item } from '../../../utils/apis/types';
 import { LockIcon } from '../../svgIcon/LockIcon';
+import { buyAtom } from '../../../atoms/buyAtom';
+import { useSetAtom } from 'jotai';
+import { useImmerAtom } from 'jotai-immer';
 
 interface Props {
   itemInfo: Item;
@@ -14,6 +17,7 @@ export const BuyData = (props: Props) => {
   const { isConnected, isConnecting } = useAccount();
   const modalData = useModal();
   const { onOpen } = useWalletKitModal();
+  const [, setBuy] = useImmerAtom(buyAtom);
 
   return (
     <Box bg="#1E2026" w="590px" borderRadius="16px">
@@ -45,9 +49,10 @@ export const BuyData = (props: Props) => {
               if (!isConnected && !isConnecting) {
                 onOpen();
               } else {
-                modalData.modalDispatch({
-                  type: 'OPEN_BUY',
-                  buyData: itemInfo,
+                setBuy((draft) => {
+                  draft.openDrawer = true;
+                  draft.buying = false;
+                  draft.buyData = itemInfo;
                 });
               }
             }}

@@ -3,9 +3,11 @@ import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { CalendarIcon } from '@totejs/icons';
 import { Box, Flex } from '@totejs/uikit';
 import BN from 'bn.js';
+import { useImmerAtom } from 'jotai-immer';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { Link } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import { buyAtom } from '../../../atoms/buyAtom';
 import { useBNBPrice } from '../../../hooks/useBNBPrice';
 import { useGetCategory } from '../../../hooks/useGetCatoriesMap';
 import { useGetItemRelationWithAddr } from '../../../hooks/useGetItemRelationWithAddr';
@@ -45,6 +47,7 @@ export const DataInfo = (props: Props) => {
   const relation = useGetItemRelationWithAddr(address, itemInfo);
 
   const modalData = useModal();
+  const [, setBuy] = useImmerAtom(buyAtom);
   const { onOpen } = useWalletKitModal();
 
   const categroyInfo = useGetCategory(itemInfo.categoryId);
@@ -151,9 +154,10 @@ export const DataInfo = (props: Props) => {
                       onOpen();
                     }
                   } else {
-                    modalData.modalDispatch({
-                      type: 'OPEN_BUY',
-                      buyData: itemInfo,
+                    setBuy((draft) => {
+                      draft.openDrawer = true;
+                      draft.buying = false;
+                      draft.buyData = itemInfo;
                     });
                   }
                 }}

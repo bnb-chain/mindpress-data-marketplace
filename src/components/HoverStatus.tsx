@@ -1,11 +1,12 @@
 import styled from '@emotion/styled';
 import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { Box, Flex, Stack } from '@totejs/uikit';
+import { useImmerAtom } from 'jotai-immer';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import { buyAtom } from '../atoms/buyAtom';
 import { useGetRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
-import { useModal } from '../hooks/useModal';
 import { trimLongStr } from '../utils';
 import { Item } from '../utils/apis/types';
 import { DefaultButton } from './ui/buttons/DefaultButton';
@@ -24,8 +25,8 @@ export const HoverStatus = ({ item, className }: IProps) => {
     isLoading: relationisLoading,
     downloadUrl,
   } = useGetRelationWithAddr(address, item);
-  const modalData = useModal();
   const { onOpen } = useWalletKitModal();
+  const [, setBuy] = useImmerAtom(buyAtom);
 
   return (
     <CardHover className={className}>
@@ -69,9 +70,10 @@ export const HoverStatus = ({ item, className }: IProps) => {
                     onOpen();
                   }
                 } else {
-                  modalData.modalDispatch({
-                    type: 'OPEN_BUY',
-                    buyData: item,
+                  setBuy((draft) => {
+                    draft.openDrawer = true;
+                    draft.buying = false;
+                    draft.buyData = item;
                   });
                 }
               }}

@@ -6,7 +6,7 @@ import { ActionResult } from '../modal/ActionResult';
 import { DelistModal } from '../modal/DelistModal';
 import { ListModal } from '../modal/ListModal';
 import { ListProcess } from '../modal/ListProcess';
-import { BuyIndex } from '../modal/buy/Index';
+import { BuyModal } from '../modal/BuyModal';
 import Footer from './Footer';
 import Header from './Header';
 
@@ -66,7 +66,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         ></ListProcess>
       )}
 
-      <BuyIndex></BuyIndex>
+      <BuyModal />
 
       <DelistModal
         isOpen={openDelist}
