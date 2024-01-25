@@ -69,6 +69,8 @@ const Resource = () => {
     name: itemInfo?.name || '',
   });
 
+  console.log('storageInfo', storageInfo, objectData);
+
   const modalData = useModal();
   const { onOpen } = useWalletKitModal();
 

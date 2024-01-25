@@ -1,17 +1,16 @@
 import styled from '@emotion/styled';
-import { NavBar } from '../NavBar';
-import { useCallback, useEffect, useState } from 'react';
 import { Box, Button, Flex } from '@totejs/uikit';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import MyCollectionList from './MyCollectionList';
-import PurchaseList from './PurchaseList';
-import OtherListedList from './OtherListedList';
 import { DCELLAR_URL } from '../../env';
-import { reportEvent } from '../../utils/ga';
+import { NavBar } from '../NavBar';
+import MyCollectionList from './MyCollectionList';
+import OtherListedList from './OtherListedList';
+import PurchaseList from './PurchaseList';
 
 enum Type {
-  Collections = 'collections',
-  Purchase = 'purchase',
+  Collections = 'uploaded',
+  Purchase = 'purchased',
 }
 const _navItems = [
   {
@@ -51,10 +50,6 @@ const ProfileList = (props: IProfileList) => {
   const currentTab = tab ? tab : Type.Collections;
   const handleTabChange = useCallback(
     (tab: any) => {
-      if (tab === 'collections')
-        reportEvent({ name: 'dm.profile.my_data.my_data.click' });
-      if (tab === 'purchase')
-        reportEvent({ name: 'dm.profile.my_purchase.my_purchase.click' });
       navigator(`/profile?tab=${tab}`);
     },
     [navigator],
