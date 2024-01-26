@@ -148,7 +148,7 @@ export const DataInfo = (props: Props) => {
             <Box>
               <BigYellowButton
                 onClick={() => {
-                  console.log('relation', relation, isConnecting, isConnected);
+                  // console.log('relation', relation, isConnecting, isConnected);
                   if (relation === 'UNKNOWN') {
                     if (!isConnected && !isConnecting) {
                       onOpen();

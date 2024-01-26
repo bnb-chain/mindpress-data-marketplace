@@ -39,8 +39,6 @@ export const DelistModal = (props: any) => {
 
   const { object_name, create_at, bucket_name, groupId } = delistData;
 
-  console.log('delistData', delistData, modalData.modalState);
-
   const name = bucket_name;
   const type = object_name ? 'Data' : 'Collection';
 
