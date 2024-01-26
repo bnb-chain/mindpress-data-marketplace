@@ -1,4 +1,4 @@
-import { Modal, Flex, ModalCloseButton, Button } from '@totejs/uikit';
+import { Modal, Flex, ModalCloseButton, Button, Center } from '@totejs/uikit';
 import styled from '@emotion/styled';
 import { ProgressSuccessIcon } from '../svgIcon/ProgressSuccess';
 
@@ -169,13 +169,16 @@ export const ListProcess = (props: ListProcessProps) => {
         {((hasRole && step == 2) || (!hasRole && step == 1)) &&
           chain &&
           chain.id !== BSC_CHAIN_ID && (
-            <BigYellowButton
-              onClick={() => {
-                switchNetwork?.(BSC_CHAIN_ID);
-              }}
-            >
-              Switch to BSC {NETWORK} Network
-            </BigYellowButton>
+            <Center>
+              <BigYellowButton
+                w="100%"
+                onClick={() => {
+                  switchNetwork?.(BSC_CHAIN_ID);
+                }}
+              >
+                Switch to BSC {NETWORK} Network
+              </BigYellowButton>
+            </Center>
           )}
         {step == 2 &&
           chain &&
@@ -183,77 +186,84 @@ export const ListProcess = (props: ListProcessProps) => {
           hasRole &&
           status == 1 &&
           !loading && (
-            <BigYellowButton
-              onClick={async () => {
-                setTitle('Finalize Listing');
-                setLoading(true);
-                let tmp = {};
-                try {
-                  const listResult: any = await List(
-                    stateModal.modalState.listData as any,
-                  );
-                  const { transactionHash } = listResult as any;
+            <Center>
+              <BigYellowButton
+                w="100%"
+                onClick={async () => {
+                  setTitle('Finalize Listing');
+                  setLoading(true);
+                  let tmp = {};
+                  try {
+                    const listResult: any = await List(
+                      stateModal.modalState.listData as any,
+                    );
+                    const { transactionHash } = listResult as any;
 
-                  if (transactionHash) {
-                    batchUpdate(() => {
-                      setLoading(false);
-                      setTitle('');
-                      setStep(3);
-                      setStatus(2);
-                      setModalTitle('List Success');
-                      setDescription('');
-                      setBscHash(transactionHash);
+                    if (transactionHash) {
+                      batchUpdate(() => {
+                        setLoading(false);
+                        setTitle('');
+                        setStep(3);
+                        setStatus(2);
+                        setModalTitle('List Success');
+                        setDescription('');
+                        setBscHash(transactionHash);
+                      });
+                    }
+                  } catch (e: any) {
+                    tmp = {
+                      variant: 'error',
+                      description: e.message ? e.message : 'List failed',
+                    };
+                    stateModal.modalDispatch({
+                      type: 'OPEN_RESULT',
+                      result: tmp,
                     });
                   }
-                } catch (e: any) {
-                  tmp = {
-                    variant: 'error',
-                    description: e.message ? e.message : 'List failed',
-                  };
-                  stateModal.modalDispatch({
-                    type: 'OPEN_RESULT',
-                    result: tmp,
-                  });
-                }
-              }}
-            >
-              List to BSC {NETWORK}
-            </BigYellowButton>
+                }}
+              >
+                List to BSC {NETWORK}
+              </BigYellowButton>
+            </Center>
           )}
         {step == 1 &&
           chain &&
           chain.id === BSC_CHAIN_ID &&
           !hasRole &&
           !loading && (
-            <BigYellowButton
-              onClick={async () => {
-                setLoading(true);
-                setTitle('Wait for Approve');
-                await Approve();
-                setHasRole(true);
-                setLoading(false);
-                setTitle('Finalize on BSC');
-                setStep(2);
-              }}
-            >
-              Approve
-            </BigYellowButton>
+            <Center>
+              <BigYellowButton
+                onClick={async () => {
+                  setLoading(true);
+                  setTitle('Wait for Approve');
+                  await Approve();
+                  setHasRole(true);
+                  setLoading(false);
+                  setTitle('Finalize on BSC');
+                  setStep(2);
+                }}
+              >
+                Approve
+              </BigYellowButton>
+            </Center>
           )}
         {status == 2 && (
-          <BigYellowButton
-            onClick={() => {
-              if (stateModal.modalState.callBack) {
-                stateModal.modalState.callBack();
-              }
+          <Center>
+            <BigYellowButton
+              onClick={() => {
+                if (stateModal.modalState.callBack) {
+                  stateModal.modalState.callBack();
+                }
 
-              reset();
+                reset();
 
-              stateModal.modalDispatch({ type: 'RESET' });
-              handleOpen(false);
-            }}
-          >
-            Got it
-          </BigYellowButton>
+                stateModal.modalDispatch({ type: 'RESET' });
+                handleOpen(false);
+              }}
+            >
+              Got it
+            </BigYellowButton>
+          </Center>
         )}
       </Flex>
     </Container>

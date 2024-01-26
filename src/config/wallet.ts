@@ -1,23 +1,33 @@
-import { WagmiConfig, createConfig } from 'wagmi';
-import {
-  WalletKitButton,
-  WalletKitProvider,
-  getDefaultConfig,
-  WalletKitOptions,
-  SwitchNetworkModal,
-  rgba,
-} from '@node-real/walletkit';
+import { WalletKitOptions, getDefaultConfig } from '@node-real/walletkit';
 import {
   metaMask,
   trustWallet,
   walletConnect,
 } from '@node-real/walletkit/wallets';
+import { Chain } from 'viem/chains';
+import { createConfig } from 'wagmi';
 import * as env from '../env';
-import { Chain, bsc, bscTestnet } from 'viem/chains';
-export const bscChain = env.NETWORK === 'Mainnet' ? bsc : bscTestnet;
+// export const bscChain = env.NETWORK === 'Mainnet' ? bsc : bscTestnet;
 
 export const chains: Chain[] = [
-  bscChain,
+  {
+    id: env.BSC_CHAIN_ID,
+    network: 'BSC Optimistic Rollup',
+    rpcUrls: {
+      default: {
+        http: [env.BSC_RPC_URL],
+      },
+      public: {
+        http: [env.BSC_RPC_URL],
+      },
+    },
+    name: `OPBNB ${env.NETWORK}`,
+    nativeCurrency: {
+      name: 'tBNB',
+      symbol: 'tBNB',
+      decimals: 18,
+    },
+  },
   {
     id: env.GF_CHAIN_ID,
     network: 'greenfield',
@@ -53,5 +63,5 @@ export const config = createConfig(
 );
 
 export const options: WalletKitOptions = {
-  initialChainId: bscChain.id,
+  initialChainId: env.BSC_CHAIN_ID,
 };
