@@ -152,3 +152,9 @@ export const encodePath = (path: Path[]) => {
 export const decodePath = (encodedPath: string): Path[] => {
   return JSON.parse(atob(encodedPath)) as Path[];
 };
+
+export const checkURL = (url: string) => {
+  const reg =
+    /^https?:\/\/(([a-zA-Z0-9_-])+(\.)?)*(:\d+)?(\/((\.)?(\?)?=?&?[a-zA-Z0-9_-](\?)?)*)*$/i;
+  return reg.test(url);
+};

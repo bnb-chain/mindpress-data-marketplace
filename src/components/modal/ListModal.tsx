@@ -50,6 +50,7 @@ import { Loader } from '../Loader';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
 import _ from 'lodash';
+import { checkURL } from '../../utils/off-chain-auth/utils';
 
 interface ListModalProps {
   isOpen: boolean;
@@ -71,6 +72,7 @@ export const ListModal = (props: ListModalProps) => {
   const [_category, _setCategory] = useState('Uncategorized');
 
   const [waringPrice, setWarningPrice] = useState(false);
+  const [waringImgUrl, setWarningImgUrl] = useState(false);
   const { switchNetwork } = useSwitchNetwork();
   const { GfBalanceVal, BscBalanceVal } = useChainBalance();
   const modalData = useModal();
@@ -268,7 +270,7 @@ export const ListModal = (props: ListModalProps) => {
           <Input
             value={_imgUrl}
             onChange={onChangeImgUrl}
-            isInvalid={_.isEmpty(_imgUrl)}
+            isInvalid={waringImgUrl}
             placeholder="Please enter an url..."
           ></Input>
         </InputCon>
@@ -340,7 +342,8 @@ export const ListModal = (props: ListModalProps) => {
                   return;
                 }
 
-                if (!_imgUrl) {
+                if (!_imgUrl || !checkURL(_imgUrl)) {
+                  setWarningImgUrl(true);
                   return;
                 }
 
