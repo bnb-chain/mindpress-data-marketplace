@@ -114,9 +114,13 @@ export const parseGroupName = (groupName: string) => {
     if (name.indexOf(`${DAPP_NAME}_o_`) === 0) {
       type = 'Data';
     }
-    const temp = name.split('_');
-    name = temp.slice(-1)[0];
-    bucketName = temp[2];
+
+    const prefix = `${DAPP_NAME}_o_`;
+    const reg = new RegExp(`${prefix}(.+?)_(.+)`);
+
+    const matches = groupName.match(reg);
+    bucketName = matches?.[1] as string;
+    name = matches?.[2] as string;
   }
   return {
     type,
