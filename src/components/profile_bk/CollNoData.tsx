@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
-import NoDataLogo from '../../images/no_data_logo.png';
 import { Button, Flex } from '@totejs/uikit';
 import { DCELLAR_URL, NETWORK } from '../../env';
+import NoDataLogo from '../../images/no_data_logo.png';
+import { YellowButton } from '../ui/buttons/YellowButton';
 const CollNoData = () => {
   return (
     <Container alignItems={'center'} justifyContent={'center'}>
@@ -11,7 +12,7 @@ const CollNoData = () => {
           You don’t have any data on Greenfield {NETWORK}. Upload your data on
           DCellar first.👏
         </Title>
-        <MyButton
+        <YellowButton
           onClick={() => {
             window.open(`${DCELLAR_URL}`);
           }}
@@ -19,7 +20,7 @@ const CollNoData = () => {
           style={{ marginLeft: '6px' }}
         >
           Upload Data in DCellar
-        </MyButton>
+        </YellowButton>
       </Content>
     </Container>
   );
