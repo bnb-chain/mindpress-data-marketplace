@@ -1,24 +1,19 @@
-import { Modal, Flex, ModalCloseButton, Button, Center } from '@totejs/uikit';
 import styled from '@emotion/styled';
+import { Center, Flex, Modal, ModalCloseButton } from '@totejs/uikit';
 import { ProgressSuccessIcon } from '../svgIcon/ProgressSuccess';
 
 import { MoreIcon, SendIcon } from '@totejs/icons';
-import { useModal } from '../../hooks/useModal';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Loader } from '../Loader';
-import { batchUpdate } from '../../utils';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
-import {
-  BSC_CHAIN_ID,
-  BSC_EXPLORER_URL,
-  GF_EXPLORER_URL,
-  NETWORK,
-} from '../../env';
-import { useList, IList } from '../../hooks/useList';
+import { OPBNB } from '../../config/wallet';
+import { BSC_CHAIN_ID, BSC_EXPLORER_URL, GF_EXPLORER_URL } from '../../env';
 import { useApprove } from '../../hooks/useApprove';
 import { useHasRole } from '../../hooks/useHasRole';
+import { IList, useList } from '../../hooks/useList';
+import { useModal } from '../../hooks/useModal';
+import { batchUpdate } from '../../utils';
+import { Loader } from '../Loader';
 import { BigYellowButton } from '../ui/buttons/YellowButton';
-import { OPBNB } from '../../config/wallet';
 interface ListProcessProps {
   isOpen: boolean;
   handleOpen: (show: boolean) => void;
@@ -129,7 +124,7 @@ export const ListProcess = (props: ListProcessProps) => {
             <>
               <ProgressStep>
                 <ProgressName active={step && step >= 2 ? true : false}>
-                  Approve on BSC
+                  Approve on {OPBNB.name}
                 </ProgressName>
                 {step && step >= 2 ? (
                   <ProgressSuccessIcon width={32} height={32} />

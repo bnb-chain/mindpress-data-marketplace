@@ -34,6 +34,7 @@ import {
   useGetCategory,
   useGetCatoriesMap,
 } from '../../hooks/useGetCatoriesMap';
+import _ from 'lodash';
 
 interface ListModalProps {
   isOpen: boolean;
@@ -189,7 +190,7 @@ export const EditModal = (props: ListModalProps) => {
         <Box h={10}></Box>
 
         <ItemTittle alignItems={'center'} justifyContent={'space-between'}>
-          Thumbnail URL
+          <span className="require">Thumbnail URL</span>
           <span>Use Greenfield Universal Endpoint or other public url</span>
         </ItemTittle>
         <Box h={10}></Box>
@@ -197,6 +198,7 @@ export const EditModal = (props: ListModalProps) => {
           <Input
             value={imgUrl}
             onChange={onChangeImgUrl}
+            isInvalid={_.isEmpty(imgUrl)}
             placeholder="Please enter an url..."
           ></Input>
         </InputCon>
@@ -240,6 +242,10 @@ export const EditModal = (props: ListModalProps) => {
             <Button
               width={'100%'}
               onClick={async () => {
+                if (!imgUrl) {
+                  return;
+                }
+
                 try {
                   setLoading(true);
                   await edit(address as string, itemInfo.groupName, extraStr);

@@ -49,6 +49,7 @@ import Logo from '../../images/logo.png';
 import { Loader } from '../Loader';
 import { useDebounce } from '../../hooks/useDebounce';
 import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
+import _ from 'lodash';
 
 interface ListModalProps {
   isOpen: boolean;
@@ -259,7 +260,7 @@ export const ListModal = (props: ListModalProps) => {
         </InputCon>
         <Box h={10}></Box>
         <ItemTittle alignItems={'center'} justifyContent={'space-between'}>
-          Thumbnail URL
+          <span className="require">Thumbnail URL</span>
           <span>Use Greenfield Universal Endpoint or other public url</span>
         </ItemTittle>
         <Box h={10}></Box>
@@ -267,6 +268,7 @@ export const ListModal = (props: ListModalProps) => {
           <Input
             value={_imgUrl}
             onChange={onChangeImgUrl}
+            isInvalid={_.isEmpty(_imgUrl)}
             placeholder="Please enter an url..."
           ></Input>
         </InputCon>
@@ -335,6 +337,10 @@ export const ListModal = (props: ListModalProps) => {
               onClick={async () => {
                 if (!price) {
                   setWarningPrice(true);
+                  return;
+                }
+
+                if (!_imgUrl) {
                   return;
                 }
 
