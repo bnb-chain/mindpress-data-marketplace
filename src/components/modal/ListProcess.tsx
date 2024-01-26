@@ -18,6 +18,7 @@ import { useList, IList } from '../../hooks/useList';
 import { useApprove } from '../../hooks/useApprove';
 import { useHasRole } from '../../hooks/useHasRole';
 import { BigYellowButton } from '../ui/buttons/YellowButton';
+import { OPBNB } from '../../config/wallet';
 interface ListProcessProps {
   isOpen: boolean;
   handleOpen: (show: boolean) => void;
@@ -64,7 +65,9 @@ export const ListProcess = (props: ListProcessProps) => {
     if (stateModal.modalState.initListStatus) {
       setStep(hasRole ? 2 : 1);
       setLoading(false);
-      setTitle(hasRole ? 'Finalize on BSC' : 'Approve on BSC');
+      setTitle(
+        hasRole ? `Finalize on ${OPBNB.name}` : `Approve on ${OPBNB.name}`,
+      );
       setStatus(1);
     }
   }, [hasRole, stateModal.modalState.initListStatus]);
@@ -145,7 +148,7 @@ export const ListProcess = (props: ListProcessProps) => {
               active={step && step >= 3 ? true : false}
               alignItems={'center'}
             >
-              Finalize on BSC
+              Finalize on {OPBNB.name}
               {status == 2 && bscHash && (
                 <SendIcon
                   cursor={'pointer'}
@@ -176,7 +179,7 @@ export const ListProcess = (props: ListProcessProps) => {
                   switchNetwork?.(BSC_CHAIN_ID);
                 }}
               >
-                Switch to BSC {NETWORK} Network
+                Switch to {OPBNB.name} Network
               </BigYellowButton>
             </Center>
           )}
@@ -222,7 +225,7 @@ export const ListProcess = (props: ListProcessProps) => {
                   }
                 }}
               >
-                List to BSC {NETWORK}
+                List to {OPBNB.name}
               </BigYellowButton>
             </Center>
           )}
@@ -239,7 +242,7 @@ export const ListProcess = (props: ListProcessProps) => {
                   await Approve();
                   setHasRole(true);
                   setLoading(false);
-                  setTitle('Finalize on BSC');
+                  setTitle(`Finalize on ${OPBNB.name}`);
                   setStep(2);
                 }}
               >

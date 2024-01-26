@@ -27,6 +27,7 @@ import { useChainBalance } from '../../hooks/useChainBalance';
 import { divide10Exp, roundFun } from '../../utils';
 import { Loader } from '../Loader';
 import { BigYellowButton } from '../ui/buttons/YellowButton';
+import { OPBNB } from '../../config/wallet';
 
 export const BuyModal = () => {
   const [buys, setBuys] = useImmerAtom(buyAtom);
@@ -159,7 +160,7 @@ export const BuyModal = () => {
               switchNetwork?.(BSC_CHAIN_ID);
             }}
           >
-            Switch to BSC {NETWORK}
+            Switch to {OPBNB.name} {NETWORK}
           </BigYellowButton>
         ) : null}
       </QDrawerFooter>

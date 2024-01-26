@@ -28,6 +28,7 @@ import { useModal } from '../../hooks/useModal';
 import { defaultImg, divide10Exp, formatDateUTC, roundFun } from '../../utils';
 import { getWeb3 } from '../../base/contract/getWeb3';
 import { BlackButton } from '../ui/buttons/BlackButton';
+import { OPBNB } from '../../config/wallet';
 
 export const DelistModal = (props: any) => {
   const modalData = useModal();
@@ -192,7 +193,7 @@ export const DelistModal = (props: any) => {
               switchNetwork?.(BSC_CHAIN_ID);
             }}
           >
-            Switch to Bsc {NETWORK}
+            Switch to {OPBNB.name} {NETWORK}
           </BlackButton>
         ) : null}
         <Cancel width={'50%'} onClick={handleOpen} variant="ghost">

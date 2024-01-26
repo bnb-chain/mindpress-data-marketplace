@@ -3,11 +3,12 @@ import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { LinkArrowIcon } from '@totejs/icons';
 import { Box, Flex, Image, Link, Stack } from '@totejs/uikit';
 import BN from 'bn.js';
+import { useImmerAtom } from 'jotai-immer';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
+import { buyAtom } from '../atoms/buyAtom';
 import { Loader } from '../components/Loader';
-import { NoData } from '../components/NoData';
 import { RelatedImage } from '../components/resource/RelatedImage';
 import BSCIcon from '../components/svgIcon/BSCIcon';
 import { MPLink } from '../components/ui/MPLink';
@@ -33,9 +34,6 @@ import {
   roundFun,
   trimLongStr,
 } from '../utils';
-import { useSetAtom } from 'jotai';
-import { buyAtom } from '../atoms/buyAtom';
-import { useImmerAtom } from 'jotai-immer';
 
 /**
  * Have been listed

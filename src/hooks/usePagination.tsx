@@ -1,9 +1,9 @@
 import { useCallback, useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
-export const usePagination = (queryKey = 'p') => {
+export const usePagination = (queryKey = 'page') => {
   const [p] = useSearchParams();
-  const queryPage = Number(p.get('page') || 1);
+  const queryPage = Number(p.get(queryKey) || 1);
 
   const [page, setPage] = useState<number>(
     isNaN(queryPage) || queryPage < 1 ? 1 : queryPage,
@@ -36,7 +36,7 @@ export const usePagination = (queryKey = 'p') => {
         replace: true,
       });
     },
-    [queryKey, p],
+    [navigator],
   );
 
   return { handlePageChange, page, loading };
