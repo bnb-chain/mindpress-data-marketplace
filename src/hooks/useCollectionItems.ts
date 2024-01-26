@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
-import { getBucketFileList, getGroupInfoByName } from '../utils/gfSDK';
 import { generateGroupName } from '../utils';
-import { useListedStatus } from './useListedStatus';
+import { getBucketFileList, getGroupInfoByName } from '../utils/gfSDK';
 import { INode, Tree } from '../utils/tree';
+import { useListedStatus } from './useListedStatus';
 
 export const cache: { [str: string]: any } = {};
 
@@ -14,6 +14,7 @@ export const useCollectionItems = (
   // 0 owner
   // 1 Waiting for purchase
   // 2 purchase
+  const [update, setUpdate] = useState<boolean>(false);
   const { address } = useAccount();
   const [list, setList] = useState<INode[]>([]);
   const [loading, setLoading] = useState(true);
@@ -105,7 +106,12 @@ export const useCollectionItems = (
           setLoading(false);
         });
     }
-  }, [bucketName, address, collectionListed, checkListed]);
+  }, [bucketName, address, collectionListed, checkListed, update]);
 
-  return { loading, list, num };
+  const toUpdate = () => {
+    setUpdate(!update);
+    setLoading(true);
+  };
+
+  return { loading, list, num, toUpdate };
 };

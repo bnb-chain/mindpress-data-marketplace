@@ -323,6 +323,7 @@ const ProgressName = styled(Flex)<{ active: boolean }>`
   font-size: 12px;
   font-weight: 500;
   line-height: 15px;
+  z-index: 2;
   color: ${(props: any) =>
     props.active
       ? props.theme.colors.bg?.card

@@ -44,7 +44,10 @@ export const Object = () => {
   // console.log('objectItemInfo', objectItemInfo);
 
   const { address } = useAccount();
-  const { num } = useCollectionItems(bucketData?.bucketInfo.bucketName, false);
+  const { num, toUpdate } = useCollectionItems(
+    bucketData?.bucketInfo.bucketName,
+    false,
+  );
 
   const openListModal = useCallback(() => {
     if (!bucketData || !objectData) return;
@@ -57,8 +60,11 @@ export const Object = () => {
     modalData.modalDispatch({
       type: 'OPEN_LIST',
       initInfo,
+      callBack: () => {
+        navigator('/detail?bid=' + bucketId);
+      },
     });
-  }, [bucketData, modalData, objectData]);
+  }, [bucketData, bucketId, modalData, navigator, objectData]);
 
   // auto open list modal
   useEffect(() => {

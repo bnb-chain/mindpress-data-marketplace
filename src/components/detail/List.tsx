@@ -28,7 +28,10 @@ const List = (props: any) => {
     bucketInfo,
   } = props;
 
-  const { list, loading } = useCollectionItems(name, collectionListed);
+  const { list, loading, toUpdate } = useCollectionItems(
+    name,
+    collectionListed,
+  );
 
   const { handlePageChange, page } = usePagination();
 
@@ -160,10 +163,13 @@ const List = (props: any) => {
                 onClick={async () => {
                   sessionStorage.setItem('resource_type', '1');
                   if (!listed) {
-                    console.log('object_info', object_info);
+                    // console.log('object_info', object_info);
                     modalData.modalDispatch({
                       type: 'OPEN_LIST',
                       initInfo: object_info,
+                      callBack: () => {
+                        toUpdate();
+                      },
                     });
                   } else {
                     modalData.modalDispatch({
@@ -173,6 +179,9 @@ const List = (props: any) => {
                         object_name,
                         create_at,
                         owner,
+                      },
+                      callBack: () => {
+                        toUpdate();
                       },
                     });
                   }

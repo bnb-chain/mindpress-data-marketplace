@@ -32,7 +32,6 @@ import { BlackButton } from '../ui/buttons/BlackButton';
  */
 export const Bucket = () => {
   const [p] = useSearchParams();
-  const { search } = useLocation();
 
   const bucketId = p.get('bid') as string;
   const modalData = useModal();
@@ -41,7 +40,7 @@ export const Bucket = () => {
 
   // if bucketItemInfo is `{}`,
   // means this bucket is not listed
-  const { data: bucketItemInfo } = useGetItemByBucketId(bucketId);
+  // const { data: bucketItemInfo } = useGetItemByBucketId(bucketId);
 
   const { address } = useAccount();
   const { num } = useCollectionItems(bucketData?.bucketInfo.bucketName, false);
@@ -63,14 +62,14 @@ export const Bucket = () => {
       type: 'OPEN_LIST',
       initInfo,
     });
-  }, [bucketData?.bucketInfo.bucketName, bucketData?.bucketInfo.createAt.low]);
+  }, [bucketData, modalData]);
 
   // auto open list modal
   useEffect(() => {
     const needOpenModal = p.get('openModal') as string;
     if (!needOpenModal) return;
     openListModal();
-  }, [p, bucketData]);
+  }, [p, bucketData, openListModal]);
 
   if (!bucketData) {
     return <NoData />;

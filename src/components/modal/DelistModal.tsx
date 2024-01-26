@@ -39,6 +39,8 @@ export const DelistModal = (props: any) => {
 
   const { object_name, create_at, bucket_name, groupId } = delistData;
 
+  console.log('delistData', delistData, modalData.modalState);
+
   const name = bucket_name;
   const type = object_name ? 'Data' : 'Collection';
 
@@ -96,18 +98,18 @@ export const DelistModal = (props: any) => {
         <Box h={10}></Box>
         <InfoCon gap={26} justifyContent={'flex-start'} alignItems={'center'}>
           <ImgCon>
-            <img src={defaultImg(name, 80)} alt="" />
+            <img src={defaultImg(object_name, 80)} alt="" />
           </ImgCon>
           <BaseInfo flexDirection={'column'} alignItems={'flex-start'}>
             <ResourceNameCon alignItems={'center'}>
-              {name}
+              {object_name}
               {type === 'Collection' ? (
                 <Tag justifyContent={'center'} alignItems={'center'}>
                   Data collection
                 </Tag>
               ) : null}
             </ResourceNameCon>
-            {type !== 'Collection' ? (
+            {type == 'Collection' ? (
               <FileInfo gap={12}>
                 <div>
                   Collection <span>{bucket_name}</span>
