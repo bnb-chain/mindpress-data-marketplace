@@ -131,7 +131,7 @@ export const DelistModal = (props: any) => {
             <ItemVal>{estimateGas} BNB</ItemVal>
           </ItemCon>
           <ItemCon alignItems={'flex-end'} justifyContent={'space-between'}>
-            <ItemTitle>Balance on BSC {NETWORK}</ItemTitle>
+            <ItemTitle>Balance on {OPBNB.name}</ItemTitle>
             <ItemVal> {roundFun(BscBalanceVal, 8)} BNB </ItemVal>
           </ItemCon>
         </BuyInfo>
