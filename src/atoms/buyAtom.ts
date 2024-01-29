@@ -5,6 +5,7 @@ interface IBuyAtom {
   openDrawer: boolean;
   buying: boolean;
   buyData: Item;
+  callback?: () => any;
 }
 
 export const buyAtom = atomWithImmer<IBuyAtom>({

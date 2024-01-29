@@ -11,6 +11,6 @@ export const useGetPurchaseList = (
     // enabled: !!params.filter.address,
     queryKey: ['SEARCH_PURCHASE', page, pageSize, params],
     queryFn: () => searchPurchase(params),
-    staleTime: 10000,
+    staleTime: 5000,
   });
 };

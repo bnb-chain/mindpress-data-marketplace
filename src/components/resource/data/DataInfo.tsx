@@ -44,7 +44,7 @@ export const DataInfo = (props: Props) => {
 
   const { address, isConnected, isConnecting } = useAccount();
   const { price: bnbPrice } = useBNBPrice();
-  const relation = useGetItemRelationWithAddr(address, itemInfo);
+  const { relation } = useGetItemRelationWithAddr(address, itemInfo);
 
   const modalData = useModal();
   const [, setBuy] = useImmerAtom(buyAtom);

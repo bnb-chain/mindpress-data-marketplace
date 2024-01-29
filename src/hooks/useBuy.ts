@@ -88,6 +88,8 @@ export const useBuy = (
             type: 'OPEN_RESULT',
             result: tmp,
           });
+
+          buys.callback && buys.callback();
         } else {
           return false;
         }

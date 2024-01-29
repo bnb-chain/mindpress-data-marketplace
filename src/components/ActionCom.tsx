@@ -18,7 +18,7 @@ export const ActionCom = (obj: IActionCom) => {
   const { data, address } = obj;
   const { id, groupName, ownerAddress, type } = data;
   const { isConnected, isConnecting } = useAccount();
-  const relation = useGetItemRelationWithAddr(address, data);
+  const { relation } = useGetItemRelationWithAddr(address, data);
   const [, setBuy] = useImmerAtom(buyAtom);
 
   const { onOpen } = useWalletKitModal();

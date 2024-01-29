@@ -5,7 +5,7 @@ import { Box, Flex, Image, Link, Stack } from '@totejs/uikit';
 import BN from 'bn.js';
 import { useImmerAtom } from 'jotai-immer';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { buyAtom } from '../atoms/buyAtom';
 import { Loader } from '../components/Loader';
@@ -42,6 +42,7 @@ import {
  */
 const Resource = () => {
   const [p] = useSearchParams();
+  const navigator = useNavigate();
   const itemId = p.get('id') as string;
   const { data: itemInfo, isLoading: itemInfoLoading } = useGetItemById(
     parseInt(itemId),
@@ -51,7 +52,10 @@ const Resource = () => {
   const [, setBuy] = useImmerAtom(buyAtom);
 
   const { address, isConnected, isConnecting } = useAccount();
-  const relation = useGetItemRelationWithAddr(address, itemInfo);
+  const { relation, refetch: refetchRelation } = useGetItemRelationWithAddr(
+    address,
+    itemInfo,
+  );
 
   const storageInfo = useGetBOInfoFromGroup(itemInfo?.groupName);
 
@@ -66,8 +70,6 @@ const Resource = () => {
     bucketName: storageInfo?.bucketName,
     name: itemInfo?.name || '',
   });
-
-  // console.log('storageInfo', storageInfo, objectData);
 
   const modalData = useModal();
   const { onOpen } = useWalletKitModal();
@@ -173,7 +175,7 @@ const Resource = () => {
                 h="48px"
                 borderRadius="8px"
                 onClick={() => {
-                  console.log('relation', relation, isConnecting, isConnected);
+                  // console.log('relation', relation, isConnecting, isConnected);
                   if (relation === 'UNKNOWN') {
                     if (!isConnected && !isConnecting) {
                       onOpen();
@@ -183,6 +185,10 @@ const Resource = () => {
                       draft.openDrawer = true;
                       draft.buying = false;
                       draft.buyData = itemInfo;
+
+                      draft.callback = () => {
+                        refetchRelation();
+                      };
                     });
                   }
                 }}
@@ -202,6 +208,9 @@ const Resource = () => {
                       bucket_name: storageInfo?.bucketName,
                       create_at: itemInfo.createdAt,
                       owner: itemInfo.ownerAddress,
+                    },
+                    callBack: () => {
+                      navigator(`/detail?bid=${bucketData.bucketInfo.id}`);
                     },
                   });
                 }}

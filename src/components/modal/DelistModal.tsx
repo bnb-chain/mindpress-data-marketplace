@@ -29,6 +29,7 @@ import { defaultImg, divide10Exp, formatDateUTC, roundFun } from '../../utils';
 import { getWeb3 } from '../../base/contract/getWeb3';
 import { BlackButton } from '../ui/buttons/BlackButton';
 import { OPBNB } from '../../config/wallet';
+import { BigYellowButton, YellowButton } from '../ui/buttons/YellowButton';
 
 export const DelistModal = (props: any) => {
   const modalData = useModal();
@@ -99,15 +100,15 @@ export const DelistModal = (props: any) => {
             <img src={defaultImg(object_name, 80)} alt="" />
           </ImgCon>
           <BaseInfo flexDirection={'column'} alignItems={'flex-start'}>
-            <ResourceNameCon alignItems={'center'}>
+            {/* <ResourceNameCon alignItems={'center'}>
               {object_name}
               {type === 'Collection' ? (
                 <Tag justifyContent={'center'} alignItems={'center'}>
                   Data collection
                 </Tag>
               ) : null}
-            </ResourceNameCon>
-            {type == 'Collection' ? (
+            </ResourceNameCon> */}
+            {/* {type == 'Collection' ? (
               <FileInfo gap={12}>
                 <div>
                   Collection <span>{bucket_name}</span>
@@ -120,7 +121,7 @@ export const DelistModal = (props: any) => {
                   <CreateTime>{formatDateUTC(create_at * 1000)}</CreateTime>
                 ) : null}
               </ResourceNum>
-            )}
+            )} */}
           </BaseInfo>
         </InfoCon>
         <Box h={10}></Box>
@@ -150,8 +151,9 @@ export const DelistModal = (props: any) => {
           </Button>
         )}
         {chain && chain.id === BSC_CHAIN_ID && hasRole && (
-          <Button
+          <BigYellowButton
             width={'50%'}
+            borderRadius="8px"
             onClick={async () => {
               let tmp = {};
               try {
@@ -184,17 +186,18 @@ export const DelistModal = (props: any) => {
             isLoading={loading}
           >
             Delist
-          </Button>
+          </BigYellowButton>
         )}
         {chain && chain.id !== BSC_CHAIN_ID ? (
-          <BlackButton
+          <BigYellowButton
+            borderRadius="8px"
             width={'100%'}
             onClick={() => {
               switchNetwork?.(BSC_CHAIN_ID);
             }}
           >
-            Switch to {OPBNB.name} {NETWORK}
-          </BlackButton>
+            Switch to {OPBNB.name}
+          </BigYellowButton>
         ) : null}
         <Cancel width={'50%'} onClick={handleOpen} variant="ghost">
           Cancel

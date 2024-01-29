@@ -1,14 +1,10 @@
-import { useEffect, useState } from 'react';
-import { Item, SearchPurchaseRequest } from '../utils/apis/types';
-import { useGetPurchaseList } from './useGetPurchaseList';
 import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { searchPurchase } from '../utils/apis';
-import {
-  useGetBOInfoFromGroup,
-  useGetBucketByName,
-  useGetObject,
-} from './useGetBucketOrObj';
+import { Item, SearchPurchaseRequest } from '../utils/apis/types';
+import { useGetBOInfoFromGroup } from './useGetBucketOrObj';
 import { useGetDownloadUrl } from './useGetDownloadUrl';
+import { useGetPurchaseList } from './useGetPurchaseList';
 
 export type ITEM_RELATION_ADDR =
   | 'PURCHASED'
@@ -25,7 +21,7 @@ export const useGetItemRelationWithAddr = (
 ) => {
   const [relation, setRelation] = useState<ITEM_RELATION_ADDR>('UNKNOWN');
 
-  const { data, isLoading } = useGetPurchaseList({
+  const { data, isLoading, refetch } = useGetPurchaseList({
     filter: {
       address: addr,
       itemId: item?.id,
@@ -51,7 +47,10 @@ export const useGetItemRelationWithAddr = (
     }
   }, [addr, data, isLoading, item]);
 
-  return relation;
+  return {
+    relation,
+    refetch,
+  };
 };
 
 export const useGetRelationWithAddr = (
@@ -78,13 +77,6 @@ export const useGetRelationWithAddr = (
   });
 
   const storageInfo = useGetBOInfoFromGroup(item?.groupName);
-
-  // const { data: bucketData } = useGetBucketByName(storageInfo?.bucketName);
-
-  // const { data: objectData } = useGetObject(
-  //   storageInfo?.bucketName,
-  //   storageInfo?.objectName,
-  // );
 
   const downloadUrl = useGetDownloadUrl({
     bucketName: storageInfo?.bucketName,
