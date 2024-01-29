@@ -1,7 +1,8 @@
 import styled from '@emotion/styled';
 import { SendIcon } from '@totejs/icons';
-import { Button, Flex } from '@totejs/uikit';
+import { Flex } from '@totejs/uikit';
 import _ from 'lodash';
+import { useCallback, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { NoData } from '../../components/NoData';
@@ -11,17 +12,14 @@ import { useGetBucketById } from '../../hooks/useGetBucketOrObj';
 import { useGetItemByObjId } from '../../hooks/useGetItemByObjId';
 import { useGfGetObjInfo } from '../../hooks/useGfGetObjInfo';
 import { useModal } from '../../hooks/useModal';
-import { useStatus } from '../../hooks/useStatus';
 import {
   defaultImg,
   formatDateUTC,
-  generateGroupName,
   parseFileSize,
   trimLongStr,
 } from '../../utils';
-import { useCallback, useEffect } from 'react';
-import { YellowButton } from '../ui/buttons/YellowButton';
 import { BlackButton } from '../ui/buttons/BlackButton';
+import { YellowButton } from '../ui/buttons/YellowButton';
 
 /**
  * Have not been listed

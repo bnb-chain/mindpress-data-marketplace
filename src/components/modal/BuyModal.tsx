@@ -20,6 +20,7 @@ import { useMemo } from 'react';
 import { formatUnits, parseUnits } from 'viem';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { buyAtom } from '../../atoms/buyAtom';
+import { OPBNB } from '../../config/wallet';
 import { BSC_CHAIN_ID, NETWORK } from '../../env';
 import { useBNBPrice } from '../../hooks/useBNBPrice';
 import { useBuy } from '../../hooks/useBuy';
@@ -27,7 +28,6 @@ import { useChainBalance } from '../../hooks/useChainBalance';
 import { divide10Exp, roundFun } from '../../utils';
 import { Loader } from '../Loader';
 import { BigYellowButton } from '../ui/buttons/YellowButton';
-import { OPBNB } from '../../config/wallet';
 
 export const BuyModal = () => {
   const [buys, setBuys] = useImmerAtom(buyAtom);
@@ -48,8 +48,9 @@ export const BuyModal = () => {
   }, [price]);
 
   const earing = useMemo(() => {
-    return Number(priceBNB) * 0.01;
-  }, [priceBNB]);
+    // 20: * 0.01
+    return divide10Exp(new BN(price, 10), 20);
+  }, [price]);
 
   const relayFeeBNB = useMemo(() => {
     const balance = divide10Exp(new BN(relayFee, 10), 18);

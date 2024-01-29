@@ -88,20 +88,23 @@ export const divide10Exp = (origin: BN, pow: number) => {
 };
 
 export const generateGroupName = (bucketName: string, objName?: string) => {
+  let res = '';
   if (objName) {
-    return `${DAPP_NAME}_o_${bucketName}_${objName}`;
+    res = `${DAPP_NAME}_o_${bucketName}_${objName}`;
   } else {
-    return `${DAPP_NAME}_b_${bucketName}`;
+    res = `${DAPP_NAME}_b_${bucketName}`;
   }
+
+  return res;
 };
 
-export const generateResourceName = (bucketName: string, objName?: string) => {
-  if (objName) {
-    return `grn:o::${bucketName}/${objName}`;
-  } else {
-    return `grn:b::${bucketName}`;
-  }
-};
+// export const generateResourceName = (bucketName: string, objName?: string) => {
+//   if (objName) {
+//     return `grn:o::${bucketName}/${objName}`;
+//   } else {
+//     return `grn:b::${bucketName}`;
+//   }
+// };
 
 /**
  * get bucket name / object name from group name
