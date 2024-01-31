@@ -205,6 +205,7 @@ const Resource = () => {
                     type: 'OPEN_DELIST',
                     delistData: {
                       groupId: itemInfo.groupId,
+                      groupName: itemInfo.groupName,
                       bucket_name: storageInfo?.bucketName,
                       create_at: itemInfo.createdAt,
                       owner: itemInfo.ownerAddress,

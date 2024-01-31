@@ -3,28 +3,19 @@ import {
   Box,
   Button,
   Flex,
-  Modal,
   ModalBody,
   ModalCloseButton,
-  ModalFooter,
   ModalHeader,
   Stack,
   StateModal,
   StateModalVariantType,
-  VStack,
-  useDisclosure,
 } from '@totejs/uikit';
-import { BigYellowButton } from '../ui/buttons/YellowButton';
-import { ColoredSuccessIcon } from '@totejs/icons';
-import { SuccessIcon } from '../svgIcon/SuccessIcon';
-import { BlackButton } from '../ui/buttons/BlackButton';
-import { DefaultButton } from '../ui/buttons/DefaultButton';
-import { getItemByGroupId } from '../../utils/apis';
 import { useNavigate } from 'react-router-dom';
-import { useGetBOInfoFromGroup } from '../../hooks/useGetBucketOrObj';
-import { useGetDownloadUrl } from '../../hooks/useGetDownloadUrl';
-import { parseGroupName } from '../../utils';
 import { useGetRandomSp } from '../../hooks/useGetRandomSp';
+import { parseGroupName } from '../../utils';
+import { getItemByGroupId } from '../../utils/apis';
+import { SuccessIcon } from '../svgIcon/SuccessIcon';
+import { BigYellowButton } from '../ui/buttons/YellowButton';
 
 const CustomSuccessIcon = () => (
   <Flex

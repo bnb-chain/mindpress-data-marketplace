@@ -12,24 +12,18 @@ import {
 import BN from 'bn.js';
 import { useEffect, useMemo, useState } from 'react';
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
+import { getWeb3 } from '../../base/contract/getWeb3';
 import { MarketPlaceContract } from '../../base/contract/marketPlaceContract';
-import {
-  BSC_CHAIN_ID,
-  BSC_SEND_GAS_FEE,
-  LIST_ESTIMATE_FEE_ON_BSC,
-  NETWORK,
-} from '../../env';
+import { OPBNB } from '../../config/wallet';
+import { BSC_CHAIN_ID, LIST_ESTIMATE_FEE_ON_BSC } from '../../env';
 import { useApprove } from '../../hooks/useApprove';
 import { useChainBalance } from '../../hooks/useChainBalance';
 import { useCollectionItems } from '../../hooks/useCollectionItems';
 import { useDelist } from '../../hooks/useDelist';
 import { useHasRole } from '../../hooks/useHasRole';
 import { useModal } from '../../hooks/useModal';
-import { defaultImg, divide10Exp, formatDateUTC, roundFun } from '../../utils';
-import { getWeb3 } from '../../base/contract/getWeb3';
-import { BlackButton } from '../ui/buttons/BlackButton';
-import { OPBNB } from '../../config/wallet';
-import { BigYellowButton, YellowButton } from '../ui/buttons/YellowButton';
+import { defaultImg, divide10Exp, roundFun } from '../../utils';
+import { BigYellowButton } from '../ui/buttons/YellowButton';
 
 export const DelistModal = (props: any) => {
   const modalData = useModal();
@@ -241,60 +235,6 @@ const ImgCon = styled.div`
   img {
     background: #d9d9d9;
     border-radius: 8px;
-  }
-`;
-const ResourceNameCon = styled(Flex)`
-  font-style: normal;
-  font-weight: 700;
-  font-size: 20px;
-  line-height: 28px;
-
-  color: #5f6368;
-`;
-
-const CreateTime = styled.div`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 10px;
-  line-height: 28px;
-`;
-const Tag = styled(Flex)`
-  margin-left: 16px;
-
-  font-style: normal;
-  font-weight: 400;
-  font-size: 8px;
-  line-height: 28px;
-
-  width: 73px;
-  height: 16px;
-
-  background: #d9d9d9;
-
-  border-radius: 16px;
-`;
-const ResourceNum = styled(Flex)`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 28px;
-
-  color: #000000;
-`;
-
-const FileInfo = styled(Flex)`
-  font-style: normal;
-  font-weight: 400;
-  font-size: 12px;
-  line-height: 28px;
-
-  color: #979797;
-  div {
-    display: flex;
-    gap: 2px;
-  }
-  span {
-    color: #181a1e;
   }
 `;
 

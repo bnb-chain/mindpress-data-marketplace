@@ -182,6 +182,7 @@ export const CollectionInfo = (props: Props) => {
                     type: 'OPEN_DELIST',
                     delistData: {
                       groupId: itemInfo.groupId,
+                      groupName: itemInfo.groupName,
                       bucket_name: itemInfo.name,
                       create_at: itemInfo.createdAt,
                       owner: itemInfo.ownerAddress,

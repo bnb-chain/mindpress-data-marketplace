@@ -1,6 +1,6 @@
-import { forEach } from '.';
-import { GF_RPC_URL, GF_CHAIN_ID, DAPP_NAME, BSC_CHAIN_ID } from '../env';
 import { Client } from '@bnb-chain/greenfield-js-sdk';
+import { forEach } from '.';
+import { BSC_CHAIN_ID, DAPP_NAME, GF_CHAIN_ID, GF_RPC_URL } from '../env';
 
 export const getSingleton = function () {
   let client: Client | null;
@@ -178,6 +178,31 @@ export const updateGroupInfo = async (
     groupOwner: address,
     groupName,
     extra,
+  });
+};
+
+export const updateGroupInfoWithTx = async (
+  address: string,
+  groupName: string,
+  extra: string,
+) => {
+  const tx = await client.group.updateGroupExtra({
+    groupName,
+    extra,
+    groupOwner: address,
+    operator: address,
+  });
+
+  const simulateInfo = await tx.simulate({
+    denom: 'BNB',
+  });
+
+  return await tx.broadcast({
+    denom: 'BNB',
+    gasLimit: Number(simulateInfo?.gasLimit),
+    gasPrice: simulateInfo?.gasPrice || '5000000000',
+    payer: address,
+    granter: '',
   });
 };
 

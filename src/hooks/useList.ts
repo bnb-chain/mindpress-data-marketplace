@@ -16,6 +16,7 @@ import {
   putBucketPolicy,
   putObjectPolicy,
   updateGroupInfo,
+  updateGroupInfoWithTx,
 } from '../utils/gfSDK';
 
 import { MarketPlaceContract } from '../base/contract/marketPlaceContract';
@@ -113,8 +114,20 @@ export const useList = (props: IList) => {
   const InitiateList = useCallback(async () => {
     const groupResult = await getGroupInfo(groupName, address as string);
     const { groupInfo } = groupResult;
+
     // groupname has created
     if (groupInfo) {
+      // need to update group info if group existed
+      try {
+        await updateGroupInfoWithTx(
+          address as string,
+          groupInfo.groupName,
+          extra,
+        );
+      } catch (e) {
+        console.error(e);
+      }
+
       setTimeout(() => {
         stateModal.modalDispatch({
           type: 'UPDATE_LIST_STATUS',
