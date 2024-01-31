@@ -67,8 +67,8 @@ const Search = () => {
         <Box mt="40px">
           <RelatedImage
             title="Images you might be interested in"
-            categoryId={100}
-            allUrl={`/search?c=100`}
+            categoryId={category?.id || 100}
+            allUrl={`/search?c=${category?.id}`}
           />
         </Box>
       </Container>
@@ -94,8 +94,8 @@ const Search = () => {
         <Box mt="40px">
           <RelatedImage
             title="Images you might be interested in"
-            categoryId={100}
-            allUrl={`/search?c=100`}
+            categoryId={category?.id || 100}
+            allUrl={`/search?c=${category?.id}`}
           />
         </Box>
       )}
