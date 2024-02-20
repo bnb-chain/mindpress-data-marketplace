@@ -7,10 +7,9 @@ import styled from '@emotion/styled';
 interface IProps {
   title: string;
   categoryId: number;
-  allUrl: string;
 }
 
-export const RelatedImage = ({ title, categoryId, allUrl }: IProps) => {
+export const RelatedImage = ({ title, categoryId }: IProps) => {
   const { data: categoryRelatedList } = useGetItemList({
     filter: {
       address: '',
@@ -21,6 +20,8 @@ export const RelatedImage = ({ title, categoryId, allUrl }: IProps) => {
     limit: 10,
     sort: 'CREATION_DESC',
   });
+
+  const allUrl = `/search?c=${categoryId || 100}`;
 
   return (
     <>

@@ -16,6 +16,8 @@ const Search = () => {
   const c = (p.get('c') as string) || '-1';
   const category = useGetCategory(Number(c));
 
+  console.log('category', category);
+
   // console.log('category', category);
 
   const {
@@ -68,7 +70,6 @@ const Search = () => {
           <RelatedImage
             title="Images you might be interested in"
             categoryId={category?.id || 100}
-            allUrl={`/search?c=${category?.id}`}
           />
         </Box>
       </Container>
@@ -95,7 +96,6 @@ const Search = () => {
           <RelatedImage
             title="Images you might be interested in"
             categoryId={category?.id || 100}
-            allUrl={`/search?c=${category?.id}`}
           />
         </Box>
       )}

@@ -237,11 +237,7 @@ const Resource = () => {
       </ResourceInfo>
 
       <Box mt="40px">
-        <RelatedImage
-          title="Related images"
-          categoryId={category?.id || 100}
-          allUrl={`/search?c=${category?.id}`}
-        />
+        <RelatedImage title="Related images" categoryId={category?.id || 100} />
       </Box>
     </Container>
   );
