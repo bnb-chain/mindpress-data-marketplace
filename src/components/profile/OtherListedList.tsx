@@ -141,7 +141,7 @@ const OtherListedList = (props: IOtherListedList) => {
 export default OtherListedList;
 
 const Container = styled.div`
-  /* width: 1123px; */
+  width: 1123px;
   background: #181a1e;
   padding: 4px 20px;
 `;
