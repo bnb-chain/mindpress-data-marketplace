@@ -57,7 +57,7 @@ export const MyBreadcrumb = (props: Props) => {
 
                   const bucketData = await getCollectionInfoByName(item);
                   const ItemInfo = await getItemByBucketId(
-                    bucketData.bucketInfo.id,
+                    bucketData.bucketInfo!.id,
                   );
                   params.id = String(ItemInfo.id);
 

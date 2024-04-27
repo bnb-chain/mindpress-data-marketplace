@@ -45,7 +45,7 @@ const Overview = (props: IOverView) => {
         <GetMyDataBox w="600px">
           <GetMyData
             itemInfo={itemInfo}
-            bucketName={bucketData?.bucketInfo.bucketName}
+            bucketName={bucketData?.bucketInfo!.bucketName}
             relation={relation}
           />
         </GetMyDataBox>

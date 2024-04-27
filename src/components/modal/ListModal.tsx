@@ -17,6 +17,16 @@ import {
   ModalCloseButton,
   Button,
   Textarea,
+  Popover,
+  PopoverArrow,
+  PopoverContent,
+  PopoverTrigger,
+  QDrawer,
+  QDrawerBody,
+  QDrawerCloseButton,
+  QDrawerFooter,
+  QDrawerHeader,
+  Stack,
 } from '@totejs/uikit';
 import {
   ForwardedRef,
@@ -153,15 +163,14 @@ export const ListModal = (props: ListModalProps) => {
   }, [GF_FEE_SUFF, BSC_FEE_SUFF, loading, waringPrice]);
 
   return (
-    <Container
-      size={'lg'}
+    <QDrawer
       isOpen={isOpen}
       onClose={() => {
         reset();
       }}
       closeOnOverlayClick={false}
     >
-      <ModalCloseButton />
+      <QDrawerCloseButton />
       <Header>Listing Data</Header>
       <CustomBody>
         <Box h={10}></Box>
@@ -331,7 +340,7 @@ export const ListModal = (props: ListModalProps) => {
           </BottomInfo>
         </FeeCon>
       </CustomBody>
-      <ModalFooter>
+      <QDrawerFooter>
         <FooterCon flexDirection={'column'} gap={6}>
           {chain && chain.id === GF_CHAIN_ID && (
             <Button
@@ -377,17 +386,12 @@ export const ListModal = (props: ListModalProps) => {
             listed as a whole
           </Tips>
         </FooterCon>
-      </ModalFooter>
-    </Container>
+      </QDrawerFooter>
+    </QDrawer>
   );
 };
 
-const Container = styled(Modal)`
-  .ui-modal-content {
-    background: #ffffff;
-  }
-`;
-const Header = styled(ModalHeader)`
+const Header = styled(QDrawerHeader)`
   font-style: normal;
   font-weight: 700;
   font-size: 20px;
@@ -400,7 +404,7 @@ const Header = styled(ModalHeader)`
   color: #000000;
 `;
 
-const CustomBody = styled(ModalBody)`
+const CustomBody = styled(QDrawerBody)`
   height: 530px;
 `;
 

@@ -43,11 +43,11 @@ export const Bucket = () => {
   // const { data: bucketItemInfo } = useGetItemByBucketId(bucketId);
 
   const { address } = useAccount();
-  const { num } = useCollectionItems(bucketData?.bucketInfo.bucketName, false);
+  const { num } = useCollectionItems(bucketData?.bucketInfo?.bucketName, false);
 
   const { status } = useStatus(
-    generateGroupName(bucketData?.bucketInfo.bucketName || ''),
-    bucketData?.bucketInfo.owner || '',
+    generateGroupName(bucketData?.bucketInfo?.bucketName || ''),
+    bucketData?.bucketInfo?.owner || '',
     address || '',
   );
 
@@ -55,8 +55,8 @@ export const Bucket = () => {
     if (!bucketData) return;
 
     const initInfo = {
-      bucket_name: bucketData.bucketInfo.bucketName,
-      create_at: bucketData.bucketInfo.createAt.low,
+      bucket_name: bucketData.bucketInfo?.bucketName,
+      create_at: bucketData.bucketInfo?.createAt.low,
     };
     modalData.modalDispatch({
       type: 'OPEN_LIST',
@@ -79,7 +79,10 @@ export const Bucket = () => {
     <>
       <ResourceInfo gap={20}>
         <ImgCon>
-          <img src={defaultImg(bucketData.bucketInfo.bucketName, 246)} alt="" />
+          <img
+            src={defaultImg(bucketData.bucketInfo!.bucketName, 246)}
+            alt=""
+          />
         </ImgCon>
         <Info
           gap={4}
@@ -87,7 +90,7 @@ export const Bucket = () => {
           justifyContent={'space-around'}
         >
           <NameCon gap={4} alignItems={'center'} justifyContent={'flex-start'}>
-            <Name>{bucketData.bucketInfo.bucketName}</Name>
+            <Name>{bucketData.bucketInfo?.bucketName}</Name>
             <SendIcon
               width={20}
               height={20}
@@ -117,14 +120,14 @@ export const Bucket = () => {
               <FileSize> {parseFileSize(fileSize)} </FileSize>
             )}*/}
             Created by{' '}
-            {address === bucketData.bucketInfo.owner ? (
+            {address === bucketData.bucketInfo?.owner ? (
               <span>You</span>
             ) : (
-              <Link to={`/profile?address=${bucketData.bucketInfo.owner}`}>
-                <span>{trimLongStr(bucketData.bucketInfo.owner)}</span>
+              <Link to={`/profile?address=${bucketData.bucketInfo?.owner}`}>
+                <span>{trimLongStr(bucketData?.bucketInfo?.owner || '')}</span>
               </Link>
             )}{' '}
-            At {formatDateUTC(bucketData.bucketInfo.createAt.low * 1000)}
+            At {formatDateUTC(bucketData?.bucketInfo!.createAt.low * 1000)}
           </OwnCon>
 
           <ActionGroup gap={10} alignItems={'center'}>
@@ -139,7 +142,7 @@ export const Bucket = () => {
               size={'sm'}
               onClick={() => {
                 window.open(
-                  `${DCELLAR_URL}buckets/${bucketData.bucketInfo.bucketName}`,
+                  `${DCELLAR_URL}buckets/${bucketData?.bucketInfo!.bucketName}`,
                 );
               }}
               variant="ghost"
@@ -153,9 +156,9 @@ export const Bucket = () => {
       <Box h={40} w={1000}></Box>
       <List
         status={status}
-        name={bucketData.bucketInfo.bucketName}
+        name={bucketData.bucketInfo!.bucketName}
         listed={false}
-        bucketName={bucketData.bucketInfo.bucketName}
+        bucketName={bucketData.bucketInfo!.bucketName}
         bucketInfo={bucketData.bucketInfo}
       ></List>
     </>

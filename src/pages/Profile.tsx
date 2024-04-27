@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Flex, Stack } from '@totejs/uikit';
+import { Box, Flex, Stack } from '@totejs/uikit';
 import { useMemo } from 'react';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useSearchParams } from 'react-router-dom';
@@ -27,6 +27,7 @@ const Profile = () => {
           {realAddress && <MetaMaskAvatar size={120} address={realAddress} />}
         </ImgCon>
         <Info gap={16} justifyContent="flex-end">
+          <Username>{trimLongStr(realAddress as string)}</Username>
           <Address>
             <BSCIcon color="#F0B90B" w={24} h={24} />
             {trimLongStr(realAddress as string)}
@@ -71,4 +72,9 @@ const Address = styled(Flex)`
   color: #ffffff;
   border: 1px solid #373943;
   border-radius: 360px;
+`;
+
+const Username = styled(Box)`
+  font-size: 32px;
+  color: #f7f7f8;
 `;

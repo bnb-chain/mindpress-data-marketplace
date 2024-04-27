@@ -62,7 +62,9 @@ export const R = () => {
               url += '&openModal=1';
             }
           } else {
-            url = `/detail?bid=${detailBid.bucketInfo.id}&oid=${detailOid?.objectInfo.id}`;
+            url = `/detail?bid=${detailBid.bucketInfo!.id}&oid=${
+              detailOid?.objectInfo!.id
+            }`;
             if (!objectIsListed && accountStatus === 'SAME_ACCOUNT') {
               url += '&openModal=1';
             }
@@ -80,8 +82,8 @@ export const R = () => {
     // console.log('url', url);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
-    detailBid?.bucketInfo.id,
-    detailOid?.objectInfo.id,
+    detailBid?.bucketInfo?.id,
+    detailOid?.objectInfo?.id,
     resourceBid?.id,
     resourceOid.id,
   ]);
@@ -97,6 +99,7 @@ export const R = () => {
         content: (
           <SwitchCorrectAccount>{trimLongStr(account)}</SwitchCorrectAccount>
         ),
+        buttonText: 'Got it',
       });
       // return;
     }
@@ -106,6 +109,7 @@ export const R = () => {
         NiceModal.show(Tips, {
           title: `Already Listed`,
           content: <Box></Box>,
+          buttonText: 'Got it',
         });
       } else {
         // ...

@@ -1,5 +1,3 @@
-import { isValidUrl } from '@bnb-chain/greenfield-js-sdk';
-
 const IP_REGEX = /^(\d+\.){3}\d+$/g;
 const ALLOW_REGEX = /^[a-z0-9][a-z0-9.\-]{1,61}[a-z0-9]$/g;
 const dotdotComponent = '..';
@@ -110,9 +108,9 @@ const validateObjectName = (objectName?: string) => {
   }
 };
 const generateUrlByBucketName = (endpoint = '', bucketName: string) => {
-  if (!isValidUrl(endpoint)) {
-    throw new Error('Invalid endpoint');
-  }
+  // if (!isValidUrl(endpoint)) {
+  //   throw new Error('Invalid endpoint');
+  // }
   validateBucketName(bucketName);
   const { protocol } = new URL(endpoint);
   return endpoint.replace(`${protocol}//`, `${protocol}//${bucketName}.`);

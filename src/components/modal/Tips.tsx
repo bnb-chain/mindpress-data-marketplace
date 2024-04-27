@@ -7,12 +7,13 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@totejs/uikit';
-import { YellowButton } from '../ui/buttons/YellowButton';
+import { BlackSolidButton } from '../ui/buttons/BlackButton';
 
 export const Tips = NiceModal.create<{
   title: string;
   content: React.ReactNode;
-}>(({ title, content }) => {
+  buttonText: string;
+}>(({ title, content, buttonText }) => {
   const modal = useModal();
 
   return (
@@ -21,13 +22,13 @@ export const Tips = NiceModal.create<{
       <Header>{title}</Header>
       <CustomBody>{content}</CustomBody>
       <ModalFooter>
-        <YellowButton
+        <BlackSolidButton
           onClick={() => {
             modal.hide();
           }}
         >
-          Got it
-        </YellowButton>
+          {buttonText}
+        </BlackSolidButton>
       </ModalFooter>
     </Container>
   );

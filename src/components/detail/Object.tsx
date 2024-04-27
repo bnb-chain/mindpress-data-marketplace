@@ -43,17 +43,17 @@ export const Object = () => {
 
   const { address } = useAccount();
   const { num, toUpdate } = useCollectionItems(
-    bucketData?.bucketInfo.bucketName,
+    bucketData?.bucketInfo?.bucketName,
     false,
   );
 
   const openListModal = useCallback(() => {
     if (!bucketData || !objectData) return;
     const initInfo = {
-      bucket_name: bucketData.bucketInfo.bucketName,
-      object_name: objectData.objectInfo.objectName,
-      create_at: bucketData.bucketInfo.createAt.low,
-      payload_size: objectData.objectInfo.payloadSize.low,
+      bucket_name: bucketData.bucketInfo?.bucketName,
+      object_name: objectData.objectInfo?.objectName,
+      create_at: bucketData.bucketInfo?.createAt.low,
+      payload_size: objectData.objectInfo?.payloadSize.low,
     };
     modalData.modalDispatch({
       type: 'OPEN_LIST',
@@ -85,7 +85,10 @@ export const Object = () => {
     <>
       <ResourceInfo gap={20}>
         <ImgCon>
-          <img src={defaultImg(objectData.objectInfo.objectName, 246)} alt="" />
+          <img
+            src={defaultImg(objectData.objectInfo!.objectName, 246)}
+            alt=""
+          />
         </ImgCon>
         <Info
           gap={4}
@@ -93,7 +96,7 @@ export const Object = () => {
           justifyContent={'space-around'}
         >
           <NameCon gap={4} alignItems={'center'} justifyContent={'flex-start'}>
-            <Name>{objectData.objectInfo.objectName}</Name>
+            <Name>{objectData.objectInfo!.objectName}</Name>
             <SendIcon
               width={20}
               height={20}
@@ -120,21 +123,21 @@ export const Object = () => {
 
           <OwnCon alignItems={'center'}>
             <FileSize>
-              {parseFileSize(objectData.objectInfo.payloadSize.low)}
+              {parseFileSize(objectData.objectInfo!.payloadSize.low)}
             </FileSize>
             Created by{' '}
-            {address === objectData.objectInfo.owner ? (
+            {address === objectData.objectInfo!.owner ? (
               <span>You</span>
             ) : (
-              <Link to={`/profile?address=${objectData.objectInfo.owner}`}>
-                <span>{trimLongStr(objectData.objectInfo.owner)}</span>
+              <Link to={`/profile?address=${objectData.objectInfo!.owner}`}>
+                <span>{trimLongStr(objectData.objectInfo!.owner)}</span>
               </Link>
             )}{' '}
-            At {formatDateUTC(objectData.objectInfo.createAt.low * 1000)}
+            At {formatDateUTC(objectData.objectInfo!.createAt.low * 1000)}
           </OwnCon>
 
           <ActionGroup gap={10} alignItems={'center'}>
-            {address === objectData.objectInfo.owner &&
+            {address === objectData.objectInfo!.owner &&
               _.isEmpty(objectItemInfo) && (
                 <YellowButton size={'sm'} onClick={openListModal}>
                   List
@@ -145,7 +148,7 @@ export const Object = () => {
               size={'sm'}
               onClick={() => {
                 window.open(
-                  `${DCELLAR_URL}buckets/${bucketData.bucketInfo.bucketName}`,
+                  `${DCELLAR_URL}buckets/${bucketData.bucketInfo!.bucketName}`,
                 );
               }}
               variant="ghost"

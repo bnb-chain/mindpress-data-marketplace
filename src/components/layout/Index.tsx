@@ -9,6 +9,7 @@ import { ListProcess } from '../modal/ListProcess';
 import { BuyModal } from '../modal/BuyModal';
 import Footer from './Footer';
 import Header from './Header';
+import { UploadObjectModal } from '../modal/UploadObject';
 
 export default function Layout({ children }: { children: ReactNode }) {
   const modalData = useModal();
@@ -83,6 +84,8 @@ export default function Layout({ children }: { children: ReactNode }) {
         callBack={callBack}
         {...result}
       ></ActionResult>
+
+      <UploadObjectModal />
     </>
   );
 }

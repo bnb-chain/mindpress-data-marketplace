@@ -122,7 +122,7 @@ const Resource = () => {
                 <Link
                   target="_blank"
                   href={`${GF_EXPLORER_URL}object/0x${Number(
-                    objectData?.objectInfo.id,
+                    objectData?.objectInfo!.id,
                   )
                     .toString(16)
                     .padStart(64, '0')}`}
@@ -134,13 +134,13 @@ const Resource = () => {
               <Option>
                 <Box className="field">Media type:</Box>
                 <Box className="value">
-                  {contentTypeToExtension(objectData?.objectInfo.contentType)}
+                  {contentTypeToExtension(objectData?.objectInfo!.contentType)}
                 </Box>
               </Option>
               <Option>
                 <Box className="field">Size</Box>
                 <Box className="value">
-                  {parseFileSize(objectData.objectInfo.payloadSize.low || 0)}
+                  {parseFileSize(objectData.objectInfo!.payloadSize.low || 0)}
                 </Box>
               </Option>
               <Option>
@@ -211,7 +211,7 @@ const Resource = () => {
                       owner: itemInfo.ownerAddress,
                     },
                     callBack: () => {
-                      navigator(`/detail?bid=${bucketData.bucketInfo.id}`);
+                      navigator(`/detail?bid=${bucketData.bucketInfo!.id}`);
                     },
                   });
                 }}

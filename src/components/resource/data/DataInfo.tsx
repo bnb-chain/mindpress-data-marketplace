@@ -92,7 +92,7 @@ export const DataInfo = (props: Props) => {
         <FlexCon flex={1} justifyContent="space-between" mr="10px">
           <Block>
             <Value>
-              {parseFileSize(objectData.objectInfo.payloadSize.low)}
+              {parseFileSize(objectData.objectInfo!.payloadSize.low)}
             </Value>
             <Field>
               <SizeIcon /> Size

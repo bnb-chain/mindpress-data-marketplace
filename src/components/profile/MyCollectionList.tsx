@@ -1,47 +1,30 @@
 import styled from '@emotion/styled';
+import { LinkArrowIcon } from '@totejs/icons';
 import {
   Box,
-  Button,
   Flex,
   Grid,
   Image,
   Pagination,
   Stack,
-  Table,
+  Text,
   VStack,
 } from '@totejs/uikit';
-import { useNavigate } from 'react-router-dom';
-import { useAccount, useSwitchNetwork } from 'wagmi';
-import { GF_CHAIN_ID, GF_EXPLORER_URL } from '../../env';
-import { usePagination } from '../../hooks/usePagination';
-import {
-  contentTypeToExtension,
-  defaultImg,
-  divide10Exp,
-  formatDateUTC,
-  trimLongStr,
-} from '../../utils';
-
-import { useCollectionList } from '../../hooks/useCollectionList';
-import { useModal } from '../../hooks/useModal';
-// import { useSalesVolume } from '../../hooks/useSalesVolume';
-import { BN } from 'bn.js';
-import { Dispatch, useMemo, useState } from 'react';
-import { useListedStatus } from '../../hooks/useListedStatus';
-import { reportEvent } from '../../utils/ga';
-import { PaginationSx } from '../ui/table/PaginationSx';
-import { TableProps } from '../ui/table/TableProps';
-import CollNoData from './CollNoData';
-import { getItemByBucketId } from '../../utils/apis';
-import _ from 'lodash';
-import { useGetItemList } from '../../hooks/useGetItemList';
-import { Item } from '../../utils/apis/types';
+import { useSetAtom } from 'jotai';
+import { useState } from 'react';
+import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
+import { GF_EXPLORER_URL } from '../../env';
 import { useGetBOInfoFromGroup } from '../../hooks/useGetBucketOrObj';
 import { useGetDownloadUrl } from '../../hooks/useGetDownloadUrl';
+import { useGetItemList } from '../../hooks/useGetItemList';
+import { contentTypeToExtension } from '../../utils';
+import { Item } from '../../utils/apis/types';
 import { Loader } from '../Loader';
-import { MPLink } from '../ui/MPLink';
-import { LinkArrowIcon } from '@totejs/icons';
+import { UploadImage } from '../svgIcon/UploadImage';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
+import { MPLink } from '../ui/MPLink';
+import { YellowButton } from '../ui/buttons/YellowButton';
+import { useNavigate } from 'react-router-dom';
 
 // const PriceCon = (props: { groupId: string }) => {
 //   const { groupId } = props;
@@ -62,12 +45,8 @@ interface ICollectionList {
 }
 const MyCollectionList = ({ address }: ICollectionList) => {
   const [page, setPage] = useState(1);
+  const navigator = useNavigate();
   const [activeItem, setActiveItem] = useState<Item | null>(null);
-  // const { list, loading, total } = useCollectionList(
-  //   page,
-  //   pageSize,
-  //   modalData.modalState.result,
-  // );
   const storageInfo = useGetBOInfoFromGroup(activeItem?.groupName);
   const downloadUrl = useGetDownloadUrl({
     bucketName: storageInfo?.bucketName,
@@ -87,6 +66,16 @@ const MyCollectionList = ({ address }: ICollectionList) => {
     PAGE_SIZE,
   );
 
+  console.log('data', data);
+
+  const setUpobjs = useSetAtom(uploadObjcetAtom);
+
+  const handleOpenUploadModal = () => {
+    setUpobjs((draft) => {
+      draft.openModal = true;
+    });
+  };
+
   if (isLoading) {
     return <Loader />;
   }
@@ -94,10 +83,21 @@ const MyCollectionList = ({ address }: ICollectionList) => {
   return (
     <Container>
       <Grid templateColumns="repeat(3, 1fr)" gap="24px">
+        <UploadImageCard onClick={handleOpenUploadModal} as="button">
+          <UploadImage />
+          <Text fontSize="16px" fontWeight="900" color="readable.disabled">
+            Upload Image
+          </Text>
+        </UploadImageCard>
         {data &&
           data.items.map((item) => {
             return (
-              <Card key={item.id}>
+              <Card
+                key={item.id}
+                onClick={() => {
+                  navigator(`/resource?id=${item.id}&path=/`);
+                }}
+              >
                 <ImageBox
                   onMouseEnter={() => {
                     setActiveItem(item);
@@ -155,11 +155,23 @@ const MyCollectionList = ({ address }: ICollectionList) => {
 
                   {/* Size: {parseFileSize(item.)} */}
                 </Info>
+
+                <Box px="20px" my="24px">
+                  <YellowButton
+                    h="48px"
+                    w="100%"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }}
+                  >
+                    {item.status === 'LISTED' ? 'Delist' : 'List'}
+                  </YellowButton>
+                </Box>
               </Card>
             );
           })}
       </Grid>
-
       <Flex justifyContent="center" mt="40px" mb="40px">
         <StyledPagination
           current={page}
@@ -187,6 +199,17 @@ const Card = styled(Stack)`
   overflow: hidden;
   gap: 24px;
   padding-bottom: 16px;
+  cursor: pointer;
+`;
+
+const UploadImageCard = styled(Stack)`
+  background-color: #1e2026;
+  border-radius: 16px;
+  overflow: hidden;
+  padding: 16px;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #5c5f6a;
 `;
 
 const Info = styled(Stack)`
