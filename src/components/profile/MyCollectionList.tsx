@@ -50,7 +50,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
   );
 
   const { data: listData, isLoading: listLoading } =
-    useGetObjInBucketListStatus('dfg', 0);
+    useGetObjInBucketListStatus(BUCKET_NAME, 0);
 
   const { data: bucketInfo } = useGetBucketByName(BUCKET_NAME);
 
@@ -91,7 +91,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                 <ImageBox>
                   <Image
                     // TODO: bucket name
-                    src={`https://gnfd-testnet-sp2.nodereal.io/view/dfg/${item.ObjectInfo.ObjectName}`}
+                    src={`https://gnfd-testnet-sp2.nodereal.io/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`}
                     fallbackSrc={`https://picsum.photos/seed/${item.ObjectInfo.ObjectName.replaceAll(
                       ' ',
                       '',
@@ -108,7 +108,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                         e.stopPropagation();
                         // TODO: bucket name
                         window.open(
-                          `https://gnfd-testnet-sp2.nodereal.io/view/dfg/${item.ObjectInfo.ObjectName}`,
+                          `https://gnfd-testnet-sp2.nodereal.io/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`,
                         );
                       }}
                     >
