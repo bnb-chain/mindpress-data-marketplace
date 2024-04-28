@@ -12,46 +12,29 @@ import {
 } from '@totejs/uikit';
 import { useSetAtom } from 'jotai';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
 import { GF_EXPLORER_URL } from '../../env';
-import { useGetBOInfoFromGroup } from '../../hooks/useGetBucketOrObj';
-import { useGetDownloadUrl } from '../../hooks/useGetDownloadUrl';
+import { useGetBucketByName } from '../../hooks/useGetBucketOrObj';
 import { useGetItemList } from '../../hooks/useGetItemList';
+import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
 import { contentTypeToExtension } from '../../utils';
-import { Item } from '../../utils/apis/types';
 import { Loader } from '../Loader';
 import { UploadImage } from '../svgIcon/UploadImage';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
-import { MPLink } from '../ui/MPLink';
 import { YellowButton } from '../ui/buttons/YellowButton';
-import { useNavigate } from 'react-router-dom';
-
-// const PriceCon = (props: { groupId: string }) => {
-//   const { groupId } = props;
-//   const { price } = useListedStatus(groupId);
-
-//   let balance = '-';
-//   if (price) {
-//     balance = divide10Exp(new BN(price, 10), 18) + ' BNB';
-//   }
-//   return <div>{balance}</div>;
-// };
+import { MPLink } from '../ui/MPLink';
 
 const PAGE_SIZE = 12;
+const BUCKET_NAME = 'dfg';
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface ICollectionList {
   address: string;
 }
 const MyCollectionList = ({ address }: ICollectionList) => {
   const [page, setPage] = useState(1);
   const navigator = useNavigate();
-  const [activeItem, setActiveItem] = useState<Item | null>(null);
-  const storageInfo = useGetBOInfoFromGroup(activeItem?.groupName);
-  const downloadUrl = useGetDownloadUrl({
-    bucketName: storageInfo?.bucketName,
-    name: activeItem?.name || '',
-  });
+
   const { data, isLoading, error } = useGetItemList(
     {
       filter: {
@@ -66,7 +49,10 @@ const MyCollectionList = ({ address }: ICollectionList) => {
     PAGE_SIZE,
   );
 
-  console.log('data', data);
+  const { data: listData, isLoading: listLoading } =
+    useGetObjInBucketListStatus('dfg', 0);
+
+  const { data: bucketInfo } = useGetBucketByName(BUCKET_NAME);
 
   const setUpobjs = useSetAtom(uploadObjcetAtom);
 
@@ -76,7 +62,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
     });
   };
 
-  if (isLoading) {
+  if (isLoading || listLoading) {
     return <Loader />;
   }
 
@@ -89,23 +75,24 @@ const MyCollectionList = ({ address }: ICollectionList) => {
             Upload Image
           </Text>
         </UploadImageCard>
-        {data &&
-          data.items.map((item) => {
+
+        {listData?.objsData &&
+          listData?.objsData.map((item) => {
             return (
               <Card
-                key={item.id}
+                key={item.ObjectInfo.Id}
                 onClick={() => {
-                  navigator(`/resource?id=${item.id}&path=/`);
+                  // console.log('item', item);
+                  navigator(
+                    `/detail?bid=${bucketInfo?.bucketInfo?.id}&oid=${item.ObjectInfo.Id}&path=/`,
+                  );
                 }}
               >
-                <ImageBox
-                  onMouseEnter={() => {
-                    setActiveItem(item);
-                  }}
-                >
+                <ImageBox>
                   <Image
-                    src={item.url}
-                    fallbackSrc={`https://picsum.photos/seed/${item.name.replaceAll(
+                    // TODO: bucket name
+                    src={`https://gnfd-testnet-sp2.nodereal.io/view/dfg/${item.ObjectInfo.ObjectName}`}
+                    fallbackSrc={`https://picsum.photos/seed/${item.ObjectInfo.ObjectName.replaceAll(
                       ' ',
                       '',
                     )}/400/400`}
@@ -119,7 +106,10 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                       fontWeight="800"
                       onClick={(e) => {
                         e.stopPropagation();
-                        window.open(downloadUrl);
+                        // TODO: bucket name
+                        window.open(
+                          `https://gnfd-testnet-sp2.nodereal.io/view/dfg/${item.ObjectInfo.ObjectName}`,
+                        );
                       }}
                     >
                       Download
@@ -138,7 +128,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                         textDecoration="underline"
                         target="_blank"
                         to={`${GF_EXPLORER_URL}object/0x${Number(
-                          item.resourceId,
+                          item.ObjectInfo.Id,
                         )
                           .toString(16)
                           .padStart(64, '0')}`}
@@ -150,23 +140,41 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                   </InfoItem>
                   <InfoItem>
                     <Field>Media Type:</Field>
-                    <Value>{contentTypeToExtension('', item.groupName)}</Value>
+                    <Value>
+                      {contentTypeToExtension('', item.ObjectInfo.ObjectName)}
+                    </Value>
                   </InfoItem>
 
                   {/* Size: {parseFileSize(item.)} */}
                 </Info>
 
                 <Box px="20px" my="24px">
-                  <YellowButton
-                    h="48px"
-                    w="100%"
-                    onClick={(e) => {
-                      e.preventDefault();
-                      e.stopPropagation();
-                    }}
-                  >
-                    {item.status === 'LISTED' ? 'Delist' : 'List'}
-                  </YellowButton>
+                  {listData.listIndex.includes(item.ObjectInfo.Id) ? (
+                    <YellowButton
+                      h="48px"
+                      w="100%"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                    >
+                      Delist
+                    </YellowButton>
+                  ) : (
+                    <YellowButton
+                      h="48px"
+                      w="100%"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        navigator(
+                          `/detail?bid=${bucketInfo?.bucketInfo?.id}&oid=${item.ObjectInfo.Id}&path=/`,
+                        );
+                      }}
+                    >
+                      List
+                    </YellowButton>
+                  )}
                 </Box>
               </Card>
             );

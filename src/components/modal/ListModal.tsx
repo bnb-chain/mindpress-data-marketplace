@@ -2,31 +2,19 @@ import styled from '@emotion/styled';
 import { ColoredWarningIcon } from '@totejs/icons';
 import {
   Box,
+  Button,
   Flex,
   Input,
   Menu,
   MenuButton,
   MenuItem,
   MenuList,
-} from '@totejs/uikit';
-import {
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalCloseButton,
-  Button,
-  Textarea,
-  Popover,
-  PopoverArrow,
-  PopoverContent,
-  PopoverTrigger,
   QDrawer,
   QDrawerBody,
   QDrawerCloseButton,
   QDrawerFooter,
   QDrawerHeader,
-  Stack,
+  Textarea,
 } from '@totejs/uikit';
 import {
   ForwardedRef,
@@ -37,6 +25,7 @@ import {
   useState,
 } from 'react';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
+import Web3 from 'web3';
 import {
   GF_CHAIN_ID,
   INITIATE_LIST_FEE,
@@ -44,7 +33,12 @@ import {
   LIST_FEE_ON_GF,
 } from '../../env';
 import { useChainBalance } from '../../hooks/useChainBalance';
+import { useCollectionItems } from '../../hooks/useCollectionItems';
+import { useDebounce } from '../../hooks/useDebounce';
+import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
 import { useList } from '../../hooks/useList';
+import { useModal } from '../../hooks/useModal';
+import Logo from '../../images/logo.png';
 import {
   defaultImg,
   formatDateUTC,
@@ -52,15 +46,8 @@ import {
   parseFileSize,
   roundFun,
 } from '../../utils';
-import Web3 from 'web3';
-import { useCollectionItems } from '../../hooks/useCollectionItems';
-import { useModal } from '../../hooks/useModal';
-import Logo from '../../images/logo.png';
-import { Loader } from '../Loader';
-import { useDebounce } from '../../hooks/useDebounce';
-import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
-import _ from 'lodash';
 import { checkURL } from '../../utils/off-chain-auth/utils';
+import { Loader } from '../Loader';
 
 interface ListModalProps {
   isOpen: boolean;
@@ -164,6 +151,7 @@ export const ListModal = (props: ListModalProps) => {
 
   return (
     <QDrawer
+      color="#f7f7f8"
       isOpen={isOpen}
       onClose={() => {
         reset();
@@ -393,7 +381,7 @@ export const ListModal = (props: ListModalProps) => {
 
 const Header = styled(QDrawerHeader)`
   font-style: normal;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 20px;
   line-height: 28px;
 
@@ -401,11 +389,13 @@ const Header = styled(QDrawerHeader)`
   align-items: center;
   text-align: center;
 
-  color: #000000;
+  color: #f7f7f8;
 `;
 
 const CustomBody = styled(QDrawerBody)`
-  height: 530px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const ItemTittle = styled(Flex)`
