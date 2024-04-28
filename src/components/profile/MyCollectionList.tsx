@@ -27,6 +27,7 @@ import { MPLink } from '../ui/MPLink';
 
 const PAGE_SIZE = 12;
 const BUCKET_NAME = 'dfg';
+const spEndpoint = `https://gnfd-testnet-sp2.nodereal.io/view/${BUCKET_NAME}/`;
 
 interface ICollectionList {
   address: string;
@@ -91,7 +92,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                 <ImageBox>
                   <Image
                     // TODO: bucket name
-                    src={`https://gnfd-testnet-sp2.nodereal.io/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`}
+                    src={`${spEndpoint}/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`}
                     fallbackSrc={`https://picsum.photos/seed/${item.ObjectInfo.ObjectName.replaceAll(
                       ' ',
                       '',
@@ -108,7 +109,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                         e.stopPropagation();
                         // TODO: bucket name
                         window.open(
-                          `https://gnfd-testnet-sp2.nodereal.io/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`,
+                          `${spEndpoint}/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`,
                         );
                       }}
                     >
