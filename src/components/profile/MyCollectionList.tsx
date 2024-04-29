@@ -24,10 +24,11 @@ import { UploadImage } from '../svgIcon/UploadImage';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { MPLink } from '../ui/MPLink';
+import { useSelectEndpoint } from '../../hooks/useSelectEndpoint';
 
+// TODO:
 const PAGE_SIZE = 12;
 const BUCKET_NAME = 'dfg';
-const spEndpoint = `https://gnfd-testnet-sp2.nodereal.io/view/${BUCKET_NAME}/`;
 
 interface ICollectionList {
   address: string;
@@ -35,6 +36,8 @@ interface ICollectionList {
 const MyCollectionList = ({ address }: ICollectionList) => {
   const [page, setPage] = useState(1);
   const navigator = useNavigate();
+
+  const { data: endpoint } = useSelectEndpoint();
 
   const { data, isLoading, error } = useGetItemList(
     {
@@ -92,7 +95,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                 <ImageBox>
                   <Image
                     // TODO: bucket name
-                    src={`${spEndpoint}/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`}
+                    src={`${endpoint}/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`}
                     fallbackSrc={`https://picsum.photos/seed/${item.ObjectInfo.ObjectName.replaceAll(
                       ' ',
                       '',
@@ -109,7 +112,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                         e.stopPropagation();
                         // TODO: bucket name
                         window.open(
-                          `${spEndpoint}/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`,
+                          `${endpoint}/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`,
                         );
                       }}
                     >
