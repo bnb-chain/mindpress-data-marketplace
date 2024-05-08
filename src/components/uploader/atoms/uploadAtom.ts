@@ -1,5 +1,5 @@
 import { atomWithImmer } from 'jotai-immer';
-import { atomWithReset, useResetAtom } from 'jotai/utils';
+import { atomWithReset } from 'jotai/utils';
 
 export type Status = 'init' | 'uploading' | 'success' | 'fail';
 
@@ -7,11 +7,15 @@ type UploadAtomType = {
   filesProgress: {
     progress: number;
   }[];
+  thumbProgress: {
+    progress: number;
+  }[];
   status: Status;
 };
 
 export const UploadAtom = atomWithImmer<UploadAtomType>({
   filesProgress: [],
+  thumbProgress: [],
   status: 'init',
 });
 

@@ -1,19 +1,25 @@
+import Compressor from 'compressorjs';
 import { OnProgressEvent, VisibilityType } from '@bnb-chain/greenfield-js-sdk';
 import { Box } from '@totejs/uikit';
-import { useImmerAtom, useSetImmerAtom } from 'jotai-immer';
+import { useImmerAtom } from 'jotai-immer';
 import { useState } from 'react';
 import { useAccount } from 'wagmi';
 import { client } from '../../utils/gfSDK';
 import { getOffchainAuthKeys } from '../../utils/off-chain-auth/utils';
 import { BlackSolidButton } from '../ui/buttons/BlackButton';
-import { Status, UploadAtom } from './atoms/uploadAtom';
+import { UploadAtom } from './atoms/uploadAtom';
 import { DragBox } from './DragArea';
 import { UploadArea } from './UploadArea';
+import { useCreateSpace } from '../../hooks/seller/useCreateSpace';
 
 export const Uploader = () => {
   const { address, connector } = useAccount();
   const [files, setFiles] = useState<File[] | null>(null);
   const [uploadInfo, setUploadInfo] = useImmerAtom(UploadAtom);
+
+  // useCreateSpace();
+
+  console.log('uploadInfo', uploadInfo);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -65,6 +71,40 @@ export const Uploader = () => {
       }
 
       const uploadTasks = files.map((file, index) => {
+        new Compressor(file, {
+          quality: 0.6,
+          width: 500,
+          success: (result: any) => {
+            console.log('result', result);
+
+            client.object.delegateUploadObject(
+              {
+                bucketName,
+                objectName: Date.now().toString() + '.thumb.' + file.name,
+                body: result,
+                delegatedOpts: {
+                  visibility: VisibilityType.VISIBILITY_TYPE_PUBLIC_READ,
+                },
+                onProgress: (e: OnProgressEvent) => {
+                  console.log('thumb progress: ', e.percent);
+
+                  setUploadInfo((draft) => {
+                    draft.thumbProgress[index] = {
+                      progress: Math.floor(e.percent),
+                    };
+                  });
+                },
+              },
+              {
+                type: 'EDDSA',
+                address,
+                domain: window.location.origin,
+                seed: offChainData.seedString,
+              },
+            );
+          },
+        });
+
         return client.object.delegateUploadObject(
           {
             bucketName,

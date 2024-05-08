@@ -55,7 +55,7 @@ export const DragBox: React.FC<IProps> = ({
         drop.current &&
         drop.current.removeEventListener('dragleave', handleDragLeave);
     };
-  }, []);
+  }, [dropChange]);
 
   const hasFiles = files && files.length > 0;
   const boxHeight = hasFiles ? '56px' : '360px';

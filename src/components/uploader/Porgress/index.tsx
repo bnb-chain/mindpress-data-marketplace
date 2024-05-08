@@ -1,6 +1,5 @@
-import { Box, Stack } from '@totejs/uikit';
-import { SuccessIcon } from '../../svgIcon/SuccessIcon';
 import { ColoredSuccessIcon } from '@totejs/icons';
+import { Box, Stack } from '@totejs/uikit';
 
 interface IProps {
   progress: number;

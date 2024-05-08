@@ -1,20 +1,11 @@
-import {
-  Box,
-  Center,
-  Flex,
-  HStack,
-  IconButton,
-  CircularProgress,
-  CircularProgressLabel,
-  Stack,
-} from '@totejs/uikit';
-import React from 'react';
-import { UploadFileIcon } from '../../svgIcon/UploadFile';
-import { parseFileSize } from '../../../utils';
 import { CloseIcon } from '@totejs/icons';
+import { Box, Center, Flex, HStack, IconButton } from '@totejs/uikit';
 import { useImmerAtom } from 'jotai-immer';
-import { UploadAtom } from '../atoms/uploadAtom';
+import React from 'react';
+import { parseFileSize } from '../../../utils';
+import { UploadFileIcon } from '../../svgIcon/UploadFile';
 import { Progress } from '../Porgress';
+import { UploadAtom } from '../atoms/uploadAtom';
 
 interface IProps {
   files: File[] | null;
@@ -96,7 +87,13 @@ export const UploadArea: React.FC<IProps> = ({ files, removeFile }) => {
 
               {uploadInfo.status !== 'init' && (
                 <Progress
-                  progress={uploadInfo.filesProgress[index]?.progress || 0}
+                  progress={
+                    Math.floor(
+                      (uploadInfo.filesProgress[index]?.progress +
+                        uploadInfo.thumbProgress[index]?.progress) /
+                        2,
+                    ) || 0
+                  }
                 />
               )}
             </Flex>
