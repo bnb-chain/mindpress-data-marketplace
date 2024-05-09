@@ -1,3 +1,5 @@
+import { bsc, bscTestnet } from 'viem/chains';
+
 const {
   REACT_APP_GF_CHAIN_ID,
   REACT_APP_GF_RPC_URL,
@@ -9,6 +11,8 @@ const {
   REACT_APP_MULTI_CALL_CONTRACT_ADDRESS,
   REACT_APP_CROSS_CHAIN_FEE,
   REACT_APP_INITIATE_LIST_FEE,
+
+  REACT_APP_NEW_MARKETPLACE_CONTRACT_ADDRESS,
 
   REACT_APP_LIST_FEE_ON_GF,
   REACT_APP_LIST_ESTIMATE_FEE_ON_BSC,
@@ -31,6 +35,8 @@ const {
 type NET = 'TESTNET' | 'MAINNET';
 export const NET_ENV: NET = REACT_APP_NET_ENV as NET;
 
+export const BSC_CHAIN = NET_ENV === 'TESTNET' ? bscTestnet : bsc;
+
 export const BANNER_IDS =
   REACT_APP_BANNER_IDS?.split(',').map((x) => Number(x)) || [];
 export const GF_CHAIN_ID = Number(REACT_APP_GF_CHAIN_ID);
@@ -47,6 +53,9 @@ export const MULTI_CALL_CONTRACT_ADDRESS =
 
 export const CROSS_CHAIN_FEE = Number(REACT_APP_CROSS_CHAIN_FEE);
 export const INITIATE_LIST_FEE = Number(REACT_APP_INITIATE_LIST_FEE);
+
+export const NEW_MARKETPLACE_CONTRACT_ADDRESS =
+  REACT_APP_NEW_MARKETPLACE_CONTRACT_ADDRESS as `0x${string}`;
 
 export const LIST_FEE_ON_GF = Number(REACT_APP_LIST_FEE_ON_GF);
 export const LIST_ESTIMATE_FEE_ON_BSC = Number(

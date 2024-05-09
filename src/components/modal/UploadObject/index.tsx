@@ -1,20 +1,8 @@
 import styled from '@emotion/styled';
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalFooter,
-  ModalHeader,
-} from '@totejs/uikit';
-import { useAtom } from 'jotai';
-import { uploadObjcetAtom } from '../../../atoms/uploadObjectAtom';
-import { DefaultButton } from '../../ui/buttons/DefaultButton';
-import { BlackButton, BlackSolidButton } from '../../ui/buttons/BlackButton';
-import NiceModal from '@ebay/nice-modal-react';
-import { Tips } from '../Tips';
-import { Uploader } from '../../uploader';
+import { Modal, ModalBody, ModalCloseButton, ModalHeader } from '@totejs/uikit';
 import { useImmerAtom } from 'jotai-immer';
+import { uploadObjcetAtom } from '../../../atoms/uploadObjectAtom';
+import { Uploader } from '../../uploader';
 import { UploadAtom } from '../../uploader/atoms/uploadAtom';
 
 export const UploadObjectModal = () => {

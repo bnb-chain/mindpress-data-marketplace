@@ -10,6 +10,10 @@ import { BuyModal } from '../modal/BuyModal';
 import Footer from './Footer';
 import Header from './Header';
 import { UploadObjectModal } from '../modal/UploadObject';
+import { Address, useAccount } from 'wagmi';
+import { getOffchainAuthKeys } from '../../utils/off-chain-auth/utils';
+import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
+import { useSetAtom } from 'jotai';
 
 export default function Layout({ children }: { children: ReactNode }) {
   const modalData = useModal();
@@ -39,6 +43,22 @@ export default function Layout({ children }: { children: ReactNode }) {
   const handleResultOpen = useCallback(() => {
     modalData.modalDispatch({ type: 'CLOSE_RESULT' });
   }, [modalData]);
+
+  const setOffchainData = useSetAtom(offchainDataAtom);
+
+  useAccount({
+    onConnect: async ({ connector, address }) => {
+      const provider = await connector?.getProvider();
+      const offChainData = await getOffchainAuthKeys(
+        address as Address,
+        provider,
+      );
+      setOffchainData({
+        address: address!,
+        seed: offChainData?.seedString,
+      });
+    },
+  });
 
   return (
     <>

@@ -7,7 +7,6 @@ import {
 import { Chain } from 'viem/chains';
 import { createConfig } from 'wagmi';
 import * as env from '../env';
-// export const bscChain = env.NETWORK === 'Mainnet' ? bsc : bscTestnet;
 
 export const OPBNB = {
   id: env.BSC_CHAIN_ID,
@@ -47,7 +46,7 @@ export const GREENFIELD = {
   },
 };
 
-export const chains: Chain[] = [OPBNB, GREENFIELD];
+export const chains: Chain[] = [env.BSC_CHAIN];
 
 export const config = createConfig(
   getDefaultConfig({
