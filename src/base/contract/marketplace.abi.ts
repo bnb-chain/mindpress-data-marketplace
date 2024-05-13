@@ -1183,6 +1183,19 @@ export const MarketplaceAbi = [
   },
   {
     inputs: [],
+    name: '_BUCKET_HUB',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: '_CROSS_CHAIN',
     outputs: [
       {
@@ -1197,19 +1210,6 @@ export const MarketplaceAbi = [
   {
     inputs: [],
     name: '_GREENFIELD_EXECUTOR',
-    outputs: [
-      {
-        internalType: 'address',
-        name: '',
-        type: 'address',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: '_BUCKET_HUB',
     outputs: [
       {
         internalType: 'address',
@@ -1397,9 +1397,14 @@ export const MarketplaceAbi = [
             type: 'address',
           },
           {
-            internalType: 'uint256',
+            internalType: 'uint64',
             name: 'primarySpApprovalExpiredHeight',
-            type: 'uint256',
+            type: 'uint64',
+          },
+          {
+            internalType: 'uint32',
+            name: 'globalVirtualGroupFamilyId',
+            type: 'uint32',
           },
           {
             internalType: 'bytes',

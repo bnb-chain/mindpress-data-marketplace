@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { NavBar } from '../NavBar';
 import MyCollectionList from './MyCollectionList';
 import PurchaseList from './PurchaseList';
+import { Address } from 'viem';
 
 enum Type {
   Purchased = 'purchased',
@@ -22,7 +23,7 @@ const navItems = [
 ];
 
 interface IProfileList {
-  address: string;
+  address: Address;
 }
 const ProfileList = (props: IProfileList) => {
   const [p] = useSearchParams();

@@ -18,6 +18,7 @@ export const client = getClient();
 
 export const getSps = async () => {
   const sps = await client.sp.getStorageProviders();
+  console.log('sps', sps);
   const finalSps = (sps ?? []).filter(
     (v: any) => v?.description?.moniker !== 'QATest',
   );
@@ -33,6 +34,7 @@ export const selectSp = async () => {
     ...finalSps.slice(selectIndex + 1),
   ].map((item) => item.operatorAddress);
   const selectSpInfo = {
+    id: finalSps[selectIndex].id,
     endpoint: finalSps[selectIndex].endpoint,
     primarySpAddress: finalSps[selectIndex]?.operatorAddress,
     sealAddress: finalSps[selectIndex].sealAddress,

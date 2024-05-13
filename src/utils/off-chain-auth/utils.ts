@@ -40,11 +40,9 @@ export const checkURL = (url: string) => {
 
 export const getSps = async () => {
   const sps = await client.sp.getStorageProviders();
-  const finalSps = (sps ?? []).filter((v: any) =>
-    v.endpoint.includes('nodereal'),
-  );
-
-  // const finalSps = sps.filter((v) => v.id === 4);
+  const finalSps = (sps ?? []).filter((v: any) => {
+    return v.endpoint.includes('nodereal') || v.endpoint.includes('bnbchain');
+  });
 
   return finalSps;
 };
@@ -78,6 +76,13 @@ export const getOffchainAuthKeys = async (address: string, provider: any) => {
   }
 
   const allSps = await getAllSps();
+  console.log({
+    sps: allSps,
+    chainId: GREENFIELD_CHAIN_ID,
+    expirationMs: 5 * 24 * 60 * 60 * 1000,
+    domain: window.location.origin,
+    address,
+  });
   const offchainAuthRes =
     await client.offchainauth.genOffChainAuthKeyPairAndUpload(
       {

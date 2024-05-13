@@ -49,10 +49,12 @@ export default function Layout({ children }: { children: ReactNode }) {
   useAccount({
     onConnect: async ({ connector, address }) => {
       const provider = await connector?.getProvider();
+      // console.log('provider', provider);
       const offChainData = await getOffchainAuthKeys(
         address as Address,
         provider,
       );
+      // console.log('useAccount offChainData', offChainData);
       setOffchainData({
         address: address!,
         seed: offChainData?.seedString,

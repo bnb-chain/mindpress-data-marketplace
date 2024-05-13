@@ -25,13 +25,14 @@ import { DefaultButton } from '../ui/buttons/DefaultButton';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { MPLink } from '../ui/MPLink';
 import { useSelectEndpoint } from '../../hooks/useSelectEndpoint';
+import { getSpaceName } from '../../utils/space';
+import { Address, useAccount } from 'wagmi';
 
 // TODO:
 const PAGE_SIZE = 12;
-const BUCKET_NAME = 'dfg';
 
 interface ICollectionList {
-  address: string;
+  address: Address;
 }
 const MyCollectionList = ({ address }: ICollectionList) => {
   const [page, setPage] = useState(1);
@@ -53,8 +54,12 @@ const MyCollectionList = ({ address }: ICollectionList) => {
     PAGE_SIZE,
   );
 
+  const BUCKET_NAME = getSpaceName(address);
+
   const { data: listData, isLoading: listLoading } =
     useGetObjInBucketListStatus(BUCKET_NAME, 0);
+
+  // console.log('listData', listData);
 
   const { data: bucketInfo } = useGetBucketByName(BUCKET_NAME);
 
@@ -215,6 +220,7 @@ const Card = styled(Stack)`
 `;
 
 const UploadImageCard = styled(Stack)`
+  min-height: 382px;
   background-color: #1e2026;
   border-radius: 16px;
   overflow: hidden;

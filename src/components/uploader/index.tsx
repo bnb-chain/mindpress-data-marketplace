@@ -1,25 +1,46 @@
-import Compressor from 'compressorjs';
 import { OnProgressEvent, VisibilityType } from '@bnb-chain/greenfield-js-sdk';
 import { Box } from '@totejs/uikit';
+import Compressor from 'compressorjs';
+import { useAtom } from 'jotai';
 import { useImmerAtom } from 'jotai-immer';
 import { useState } from 'react';
 import { useAccount } from 'wagmi';
+import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
+import { useCreateSpace } from '../../hooks/seller/useCreateSpace';
+import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
 import { client } from '../../utils/gfSDK';
-import { getOffchainAuthKeys } from '../../utils/off-chain-auth/utils';
+import { getSpaceName, sleep } from '../../utils/space';
 import { BlackSolidButton } from '../ui/buttons/BlackButton';
-import { UploadAtom } from './atoms/uploadAtom';
 import { DragBox } from './DragArea';
 import { UploadArea } from './UploadArea';
-import { useCreateSpace } from '../../hooks/seller/useCreateSpace';
+import { UploadAtom } from './atoms/uploadAtom';
 
 export const Uploader = () => {
   const { address, connector } = useAccount();
+  const [offchainData, setOffchainData] = useAtom(offchainDataAtom);
   const [files, setFiles] = useState<File[] | null>(null);
   const [uploadInfo, setUploadInfo] = useImmerAtom(UploadAtom);
 
-  // useCreateSpace();
+  const {
+    start: createSpaceStart,
+    doCreateSpace,
+    spaceExist,
+  } = useCreateSpace({
+    onFailure: async () => {
+      // ...
+    },
+    onSuccess: async () => {
+      // ...
+      await sleep(40000);
+    },
+  });
 
-  console.log('uploadInfo', uploadInfo);
+  // const { doDelete } = useDeleteSpace({});
+
+  const { refetch: refetchList } = useGetObjInBucketListStatus(
+    getSpaceName(address),
+    0,
+  );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -56,19 +77,32 @@ export const Uploader = () => {
   const handleUpload = async () => {
     if (!address) return;
 
-    const bucketName = 'dfg';
+    const bucketName = getSpaceName(address);
+
+    if (!spaceExist) {
+      await doCreateSpace();
+    }
+    // else {
+    //   await doDelete();
+    //   return;
+    // }
 
     if (files) {
       setUploadInfo((draft) => {
         draft.status = 'uploading';
       });
 
-      const provider = await connector?.getProvider();
-      const offChainData = await getOffchainAuthKeys(address, provider);
-      if (!offChainData) {
-        alert('No offchain, please create offchain pairs first');
-        return;
-      }
+      // const provider = await connector?.getProvider();
+      // const data = await getOffchainAuthKeys(address, provider);
+
+      // console.log('data', data);
+
+      // setOffchainData({
+      //   address: address,
+      //   seed: data?.seedString,
+      // });
+
+      console.log('offchainData', offchainData);
 
       const uploadTasks = files.map((file, index) => {
         new Compressor(file, {
@@ -99,7 +133,7 @@ export const Uploader = () => {
                 type: 'EDDSA',
                 address,
                 domain: window.location.origin,
-                seed: offChainData.seedString,
+                seed: offchainData?.seed || '',
               },
             );
           },
@@ -127,7 +161,7 @@ export const Uploader = () => {
             type: 'EDDSA',
             address,
             domain: window.location.origin,
-            seed: offChainData.seedString,
+            seed: offchainData?.seed || '',
           },
         );
       });
@@ -140,6 +174,8 @@ export const Uploader = () => {
           draft.status = 'success';
         });
         // resetUploadInfo();
+
+        await refetchList();
       } catch (error) {
         console.error(error);
         setUploadInfo((draft) => {
@@ -167,7 +203,14 @@ export const Uploader = () => {
           bg="rgba(30, 32, 38, 1)"
           fontSize="16px"
           width={'100%'}
-          disabled={files === null || files.length === 0}
+          disabled={
+            files === null ||
+            files.length === 0 ||
+            createSpaceStart ||
+            uploadInfo.status === 'uploading'
+          }
+          isLoading={createSpaceStart || uploadInfo.status === 'uploading'}
+          loadingText={'Progressing...'}
           onClick={async () => {
             handleUpload();
 

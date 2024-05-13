@@ -1,9 +1,10 @@
+import { PickVGFStrategy } from '@bnb-chain/greenfield-cosmos-types/greenfield/virtualgroup/common';
 import {
   BucketVisibilityType,
   ExecutorMsg,
 } from '@bnb-chain/bsc-cross-greenfield-sdk';
 import * as ethers from 'ethers';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Address, formatEther, parseEther, parseGwei } from 'viem';
 import {
   useAccount,
@@ -18,6 +19,7 @@ import { MarketplaceAbi } from '../../base/contract/marketplace.abi';
 import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 import { getSpaceName } from '../../utils/space';
 import { useGetContractAddresses } from './useGetContractAddresses';
+import { client, selectSp } from '../../utils/gfSDK';
 
 export type CreateBucketSynPackage = {
   creator: Address;
@@ -29,6 +31,7 @@ export type CreateBucketSynPackage = {
   primarySpSignature: Address;
   chargedReadQuota: bigint;
   extraData: `0x${string}`;
+  globalVirtualGroupFamilyId: number;
 };
 
 interface Params {
@@ -44,6 +47,7 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
   const isBSCChain = chain?.id === BSC_CHAIN.id;
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
+  const [spaceExist, setSpaceExist] = useState<boolean>(false);
 
   const { data: contracts, isLoading: loadingContract } =
     useGetContractAddresses();
@@ -110,16 +114,26 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
 
       // 2. crate space
       const spaceName = getSpaceName(address);
+      const sp = await selectSp();
+      console.log('sp', sp);
+      const { globalVirtualGroupFamilyId } =
+        await client.virtualGroup.getSpOptimalGlobalVirtualGroupFamily({
+          spId: sp.id,
+          pickVgfStrategy: PickVGFStrategy.Strategy_Oldest_Create_Time,
+        });
+
       const bucketPkg: CreateBucketSynPackage = {
         creator: address,
         name: spaceName,
         visibility: 2, // private
         paymentAddress: NEW_MARKETPLACE_CONTRACT_ADDRESS,
-        primarySpAddress: ethers.constants.AddressZero,
+        primarySpAddress: sp.primarySpAddress as Address,
         primarySpApprovalExpiredHeight: BigInt(0),
         primarySpSignature: '0x', // TODO if the owner of the bucket is a smart contract, we are not able to get the primarySpSignature
         chargedReadQuota: BigInt(0),
         extraData: '0x',
+        // globalVirtualGroupFamilyId: 1,
+        globalVirtualGroupFamilyId,
       };
       console.log('bucketPkg', bucketPkg);
 
@@ -127,9 +141,9 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
         ExecutorMsg.getSetBucketFlowRateLimitParams({
           bucketName: spaceName,
           bucketOwner: address,
-          operator: address,
-          paymentAddress: address,
-          flowRateLimit: '10',
+          operator: NEW_MARKETPLACE_CONTRACT_ADDRESS,
+          paymentAddress: NEW_MARKETPLACE_CONTRACT_ADDRESS,
+          flowRateLimit: '1000000000000000000',
         });
 
       console.log('flowRateLimitParams', dataSetBucketFlowRateLimit);
@@ -144,36 +158,38 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
       const value = realyFee * BigInt(2) + ackRelayFee;
       console.log('fees', realyFee, ackRelayFee);
       console.log('value', value, formatEther(value));
-      // const { request } = await publicClient.simulateContract({
+      const { request, result } = await publicClient.simulateContract({
+        account: address,
+        address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
+        abi: MarketplaceAbi,
+        functionName: 'createSpace',
+        args: [bucketPkg, dataSetBucketFlowRateLimit[1]],
+        value,
+      });
+      console.log('request', request);
+      console.log('result', result);
+      const hash = await walletClient?.writeContract(request);
+
+      // const gas = await publicClient.estimateContractGas({
       //   account: address,
+      //   abi: MarketplaceAbi,
+      //   functionName: 'createSpace',
+      //   address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
+      //   args: [bucketPkg, dataSetBucketFlowRateLimit[1]],
+      // });
+      // console.log('gas', gas);
+
+      // const hash = await walletClient?.writeContract({
       //   address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
       //   abi: MarketplaceAbi,
       //   functionName: 'createSpace',
       //   args: [bucketPkg, dataSetBucketFlowRateLimit[1]],
+      //   account: address,
       //   value,
+      //   gas: BigInt(2000000),
+      //   gasPrice: parseGwei('10'),
       // });
-      // const hash = await walletClient?.writeContract(request);
-
-      const gas = await publicClient.estimateContractGas({
-        account: address,
-        abi: MarketplaceAbi,
-        functionName: 'createSpace',
-        address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
-        args: [bucketPkg, dataSetBucketFlowRateLimit[1]],
-      });
-      console.log('gas', gas);
-
-      const hash = await walletClient?.writeContract({
-        address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
-        abi: MarketplaceAbi,
-        functionName: 'createSpace',
-        args: [bucketPkg, dataSetBucketFlowRateLimit[1]],
-        account: address,
-        value,
-        gas: BigInt(2000000),
-        gasPrice: parseGwei('10'),
-      });
-      console.log('hash', hash);
+      // console.log('hash', hash);
 
       if (hash) {
         const tx = await publicClient.waitForTransactionReceipt({
@@ -191,8 +207,24 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
     }
   };
 
+  useEffect(() => {
+    const spaceName = getSpaceName(address);
+
+    const hadCreated = async () => {
+      try {
+        await client.bucket.headBucket(spaceName);
+        setSpaceExist(true);
+      } catch (e) {
+        setSpaceExist(false);
+      }
+    };
+
+    hadCreated();
+  }, [address]);
+
   return {
     start,
     doCreateSpace: create,
+    spaceExist,
   };
 };

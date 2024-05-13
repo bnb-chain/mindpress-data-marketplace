@@ -5,6 +5,7 @@
   "dependencies": {
     "@babel/core": "^7.22.1",
     "@bnb-chain/bsc-cross-greenfield-sdk": "^0.0.2",
+    "@bnb-chain/greenfield-cosmos-types": "0.4.0-alpha.32",
     "@bnb-chain/greenfield-js-sdk": "2.0.0-alpha.9",
     "@dopex-io/web3-multicall": "^0.1.9",
     "@ebay/nice-modal-react": "^1.2.13",

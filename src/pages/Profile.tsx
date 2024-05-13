@@ -35,7 +35,7 @@ const Profile = () => {
         </Info>
       </PersonInfo>
 
-      {realAddress && <ProfileList address={realAddress} />}
+      {realAddress && <ProfileList address={realAddress as `0x${string}`} />}
     </Container>
   );
 };

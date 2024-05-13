@@ -64,6 +64,8 @@ export const getItemByObjectId = async (objectId: string): Promise<Item> => {
 };
 
 export const getItemByObjectIds = async (ids: number[]): Promise<Item[]> => {
+  if (ids.length === 0) return [];
+
   const data = await instance.post(`item_by_objects`, JSON.stringify({ ids }));
 
   return data?.data?.data?.items || [];

@@ -14,6 +14,9 @@ importers:
       '@bnb-chain/bsc-cross-greenfield-sdk':
         specifier: ^0.0.2
         version: 0.0.2(bufferutil@4.0.8)(typescript@5.4.5)(utf-8-validate@5.0.10)
+      '@bnb-chain/greenfield-cosmos-types':
+        specifier: 0.4.0-alpha.32
+        version: 0.4.0-alpha.32
       '@bnb-chain/greenfield-js-sdk':
         specifier: 2.0.0-alpha.9
         version: 2.0.0-alpha.9(bufferutil@4.0.8)(utf-8-validate@5.0.10)
