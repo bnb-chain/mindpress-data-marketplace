@@ -27,6 +27,18 @@ export const useGetContractAddresses = () => {
             ...contract,
             functionName: '_BUCKET_HUB',
           },
+          {
+            ...contract,
+            functionName: '_PERMISSION_HUB',
+          },
+          {
+            ...contract,
+            functionName: '_GROUP_TOKEN',
+          },
+          {
+            ...contract,
+            functionName: '_GROUP_HUB',
+          },
         ],
       });
 
@@ -34,6 +46,9 @@ export const useGetContractAddresses = () => {
       return {
         CrossChainAddress: (contractAddresses[0].result || '0x') as Address,
         BucketHubAddress: (contractAddresses[1].result || '0x') as Address,
+        PermissionHubAddress: (contractAddresses[2].result || '0x') as Address,
+        GroupTokenAddress: (contractAddresses[3].result || '0x') as Address,
+        GroupHubAddress: (contractAddresses[4].result || '0x') as Address,
       };
     },
     staleTime: Infinity,
