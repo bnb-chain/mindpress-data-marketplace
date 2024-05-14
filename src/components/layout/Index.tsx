@@ -70,24 +70,16 @@ export default function Layout({ children }: { children: ReactNode }) {
         <Footer />
       </Container>
 
-      {openList && (
-        <ListModal
-          isOpen={openList}
-          handleOpen={() => {
-            handleListOpen();
-          }}
-          detail={initInfo}
-        ></ListModal>
-      )}
+      <ListModal />
 
-      {openListProcess && (
+      {/* {openListProcess && (
         <ListProcess
           isOpen={openListProcess}
           handleOpen={() => {
             handleListProcessOpen();
           }}
         ></ListProcess>
-      )}
+      )} */}
 
       <BuyModal />
 

@@ -4,7 +4,6 @@ import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader } from '../components/Loader';
 import { useRedirectFromExternal } from '../hooks/useRedirectFromExternal';
-import { useWalletModal } from '../hooks/useWalletModal';
 import NiceModal from '@ebay/nice-modal-react';
 import { useModal } from '@node-real/walletkit';
 import { Tips } from '../components/modal/Tips';

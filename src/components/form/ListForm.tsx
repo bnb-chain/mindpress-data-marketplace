@@ -18,6 +18,8 @@ import { Option, Select } from '../ui/select';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { useAccount } from 'wagmi';
 import { YellowButton } from '../ui/buttons/YellowButton';
+import { listAtom } from '../../atoms/listAtom';
+import { useImmerAtom } from 'jotai-immer';
 
 interface FormValues {
   name: string;
@@ -34,8 +36,22 @@ const ListSchema = Yup.object().shape({
   category: Yup.string().required('Category is required'),
 });
 
-export const ListForm: React.FC<{ owner?: string }> = ({ owner }) => {
+interface IProps {
+  bucketId: string;
+  objectId: string;
+  imageUrl: string;
+  owner?: string;
+}
+
+export const ListForm: React.FC<IProps> = ({
+  owner,
+  bucketId,
+  objectId,
+  imageUrl,
+}) => {
   const { address } = useAccount();
+  const [listInfo, setListInfo] = useImmerAtom(listAtom);
+  console.log('listInfo', listInfo);
   const formik = useFormik<FormValues>({
     initialValues: {
       name: '',
@@ -45,7 +61,17 @@ export const ListForm: React.FC<{ owner?: string }> = ({ owner }) => {
     },
     onSubmit: (v) => {
       console.log('form v:', v);
-      // openListModal
+
+      setListInfo((draft) => {
+        draft.open = true;
+        draft.data = {
+          bucketId: BigInt(bucketId),
+          objectId: BigInt(objectId),
+          price: BigInt(v.price),
+          imageUrl: imageUrl,
+          desc: v.description,
+        };
+      });
     },
     validationSchema: ListSchema,
     validateOnChange: false,

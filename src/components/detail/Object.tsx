@@ -1,15 +1,13 @@
 import styled from '@emotion/styled';
 import { BackIcon } from '@totejs/icons';
 import { Box, Flex } from '@totejs/uikit';
-import { useCallback, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { NoData } from '../../components/NoData';
 import { useGetBucketById } from '../../hooks/useGetBucketOrObj';
 import { useGfGetObjInfo } from '../../hooks/useGfGetObjInfo';
-import { useModal } from '../../hooks/useModal';
 import { useSelectEndpoint } from '../../hooks/useSelectEndpoint';
-import { MPLink } from '../ui/MPLink';
 import { ListForm } from '../form/ListForm';
+import { MPLink } from '../ui/MPLink';
 
 /**
  * Have not been listed
@@ -20,7 +18,6 @@ export const Object = () => {
   const [p] = useSearchParams();
   const objectId = p.get('oid') as string;
   const bucketId = p.get('bid') as string;
-  const modalData = useModal();
   const { data: endpoint } = useSelectEndpoint();
 
   const { data: bucketData } = useGetBucketById(bucketId);
@@ -37,29 +34,35 @@ export const Object = () => {
   //   false,
   // );
 
-  const openListModal = useCallback(() => {
-    if (!bucketData || !objectData) return;
-    const initInfo = {
-      bucket_name: bucketData.bucketInfo?.bucketName,
-      object_name: objectData.objectInfo?.objectName,
-      create_at: bucketData.bucketInfo?.createAt.low,
-      payload_size: objectData.objectInfo?.payloadSize.low,
-    };
-    modalData.modalDispatch({
-      type: 'OPEN_LIST',
-      initInfo,
-      callBack: () => {
-        navigator('/detail?bid=' + bucketId);
-      },
-    });
-  }, [bucketData, bucketId, modalData, navigator, objectData]);
+  // const openListModal = useCallback(() => {
+  //   if (!bucketData || !objectData) {
+  //     return;
+  //   }
+
+  //   const imageUrl = `${endpoint}/view/${bucketData.bucketInfo?.bucketName}/${objectData.objectInfo?.objectName}`;
+
+  //   const initInfo = {
+  //     bucket_name: bucketData.bucketInfo?.bucketName,
+  //     object_name: objectData.objectInfo?.objectName,
+  //     create_at: bucketData.bucketInfo?.createAt.low,
+  //     payload_size: objectData.objectInfo?.payloadSize.low,
+  //     imageUrl,
+  //   };
+  //   modalData.modalDispatch({
+  //     type: 'OPEN_LIST',
+  //     initInfo,
+  //     callBack: () => {
+  //       navigator('/detail?bid=' + bucketId);
+  //     },
+  //   });
+  // }, [bucketData, bucketId, modalData, navigator, objectData]);
 
   // auto open list modal
-  useEffect(() => {
-    const needOpenModal = p.get('openModal') as string;
-    if (!needOpenModal) return;
-    openListModal();
-  }, [p, bucketData, objectData]);
+  // useEffect(() => {
+  //   const needOpenModal = p.get('openModal') as string;
+  //   if (!needOpenModal) return;
+  //   openListModal();
+  // }, [p, bucketData, objectData]);
 
   // TODO: how logic
   // if (!_.isEmpty(objectItemInfo)) {
@@ -71,6 +74,8 @@ export const Object = () => {
   if (!objectData || !bucketData) {
     return <NoData />;
   }
+
+  const imageUrl = `${endpoint}/view/${bucketData.bucketInfo?.bucketName}/${objectData.objectInfo?.objectName}`;
 
   return (
     <>
@@ -87,14 +92,16 @@ export const Object = () => {
       </Box>
       <ResourceInfo gap="20px">
         <ImgCon>
-          <img
-            src={`${endpoint}/view/${bucketData.bucketInfo?.bucketName}/${objectData.objectInfo?.objectName}`}
-            alt=""
-          />
+          <img src={imageUrl} alt="" />
         </ImgCon>
 
         <Flex flex="1" gap={24} flexDir="column" justifyContent={'start'}>
-          <ListForm owner={objectData.objectInfo?.owner} />
+          <ListForm
+            owner={objectData.objectInfo?.owner}
+            bucketId={bucketId}
+            objectId={objectId}
+            imageUrl={imageUrl}
+          />
         </Flex>
       </ResourceInfo>
     </>
