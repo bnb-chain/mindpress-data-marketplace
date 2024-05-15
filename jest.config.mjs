@@ -15,7 +15,6 @@ export default {
     '^.+\\.ts?$': [
       'ts-jest',
       {
-        // tsconfig: './config/tsconfig-cjs.json',
         useESM: true,
       },
     ],
