@@ -39,6 +39,10 @@ export const useGetContractAddresses = () => {
             ...contract,
             functionName: '_GROUP_HUB',
           },
+          {
+            ...contract,
+            functionName: '_MULTI_MESSAGE',
+          },
         ],
       });
 
@@ -49,6 +53,7 @@ export const useGetContractAddresses = () => {
         PermissionHubAddress: (contractAddresses[2].result || '0x') as Address,
         GroupTokenAddress: (contractAddresses[3].result || '0x') as Address,
         GroupHubAddress: (contractAddresses[4].result || '0x') as Address,
+        MultiMessageAddress: (contractAddresses[5].result || '0x') as Address,
       };
     },
     staleTime: Infinity,

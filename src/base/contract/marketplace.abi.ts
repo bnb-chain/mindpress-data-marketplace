@@ -5,6 +5,25 @@ export const MarketplaceAbi = [
       {
         indexed: true,
         internalType: 'address',
+        name: 'creator',
+        type: 'address',
+      },
+      {
+        indexed: true,
+        internalType: 'uint256',
+        name: 'groupId',
+        type: 'uint256',
+      },
+    ],
+    name: 'AddedListGroup',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: 'address',
         name: 'appAddress',
         type: 'address',
       },
@@ -1487,6 +1506,48 @@ export const MarketplaceAbi = [
   {
     inputs: [
       {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'collectionMap',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'bucketId',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string[]',
+        name: 'groupNames',
+        type: 'string[]',
+      },
+      {
+        internalType: 'uint256',
+        name: 'callbackGasLimit',
+        type: 'uint256',
+      },
+      {
+        internalType: 'uint256',
+        name: 'createGroupRelayFee',
+        type: 'uint256',
+      },
+    ],
+    name: 'createListGroupIds',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         components: [
           {
             internalType: 'address',
@@ -1633,6 +1694,25 @@ export const MarketplaceAbi = [
         internalType: 'uint256[]',
         name: '',
         type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'string',
+        name: 'groupName',
+        type: 'string',
+      },
+    ],
+    name: 'getGroupId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'groupId',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',
@@ -1788,6 +1868,44 @@ export const MarketplaceAbi = [
   {
     inputs: [
       {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    name: 'groupNameToId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'groupToLister',
+    outputs: [
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
         internalType: 'bytes32',
         name: 'role',
         type: 'bytes32',
@@ -1845,9 +1963,9 @@ export const MarketplaceAbi = [
   {
     inputs: [
       {
-        internalType: 'uint256',
-        name: 'groupId',
-        type: 'uint256',
+        internalType: 'string',
+        name: 'groupName',
+        type: 'string',
       },
       {
         internalType: 'uint256',
@@ -1857,12 +1975,31 @@ export const MarketplaceAbi = [
     ],
     name: 'list',
     outputs: [],
-    stateMutability: 'nonpayable',
+    stateMutability: 'payable',
     type: 'function',
   },
   {
     inputs: [],
     name: 'maxCallbackDataLength',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'objectToGroupId',
     outputs: [
       {
         internalType: 'uint256',
@@ -2132,6 +2269,19 @@ export const MarketplaceAbi = [
         internalType: 'bool',
         name: '',
         type: 'bool',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'totalGroups',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',

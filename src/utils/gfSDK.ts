@@ -20,7 +20,10 @@ export const getSps = async () => {
   const sps = await client.sp.getStorageProviders();
   console.log('sps', sps);
   const finalSps = (sps ?? []).filter(
-    (v: any) => v?.description?.moniker !== 'QATest',
+    (v: any) =>
+      v?.description?.moniker !== 'QATest' &&
+      (v.endpoint.indexOf('bnbchain.org') > 0 ||
+        v.endpoint.indexOf('nodereal.io') > 0),
   );
 
   return finalSps;

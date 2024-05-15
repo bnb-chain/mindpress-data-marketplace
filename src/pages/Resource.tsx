@@ -74,11 +74,13 @@ const Resource = () => {
   const modalData = useModal();
   const { onOpen } = useWalletKitModal();
 
+  console.log('itemInfo', storageInfo, itemInfo, bucketData, objectData);
+
   if (itemInfoLoading) {
     return <Loader />;
   }
 
-  if (!itemInfo || !bucketData || !objectData) {
+  if (!itemInfo /* || !bucketData || !objectData */) {
     return <Loader />;
   }
 
@@ -140,7 +142,7 @@ const Resource = () => {
               <Option>
                 <Box className="field">Size</Box>
                 <Box className="value">
-                  {parseFileSize(objectData.objectInfo!.payloadSize.low || 0)}
+                  {/* {parseFileSize(objectData.objectInfo!.payloadSize.low || 0)} */}
                 </Box>
               </Option>
               <Option>
@@ -211,7 +213,7 @@ const Resource = () => {
                       owner: itemInfo.ownerAddress,
                     },
                     callBack: () => {
-                      navigator(`/detail?bid=${bucketData.bucketInfo!.id}`);
+                      // navigator(`/detail?bid=${bucketData.bucketInfo!.id}`);
                     },
                   });
                 }}

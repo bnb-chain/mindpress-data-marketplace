@@ -1,7 +1,10 @@
 import { Address } from 'viem';
 
 export const getSpaceName = (address?: Address) => {
-  return 'mindpress-' + address?.toLocaleLowerCase();
+  const add = address?.toLocaleLowerCase().replace('0x', '');
+  if (!add) return '';
+
+  return 'md-' + add.slice(0, 6) + '-' + add.slice(-4);
 };
 
 export const sleep = (time: number) => {

@@ -1,5 +1,5 @@
 import { OnProgressEvent, VisibilityType } from '@bnb-chain/greenfield-js-sdk';
-import { Box } from '@totejs/uikit';
+import { Box, Center, Flex, Text } from '@totejs/uikit';
 import Compressor from 'compressorjs';
 import { useAtom } from 'jotai';
 import { useImmerAtom } from 'jotai-immer';
@@ -14,6 +14,9 @@ import { BlackSolidButton } from '../ui/buttons/BlackButton';
 import { DragBox } from './DragArea';
 import { UploadArea } from './UploadArea';
 import { UploadAtom } from './atoms/uploadAtom';
+import NiceModal from '@ebay/nice-modal-react';
+import { Tips } from '../modal/Tips';
+import BSCIcon from '../svgIcon/BSCIcon';
 
 export const Uploader = () => {
   const { address, connector } = useAccount();
@@ -80,6 +83,30 @@ export const Uploader = () => {
     const bucketName = getSpaceName(address);
 
     if (!spaceExist) {
+      await NiceModal.show(Tips, {
+        title: ``,
+        content: (
+          <Box>
+            <Flex justifyContent="center" alignItems="center">
+              <Center w="80px" h="80px" bg="#F1F2F3" borderRadius="50%">
+                <BSCIcon boxSize={56} w="56px" h="56px" />
+              </Center>
+            </Flex>
+
+            <Text as="h2" fontSize="24px" mt="24px">
+              Upload to BNB Greenfield
+            </Text>
+            <Text fontSize="14px" color="#76808F">
+              We will store your photos on Greenfield blockchain to ensure you
+              have full ownership. Therefore a small gas fee is required to
+              create a storage space for the first upload.
+            </Text>
+          </Box>
+        ),
+        buttonText: 'Continue',
+        // buttonClick: async () => {},
+      });
+
       await doCreateSpace();
     }
 

@@ -217,6 +217,10 @@ export const ListModal = () => {
               h="48px"
               onClick={async () => {
                 await doList();
+
+                setListInfo((draft) => {
+                  draft.open = false;
+                });
               }}
               isLoading={listStart}
               loadingText={<Loader size={30} />}

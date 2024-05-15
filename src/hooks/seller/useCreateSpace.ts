@@ -59,7 +59,6 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
     setStart(true);
 
     if (!isBSCChain) {
-      console.log('BSC_CHAIN', BSC_CHAIN);
       await switchNetworkAsync?.(BSC_CHAIN.id);
     }
 

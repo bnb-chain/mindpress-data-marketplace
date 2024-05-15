@@ -5,7 +5,11 @@ import {
 } from '@bnb-chain/greenfield-cosmos-types/greenfield/permission/common';
 import { Policy } from '@bnb-chain/greenfield-cosmos-types/greenfield/permission/types';
 import { ResourceType } from '@bnb-chain/greenfield-cosmos-types/greenfield/resource/types';
-import { GRNToString, newGroupGRN } from '@bnb-chain/greenfield-js-sdk';
+import {
+  GRNToString,
+  newGroupGRN,
+  newObjectGRN,
+} from '@bnb-chain/greenfield-js-sdk';
 import { solidityPack } from 'ethers/lib/utils';
 import { useEffect, useState } from 'react';
 import { Address, encodeFunctionData, parseAbi, toHex } from 'viem';
@@ -25,6 +29,8 @@ import { PermissonHubAbi } from '../../base/contract/permissonHub.abi';
 import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 import { generateGroupName } from '../../utils';
 import { useGetContractAddresses } from './useGetContractAddresses';
+import { client } from '../../utils/gfSDK';
+import { sleep } from '../../utils/space';
 
 interface Params {
   data: {
@@ -144,11 +150,11 @@ export const useList = ({
       }
 
       // create group
-      // const [realyFee, ackRelayFee] = await publicClient.readContract({
-      //   abi: CrossChainAbi,
-      //   address: contracts.CrossChainAddress,
-      //   functionName: 'getRelayFees',
-      // });
+      const [realyFee, ackRelayFee] = await publicClient.readContract({
+        abi: CrossChainAbi,
+        address: contracts.CrossChainAddress,
+        functionName: 'getRelayFees',
+      });
 
       // const totalRelayFee = realyFee * BigInt(2) + ackRelayFee;
       // const callbackGasPrice = await publicClient.readContract({
@@ -157,52 +163,101 @@ export const useList = ({
       //   functionName: 'callbackGasPrice',
       // });
 
-      const groupId = await publicClient.readContract({
+      // TODO: group name?
+      const { bucketInfo } = await client.bucket.headBucketById(
+        String(bucketId),
+      );
+      const { objectInfo } = await client.object.headObjectById(
+        String(objectId),
+      );
+
+      if (!bucketInfo || !objectInfo) {
+        throw new Error('bucket or object not found');
+      }
+
+      const groupName = generateGroupName(
+        bucketInfo.bucketName,
+        objectInfo.objectName,
+      );
+      console.log('groupName', groupName);
+      const callbackGasLimit = await publicClient.readContract({
         abi: MarketplaceAbi,
         address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
-        functionName: 'getListGroupId',
-        args: [address],
+        functionName: 'callbackGasLimit',
+      });
+      console.log('callbackGasLimit', callbackGasLimit);
+
+      const callbackGasPrice = await publicClient.readContract({
+        abi: CrossChainAbi,
+        address: contracts.CrossChainAddress,
+        functionName: 'callbackGasPrice',
+      });
+      console.log('callbackGasPrice', callbackGasPrice);
+
+      const callbackFee = callbackGasPrice * callbackGasLimit;
+
+      // const callbackDataCreateGroup = solidityPack(
+      //   ['address'],
+      //   [address],
+      // ) as Address;
+
+      // console.log('NEW_MARKETPLACE_CONTRACT_ADDRESS', {
+      //   appAddress: NEW_MARKETPLACE_CONTRACT_ADDRESS,
+      //   refundAddress: address,
+      //   failureHandleStrategy: 2, // SkipOnFail
+      //   callbackData: callbackDataCreateGroup,
+      // });
+
+      // const createGroupData = encodeFunctionData({
+      //   abi: GroupHubAbi,
+      //   functionName: 'prepareCreateGroup',
+      //   args: [address, NEW_MARKETPLACE_CONTRACT_ADDRESS, groupName],
+      // });
+
+      // console.log('createGroupData', createGroupData);
+
+      // console.log(
+      //   'GRNToString(newGroupGRN(address as string, groupName))',
+      //   GRNToString(newGroupGRN(address as string, groupName)),
+      // );
+
+      const { request: listRequest } = await publicClient.simulateContract({
+        account: address,
+        abi: MarketplaceAbi,
+        address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
+        functionName: 'list',
+        args: [groupName, objectPrice],
+        value: realyFee + ackRelayFee + callbackFee,
+        gas: BigInt(400000),
       });
 
-      // TODO: group name?
-      const groupName = generateGroupName(String(bucketId), String(objectId));
-      // const callbackGasLimit = BigInt(500000);
-      // const callbackFee = callbackGasPrice * callbackGasLimit;
+      const listHash = await walletClient?.writeContract(listRequest);
+      console.log('listHash', listHash);
 
-      const callbackDataCreateGroup = solidityPack(
-        ['address'],
-        [address],
-      ) as Address;
+      if (listHash) {
+        const tx = await publicClient.waitForTransactionReceipt({
+          hash: listHash,
+        });
+        console.log('list tx', tx);
+      }
 
-      console.log('NEW_MARKETPLACE_CONTRACT_ADDRESS', {
-        appAddress: NEW_MARKETPLACE_CONTRACT_ADDRESS,
-        refundAddress: address,
-        failureHandleStrategy: 2, // SkipOnFail
-        callbackData: callbackDataCreateGroup,
-      });
+      let groupId = BigInt(0);
 
-      const createGroupData = encodeFunctionData({
-        abi: GroupHubAbi,
-        // abi: [
-        //   'prepareCreateGroup(address,address,string,uint256,(address,address,uint8,bytes))',
-        // ],
-        functionName: 'prepareCreateGroup',
-        args: [
-          address,
-          NEW_MARKETPLACE_CONTRACT_ADDRESS,
-          // groupName,
-          'test-group',
-          callbackGasLimit,
-          {
-            appAddress: NEW_MARKETPLACE_CONTRACT_ADDRESS,
-            refundAddress: address,
-            failureHandleStrategy: 2, // SkipOnFail
-            callbackData: callbackDataCreateGroup,
-          },
-        ],
-      });
+      while (true) {
+        groupId = await publicClient.readContract({
+          abi: MarketplaceAbi,
+          address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
+          functionName: 'getGroupId',
+          args: [groupName],
+        });
+        console.log('groupId', groupId);
 
-      console.log('createGroupData', createGroupData);
+        await sleep(5000);
+
+        if (groupId !== BigInt(0)) {
+          break;
+        }
+      }
 
       const policyDataToBindGroupToObject = Policy.encode({
         id: '0',
@@ -217,31 +272,23 @@ export const useList = ({
         ],
         principal: {
           type: PrincipalType.PRINCIPAL_TYPE_GNFD_GROUP,
-          value: GRNToString(newGroupGRN(address as string, groupName)),
+          value: String(groupId),
         },
       }).finish();
 
-      const callbackDataCreatePolicy = solidityPack(
-        ['address', 'uint256', 'uint256', 'uint256', 'uint256'],
-        [address, groupId, bucketId, objectId, objectPrice],
-      ) as Address;
+      // const callbackDataCreatePolicy = solidityPack(
+      //   ['address', 'uint256', 'uint256', 'uint256', 'uint256'],
+      //   [address, groupId, bucketId, objectId, objectPrice],
+      // ) as Address;
 
-      const createPolicyData = encodeFunctionData({
-        abi: PermissonHubAbi,
-        functionName: 'prepareCreatePolicy',
-        args: [
-          address,
-          toHex(policyDataToBindGroupToObject),
-          {
-            appAddress: NEW_MARKETPLACE_CONTRACT_ADDRESS,
-            refundAddress: address,
-            failureHandleStrategy: 2, // SkipOnFail
-            callbackData: callbackDataCreatePolicy,
-          },
-        ],
-      });
+      // const createPolicyData = encodeFunctionData({
+      //   abi: PermissonHubAbi,
+      //   functionName: 'prepareCreatePolicy',
+      //   args: [address, toHex(policyDataToBindGroupToObject)],
+      // });
 
-      const data = [createGroupData, createPolicyData];
+      // console.log('createPolicyData', createPolicyData);
+      // const data = [createPolicyData];
 
       // const values = [totalRelayFee + callbackFee, totalRelayFee + callbackFee];
       // const totalValue = values.reduce((a, b) => a + b);
@@ -249,25 +296,24 @@ export const useList = ({
       const totalValue = totalFee.reduce((a, b) => a + b);
       console.log('totalValue', totalValue);
 
-      const { request } = await publicClient.simulateContract({
-        account: address,
-        abi: parseAbi(MultiMessageAbi),
-        address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
-        functionName: 'sendMessages',
-        args: [
-          [contracts.GroupHubAddress, contracts.PermissionHubAddress],
-          data,
-          totalFee,
-        ],
-        value: totalValue,
-      });
+      const { request: permissonCreatePolicyRequest } =
+        await publicClient.simulateContract({
+          account: address,
+          abi: PermissonHubAbi,
+          address: contracts.PermissionHubAddress,
+          functionName: 'createPolicy',
+          args: [toHex(policyDataToBindGroupToObject)],
+          value: realyFee + ackRelayFee,
+        });
 
-      const hash = await walletClient?.writeContract(request);
-      console.log('hash', hash);
+      const createPolicyHash = await walletClient?.writeContract(
+        permissonCreatePolicyRequest,
+      );
+      console.log('hash', createPolicyHash);
 
-      if (hash) {
+      if (createPolicyHash) {
         const tx = await publicClient.waitForTransactionReceipt({
-          hash,
+          hash: createPolicyHash,
         });
         console.log('tx', tx);
       }

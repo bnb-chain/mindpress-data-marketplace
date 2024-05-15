@@ -8,8 +8,6 @@ interface IListAtom {
     price: bigint;
     imageUrl: string;
     desc: string;
-    // create_at: number;
-    // payload_size: number;
   };
 }
 
