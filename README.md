@@ -1,18 +1,18 @@
-# Greenfield Marketplace
+# Mindpress Marketplace
 
-Greenfield Data marketplace is a data exchange platform where users can freely create, list, trade, and sell data assets, including digital publications, scientific experimental data, and specific domain data, or even NFT can be treated as a kind of data.
+Mindpress marketplace is a data exchange platform where users can freely create, list, trade, and sell data assets, including digital publications, scientific experimental data, and specific domain data, or even NFT can be treated as a kind of data.
 
 ### Demo link
 
-[BNB Greenfield Data Marketplace](https://gnfd-testnet-sp4.bnbchain.org/view/data-marketplace/index.html)
+[Mindpress Marketplace](https://gnfd-testnet-sp4.bnbchain.org/view/data-marketplace/index.html)
 
 ### Start the project
 
 Clone the project and install dependencies:
 
 ```bash
-> git clone https://github.com/bnb-chain/greenfield-data-marketplace-frontend.git
-> cd greenfield-data-marketplace-frontend
+> git clone git@github.com:bnb-chain/mindpress-marketplace.git
+> cd mindpress-marketplace
 > pnpm install
 > cp .env.example .env.development.local
 ```
@@ -27,12 +27,6 @@ abd then run example:
 
 ```bash
 > pnpm run start
-```
-
-if you want to add dependency:
-
-```bash
-> pnpm i react
 ```
 
 ### Publish the project

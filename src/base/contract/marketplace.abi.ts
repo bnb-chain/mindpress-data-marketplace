@@ -715,6 +715,19 @@ export const MarketplaceAbi = [
   },
   {
     inputs: [],
+    name: 'CACHE_MIN_LIST_GROUPS',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
     name: 'CROSS_CHAIN',
     outputs: [
       {
@@ -1601,6 +1614,44 @@ export const MarketplaceAbi = [
         internalType: 'address',
         name: '',
         type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'lister',
+        type: 'address',
+      },
+    ],
+    name: 'getAllListGroupId',
+    outputs: [
+      {
+        internalType: 'uint256[]',
+        name: '',
+        type: 'uint256[]',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'address',
+        name: 'lister',
+        type: 'address',
+      },
+    ],
+    name: 'getListGroupId',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: 'id',
+        type: 'uint256',
       },
     ],
     stateMutability: 'view',

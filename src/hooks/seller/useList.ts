@@ -5,6 +5,7 @@ import {
 } from '@bnb-chain/greenfield-cosmos-types/greenfield/permission/common';
 import { Policy } from '@bnb-chain/greenfield-cosmos-types/greenfield/permission/types';
 import { ResourceType } from '@bnb-chain/greenfield-cosmos-types/greenfield/resource/types';
+import { GRNToString, newGroupGRN } from '@bnb-chain/greenfield-js-sdk';
 import { solidityPack } from 'ethers/lib/utils';
 import { useEffect, useState } from 'react';
 import { Address, encodeFunctionData, parseAbi, toHex } from 'viem';
@@ -18,9 +19,11 @@ import {
 import { CrossChainAbi } from '../../base/contract/crossChain.abi';
 import { GroupHubAbi } from '../../base/contract/groupHub.abi';
 import { GroupTokenAbi } from '../../base/contract/groupToken.abi';
+import { MarketplaceAbi } from '../../base/contract/marketplace.abi';
 import { MultiMessageAbi } from '../../base/contract/multimessage.abi';
 import { PermissonHubAbi } from '../../base/contract/permissonHub.abi';
 import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
+import { generateGroupName } from '../../utils';
 import { useGetContractAddresses } from './useGetContractAddresses';
 
 interface Params {
@@ -137,6 +140,7 @@ export const useList = ({
     try {
       if (!isApproved) {
         await doApprove();
+        return;
       }
 
       // create group
@@ -153,7 +157,15 @@ export const useList = ({
       //   functionName: 'callbackGasPrice',
       // });
 
-      const groupName = '';
+      const groupId = await publicClient.readContract({
+        abi: MarketplaceAbi,
+        address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
+        functionName: 'getListGroupId',
+        args: [address],
+      });
+
+      // TODO: group name?
+      const groupName = generateGroupName(String(bucketId), String(objectId));
       // const callbackGasLimit = BigInt(500000);
       // const callbackFee = callbackGasPrice * callbackGasLimit;
 
@@ -173,7 +185,7 @@ export const useList = ({
         functionName: 'prepareCreateGroup',
         args: [
           address,
-          address,
+          NEW_MARKETPLACE_CONTRACT_ADDRESS,
           groupName,
           callbackGasLimit,
           {
@@ -198,17 +210,13 @@ export const useList = ({
         ],
         principal: {
           type: PrincipalType.PRINCIPAL_TYPE_GNFD_GROUP,
-          value: '', // TODO: groupId?
+          value: GRNToString(newGroupGRN(address as string, groupName)),
         },
       }).finish();
 
       const callbackDataCreatePolicy = solidityPack(
-        ['uint8', 'address', 'uint256'],
-        [
-          2, // create policy
-          address,
-          objectId,
-        ],
+        ['address', 'uint256', 'uint256', 'uint256', 'uint256'],
+        [address, groupId, bucketId, objectId, objectPrice],
       ) as Address;
 
       const createPolicyData = encodeFunctionData({
@@ -232,8 +240,10 @@ export const useList = ({
       // const totalValue = values.reduce((a, b) => a + b);
 
       const totalValue = totalFee.reduce((a, b) => a + b);
+      console.log('totalValue', totalValue);
 
       const { request } = await publicClient.simulateContract({
+        account: address,
         abi: parseAbi(MultiMessageAbi),
         address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
         functionName: 'sendMessages',

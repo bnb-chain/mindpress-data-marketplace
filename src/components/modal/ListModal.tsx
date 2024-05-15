@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { ColoredWarningIcon } from '@totejs/icons';
+import { ColoredWarningIcon, ReverseVIcon } from '@totejs/icons';
 import {
   Box,
   Button,
@@ -9,6 +9,7 @@ import {
   QDrawerCloseButton,
   QDrawerFooter,
   QDrawerHeader,
+  Stack,
 } from '@totejs/uikit';
 import { useImmerAtom } from 'jotai-immer';
 import { useCallback, useMemo } from 'react';
@@ -20,6 +21,7 @@ import { useList } from '../../hooks/seller/useList';
 import { useGetBnbUsdtExchangeRate } from '../../hooks/useGetBnbUsdtExchangeRate';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';
+import { Loader } from '../Loader';
 
 // interface ListModalProps {
 //   // isOpen: boolean;
@@ -39,7 +41,6 @@ export const ListModal = () => {
   // const { data: categories } = useGetCatoriesMap();
 
   const { chain } = useNetwork();
-  console.log('chain', chain);
 
   const reset = useCallback(() => {
     setListInfo((draft) => {
@@ -65,6 +66,9 @@ export const ListModal = () => {
     },
   });
 
+  // const isApproved = false;
+  // console.log('isApproved', isApproved);
+
   const { data: usdExchange, isLoading: usdExchangeIsLoading } =
     useGetBnbUsdtExchangeRate();
 
@@ -72,18 +76,21 @@ export const ListModal = () => {
     if (totalFee.length === 0) return BigInt(0);
     return totalFee?.reduce((a, b) => a + b);
   }, [totalFee]);
-  console.log(
-    'totalFee',
-    formatEther(totalFees),
-    BigInt(parseInt(usdExchange)),
-  );
+  // console.log(
+  //   'totalFee',
+  //   formatEther(totalFees),
+  //   BigInt(parseInt(usdExchange)),
+  // );
 
   const BSC_FEE_SUFF = useMemo(() => {
     if (!BscBalanceVal) return false;
     return BscBalanceVal.value >= totalFees;
   }, [BscBalanceVal, totalFees]);
 
-  const usd = formatEther(BigInt(parseInt(usdExchange)) * totalFees);
+  const usd = useMemo(() => {
+    if (!usdExchange) return '0';
+    return formatEther(BigInt(parseInt(usdExchange)) * totalFees);
+  }, [totalFees, usdExchange]);
 
   return (
     <QDrawer
@@ -119,11 +126,73 @@ export const ListModal = () => {
 
       <QDrawerFooter>
         <Flex flexDirection={'column'} gap={6} w="100%">
+          <Stack
+            mb="24px"
+            color="#F7F7F8"
+            pos="relative"
+            sx={{
+              '.line': {
+                w: '1px',
+                h: '30px',
+                bg: '#373943',
+                pos: 'absolute',
+                left: '4px',
+                top: '13px',
+              },
+              '&> .item': {
+                pos: 'relative',
+                pl: '20px',
+                my: '7px',
+                fontSize: '14px',
+                fontWeight: 600,
+              },
+              '&>.item:before': {
+                content: '""',
+                display: 'block',
+                width: '9px',
+                height: '9px',
+                borderRadius: '50%',
+                position: 'absolute',
+                left: 0,
+                top: '5px',
+              },
+              '&>.approve:before': {
+                background: isApproved ? '#F7F7F8' : '#373943',
+              },
+
+              '&>.list': {
+                color: '#8C8F9B',
+              },
+              '&>.list:before': {
+                background: '#373943',
+              },
+            }}
+          >
+            <Box className="line" />
+            <Box className="item approve">Approve</Box>
+            <Box className="item list">List on BSC</Box>
+          </Stack>
+
           {!BSC_FEE_SUFF && (
             <BalanceWarn>
               <ColoredWarningIcon size="sm" color="#ff6058" mr="4px" />{' '}
               Insufficient BSC Balance
             </BalanceWarn>
+          )}
+
+          {chain && chain.id !== BSC_CHAIN.id && (
+            <Button
+              bg="#FFA260"
+              h="48px"
+              color="#181A1E"
+              fontWeight={700}
+              onClick={() => {
+                switchNetwork?.(BSC_CHAIN.id);
+              }}
+            >
+              <ReverseVIcon />
+              Switch to BSC Network
+            </Button>
           )}
 
           {chain && chain.id === BSC_CHAIN.id && (
@@ -134,9 +203,10 @@ export const ListModal = () => {
                 await doList();
               }}
               isLoading={listStart}
+              loadingText={<Loader size={30} />}
               disabled={!BSC_FEE_SUFF || listStart}
             >
-              List
+              {isApproved ? 'List' : 'Approve'}
             </YellowButton>
           )}
         </Flex>
