@@ -1,3 +1,4 @@
+import NiceModal from '@ebay/nice-modal-react';
 import styled from '@emotion/styled';
 import { ColoredWarningIcon, ReverseVIcon } from '@totejs/icons';
 import {
@@ -10,6 +11,7 @@ import {
   QDrawerFooter,
   QDrawerHeader,
   Stack,
+  Text,
 } from '@totejs/uikit';
 import { useImmerAtom } from 'jotai-immer';
 import { useCallback, useMemo } from 'react';
@@ -19,15 +21,11 @@ import { listAtom } from '../../atoms/listAtom';
 import { BSC_CHAIN } from '../../env';
 import { useList } from '../../hooks/seller/useList';
 import { useGetBnbUsdtExchangeRate } from '../../hooks/useGetBnbUsdtExchangeRate';
+import { useGetItemByObjId } from '../../hooks/useGetItemByObjId';
+import { Loader } from '../Loader';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';
-import { Loader } from '../Loader';
-
-// interface ListModalProps {
-//   // isOpen: boolean;
-//   // handleOpen: (show: boolean) => void;
-//   // detail: any;
-// }
+import { Tips } from './Tips';
 
 export const ListModal = () => {
   const [listInfo, setListInfo] = useImmerAtom(listAtom);
@@ -42,15 +40,14 @@ export const ListModal = () => {
 
   const { chain } = useNetwork();
 
+  const { refetch: refetchListStatus } = useGetItemByObjId(
+    String(listInfo.data.objectId),
+  );
+
   const reset = useCallback(() => {
     setListInfo((draft) => {
       draft.open = false;
     });
-    // setPrice('');
-    // setDesc('');
-    // setImgUrl('');
-    // setCategory('');
-    // handleOpen(false);
   }, [setListInfo]);
 
   const {
@@ -64,10 +61,34 @@ export const ListModal = () => {
       objectId: listInfo.data.objectId,
       objectPrice: listInfo.data.price,
     },
-  });
+    onSuccess: async () => {
+      NiceModal.show(Tips, {
+        title: `Please switch to correct account`,
+        content: (
+          <Box>
+            <img src={listInfo.data.imageUrl} />
+            <Text as="h2" fontSize="24px">
+              Your item has been listed!
+            </Text>
+            <Text fontSize="14px">
+              <Box as="span" color="">
+                Cement panel ceiling square block pattern Lighting Architecture
+                details
+              </Box>{' '}
+              has been listed on MindPress. You can click the button below to
+              <Box as="a" href="" target="_blank">
+                check the listing or check on explorer.
+              </Box>
+            </Text>
+          </Box>
+        ),
+        buttonText: 'View Listing',
+      });
 
-  // const isApproved = false;
-  // console.log('isApproved', isApproved);
+      // refetch object status
+      await refetchListStatus();
+    },
+  });
 
   const { data: usdExchange, isLoading: usdExchangeIsLoading } =
     useGetBnbUsdtExchangeRate();
@@ -76,11 +97,6 @@ export const ListModal = () => {
     if (totalFee.length === 0) return BigInt(0);
     return totalFee?.reduce((a, b) => a + b);
   }, [totalFee]);
-  // console.log(
-  //   'totalFee',
-  //   formatEther(totalFees),
-  //   BigInt(parseInt(usdExchange)),
-  // );
 
   const BSC_FEE_SUFF = useMemo(() => {
     if (!BscBalanceVal) return false;

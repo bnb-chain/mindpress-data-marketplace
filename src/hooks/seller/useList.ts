@@ -170,23 +170,28 @@ export const useList = ({
       // const callbackFee = callbackGasPrice * callbackGasLimit;
 
       const callbackDataCreateGroup = solidityPack(
-        ['uint8', 'address', 'uint256', 'uint256', 'uint256'],
-        [
-          1, // create group
-          address,
-          bucketId,
-          objectId,
-          objectPrice,
-        ],
+        ['address'],
+        [address],
       ) as Address;
+
+      console.log('NEW_MARKETPLACE_CONTRACT_ADDRESS', {
+        appAddress: NEW_MARKETPLACE_CONTRACT_ADDRESS,
+        refundAddress: address,
+        failureHandleStrategy: 2, // SkipOnFail
+        callbackData: callbackDataCreateGroup,
+      });
 
       const createGroupData = encodeFunctionData({
         abi: GroupHubAbi,
+        // abi: [
+        //   'prepareCreateGroup(address,address,string,uint256,(address,address,uint8,bytes))',
+        // ],
         functionName: 'prepareCreateGroup',
         args: [
           address,
           NEW_MARKETPLACE_CONTRACT_ADDRESS,
-          groupName,
+          // groupName,
+          'test-group',
           callbackGasLimit,
           {
             appAddress: NEW_MARKETPLACE_CONTRACT_ADDRESS,
@@ -196,6 +201,8 @@ export const useList = ({
           },
         ],
       });
+
+      console.log('createGroupData', createGroupData);
 
       const policyDataToBindGroupToObject = Policy.encode({
         id: '0',

@@ -82,10 +82,6 @@ export const Uploader = () => {
     if (!spaceExist) {
       await doCreateSpace();
     }
-    // else {
-    //   await doDelete();
-    //   return;
-    // }
 
     if (files) {
       setUploadInfo((draft) => {

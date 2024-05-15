@@ -12,14 +12,14 @@ import {
   Textarea,
 } from '@totejs/uikit';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
-import { Option, Select } from '../ui/select';
-import BSCIcon from '../svgIcon/BSCIcon';
-import { useAccount } from 'wagmi';
-import { YellowButton } from '../ui/buttons/YellowButton';
-import { listAtom } from '../../atoms/listAtom';
 import { useImmerAtom } from 'jotai-immer';
+import { useAccount } from 'wagmi';
+import * as Yup from 'yup';
+import { listAtom } from '../../atoms/listAtom';
+import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
+import BSCIcon from '../svgIcon/BSCIcon';
+import { YellowButton } from '../ui/buttons/YellowButton';
+import { Option, Select } from '../ui/select';
 
 interface FormValues {
   name: string;
@@ -50,8 +50,9 @@ export const ListForm: React.FC<IProps> = ({
   imageUrl,
 }) => {
   const { address } = useAccount();
-  const [listInfo, setListInfo] = useImmerAtom(listAtom);
-  console.log('listInfo', listInfo);
+  const [_, setListInfo] = useImmerAtom(listAtom);
+
+  // console.log('listInfo', listInfo);
   const formik = useFormik<FormValues>({
     initialValues: {
       name: '',

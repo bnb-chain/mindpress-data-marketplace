@@ -8,13 +8,14 @@ import { useGfGetObjInfo } from '../../hooks/useGfGetObjInfo';
 import { useSelectEndpoint } from '../../hooks/useSelectEndpoint';
 import { ListForm } from '../form/ListForm';
 import { MPLink } from '../ui/MPLink';
+import { useGetItemByObjId } from '../../hooks/useGetItemByObjId';
+import { isEmpty } from 'lodash';
 
 /**
  * Have not been listed
  * Show bucket or object detail info
  */
 export const Object = () => {
-  const navigator = useNavigate();
   const [p] = useSearchParams();
   const objectId = p.get('oid') as string;
   const bucketId = p.get('bid') as string;
@@ -25,9 +26,7 @@ export const Object = () => {
 
   // if objectItemInfo is `{}`,
   // means this object is not listed
-  // const { data: objectItemInfo } = useGetItemByObjId(objectId);
-
-  // console.log('objectItemInfo', objectItemInfo);
+  const { data: objectItemInfo } = useGetItemByObjId(objectId);
 
   // const { num, toUpdate } = useCollectionItems(
   //   bucketData?.bucketInfo?.bucketName,
@@ -96,12 +95,14 @@ export const Object = () => {
         </ImgCon>
 
         <Flex flex="1" gap={24} flexDir="column" justifyContent={'start'}>
-          <ListForm
-            owner={objectData.objectInfo?.owner}
-            bucketId={bucketId}
-            objectId={objectId}
-            imageUrl={imageUrl}
-          />
+          {isEmpty(objectItemInfo) && (
+            <ListForm
+              owner={objectData.objectInfo?.owner}
+              bucketId={bucketId}
+              objectId={objectId}
+              imageUrl={imageUrl}
+            />
+          )}
         </Flex>
       </ResourceInfo>
     </>
