@@ -4,7 +4,6 @@
 import { useCallback } from 'react';
 import { useAccount } from 'wagmi';
 import { MarketPlaceContract } from '../base/contract/marketPlaceContract';
-import { BSC_SEND_GAS_FEE } from '../env';
 import { getWeb3 } from '../base/contract/getWeb3';
 
 export const useDelist = () => {

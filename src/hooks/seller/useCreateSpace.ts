@@ -17,7 +17,7 @@ import { BucketHubAbi } from '../../base/contract/bucketHub.abi';
 import { CrossChainAbi } from '../../base/contract/crossChain.abi';
 import { MarketplaceAbi } from '../../base/contract/marketplace.abi';
 import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
-import { getSpaceName } from '../../utils/space';
+import { getSpaceName, sleep } from '../../utils/space';
 import { useGetContractAddresses } from './useGetContractAddresses';
 import { client, selectSp } from '../../utils/gfSDK';
 
@@ -195,6 +195,23 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
           hash,
         });
         console.log('tx', tx);
+      }
+
+      while (true) {
+        let bucketRes;
+        try {
+          bucketRes = await client.bucket.headBucket(spaceName);
+        } catch (e) {
+          // ...
+        }
+
+        await sleep(5000);
+        console.log('bucket res', bucketRes);
+
+        if (bucketRes) {
+          setSpaceExist(true);
+          break;
+        }
       }
 
       await onSuccess?.();

@@ -10,6 +10,7 @@ import { ListForm } from '../form/ListForm';
 import { MPLink } from '../ui/MPLink';
 import { useGetItemByObjId } from '../../hooks/useGetItemByObjId';
 import { isEmpty } from 'lodash';
+import { THUMB } from '../../utils/space';
 
 /**
  * Have not been listed
@@ -74,7 +75,7 @@ export const Object = () => {
     return <NoData />;
   }
 
-  const imageUrl = `${endpoint}/view/${bucketData.bucketInfo?.bucketName}/${objectData.objectInfo?.objectName}`;
+  const imageUrl = `${endpoint}/view/${bucketData.bucketInfo?.bucketName}/${THUMB}/${objectData.objectInfo?.objectName}`;
 
   return (
     <>

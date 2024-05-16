@@ -13,7 +13,7 @@ export const Tips = NiceModal.create<{
   title: string;
   content: React.ReactNode;
   buttonText: string;
-  buttonClick?: () => void;
+  buttonClick?: () => Promise<void>;
 }>(({ title, content, buttonText, buttonClick }) => {
   const modal = useModal();
 
@@ -24,9 +24,10 @@ export const Tips = NiceModal.create<{
       <CustomBody>{content}</CustomBody>
       <ModalFooter>
         <BlackSolidButton
-          onClick={() => {
+          onClick={async () => {
             modal.hide();
-            buttonClick?.();
+            await buttonClick?.();
+            modal.resolve();
           }}
         >
           {buttonText}

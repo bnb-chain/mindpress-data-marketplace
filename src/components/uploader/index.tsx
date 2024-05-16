@@ -9,7 +9,7 @@ import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
 import { useCreateSpace } from '../../hooks/seller/useCreateSpace';
 import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
 import { client } from '../../utils/gfSDK';
-import { getSpaceName, sleep } from '../../utils/space';
+import { THUMB, getSpaceName, shortObjectName, sleep } from '../../utils/space';
 import { BlackSolidButton } from '../ui/buttons/BlackButton';
 import { DragBox } from './DragArea';
 import { UploadArea } from './UploadArea';
@@ -34,7 +34,7 @@ export const Uploader = () => {
     },
     onSuccess: async () => {
       // ...
-      await sleep(40000);
+      // await sleep(40000);
     },
   });
 
@@ -104,10 +104,10 @@ export const Uploader = () => {
           </Box>
         ),
         buttonText: 'Continue',
-        // buttonClick: async () => {},
+        buttonClick: async () => {
+          await doCreateSpace();
+        },
       });
-
-      await doCreateSpace();
     }
 
     if (files) {
@@ -125,6 +125,8 @@ export const Uploader = () => {
       //   seed: data?.seedString,
       // });
 
+      const now = Date.now().toString();
+
       console.log('offchainData', offchainData);
 
       const uploadTasks = files.map((file, index) => {
@@ -137,7 +139,9 @@ export const Uploader = () => {
             client.object.delegateUploadObject(
               {
                 bucketName,
-                objectName: Date.now().toString() + '.thumb.' + file.name,
+                // objectName: Date.now().toString() + '.thumb.' + file.name,
+                objectName:
+                  `${THUMB}/` + shortObjectName(file.name, `${now}_${index}`),
                 body: result,
                 delegatedOpts: {
                   visibility: VisibilityType.VISIBILITY_TYPE_PUBLIC_READ,
@@ -165,10 +169,11 @@ export const Uploader = () => {
         return client.object.delegateUploadObject(
           {
             bucketName,
-            objectName: Date.now().toString() + file.name,
+            // objectName: Date.now().toString() + file.name,
+            objectName: shortObjectName(file.name, `${now}_${index}`),
             body: file,
             delegatedOpts: {
-              visibility: VisibilityType.VISIBILITY_TYPE_PUBLIC_READ,
+              visibility: VisibilityType.VISIBILITY_TYPE_PRIVATE,
             },
             onProgress: (e: OnProgressEvent) => {
               console.log('progress: ', e.percent);

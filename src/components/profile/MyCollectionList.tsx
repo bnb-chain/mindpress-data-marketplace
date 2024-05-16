@@ -25,7 +25,7 @@ import { DefaultButton } from '../ui/buttons/DefaultButton';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { MPLink } from '../ui/MPLink';
 import { useSelectEndpoint } from '../../hooks/useSelectEndpoint';
-import { getSpaceName } from '../../utils/space';
+import { THUMB, getSpaceName } from '../../utils/space';
 import { Address, useAccount } from 'wagmi';
 
 // TODO:
@@ -100,11 +100,12 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                 <ImageBox>
                   <Image
                     // TODO: bucket name
-                    src={`${endpoint}/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`}
+                    src={`${endpoint}/view/${BUCKET_NAME}/${THUMB}/${item.ObjectInfo.ObjectName}`}
                     fallbackSrc={`https://picsum.photos/seed/${item.ObjectInfo.ObjectName.replaceAll(
                       ' ',
                       '',
                     )}/400/400`}
+                    alt={`${endpoint}/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`}
                   />
 
                   <VStack className="layer" justifyContent="center">

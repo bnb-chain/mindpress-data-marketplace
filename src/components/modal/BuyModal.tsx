@@ -21,7 +21,7 @@ import { formatUnits, parseUnits } from 'viem';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { buyAtom } from '../../atoms/buyAtom';
 import { OPBNB } from '../../config/wallet';
-import { BSC_CHAIN_ID, NETWORK } from '../../env';
+import { BSC_CHAIN, BSC_CHAIN_ID, NETWORK } from '../../env';
 import { useBNBPrice } from '../../hooks/useBNBPrice';
 import { useBuy } from '../../hooks/useBuy';
 import { useChainBalance } from '../../hooks/useChainBalance';
@@ -33,6 +33,8 @@ export const BuyModal = () => {
   const [buys, setBuys] = useImmerAtom(buyAtom);
 
   const { groupId, price, groupName, ownerAddress } = buys.buyData;
+
+  console.log('buys', buys);
 
   const { buy, relayFee } = useBuy(groupName, ownerAddress, price);
 
@@ -137,7 +139,7 @@ export const BuyModal = () => {
       </CustomBody>
       {!BSC_FEE_SUFF && <BalanceWarn>Insufficient Balance</BalanceWarn>}
       <QDrawerFooter>
-        {chain && chain.id === BSC_CHAIN_ID && (
+        {chain && chain.id === BSC_CHAIN.id && (
           <BigYellowButton
             isLoading={buys.buying}
             loadingText={<Loader size={30} />}
@@ -154,14 +156,14 @@ export const BuyModal = () => {
             Buy
           </BigYellowButton>
         )}
-        {chain && chain.id !== BSC_CHAIN_ID ? (
+        {chain && chain.id !== BSC_CHAIN.id ? (
           <BigYellowButton
             width={'100%'}
             onClick={() => {
-              switchNetwork?.(BSC_CHAIN_ID);
+              switchNetwork?.(BSC_CHAIN.id);
             }}
           >
-            Switch to {OPBNB.name} {NETWORK}
+            Switch to BSC {NETWORK}
           </BigYellowButton>
         ) : null}
       </QDrawerFooter>

@@ -63,11 +63,11 @@ export const ListModal = () => {
     },
     onSuccess: async () => {
       NiceModal.show(Tips, {
-        title: `Please switch to correct account`,
+        title: ``,
         content: (
           <Box>
             <img src={listInfo.data.imageUrl} />
-            <Text as="h2" fontSize="24px">
+            <Text as="h2" fontSize="24px" mt="20px">
               Your item has been listed!
             </Text>
             <Text fontSize="14px">
