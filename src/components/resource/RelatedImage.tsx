@@ -23,6 +23,10 @@ export const RelatedImage = ({ title, categoryId }: IProps) => {
 
   const allUrl = `/search?c=${categoryId || 100}`;
 
+  if (categoryRelatedList?.total === 0) {
+    return null;
+  }
+
   return (
     <>
       <Flex alignItems="center" justifyContent="space-between">

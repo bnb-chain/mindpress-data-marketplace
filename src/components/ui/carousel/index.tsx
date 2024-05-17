@@ -1,16 +1,14 @@
 import styled from '@emotion/styled';
 import { BackIcon, GoIcon } from '@totejs/icons';
-import { Box, Center, Flex, Image, Stack } from '@totejs/uikit';
+import { Box, Center, Flex, Image } from '@totejs/uikit';
 import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick-theme.css';
 import 'slick-carousel/slick/slick.css';
 import { Item } from '../../../utils/apis/types';
-import { MPLink } from '../MPLink';
-import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { useNavigate } from 'react-router-dom';
-import { trimLongStr } from '../../../utils';
 import { HoverStatus } from '../../HoverStatus';
+import { MPLink } from '../MPLink';
 
 interface IProps {
   list: Item[];
@@ -19,7 +17,6 @@ interface IProps {
 export const Carousel = ({ list }: IProps) => {
   const ref = useRef() as any;
   const [index, setIndex] = useState(0);
-  const navigator = useNavigate();
   const [activeItem, setActiveItem] = useState<Item | null>(null);
 
   const settings = {
@@ -46,10 +43,14 @@ export const Carousel = ({ list }: IProps) => {
           return (
             <Card
               key={item.id}
-              to={`/resource?id=${item.id}&path=/`}
+              to={`/resource?id=${item.id}&gid=${item.groupId}`}
               onMouseEnter={() => {
+                console.log('11', item);
                 setActiveItem(item);
               }}
+              // onClick={() => {
+              //   navigator(`/resource?id=${item.id}&gid=${item.groupId}`);
+              // }}
             >
               <Image
                 src={item.url}
@@ -138,17 +139,15 @@ const Card = styled(MPLink)`
 const Arrows = styled(Flex)`
   justify-content: space-between;
   align-items: center;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
 `;
 
 const ArrowBox = styled(Center)`
   height: 100%;
+  position: absolute;
+  top: 0;
 
   &:nth-of-type(1) {
+    left: 0;
     background: linear-gradient(
       90deg,
       #181a1e 0%,
@@ -158,6 +157,7 @@ const ArrowBox = styled(Center)`
   }
 
   &:nth-of-type(2) {
+    right: 0;
     background: linear-gradient(
       270deg,
       #181a1e 0%,

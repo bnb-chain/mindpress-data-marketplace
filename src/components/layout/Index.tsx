@@ -5,7 +5,6 @@ import { useModal } from '../../hooks/useModal';
 import { ActionResult } from '../modal/ActionResult';
 import { DelistModal } from '../modal/DelistModal';
 import { ListModal } from '../modal/ListModal';
-import { ListProcess } from '../modal/ListProcess';
 import { BuyModal } from '../modal/BuyModal';
 import Footer from './Footer';
 import Header from './Header';
@@ -27,14 +26,6 @@ export default function Layout({ children }: { children: ReactNode }) {
     result,
     callBack,
   } = modalData.modalState;
-
-  const handleListOpen = useCallback(() => {
-    modalData.modalDispatch({ type: 'CLOSE_LIST' });
-  }, [modalData]);
-
-  const handleListProcessOpen = useCallback(() => {
-    modalData.modalDispatch({ type: 'CLOSE_LIST_PROCESS' });
-  }, [modalData]);
 
   const handleDelistOpen = useCallback(() => {
     modalData.modalDispatch({ type: 'CLOSE_DELIST' });

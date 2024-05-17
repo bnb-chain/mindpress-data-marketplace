@@ -20,6 +20,7 @@ import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { Option, Select } from '../ui/select';
+import { parseEther } from 'viem';
 
 interface FormValues {
   name: string;
@@ -72,6 +73,7 @@ export const ListForm: React.FC<IProps> = ({
           price: parseEther(v.price),
           imageUrl: imageUrl,
           desc: v.description,
+          categoryId: Number(v.category),
         };
       });
     },

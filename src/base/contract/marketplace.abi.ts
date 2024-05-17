@@ -734,19 +734,6 @@ export const MarketplaceAbi = [
   },
   {
     inputs: [],
-    name: 'CACHE_MIN_LIST_GROUPS',
-    outputs: [
-      {
-        internalType: 'uint256',
-        name: '',
-        type: 'uint256',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
     name: 'CROSS_CHAIN',
     outputs: [
       {
@@ -1471,6 +1458,30 @@ export const MarketplaceAbi = [
     type: 'function',
   },
   {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: '',
+        type: 'address',
+      },
+    ],
+    name: 'buyPrice',
+    outputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [],
     name: 'callbackGasLimit',
     outputs: [
@@ -1683,25 +1694,6 @@ export const MarketplaceAbi = [
   {
     inputs: [
       {
-        internalType: 'address',
-        name: 'lister',
-        type: 'address',
-      },
-    ],
-    name: 'getAllListGroupId',
-    outputs: [
-      {
-        internalType: 'uint256[]',
-        name: '',
-        type: 'uint256[]',
-      },
-    ],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      {
         internalType: 'string',
         name: 'groupName',
         type: 'string',
@@ -1721,17 +1713,91 @@ export const MarketplaceAbi = [
   {
     inputs: [
       {
+        internalType: 'uint256',
+        name: 'groupId',
+        type: 'uint256',
+      },
+      {
         internalType: 'address',
-        name: 'lister',
+        name: 'buyer',
         type: 'address',
       },
     ],
-    name: 'getListGroupId',
+    name: 'getListItem',
     outputs: [
       {
+        internalType: 'bool',
+        name: 'isBought',
+        type: 'bool',
+      },
+      {
+        internalType: 'string',
+        name: 'groupName',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'description',
+        type: 'string',
+      },
+      {
         internalType: 'uint256',
-        name: 'id',
+        name: 'categoryId',
         type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: 'creator',
+        type: 'address',
+      },
+      {
+        internalType: 'uint256',
+        name: 'price',
+        type: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256[]',
+        name: 'groupIds',
+        type: 'uint256[]',
+      },
+    ],
+    name: 'getListItems',
+    outputs: [
+      {
+        internalType: 'string[]',
+        name: 'groupNames',
+        type: 'string[]',
+      },
+      {
+        internalType: 'string[]',
+        name: 'descriptions',
+        type: 'string[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: 'categoryIds',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'address[]',
+        name: 'creators',
+        type: 'address[]',
+      },
+      {
+        internalType: 'uint256[]',
+        name: 'priceList',
+        type: 'uint256[]',
+      },
+      {
+        internalType: 'string[]',
+        name: 'urls',
+        type: 'string[]',
       },
     ],
     stateMutability: 'view',
@@ -1972,10 +2038,78 @@ export const MarketplaceAbi = [
         name: 'price',
         type: 'uint256',
       },
+      {
+        internalType: 'string',
+        name: 'description',
+        type: 'string',
+      },
+      {
+        internalType: 'uint256',
+        name: 'categoryId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'string',
+        name: 'url',
+        type: 'string',
+      },
     ],
     name: 'list',
     outputs: [],
     stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'listItems',
+    outputs: [
+      {
+        internalType: 'string',
+        name: 'groupName',
+        type: 'string',
+      },
+      {
+        internalType: 'string',
+        name: 'description',
+        type: 'string',
+      },
+      {
+        internalType: 'uint256',
+        name: 'categoryId',
+        type: 'uint256',
+      },
+      {
+        internalType: 'address',
+        name: 'creator',
+        type: 'address',
+      },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      {
+        internalType: 'uint256',
+        name: '',
+        type: 'uint256',
+      },
+    ],
+    name: 'listUrl',
+    outputs: [
+      {
+        internalType: 'string',
+        name: '',
+        type: 'string',
+      },
+    ],
+    stateMutability: 'view',
     type: 'function',
   },
   {

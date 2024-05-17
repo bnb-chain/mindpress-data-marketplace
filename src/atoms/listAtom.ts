@@ -8,6 +8,7 @@ interface IListAtom {
     price: bigint;
     imageUrl: string;
     desc: string;
+    categoryId: number;
   };
 }
 
@@ -19,5 +20,6 @@ export const listAtom = atomWithImmer<IListAtom>({
     price: BigInt(0),
     imageUrl: '',
     desc: '',
+    categoryId: 100,
   },
 });

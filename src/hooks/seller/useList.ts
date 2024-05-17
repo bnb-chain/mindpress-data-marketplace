@@ -37,6 +37,9 @@ interface Params {
     bucketId: bigint;
     objectId: bigint;
     objectPrice: bigint;
+    desc: string;
+    categoryId: bigint;
+    imageUrl: string;
   };
   onSuccess?: () => Promise<void>;
   onFailure?: () => Promise<void>;
@@ -45,7 +48,7 @@ interface Params {
 const callbackGasLimit = BigInt(500000);
 
 export const useList = ({
-  data: { bucketId, objectId, objectPrice },
+  data: { bucketId, objectId, desc, objectPrice, imageUrl, categoryId },
   onFailure,
   onSuccess,
 }: Params) => {
@@ -226,7 +229,7 @@ export const useList = ({
         abi: MarketplaceAbi,
         address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
         functionName: 'list',
-        args: [groupName, objectPrice],
+        args: [groupName, objectPrice, desc, BigInt(categoryId), imageUrl],
         value: realyFee + ackRelayFee + callbackFee,
         gas: BigInt(400000),
       });

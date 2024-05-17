@@ -57,7 +57,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
   const BUCKET_NAME = getSpaceName(address);
 
   const { data: listData, isLoading: listLoading } =
-    useGetObjInBucketListStatus(BUCKET_NAME, 0);
+    useGetObjInBucketListStatus(BUCKET_NAME, page);
 
   // console.log('listData', listData);
 
@@ -99,7 +99,6 @@ const MyCollectionList = ({ address }: ICollectionList) => {
               >
                 <ImageBox>
                   <Image
-                    // TODO: bucket name
                     src={`${endpoint}/view/${BUCKET_NAME}/${THUMB}/${item.ObjectInfo.ObjectName}`}
                     fallbackSrc={`https://picsum.photos/seed/${item.ObjectInfo.ObjectName.replaceAll(
                       ' ',

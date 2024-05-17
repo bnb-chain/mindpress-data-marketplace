@@ -17,14 +17,15 @@ export type ITEM_RELATION_ADDR =
  */
 export const useGetItemRelationWithAddr = (
   addr: string | undefined,
-  item: Item | undefined,
+  itemId: number,
+  ownerAddress: string,
 ) => {
   const [relation, setRelation] = useState<ITEM_RELATION_ADDR>('UNKNOWN');
 
   const { data, isLoading, refetch } = useGetPurchaseList({
     filter: {
       address: addr,
-      itemId: item?.id,
+      itemId,
     },
     limit: 10,
     offset: 0,
@@ -32,10 +33,10 @@ export const useGetItemRelationWithAddr = (
   });
 
   useEffect(() => {
-    if (!addr || !item) return;
+    if (!addr) return;
     if (isLoading || !data) return;
 
-    if (addr === item.ownerAddress) {
+    if (addr === ownerAddress) {
       setRelation('OWNER');
       return;
     }
@@ -45,7 +46,7 @@ export const useGetItemRelationWithAddr = (
     } else {
       setRelation('NOT_PURCHASE');
     }
-  }, [addr, data, isLoading, item]);
+  }, [addr, data, isLoading, ownerAddress]);
 
   return {
     relation,
@@ -56,6 +57,7 @@ export const useGetItemRelationWithAddr = (
 export const useGetRelationWithAddr = (
   addr: string | undefined,
   item: Item | null,
+  ownerAddress: string,
 ) => {
   const [relation, setRelation] = useState<ITEM_RELATION_ADDR>('UNKNOWN');
 
@@ -88,7 +90,7 @@ export const useGetRelationWithAddr = (
 
     // console.log('addr', addr, ownerAddress);
 
-    if (addr === item?.ownerAddress) {
+    if (addr === ownerAddress) {
       setRelation('OWNER');
       return;
     }
@@ -98,7 +100,7 @@ export const useGetRelationWithAddr = (
     } else {
       setRelation('NOT_PURCHASE');
     }
-  }, [addr, data, item?.ownerAddress]);
+  }, [addr, data, ownerAddress]);
 
   return {
     relation,

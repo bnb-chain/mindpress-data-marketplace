@@ -11,6 +11,7 @@ import { trimLongStr } from '../utils';
 import { Item } from '../utils/apis/types';
 import { DefaultButton } from './ui/buttons/DefaultButton';
 import { YellowButton } from './ui/buttons/YellowButton';
+import { useGetChainListItems } from '../hooks/buyer/useGetChainListItems';
 
 interface IProps {
   item: Item;
@@ -20,11 +21,14 @@ interface IProps {
 export const HoverStatus = ({ item, className }: IProps) => {
   const navigator = useNavigate();
   const { address, isConnected, isConnecting } = useAccount();
+  const { data: chainItemInfo, isLoading: isChainItemInfo } =
+    useGetChainListItems([BigInt(item.groupId)]);
+
   const {
     relation,
     isLoading: relationisLoading,
     downloadUrl,
-  } = useGetRelationWithAddr(address, item);
+  } = useGetRelationWithAddr(address, item, chainItemInfo?.creators?.[0] || '');
   const { onOpen } = useWalletKitModal();
   const [, setBuy] = useImmerAtom(buyAtom);
 

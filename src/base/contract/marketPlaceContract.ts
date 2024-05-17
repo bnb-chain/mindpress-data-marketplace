@@ -1,8 +1,8 @@
 // import { useGetChainProviders } from './useGetChainProviders';
 import Web3 from 'web3';
-import ABI from './marketplace_abi.json';
 import { AbiItem } from 'web3-utils';
-import { BSC_RPC_URL, MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
+import { BSC_RPC_URL, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
+import ABI from './marketplace_abi.json';
 
 export const MarketPlaceContract = (sign = true) => {
   // const gfProvider = new Web3.providers.HttpProvider(BSC_RPC_URL);
@@ -22,9 +22,10 @@ export const MarketPlaceContract = (sign = true) => {
     const gfProvider = new Web3.providers.HttpProvider(BSC_RPC_URL);
     web3 = new Web3(gfProvider);
   }
+
   const contractInstance = new web3.eth.Contract(
     ABI as AbiItem[],
-    MARKETPLACE_CONTRACT_ADDRESS,
+    NEW_MARKETPLACE_CONTRACT_ADDRESS,
   );
   return contractInstance;
 };

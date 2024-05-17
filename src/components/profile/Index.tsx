@@ -55,19 +55,6 @@ const ProfileList = (props: IProfileList) => {
       ) : (
         <MyCollectionList address={address} />
       )}
-
-      {/* {self ? (
-        currentTab === Type.Collections ? (
-          <MyCollectionList setShowButton={setShowButton}></MyCollectionList>
-        ) : (
-          <PurchaseList></PurchaseList>
-        )
-      ) : (
-        <OtherListedList
-          realAddress={realAddress}
-          self={self}
-        ></OtherListedList>
-      )} */}
     </Container>
   );
 };

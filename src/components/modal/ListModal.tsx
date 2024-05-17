@@ -60,13 +60,23 @@ export const ListModal = () => {
       bucketId: listInfo.data.bucketId,
       objectId: listInfo.data.objectId,
       objectPrice: listInfo.data.price,
+      categoryId: BigInt(listInfo.data.categoryId),
+      desc: listInfo.data.desc,
+      imageUrl: listInfo.data.imageUrl,
     },
     onSuccess: async () => {
       NiceModal.show(Tips, {
         title: ``,
         content: (
           <Box>
-            <img src={listInfo.data.imageUrl} />
+            <img
+              style={{
+                height: '100px',
+                width: '100%',
+                objectFit: 'contain',
+              }}
+              src={listInfo.data.imageUrl}
+            />
             <Text as="h2" fontSize="24px" mt="20px">
               Your item has been listed!
             </Text>

@@ -17,13 +17,13 @@ import {
 import { BN } from 'bn.js';
 import { useImmerAtom } from 'jotai-immer';
 import { useMemo } from 'react';
-import { formatUnits, parseUnits } from 'viem';
+import { formatEther, formatUnits, parseUnits } from 'viem';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { buyAtom } from '../../atoms/buyAtom';
 import { OPBNB } from '../../config/wallet';
 import { BSC_CHAIN, BSC_CHAIN_ID, NETWORK } from '../../env';
 import { useBNBPrice } from '../../hooks/useBNBPrice';
-import { useBuy } from '../../hooks/useBuy';
+import { useBuy } from '../../hooks/buyer/useBuy';
 import { useChainBalance } from '../../hooks/useChainBalance';
 import { divide10Exp, roundFun } from '../../utils';
 import { Loader } from '../Loader';
@@ -34,7 +34,7 @@ export const BuyModal = () => {
 
   const { groupId, price, groupName, ownerAddress } = buys.buyData;
 
-  console.log('buys', buys);
+  console.log('buys', buys.buyData);
 
   const { buy, relayFee } = useBuy(groupName, ownerAddress, price);
 
@@ -55,8 +55,10 @@ export const BuyModal = () => {
   }, [price]);
 
   const relayFeeBNB = useMemo(() => {
-    const balance = divide10Exp(new BN(relayFee, 10), 18);
-    return balance;
+    // return relayFee;
+    // const balance = divide10Exp(new BN(relayFee, 10), 18);
+    // return balance;
+    return formatEther(relayFee);
   }, [relayFee]);
 
   const TotalPrice = useMemo(() => {
@@ -144,8 +146,11 @@ export const BuyModal = () => {
             isLoading={buys.buying}
             loadingText={<Loader size={30} />}
             width={'100%'}
-            onClick={() => {
+            onClick={async () => {
+              // await buy(2479);
+              console.log('groupId', groupId);
               buy(groupId);
+
               setBuys((draft) => {
                 draft.openDrawer = true;
                 draft.buying = true;

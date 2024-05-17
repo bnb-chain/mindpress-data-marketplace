@@ -5,7 +5,7 @@ import { Box, Flex, Image, Link, Stack } from '@totejs/uikit';
 import BN from 'bn.js';
 import { useImmerAtom } from 'jotai-immer';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { buyAtom } from '../atoms/buyAtom';
 import { Loader } from '../components/Loader';
@@ -15,10 +15,10 @@ import { MPLink } from '../components/ui/MPLink';
 import { DefaultButton } from '../components/ui/buttons/DefaultButton';
 import { YellowButton } from '../components/ui/buttons/YellowButton';
 import { GF_EXPLORER_URL } from '../env';
+import { useGetChainListItems } from '../hooks/buyer/useGetChainListItems';
 import { useBNBPrice } from '../hooks/useBNBPrice';
 import {
   useGetBOInfoFromGroup,
-  useGetBucketByName,
   useGetObject,
 } from '../hooks/useGetBucketOrObj';
 import { useGetCategory } from '../hooks/useGetCatoriesMap';
@@ -30,7 +30,6 @@ import {
   contentTypeToExtension,
   divide10Exp,
   formatDateDot,
-  parseFileSize,
   roundFun,
   trimLongStr,
 } from '../utils';
@@ -42,24 +41,32 @@ import {
  */
 const Resource = () => {
   const [p] = useSearchParams();
-  const navigator = useNavigate();
   const itemId = p.get('id') as string;
+  const groupId = p.get('gid') as string;
+
+  const { data: chainItemInfo, isLoading: isChainItemInfo } =
+    useGetChainListItems([BigInt(groupId)]);
+
   const { data: itemInfo, isLoading: itemInfoLoading } = useGetItemById(
     parseInt(itemId),
   );
   const { price: bnbPrice } = useBNBPrice();
-  const category = useGetCategory(itemInfo?.categoryId || 100);
   const [, setBuy] = useImmerAtom(buyAtom);
 
   const { address, isConnected, isConnecting } = useAccount();
   const { relation, refetch: refetchRelation } = useGetItemRelationWithAddr(
     address,
-    itemInfo,
+    parseInt(itemId),
+    chainItemInfo?.creators?.[0] || '',
+  );
+
+  const category = useGetCategory(
+    Number(chainItemInfo?.categoryIds?.[0] || 100),
   );
 
   const storageInfo = useGetBOInfoFromGroup(itemInfo?.groupName);
 
-  const { data: bucketData } = useGetBucketByName(storageInfo?.bucketName);
+  // const { data: bucketData } = useGetBucketByName(storageInfo?.bucketName);
 
   const { data: objectData } = useGetObject(
     storageInfo?.bucketName,
@@ -74,13 +81,14 @@ const Resource = () => {
   const modalData = useModal();
   const { onOpen } = useWalletKitModal();
 
-  console.log('itemInfo', storageInfo, itemInfo, bucketData, objectData);
+  // console.log('itemInfo', storageInfo, itemInfo, bucketData, objectData);
+  console.log('chainItemInfo', groupId, chainItemInfo);
 
-  if (itemInfoLoading) {
+  if (itemInfoLoading || isChainItemInfo) {
     return <Loader />;
   }
 
-  if (!itemInfo /* || !bucketData || !objectData */) {
+  if (!itemInfo || !chainItemInfo /* || !bucketData || !objectData */) {
     return <Loader />;
   }
 
@@ -89,7 +97,7 @@ const Resource = () => {
       <ResourceInfo>
         <ImageContainer>
           <Image
-            src={itemInfo.url}
+            src={chainItemInfo?.urls?.[0]}
             fallbackSrc={`https://picsum.photos/seed/${itemInfo.id}/400/600`}
           />
         </ImageContainer>
@@ -98,18 +106,23 @@ const Resource = () => {
           <Stack gap="24px">
             <UserNameContainer
               as={MPLink}
-              to={`/profile?address=${itemInfo.ownerAddress}`}
+              to={`/profile?address=${chainItemInfo?.creators?.[0]}`}
               gap={8}
               alignItems={'center'}
               justifyContent={'flex-start'}
             >
-              <MetaMaskAvatar size={40} address={itemInfo.ownerAddress} />
-              <UserName>{trimLongStr(itemInfo.ownerAddress)}</UserName>
+              <MetaMaskAvatar
+                size={40}
+                address={chainItemInfo?.creators?.[0] || ''}
+              />
+              <UserName>
+                {trimLongStr(chainItemInfo?.creators?.[0] || '')}
+              </UserName>
             </UserNameContainer>
 
             <Box>
               <ResourceName>{itemInfo.name}</ResourceName>
-              {itemInfo.description && <Desc>{itemInfo.description}</Desc>}
+              <Desc>{chainItemInfo?.descriptions?.[0]}</Desc>
             </Box>
 
             <Flex gap="8px">

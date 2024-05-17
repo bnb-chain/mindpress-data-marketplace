@@ -10,8 +10,6 @@ import { AxiosResponse } from 'axios';
 import { DAPP_NAME } from '../env';
 import { getUtcZeroTimestamp } from './time';
 
-// import ProgressBarToast from '../components/ProgressBarToast';
-
 export const trimLongStr = (
   str: string,
   maxLength = 14,

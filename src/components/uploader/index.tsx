@@ -17,12 +17,14 @@ import { UploadAtom } from './atoms/uploadAtom';
 import NiceModal from '@ebay/nice-modal-react';
 import { Tips } from '../modal/Tips';
 import BSCIcon from '../svgIcon/BSCIcon';
+import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
 
 export const Uploader = () => {
   const { address, connector } = useAccount();
   const [offchainData, setOffchainData] = useAtom(offchainDataAtom);
   const [files, setFiles] = useState<File[] | null>(null);
   const [uploadInfo, setUploadInfo] = useImmerAtom(UploadAtom);
+  const [upobjs, setUpobjs] = useImmerAtom(uploadObjcetAtom);
 
   const {
     start: createSpaceStart,
@@ -240,17 +242,16 @@ export const Uploader = () => {
           isLoading={createSpaceStart || uploadInfo.status === 'uploading'}
           loadingText={'Progressing...'}
           onClick={async () => {
-            handleUpload();
-
-            // NiceModal.show(Tips, {
-            //   title: 'Upload to BNB Greenfield',
-            //   content:
-            //     'We will store your photos on Greenfield blockchain to ensure you have full ownership. Therefore a small gas fee is required to create a storage space for the first upload.',
-            //   buttonText: 'Continue',
-            // });
+            if (uploadInfo.status === 'success') {
+              setUpobjs((draft) => {
+                draft.openModal = false;
+              });
+            } else {
+              handleUpload();
+            }
           }}
         >
-          Upload
+          {uploadInfo.status === 'success' ? 'Close' : 'Upload'}
         </BlackSolidButton>
       </Box>
     </Box>
