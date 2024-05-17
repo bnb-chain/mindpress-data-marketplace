@@ -31,6 +31,7 @@ interface FormValues {
 const ListSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
   price: Yup.number()
+    .positive()
     .required('Price is required')
     .typeError('Price must be a number'),
   category: Yup.string().required('Category is required'),
@@ -68,7 +69,7 @@ export const ListForm: React.FC<IProps> = ({
         draft.data = {
           bucketId: BigInt(bucketId),
           objectId: BigInt(objectId),
-          price: BigInt(v.price),
+          price: parseEther(v.price),
           imageUrl: imageUrl,
           desc: v.description,
         };
