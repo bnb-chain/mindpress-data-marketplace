@@ -20,7 +20,7 @@ import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
 import { listAtom } from '../../atoms/listAtom';
 import { BSC_CHAIN } from '../../env';
 import { useList } from '../../hooks/seller/useList';
-import { useGetBnbUsdtExchangeRate } from '../../hooks/useGetBnbUsdtExchangeRate';
+import { useGetBnbUsdtExchangeRate } from '../../hooks/price/useGetBnbUsdtExchangeRate';
 import { useGetItemByObjId } from '../../hooks/useGetItemByObjId';
 import { Loader } from '../Loader';
 import BSCIcon from '../svgIcon/BSCIcon';

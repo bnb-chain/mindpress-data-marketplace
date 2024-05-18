@@ -5,9 +5,7 @@ import NiceModal from '@ebay/nice-modal-react';
 import { ThemeProvider } from '@totejs/uikit';
 import { HashRouter, Route, Routes } from 'react-router-dom';
 import Layout from './components/layout/Index';
-import { GlobalProvider } from './context/global';
 import { ModalProvider } from './context/modal';
-import { WalletModalProvider } from './context/walletModal';
 import Home from './pages/Home';
 import Profile from './pages/Profile';
 import Resource from './pages/Resource';
@@ -160,31 +158,25 @@ function App() {
       <WagmiConfig config={config}>
         <WalletKitProvider options={options} mode="dark">
           <QueryClientProvider client={queryClient}>
-            <GlobalProvider>
-              <NiceModal.Provider>
-                <ModalProvider>
-                  <WalletModalProvider>
-                    <HashRouter>
-                      <Layout>
-                        <Routes>
-                          {routes.map((item: IRoute) => {
-                            return (
-                              <Route
-                                key={item.path}
-                                path={item.path}
-                                element={
-                                  <RouteGuard>{item.element}</RouteGuard>
-                                }
-                              />
-                            );
-                          })}
-                        </Routes>
-                      </Layout>
-                    </HashRouter>
-                  </WalletModalProvider>
-                </ModalProvider>
-              </NiceModal.Provider>
-            </GlobalProvider>
+            <NiceModal.Provider>
+              <ModalProvider>
+                <HashRouter>
+                  <Layout>
+                    <Routes>
+                      {routes.map((item: IRoute) => {
+                        return (
+                          <Route
+                            key={item.path}
+                            path={item.path}
+                            element={<RouteGuard>{item.element}</RouteGuard>}
+                          />
+                        );
+                      })}
+                    </Routes>
+                  </Layout>
+                </HashRouter>
+              </ModalProvider>
+            </NiceModal.Provider>
 
             <ReactQueryDevtools initialIsOpen />
             {showDevtools && (

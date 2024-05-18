@@ -6,9 +6,9 @@ import { buyAtom } from '../../atoms/buyAtom';
 import { MarketplaceAbi } from '../../base/contract/marketplace.abi';
 import { BSC_SEND_GAS_FEE, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 import { sleep } from '../../utils/space';
-import { useChainBalance } from '../useChainBalance';
+import { useChainBalance } from '../price/useChainBalance';
 import { useModal } from '../useModal';
-import { useRelayFee } from '../useRelayFee';
+import { useRelayFee } from '../price/useRelayFee';
 import { useStatus } from '../useStatus';
 
 export const useBuy = (

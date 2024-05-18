@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { parseAbi } from 'viem';
 import { usePublicClient } from 'wagmi';
-import { NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../env';
+import { NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 
 export const useRelayFee = () => {
   const [relayFee, setRelayFee] = useState(BigInt(0));

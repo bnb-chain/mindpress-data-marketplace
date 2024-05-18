@@ -1,6 +1,5 @@
 import styled from '@emotion/styled';
 import { useSearchParams } from 'react-router-dom';
-import { Bucket } from '../components/detail/Bucket';
 import { Object } from '../components/detail/Object';
 
 /**
@@ -10,12 +9,12 @@ import { Object } from '../components/detail/Object';
 export const Detail = () => {
   const [p] = useSearchParams();
 
-  const bucketId = p.get('bid') as string;
+  // const bucketId = p.get('bid') as string;
   const objectId = p.get('oid') as string;
 
   return (
     <Container>
-      {bucketId && !objectId && <Bucket />}
+      {/* {bucketId && !objectId && <Bucket />} */}
       {objectId && objectId && <Object />}
     </Container>
   );

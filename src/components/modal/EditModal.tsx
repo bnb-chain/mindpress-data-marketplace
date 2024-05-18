@@ -22,7 +22,7 @@ import {
 import { ForwardedRef, ReactNode, forwardRef, useMemo, useState } from 'react';
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import { GF_CHAIN_ID } from '../../env';
-import { useChainBalance } from '../../hooks/useChainBalance';
+import { useChainBalance } from '../../hooks/price/useChainBalance';
 import { useEdit } from '../../hooks/useEdit';
 import { Loader } from '../Loader';
 import { roundFun } from '../../utils';

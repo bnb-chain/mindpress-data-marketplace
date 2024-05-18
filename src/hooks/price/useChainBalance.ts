@@ -1,8 +1,8 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useBalance, useAccount } from 'wagmi';
 
-import * as env from '../env';
-import { batchUpdate } from '../utils';
+import * as env from '../../env';
+import { batchUpdate } from '../../utils';
 
 export const useChainBalance = () => {
   const { address, isConnected } = useAccount();

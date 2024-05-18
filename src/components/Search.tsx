@@ -3,7 +3,7 @@ import { SearchInput } from './SearchInput';
 
 import styled from '@emotion/styled';
 import { Box, Flex } from '@totejs/uikit';
-import { useDebounce } from '../hooks/useDebounce';
+import { useDebounce } from '../hooks/common/useDebounce';
 import { parseGroupName } from '../utils';
 import { searchKey } from '../utils/gfSDK';
 import ScrollSelect from './ScrollSelect';

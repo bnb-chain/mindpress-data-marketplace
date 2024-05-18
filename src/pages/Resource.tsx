@@ -16,7 +16,7 @@ import { DefaultButton } from '../components/ui/buttons/DefaultButton';
 import { YellowButton } from '../components/ui/buttons/YellowButton';
 import { GF_EXPLORER_URL } from '../env';
 import { useGetChainListItems } from '../hooks/buyer/useGetChainListItems';
-import { useBNBPrice } from '../hooks/useBNBPrice';
+import { useBNBPrice } from '../hooks/price/useBNBPrice';
 import {
   useGetBOInfoFromGroup,
   useGetObject,

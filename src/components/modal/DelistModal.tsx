@@ -17,7 +17,7 @@ import { MarketPlaceContract } from '../../base/contract/marketPlaceContract';
 import { OPBNB } from '../../config/wallet';
 import { BSC_CHAIN_ID, LIST_ESTIMATE_FEE_ON_BSC } from '../../env';
 import { useApprove } from '../../hooks/useApprove';
-import { useChainBalance } from '../../hooks/useChainBalance';
+import { useChainBalance } from '../../hooks/price/useChainBalance';
 import { useCollectionItems } from '../../hooks/useCollectionItems';
 import { useDelist } from '../../hooks/useDelist';
 import { useHasRole } from '../../hooks/useHasRole';
