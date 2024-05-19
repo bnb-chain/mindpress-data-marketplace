@@ -21,7 +21,7 @@ import { listAtom } from '../../atoms/listAtom';
 import { BSC_CHAIN } from '../../env';
 import { useList } from '../../hooks/seller/useList';
 import { useGetBnbUsdtExchangeRate } from '../../hooks/price/useGetBnbUsdtExchangeRate';
-import { useGetItemByObjId } from '../../hooks/useGetItemByObjId';
+import { useGetItemByObjId } from '../../hooks/apis/useGetItemByObjId';
 import { Loader } from '../Loader';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';

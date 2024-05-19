@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Flex } from '@totejs/uikit';
-import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
+import { useGetCatoriesMap } from '../../hooks/apis/useGetCatoriesMap';
 import { Loader } from '../Loader';
 import { MPLink } from '../ui/MPLink';
 

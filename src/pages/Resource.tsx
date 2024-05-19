@@ -21,9 +21,9 @@ import {
   useGetBOInfoFromGroup,
   useGetObject,
 } from '../hooks/useGetBucketOrObj';
-import { useGetCategory } from '../hooks/useGetCatoriesMap';
-import { useGetDownloadUrl } from '../hooks/useGetDownloadUrl';
-import { useGetItemById } from '../hooks/useGetItemById';
+import { useGetCategory } from '../hooks/apis/useGetCatoriesMap';
+import { useGetDownloadUrl } from '../hooks/apis/useGetDownloadUrl';
+import { useGetItemById } from '../hooks/apis/useGetItemById';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
 import { useModal } from '../hooks/useModal';
 import {

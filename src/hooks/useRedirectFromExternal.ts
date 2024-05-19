@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { useGetBucketById } from './useGetBucketOrObj';
-import { useGetItemByBucketId } from './useGetItemByBucketId';
-import { useGetItemByObjId } from './useGetItemByObjId';
-import { useGfGetObjInfo } from './useGfGetObjInfo';
+import { useGetItemByBucketId } from './gnfd/useGetItemByBucketId';
+import { useGetItemByObjId } from './apis/useGetItemByObjId';
+import { useGfGetObjInfo } from './gnfd/useGfGetObjInfo';
 
 /**
  * Hook to redirect from external links.

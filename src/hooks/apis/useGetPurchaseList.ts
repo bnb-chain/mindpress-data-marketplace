@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { SearchPurchaseRequest } from '../utils/apis/types';
-import { searchPurchase } from '../utils/apis';
+import { SearchPurchaseRequest } from '../../utils/apis/types';
+import { searchPurchase } from '../../utils/apis';
 
 export const useGetPurchaseList = (
   params: SearchPurchaseRequest,

@@ -1,6 +1,6 @@
 import { RefObject, useEffect, useState } from 'react';
 
-import { off, on } from '../utils/event';
+import { off, on } from '../../utils/event';
 
 export interface State {
   x: number;

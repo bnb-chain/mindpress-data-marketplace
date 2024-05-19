@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getRandomSp } from '../utils/gfSDK';
+import { getRandomSp } from '../../utils/gfSDK';
 
 export const useGetRandomSp = () => {
   return useQuery({

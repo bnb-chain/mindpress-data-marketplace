@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getItemByBucketId } from '../utils/apis';
+import { getItemByBucketId } from '../../utils/apis';
 
 export const useGetItemByBucketId = (bucketId: string) => {
   return useQuery({

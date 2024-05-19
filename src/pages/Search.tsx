@@ -5,7 +5,7 @@ import { useInfiniteGetItemList } from '../hooks/useGetItemList';
 import { MindPressMasmonry } from '../components/ui/masmonry';
 import { useCallback } from 'react';
 import NoData from '../images/NoData.svg';
-import { useGetCategory } from '../hooks/useGetCatoriesMap';
+import { useGetCategory } from '../hooks/apis/useGetCatoriesMap';
 import { RelatedImage } from '../components/resource/RelatedImage';
 
 const Search = () => {

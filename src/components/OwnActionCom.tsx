@@ -3,7 +3,7 @@ import { DownloadIcon, GoIcon } from '@totejs/icons';
 import styled from '@emotion/styled';
 import { Box, Flex } from '@totejs/uikit';
 import { useNavigate } from 'react-router-dom';
-import { useGetDownloadUrl } from '../hooks/useGetDownloadUrl';
+import { useGetDownloadUrl } from '../hooks/apis/useGetDownloadUrl';
 import { parseGroupName } from '../utils/';
 import { BlackButton } from './ui/buttons/BlackButton';
 

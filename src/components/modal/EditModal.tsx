@@ -28,12 +28,12 @@ import { Loader } from '../Loader';
 import { roundFun } from '../../utils';
 import { Item } from '../../utils/apis/types';
 import { QueryHeadGroupResponse } from '../../utils/gfSDK';
-import { useGetItemById } from '../../hooks/useGetItemById';
+import { useGetItemById } from '../../hooks/apis/useGetItemById';
 import { useGetGroupByName } from '../../hooks/useGetBucketOrObj';
 import {
   useGetCategory,
   useGetCatoriesMap,
-} from '../../hooks/useGetCatoriesMap';
+} from '../../hooks/apis/useGetCatoriesMap';
 import _ from 'lodash';
 
 interface ListModalProps {

@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getObjectInfo } from '../utils/gfSDK';
+import { getObjectInfo } from '../../utils/gfSDK';
 
 export const useGfGetObjInfo = (objectId: string) => {
   return useQuery({

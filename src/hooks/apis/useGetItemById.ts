@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { getItemById } from '../utils/apis';
-import { Item } from '../utils/apis/types';
+import { getItemById } from '../../utils/apis';
+import { Item } from '../../utils/apis/types';
 import { useEffect, useState } from 'react';
 
 export const DEFAULT_ITEM: Item = {

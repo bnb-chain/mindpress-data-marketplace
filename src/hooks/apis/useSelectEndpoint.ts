@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getAllSps } from '../utils/off-chain-auth/utils';
+import { getAllSps } from '../../utils/off-chain-auth/utils';
 
 export const useSelectEndpoint = () => {
   return useQuery({

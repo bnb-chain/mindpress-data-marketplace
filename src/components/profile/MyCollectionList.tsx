@@ -24,7 +24,7 @@ import { UploadImage } from '../svgIcon/UploadImage';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { MPLink } from '../ui/MPLink';
-import { useSelectEndpoint } from '../../hooks/useSelectEndpoint';
+import { useSelectEndpoint } from '../../hooks/apis/useSelectEndpoint';
 import { THUMB, getSpaceName } from '../../utils/space';
 import { Address, useAccount } from 'wagmi';
 import { useDelist } from '../../hooks/seller/useDelist';

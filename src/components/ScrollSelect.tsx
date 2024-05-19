@@ -14,7 +14,7 @@ import React, {
 import { Link, useNavigate } from 'react-router-dom';
 import { NoData } from './NoData';
 import { Loader } from './Loader';
-import { mobileMedia, useResponsive } from '../hooks/useResponsive';
+import { mobileMedia, useResponsive } from '../hooks/common/useResponsive';
 
 export interface ISearchData {
   title: string;

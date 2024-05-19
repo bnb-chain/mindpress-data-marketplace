@@ -1,18 +1,17 @@
 import styled from '@emotion/styled';
 import { Flex } from '@totejs/uikit';
+import { useSetAtom } from 'jotai';
 import { ReactNode, useCallback } from 'react';
+import { Address, useAccount } from 'wagmi';
+import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
 import { useModal } from '../../hooks/useModal';
+import { getOffchainAuthKeys } from '../../utils/off-chain-auth/utils';
 import { ActionResult } from '../modal/ActionResult';
-import { DelistModal } from '../modal/DelistModal';
-import { ListModal } from '../modal/ListModal';
 import { BuyModal } from '../modal/BuyModal';
+import { ListModal } from '../modal/ListModal';
+import { UploadObjectModal } from '../modal/UploadObject';
 import Footer from './Footer';
 import Header from './Header';
-import { UploadObjectModal } from '../modal/UploadObject';
-import { Address, useAccount } from 'wagmi';
-import { getOffchainAuthKeys } from '../../utils/off-chain-auth/utils';
-import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
-import { useSetAtom } from 'jotai';
 
 export default function Layout({ children }: { children: ReactNode }) {
   const modalData = useModal();
@@ -26,10 +25,6 @@ export default function Layout({ children }: { children: ReactNode }) {
     result,
     callBack,
   } = modalData.modalState;
-
-  const handleDelistOpen = useCallback(() => {
-    modalData.modalDispatch({ type: 'CLOSE_DELIST' });
-  }, [modalData]);
 
   const handleResultOpen = useCallback(() => {
     modalData.modalDispatch({ type: 'CLOSE_RESULT' });
@@ -73,13 +68,6 @@ export default function Layout({ children }: { children: ReactNode }) {
       )} */}
 
       <BuyModal />
-
-      <DelistModal
-        isOpen={openDelist}
-        handleOpen={() => {
-          handleDelistOpen();
-        }}
-      ></DelistModal>
 
       <ActionResult
         isOpen={openResult}

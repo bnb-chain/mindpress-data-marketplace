@@ -11,7 +11,7 @@ import {
   StateModalVariantType,
 } from '@totejs/uikit';
 import { useNavigate } from 'react-router-dom';
-import { useGetRandomSp } from '../../hooks/useGetRandomSp';
+import { useGetRandomSp } from '../../hooks/apis/useGetRandomSp';
 import { parseGroupName } from '../../utils';
 import { getItemByGroupId } from '../../utils/apis';
 import { SuccessIcon } from '../svgIcon/SuccessIcon';

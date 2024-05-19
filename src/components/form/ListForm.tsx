@@ -16,7 +16,7 @@ import { useImmerAtom } from 'jotai-immer';
 import { useAccount } from 'wagmi';
 import * as Yup from 'yup';
 import { listAtom } from '../../atoms/listAtom';
-import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
+import { useGetCatoriesMap } from '../../hooks/apis/useGetCatoriesMap';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { Option, Select } from '../ui/select';

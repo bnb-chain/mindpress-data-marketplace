@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getItemByGroupId } from '../utils/apis';
+import { getItemByGroupId } from '../../utils/apis';
 
 export const useGetItemByGroupId = (groupId: string) => {
   return useQuery({

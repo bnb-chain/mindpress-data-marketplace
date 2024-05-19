@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import { searchPurchase } from '../utils/apis';
 import { Item, SearchPurchaseRequest } from '../utils/apis/types';
 import { useGetBOInfoFromGroup } from './useGetBucketOrObj';
-import { useGetDownloadUrl } from './useGetDownloadUrl';
-import { useGetPurchaseList } from './useGetPurchaseList';
+import { useGetDownloadUrl } from './apis/useGetDownloadUrl';
+import { useGetPurchaseList } from './apis/useGetPurchaseList';
 
 export type ITEM_RELATION_ADDR =
   | 'PURCHASED'
