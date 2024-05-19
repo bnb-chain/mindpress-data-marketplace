@@ -12,7 +12,7 @@ import { CrossChainAbi } from '../../base/contract/crossChain.abi';
 import { BSC_CHAIN } from '../../env';
 import { client } from '../../utils/gfSDK';
 import { getSpaceName } from '../../utils/space';
-import { useGetContractAddresses } from './useGetContractAddresses';
+import { useGetContractAddresses } from '../common/useGetContractAddresses';
 
 interface Params {
   bucketId: bigint;

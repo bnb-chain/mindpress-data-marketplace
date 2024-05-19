@@ -35,7 +35,7 @@ import {
 } from '../utils';
 
 /**
- * Have been listed
+ * Have been listed page
  *
  * Can be queryed in API
  */
@@ -60,6 +60,8 @@ const Resource = () => {
     chainItemInfo?.creators?.[0] || '',
   );
 
+  // console.log('relation', relation);
+
   const category = useGetCategory(
     Number(chainItemInfo?.categoryIds?.[0] || 100),
   );
@@ -82,7 +84,7 @@ const Resource = () => {
   const { onOpen } = useWalletKitModal();
 
   // console.log('itemInfo', storageInfo, itemInfo, bucketData, objectData);
-  console.log('chainItemInfo', groupId, chainItemInfo);
+  // console.log('chainItemInfo', groupId, chainItemInfo);
 
   if (itemInfoLoading || isChainItemInfo) {
     return <Loader />;

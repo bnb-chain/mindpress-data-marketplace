@@ -18,7 +18,7 @@ import { CrossChainAbi } from '../../base/contract/crossChain.abi';
 import { MarketplaceAbi } from '../../base/contract/marketplace.abi';
 import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 import { getSpaceName, sleep } from '../../utils/space';
-import { useGetContractAddresses } from './useGetContractAddresses';
+import { useGetContractAddresses } from '../common/useGetContractAddresses';
 import { client, selectSp } from '../../utils/gfSDK';
 
 export type CreateBucketSynPackage = {

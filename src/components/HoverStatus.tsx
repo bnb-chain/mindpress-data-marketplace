@@ -21,8 +21,7 @@ interface IProps {
 export const HoverStatus = ({ item, className }: IProps) => {
   const navigator = useNavigate();
   const { address, isConnected, isConnecting } = useAccount();
-  const { data: chainItemInfo, isLoading: isChainItemInfo } =
-    useGetChainListItems([BigInt(item.groupId)]);
+  const { data: chainItemInfo } = useGetChainListItems([BigInt(item.groupId)]);
 
   const {
     relation,

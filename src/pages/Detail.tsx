@@ -4,7 +4,8 @@ import { Object } from '../components/detail/Object';
 
 /**
  * Have not been listed
- * Show bucket or object detail info
+ *
+ * Show bucket or object detail info to be listed
  */
 export const Detail = () => {
   const [p] = useSearchParams();

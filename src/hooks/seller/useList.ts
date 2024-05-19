@@ -28,7 +28,7 @@ import { MultiMessageAbi } from '../../base/contract/multimessage.abi';
 import { PermissonHubAbi } from '../../base/contract/permissonHub.abi';
 import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 import { generateGroupName } from '../../utils';
-import { useGetContractAddresses } from './useGetContractAddresses';
+import { useGetContractAddresses } from '../common/useGetContractAddresses';
 import { client } from '../../utils/gfSDK';
 import { sleep } from '../../utils/space';
 

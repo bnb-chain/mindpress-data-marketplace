@@ -46,5 +46,6 @@ export const useGetObjInBucketListStatus = (
         listIndex: listedObjList.map((item) => item.resourceId),
       };
     },
+    staleTime: 10_000,
   });
 };

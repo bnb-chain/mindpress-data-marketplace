@@ -34,7 +34,7 @@ export const BuyModal = () => {
 
   const { groupId, price, groupName, ownerAddress } = buys.buyData;
 
-  console.log('buys', buys.buyData);
+  // console.log('buys', buys.buyData);
 
   const { buy, relayFee } = useBuy(groupName, ownerAddress, price);
 

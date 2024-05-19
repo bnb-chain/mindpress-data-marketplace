@@ -27,6 +27,8 @@ import { MPLink } from '../ui/MPLink';
 import { useSelectEndpoint } from '../../hooks/useSelectEndpoint';
 import { THUMB, getSpaceName } from '../../utils/space';
 import { Address, useAccount } from 'wagmi';
+import { useDelist } from '../../hooks/seller/useDelist';
+import { getItemByObjectId } from '../../utils/apis';
 
 // TODO:
 const PAGE_SIZE = 12;
@@ -56,10 +58,10 @@ const MyCollectionList = ({ address }: ICollectionList) => {
 
   const BUCKET_NAME = getSpaceName(address);
 
+  const { confirmDelist } = useDelist();
+
   const { data: listData, isLoading: listLoading } =
     useGetObjInBucketListStatus(BUCKET_NAME, page);
-
-  // console.log('listData', listData);
 
   const { data: bucketInfo } = useGetBucketByName(BUCKET_NAME);
 
@@ -160,11 +162,18 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                 <Box px="20px" my="24px">
                   {listData.listIndex.includes(item.ObjectInfo.Id) ? (
                     <YellowButton
+                      background="#5C5F6A"
                       h="48px"
                       w="100%"
-                      onClick={(e) => {
+                      onClick={async (e) => {
                         e.preventDefault();
                         e.stopPropagation();
+
+                        const { groupId } = await getItemByObjectId(
+                          item.ObjectInfo.Id.toString(),
+                        );
+
+                        confirmDelist(BigInt(groupId));
                       }}
                     >
                       Delist

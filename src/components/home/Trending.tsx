@@ -10,6 +10,7 @@ export const Trending = () => {
     fetchNextPage,
     hasNextPage,
     flatData: trendingList,
+    isLoading,
   } = useInfiniteGetItemList({
     filter: {
       address: '',
@@ -26,7 +27,7 @@ export const Trending = () => {
 
   // console.log('trendingList', trendingList, hasNextPage);
 
-  if (!trendingList) return <Loader />;
+  if (!trendingList || isLoading) return <Loader />;
 
   return (
     <Container>

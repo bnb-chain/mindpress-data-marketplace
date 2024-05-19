@@ -19,6 +19,7 @@ import { Item } from '../../utils/apis/types';
 import { Loader } from '../Loader';
 import { MPLink } from '../ui/MPLink';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
+import { useGetChainListItems } from '../../hooks/buyer/useGetChainListItems';
 
 const PAGE_SIZE = 12;
 
@@ -35,6 +36,13 @@ const PurchaseList = ({ address }: IProps) => {
     page - 1,
     PAGE_SIZE,
   );
+
+  const groupIds = list?.purchases.map((item) => BigInt(item.item.groupId));
+  const { data: chainGroupsInfo, isLoading: getChainListItemLoading } =
+    useGetChainListItems(groupIds);
+
+  console.log('chainGroupsInfo', chainGroupsInfo);
+
   const [activeItem, setActiveItem] = useState<Item | null>(null);
   const storageInfo = useGetBOInfoFromGroup(activeItem?.groupName);
   const downloadUrl = useGetDownloadUrl({
@@ -50,8 +58,9 @@ const PurchaseList = ({ address }: IProps) => {
     <Container>
       <Grid templateColumns="repeat(3, 1fr)" gap="24px">
         {list &&
-          list.purchases.map((purResource) => {
+          list.purchases.map((purResource, index) => {
             const { item } = purResource;
+
             return (
               <Card key={item.id}>
                 <ImageBox
@@ -60,7 +69,7 @@ const PurchaseList = ({ address }: IProps) => {
                   }}
                 >
                   <Image
-                    src={item.url}
+                    src={chainGroupsInfo?.urls?.[index] || ''}
                     fallbackSrc={`https://picsum.photos/seed/${item.name.replaceAll(
                       ' ',
                       '',

@@ -106,7 +106,7 @@ const Header = () => {
                 onOpen();
                 return;
               }
-              navigate('/profile');
+              navigate('/profile?tab=uploaded');
             }}
           >
             {/* Upload Images */}

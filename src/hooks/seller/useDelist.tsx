@@ -30,7 +30,7 @@ export const useDelist = () => {
     }
   };
 
-  const confirmDelist = () => {
+  const confirmDelist = (groupId: bigint) => {
     NiceModal.show(Tips, {
       title: ``,
       content: (
@@ -53,7 +53,7 @@ export const useDelist = () => {
       buttonText: 'Confirm',
       buttonClick: async () => {
         // ... dolist
-        // await doDeist();
+        // await doDeist(groupId);
       },
     });
   };

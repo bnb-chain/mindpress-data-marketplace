@@ -52,10 +52,11 @@ export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
 
   const groupIds = flatData?.map((item) => BigInt(item.groupId));
 
-  const { data: chainGroupsInfo } = useGetChainListItems(groupIds);
+  const { data: chainGroupsInfo, isLoading: getChainListItemLoading } =
+    useGetChainListItems(groupIds);
 
-  // console.log('groupIds', groupIds);
-  // console.log('chainGroupsInfo', chainGroupsInfo);
+  console.log('groupIds', groupIds);
+  console.log('chainGroupsInfo', chainGroupsInfo);
 
   const total = useMemo(() => {
     return query.data?.pages[0].total || 0;
@@ -73,5 +74,6 @@ export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
     ...query,
     flatData: flatDataWithUrls,
     total,
+    isLoading: getChainListItemLoading,
   };
 };
