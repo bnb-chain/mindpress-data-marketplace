@@ -48,7 +48,7 @@
     "eslint": "^8.41.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-webpack-plugin": "^3.2.0",
-    "ethers": "5",
+    "ethers": "^5.7.2",
     "file-loader": "^6.2.0",
     "formik": "^2.4.6",
     "fs-extra": "^10.1.0",
@@ -104,7 +104,7 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "build:gf": "export INLINE_RUNTIME_CHUNK=true && export GENERATE_SOURCEMAP=false && IMAGE_INLINE_SIZE_LIMIT=1000000000 && node scripts/build.js",
+    "build:gf": "export INLINE_RUNTIME_CHUNK=true && export GENERATE_SOURCEMAP=false && IMAGE_INLINE_SIZE_LIMIT=100000000000 && node scripts/build.js",
     "test": "node scripts/test.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix"
   },
