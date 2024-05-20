@@ -8,44 +8,6 @@ import { Chain } from 'viem/chains';
 import { createConfig } from 'wagmi';
 import * as env from '../env';
 
-export const OPBNB = {
-  id: env.BSC_CHAIN_ID,
-  network: 'BSC Optimistic Rollup',
-  rpcUrls: {
-    default: {
-      http: [env.BSC_RPC_URL],
-    },
-    public: {
-      http: [env.BSC_RPC_URL],
-    },
-  },
-  name: `OPBNB ${env.NETWORK}`,
-  nativeCurrency: {
-    name: 'tBNB',
-    symbol: 'tBNB',
-    decimals: 18,
-  },
-};
-
-export const GREENFIELD = {
-  id: env.GF_CHAIN_ID,
-  network: 'greenfield',
-  rpcUrls: {
-    default: {
-      http: [env.GF_RPC_URL],
-    },
-    public: {
-      http: [env.GF_RPC_URL],
-    },
-  },
-  name: `Greenfield ${env.NETWORK}`,
-  nativeCurrency: {
-    name: 'tBNB',
-    symbol: 'tBNB',
-    decimals: 18,
-  },
-};
-
 export const chains: Chain[] = [env.BSC_CHAIN];
 
 export const config = createConfig(
@@ -63,5 +25,5 @@ export const config = createConfig(
 );
 
 export const options: WalletKitOptions = {
-  initialChainId: env.BSC_CHAIN_ID,
+  initialChainId: env.BSC_CHAIN.id,
 };
