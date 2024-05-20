@@ -50,7 +50,7 @@ export const useGetContractAddresses = () => {
         ],
       });
 
-      // console.log('contractAddresses res: ', contractAddresses);
+      console.log('contractAddresses res: ', contractAddresses);
       return {
         CrossChainAddress: (contractAddresses[0].result || '0x') as Address,
         BucketHubAddress: (contractAddresses[1].result || '0x') as Address,

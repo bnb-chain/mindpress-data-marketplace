@@ -11,7 +11,7 @@ import {
   newObjectGRN,
 } from '@bnb-chain/greenfield-js-sdk';
 import { solidityPack } from 'ethers/lib/utils';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Address, encodeFunctionData, parseAbi, toHex } from 'viem';
 import {
   useAccount,
@@ -66,24 +66,33 @@ export const useList = ({
   const { data: contracts, isLoading: loadingContract } =
     useGetContractAddresses();
 
+  const getApprovedResult = useCallback(
+    async (groupTokenAddress: Address, owner: Address) => {
+      return await publicClient.readContract({
+        abi: GroupTokenAbi,
+        address: groupTokenAddress,
+        functionName: 'isApprovedForAll',
+        args: [owner, NEW_MARKETPLACE_CONTRACT_ADDRESS],
+      });
+    },
+    [publicClient],
+  );
+
   // 1. check group nft approved
   useEffect(() => {
     const checkApproved = async () => {
       if (!address) return;
       if (loadingContract || !contracts) return;
 
-      const isApprovedRes = await publicClient.readContract({
-        abi: GroupTokenAbi,
-        address: contracts.GroupTokenAddress,
-        functionName: 'isApprovedForAll',
-        args: [address, NEW_MARKETPLACE_CONTRACT_ADDRESS],
-      });
-
+      const isApprovedRes = await getApprovedResult(
+        contracts.GroupTokenAddress,
+        address,
+      );
       setIsApproved(isApprovedRes);
     };
 
     checkApproved();
-  }, [address, contracts, loadingContract, publicClient]);
+  }, [address, contracts, getApprovedResult, loadingContract, publicClient]);
 
   // approve group nft
   const doApprove = async () => {
@@ -106,6 +115,12 @@ export const useList = ({
       });
       console.log('tx', tx);
     }
+
+    const isApprovedRes = await getApprovedResult(
+      contracts.GroupTokenAddress,
+      address,
+    );
+    setIsApproved(isApprovedRes);
   };
 
   useEffect(() => {
