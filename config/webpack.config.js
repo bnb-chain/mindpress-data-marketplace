@@ -786,8 +786,8 @@ module.exports = function (webpackEnv) {
             },
           },
         }),
-      process.env.INLINE_RUNTIME_CHUNK && new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 0
+      shouldInlineRuntimeChunk && new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1
       })
     ].filter(Boolean),
     // Turn off performance processing because we utilize
