@@ -25,7 +25,7 @@ export const Trending = () => {
     fetchNextPage();
   }, [fetchNextPage]);
 
-  // console.log('trendingList', trendingList, hasNextPage);
+  console.log('trendingList', trendingList);
 
   if (!trendingList || isLoading) return <Loader />;
 

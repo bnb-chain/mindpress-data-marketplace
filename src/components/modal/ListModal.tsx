@@ -26,8 +26,10 @@ import { Loader } from '../Loader';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { Tips } from './Tips';
+import { useNavigate } from 'react-router-dom';
 
 export const ListModal = () => {
+  const navigator = useNavigate();
   const [listInfo, setListInfo] = useImmerAtom(listAtom);
   const { address } = useAccount();
   const { switchNetwork } = useSwitchNetwork();
@@ -93,6 +95,9 @@ export const ListModal = () => {
           </Box>
         ),
         buttonText: 'View Listing',
+        buttonClick: async () => {
+          navigator(`/profile?tab=uploaded`);
+        },
       });
 
       // refetch object status

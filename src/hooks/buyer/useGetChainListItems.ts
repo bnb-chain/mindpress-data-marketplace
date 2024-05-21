@@ -5,10 +5,11 @@ import { NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 
 export const useGetChainListItems = (groupIds?: bigint[]) => {
   const publicClient = usePublicClient();
+  const strGroupIds = groupIds?.map((id) => id.toString());
 
   return useQuery({
     enabled: !!groupIds,
-    queryKey: ['getListItems'],
+    queryKey: ['getListItems', strGroupIds],
     queryFn: async () => {
       if (!groupIds) return;
       return await publicClient.readContract({

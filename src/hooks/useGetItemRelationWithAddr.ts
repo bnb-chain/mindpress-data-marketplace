@@ -61,6 +61,7 @@ export const useGetRelationWithAddr = (
 ) => {
   const [relation, setRelation] = useState<ITEM_RELATION_ADDR>('UNKNOWN');
 
+  console.log('ownerAddress', ownerAddress);
   const params: SearchPurchaseRequest = {
     filter: {
       address: addr,

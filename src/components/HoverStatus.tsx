@@ -23,6 +23,8 @@ export const HoverStatus = ({ item, className }: IProps) => {
   const { address, isConnected, isConnecting } = useAccount();
   const { data: chainItemInfo } = useGetChainListItems([BigInt(item.groupId)]);
 
+  console.log('item.groupId', item);
+  console.log('chainItemInfo', chainItemInfo);
   const {
     relation,
     isLoading: relationisLoading,
