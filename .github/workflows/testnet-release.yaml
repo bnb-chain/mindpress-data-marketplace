@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: '16.x'
           registry-url: 'https://registry.npmjs.org'
-      
+
       - uses: ./.github/actions/ci-setup
 
       - name: Build React App
@@ -42,20 +42,10 @@ jobs:
           REACT_APP_GF_RPC_URL: https://gnfd-testnet-fullnode-tendermint-us.bnbchain.org
           REACT_APP_BSC_RPC_URL: https://opbnb-testnet-rpc.bnbchain.org
           REACT_APP_BSC_CHAIN_ID: 5611
-          REACT_APP_MARKETPLACE_CONTRACT_ADDRESS: "0xbDc835828B140d1F36315f70575a8a057506ECC4"
-          REACT_APP_GROUP_HUB_CONTRACT_ADDRESS: "0xe53725ac14bD77fA4754fC5a09889135C2c7Bc25"
-          REACT_APP_MULTI_CALL_CONTRACT_ADDRESS: "0xB3C3c8434BCaD4171F86426C2AFBf5A9c0590Be2"
-          REACT_APP_ERC1155_TRANSFER_CONTRACT_ADDRESS: "0x5116a3255C33029756013B6a0d1690775413EE6D"
-          REACT_APP_ERC721_TRANSFER_CONTRACT_ADDRESS: "0x8C74F8e6cD4DCb307d344F358683594A68d66CD9"
           REACT_APP_NETWORK: Testnet
           REACT_APP_DAPP_NAME: mindt0125
           G_TAG: G-SHLTDD3YG4
           REACT_APP_API_DOMAIN: https://api-testnet-marketplace.mindpress.io/v1/
-          REACT_APP_CROSS_CHAIN_FEE: 0.000001
-          REACT_APP_INITIATE_LIST_FEE: 0.00003
-          REACT_APP_LIST_FEE_ON_GF: 0.0000036
-          REACT_APP_LIST_ESTIMATE_FEE_ON_BSC: 0.0000036
-          REACT_APP_BSC_SEND_GAS_FEE: 10000000000
         run: |
           pnpm run build
 
@@ -67,7 +57,7 @@ jobs:
           --label "org.opencontainers.image.version=$(git describe --tags --abbrev=0)" \
           --label "org.opencontainers.image.licenses=AGPL-3.0" \
           -f ./Dockerfile -t "${IMAGE_NAME}"
-    
+
       - name: Login to GHCR
         uses: docker/login-action@v2
         with:

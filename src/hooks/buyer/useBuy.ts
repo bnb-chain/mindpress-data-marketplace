@@ -4,11 +4,11 @@ import { parseEther } from 'viem';
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { buyAtom } from '../../atoms/buyAtom';
 import { MarketplaceAbi } from '../../base/contract/marketplace.abi';
-import { BSC_SEND_GAS_FEE, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
+import { NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 import { sleep } from '../../utils/space';
 import { useChainBalance } from '../price/useChainBalance';
-import { useModal } from '../useModal';
 import { useRelayFee } from '../price/useRelayFee';
+import { useModal } from '../useModal';
 import { useStatus } from '../useStatus';
 
 export const useBuy = (
@@ -56,12 +56,6 @@ export const useBuy = (
         if (parseEther(BscBalanceVal.toString()) >= totalFee) {
           let tmp = {};
           try {
-            console.log('params', groupId, {
-              from: address,
-              value: totalFee,
-              gasPrice: BSC_SEND_GAS_FEE,
-            });
-
             const { request } = await publicClient.simulateContract({
               account: address,
               address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
