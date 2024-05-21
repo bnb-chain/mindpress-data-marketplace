@@ -42,11 +42,14 @@ const CateItem = styled(MPLink)`
   color: #f7f7f8;
   width: 180px;
   height: 180px;
-  line-height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 16px;
   font-weight: 800;
   text-align: center;
   border-radius: 8px;
+  word-break: break-all;
 
   &:hover {
     color: rgba(247, 247, 248, 0.8);
