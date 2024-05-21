@@ -19,6 +19,7 @@ import { Tips } from '../modal/Tips';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
 import { Loader } from '../Loader';
+import { UPLOAD_LIST_PAGE_SIZE } from '../profile/MyCollectionList';
 
 export const Uploader = () => {
   const { address, connector } = useAccount();
@@ -46,7 +47,7 @@ export const Uploader = () => {
   const { refetch: refetchList } = useGetObjInBucketListStatus(
     getSpaceName(address),
     0,
-    10,
+    UPLOAD_LIST_PAGE_SIZE,
   );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {

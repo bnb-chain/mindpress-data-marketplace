@@ -13,25 +13,24 @@ import {
 import { useSetAtom } from 'jotai';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Address } from 'wagmi';
 import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
 import { GF_EXPLORER_URL } from '../../env';
+import { useSelectEndpoint } from '../../hooks/apis/useSelectEndpoint';
+import { useDelist } from '../../hooks/seller/useDelist';
 import { useGetBucketByName } from '../../hooks/useGetBucketOrObj';
 import { useGetItemList } from '../../hooks/useGetItemList';
 import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
 import { contentTypeToExtension } from '../../utils';
+import { getItemByObjectId } from '../../utils/apis';
+import { THUMB, getSpaceName } from '../../utils/space';
 import { Loader } from '../Loader';
 import { UploadImage } from '../svgIcon/UploadImage';
+import { MPLink } from '../ui/MPLink';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
 import { YellowButton } from '../ui/buttons/YellowButton';
-import { MPLink } from '../ui/MPLink';
-import { useSelectEndpoint } from '../../hooks/apis/useSelectEndpoint';
-import { THUMB, getSpaceName } from '../../utils/space';
-import { Address, useAccount } from 'wagmi';
-import { useDelist } from '../../hooks/seller/useDelist';
-import { getItemByObjectId } from '../../utils/apis';
 
-// TODO:
-const PAGE_SIZE = 10;
+export const UPLOAD_LIST_PAGE_SIZE = 10;
 
 interface ICollectionList {
   address: Address;
@@ -48,12 +47,12 @@ const MyCollectionList = ({ address }: ICollectionList) => {
         address: address,
         keyword: '',
       },
-      offset: (page - 1) * PAGE_SIZE,
-      limit: PAGE_SIZE,
+      offset: (page - 1) * UPLOAD_LIST_PAGE_SIZE,
+      limit: UPLOAD_LIST_PAGE_SIZE,
       sort: 'CREATION_DESC',
     },
     page,
-    PAGE_SIZE,
+    UPLOAD_LIST_PAGE_SIZE,
   );
 
   const BUCKET_NAME = getSpaceName(address);
@@ -61,7 +60,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
   const { confirmDelist } = useDelist();
 
   const { data: listData, isLoading: listLoading } =
-    useGetObjInBucketListStatus(BUCKET_NAME, page, PAGE_SIZE);
+    useGetObjInBucketListStatus(BUCKET_NAME, page, UPLOAD_LIST_PAGE_SIZE);
 
   const { data: bucketInfo } = useGetBucketByName(BUCKET_NAME);
 
@@ -198,10 +197,11 @@ const MyCollectionList = ({ address }: ICollectionList) => {
             );
           })}
       </Grid>
+
       <Flex justifyContent="center" mt="40px" mb="40px">
         <StyledPagination
           current={page}
-          pageSize={PAGE_SIZE}
+          pageSize={UPLOAD_LIST_PAGE_SIZE}
           total={data?.total}
           showQuickJumper={false}
           onChange={(p) => {

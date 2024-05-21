@@ -1,8 +1,8 @@
 import styled from '@emotion/styled';
 import { Box, Flex, Stack } from '@totejs/uikit';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import Web3 from 'web3';
 import BSCIcon from '../components/svgIcon/BSCIcon';
@@ -12,6 +12,7 @@ import ProfileList from '../components/profile/Index';
 const Profile = () => {
   const { address } = useAccount();
   const [p] = useSearchParams();
+  const navigator = useNavigate();
   const otherAddress = p.get('address') as string;
 
   const realAddress = useMemo(() => {
@@ -19,6 +20,12 @@ const Profile = () => {
       ? otherAddress
       : address;
   }, [address, otherAddress]);
+
+  useEffect(() => {
+    if (!realAddress) {
+      navigator(`/`);
+    }
+  }, [navigator, realAddress]);
 
   return (
     <Container>
