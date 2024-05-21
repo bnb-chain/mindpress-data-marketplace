@@ -31,7 +31,7 @@ import { useDelist } from '../../hooks/seller/useDelist';
 import { getItemByObjectId } from '../../utils/apis';
 
 // TODO:
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 10;
 
 interface ICollectionList {
   address: Address;
@@ -61,7 +61,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
   const { confirmDelist } = useDelist();
 
   const { data: listData, isLoading: listLoading } =
-    useGetObjInBucketListStatus(BUCKET_NAME, page);
+    useGetObjInBucketListStatus(BUCKET_NAME, page, PAGE_SIZE);
 
   const { data: bucketInfo } = useGetBucketByName(BUCKET_NAME);
 

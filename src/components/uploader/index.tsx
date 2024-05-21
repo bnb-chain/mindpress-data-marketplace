@@ -46,6 +46,7 @@ export const Uploader = () => {
   const { refetch: refetchList } = useGetObjInBucketListStatus(
     getSpaceName(address),
     0,
+    10,
   );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
