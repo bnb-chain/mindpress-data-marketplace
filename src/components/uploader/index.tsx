@@ -18,6 +18,7 @@ import NiceModal from '@ebay/nice-modal-react';
 import { Tips } from '../modal/Tips';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
+import { Loader } from '../Loader';
 
 export const Uploader = () => {
   const { address, connector } = useAccount();
@@ -240,13 +241,23 @@ export const Uploader = () => {
             uploadInfo.status === 'uploading'
           }
           isLoading={createSpaceStart || uploadInfo.status === 'uploading'}
-          loadingText={'Progressing...'}
+          loadingText={
+            <Flex alignItems="center" gap="5px">
+              <Loader minHeight={50} size={25} color="#999" bg="#efefef" />
+              Progressing...
+            </Flex>
+          }
           onClick={async () => {
             if (uploadInfo.status === 'success') {
+              // Close
               setUpobjs((draft) => {
                 draft.openModal = false;
               });
+              setUploadInfo((draft) => {
+                draft.status = 'init';
+              });
             } else {
+              // Upload
               handleUpload();
             }
           }}
