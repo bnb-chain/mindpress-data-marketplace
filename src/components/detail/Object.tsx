@@ -11,6 +11,7 @@ import { useSelectEndpoint } from '../../hooks/apis/useSelectEndpoint';
 import { THUMB } from '../../utils/space';
 import { ListForm } from '../form/ListForm';
 import { MPLink } from '../ui/MPLink';
+import { Loader } from '../Loader';
 
 /**
  * Have not been listed
@@ -22,8 +23,10 @@ export const Object = () => {
   const bucketId = p.get('bid') as string;
   const { data: endpoint } = useSelectEndpoint();
 
-  const { data: bucketData } = useGetBucketById(bucketId);
-  const { data: objectData } = useGfGetObjInfo(objectId);
+  const { data: bucketData, isLoading: isBucketLoading } =
+    useGetBucketById(bucketId);
+  const { data: objectData, isLoading: isObjectLoading } =
+    useGfGetObjInfo(objectId);
 
   // if objectItemInfo is `{}`,
   // means this object is not listed
@@ -70,6 +73,10 @@ export const Object = () => {
   //     replace: true,
   //   });
   // }
+
+  if (isBucketLoading || isObjectLoading) {
+    return <Loader />;
+  }
 
   if (!objectData || !bucketData) {
     return <NoData />;
