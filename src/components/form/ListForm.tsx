@@ -79,8 +79,6 @@ export const ListForm: React.FC<IProps> = ({
       });
     },
     validationSchema: ListSchema,
-    validateOnChange: false,
-    validateOnBlur: false,
   });
 
   const { data: cates } = useGetCatoriesMap();
@@ -95,7 +93,7 @@ export const ListForm: React.FC<IProps> = ({
   return (
     <form onSubmit={formik.handleSubmit}>
       <Stack gap="24px">
-        <MpFormControl isInvalid={!!formik.errors.name}>
+        <MpFormControl isInvalid={!!formik.errors.name && formik.touched.name}>
           <FormLabel htmlFor="name">Name</FormLabel>
           <MpInput
             id="name"
@@ -107,7 +105,9 @@ export const ListForm: React.FC<IProps> = ({
             <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
           )}
         </MpFormControl>
-        <MpFormControl isInvalid={!!formik.errors.description}>
+        <MpFormControl
+          isInvalid={!!formik.errors.description && formik.touched.description}
+        >
           <FormLabel htmlFor="description">Description</FormLabel>
           <MpTextarea
             id="description"
@@ -119,7 +119,9 @@ export const ListForm: React.FC<IProps> = ({
             <FormErrorMessage>{formik.errors.description}</FormErrorMessage>
           )}
         </MpFormControl>
-        <MpFormControl isInvalid={!!formik.errors.category}>
+        <MpFormControl
+          isInvalid={!!formik.errors.category && formik.touched.category}
+        >
           <FormLabel htmlFor="category">Category</FormLabel>
           <Select
             handleSelectVal={(v) => {
@@ -131,7 +133,9 @@ export const ListForm: React.FC<IProps> = ({
             <FormErrorMessage>{formik.errors.category}</FormErrorMessage>
           )}
         </MpFormControl>
-        <MpFormControl isInvalid={!!formik.errors.price}>
+        <MpFormControl
+          isInvalid={!!formik.errors.price && formik.touched.price}
+        >
           <FormLabel htmlFor="price">Set a price</FormLabel>
           <InputGroup>
             <MpInput
