@@ -30,12 +30,13 @@ interface FormValues {
 }
 
 const ListSchema = Yup.object().shape({
-  name: Yup.string().required('Name is required'),
+  name: Yup.string().required('Name is required').max(30),
   price: Yup.number()
     .positive()
     .required('Price is required')
     .typeError('Price must be a number'),
   category: Yup.string().required('Category is required'),
+  description: Yup.string().max(120),
 });
 
 interface IProps {
@@ -106,7 +107,7 @@ export const ListForm: React.FC<IProps> = ({
             <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
           )}
         </MpFormControl>
-        <MpFormControl>
+        <MpFormControl isInvalid={!!formik.errors.description}>
           <FormLabel htmlFor="description">Description</FormLabel>
           <MpTextarea
             id="description"
@@ -114,6 +115,9 @@ export const ListForm: React.FC<IProps> = ({
             onChange={formik.handleChange}
             value={formik.values.description}
           />
+          {formik.errors.description && (
+            <FormErrorMessage>{formik.errors.description}</FormErrorMessage>
+          )}
         </MpFormControl>
         <MpFormControl isInvalid={!!formik.errors.category}>
           <FormLabel htmlFor="category">Category</FormLabel>
