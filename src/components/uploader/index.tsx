@@ -1,25 +1,29 @@
 import { OnProgressEvent, VisibilityType } from '@bnb-chain/greenfield-js-sdk';
+import NiceModal from '@ebay/nice-modal-react';
 import { Box, Center, Flex, Text } from '@totejs/uikit';
 import Compressor from 'compressorjs';
 import { useAtom } from 'jotai';
 import { useImmerAtom } from 'jotai-immer';
 import { useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useBalance } from 'wagmi';
 import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
+import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
+import { useChainBalance } from '../../hooks/price/useChainBalance';
 import { useCreateSpace } from '../../hooks/seller/useCreateSpace';
 import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
 import { client } from '../../utils/gfSDK';
-import { THUMB, getSpaceName, shortObjectName, sleep } from '../../utils/space';
+import { THUMB, getSpaceName, shortObjectName } from '../../utils/space';
+import { Loader } from '../Loader';
+import { Tips } from '../modal/Tips';
+import { UPLOAD_LIST_PAGE_SIZE } from '../profile/MyCollectionList';
+import BSCIcon from '../svgIcon/BSCIcon';
 import { BlackSolidButton } from '../ui/buttons/BlackButton';
 import { DragBox } from './DragArea';
 import { UploadArea } from './UploadArea';
 import { UploadAtom } from './atoms/uploadAtom';
-import NiceModal from '@ebay/nice-modal-react';
-import { Tips } from '../modal/Tips';
-import BSCIcon from '../svgIcon/BSCIcon';
-import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
-import { Loader } from '../Loader';
-import { UPLOAD_LIST_PAGE_SIZE } from '../profile/MyCollectionList';
+import { GREENFIELD_CHAIN, UPLOAD_OBJECT_FEE } from '../../env';
+import { parseEther } from 'viem';
+import { ColoredErrorIcon } from '@totejs/icons';
 
 export const Uploader = () => {
   const { address, connector } = useAccount();
@@ -27,6 +31,11 @@ export const Uploader = () => {
   const [files, setFiles] = useState<File[] | null>(null);
   const [uploadInfo, setUploadInfo] = useImmerAtom(UploadAtom);
   const [upobjs, setUpobjs] = useImmerAtom(uploadObjcetAtom);
+
+  const { data: GnfdBalance } = useBalance({
+    address: address,
+    chainId: GREENFIELD_CHAIN.id,
+  });
 
   const {
     start: createSpaceStart,
@@ -84,6 +93,20 @@ export const Uploader = () => {
 
   const handleUpload = async () => {
     if (!address) return;
+
+    if (!GnfdBalance || !UPLOAD_OBJECT_FEE) return;
+    if (GnfdBalance.value < parseEther(UPLOAD_OBJECT_FEE)) {
+      NiceModal.show(Tips, {
+        title: 'insufficient gas',
+        content: (
+          <Box>
+            <ColoredErrorIcon size="xl" />
+          </Box>
+        ),
+        buttonText: 'Got it',
+      });
+      return;
+    }
 
     const bucketName = getSpaceName(address);
 

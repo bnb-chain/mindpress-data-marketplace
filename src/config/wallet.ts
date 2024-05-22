@@ -8,7 +8,7 @@ import { Chain } from 'viem/chains';
 import { createConfig } from 'wagmi';
 import * as env from '../env';
 
-export const chains: Chain[] = [env.BSC_CHAIN];
+export const chains: Chain[] = [env.BSC_CHAIN, env.GREENFIELD_CHAIN];
 
 export const config = createConfig(
   getDefaultConfig({
