@@ -13,6 +13,7 @@ import { ListForm } from '../form/ListForm';
 import { MPLink } from '../ui/MPLink';
 import { Loader } from '../Loader';
 import DefaultImage from '../ui/default-image';
+import { useSourceImage } from '../../hooks/useSourceImage';
 
 /**
  * Have not been listed
@@ -75,6 +76,12 @@ export const Object = () => {
   //   });
   // }
 
+  const { data: sourceImageUrl, isLoading: isLoadingSourceImage } =
+    useSourceImage({
+      bucketName: bucketData?.bucketInfo?.bucketName,
+      objectName: objectData?.objectInfo?.objectName,
+    });
+
   if (isBucketLoading || isObjectLoading) {
     return <Loader />;
   }
@@ -100,7 +107,15 @@ export const Object = () => {
       </Box>
       <ResourceInfo gap="20px">
         <ImgCon>
-          <Image src={imageUrl} alt="" fallbackSrc={DefaultImage} />
+          {isLoadingSourceImage ? (
+            <Loader />
+          ) : (
+            <Image
+              src={sourceImageUrl || imageUrl}
+              alt=""
+              fallbackSrc={DefaultImage}
+            />
+          )}
         </ImgCon>
 
         <Flex flex="1" gap={24} flexDir="column" justifyContent={'start'}>
