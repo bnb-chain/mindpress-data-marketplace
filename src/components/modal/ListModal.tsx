@@ -123,6 +123,8 @@ export const ListModal = () => {
     return formatEther(BigInt(parseInt(usdExchange)) * totalFees);
   }, [totalFees, usdExchange]);
 
+  console.log('isApproved', isApproved);
+
   return (
     <QDrawer
       w="380px"
@@ -167,7 +169,7 @@ export const ListModal = () => {
         <Flex flexDirection={'column'} gap={6} w="100%">
           <Stack
             mb="24px"
-            color="#F7F7F8"
+            // color="#F7F7F8"
             pos="relative"
             sx={{
               '.line': {
@@ -184,6 +186,7 @@ export const ListModal = () => {
                 my: '7px',
                 fontSize: '14px',
                 fontWeight: 600,
+                color: isApproved ? '#F7F7F8' : '#8C8F9B',
               },
               '&>.item:before': {
                 content: '""',
