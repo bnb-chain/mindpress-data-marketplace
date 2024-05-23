@@ -9,6 +9,7 @@ import 'slick-carousel/slick/slick.css';
 import { Item } from '../../../utils/apis/types';
 import { HoverStatus } from '../../HoverStatus';
 import { MPLink } from '../MPLink';
+import DefaultImage from '../default-image';
 
 interface IProps {
   list: Item[];
@@ -52,10 +53,7 @@ export const Carousel = ({ list }: IProps) => {
               //   navigator(`/resource?id=${item.id}&gid=${item.groupId}`);
               // }}
             >
-              <Image
-                src={item.url}
-                fallbackSrc={`https://picsum.photos/500/200?${item.id}`}
-              />
+              <Image src={item.url} fallbackSrc={DefaultImage} />
 
               {activeItem && (
                 <HoverStatus className="hover-layer" item={activeItem} />

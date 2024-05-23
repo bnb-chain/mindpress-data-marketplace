@@ -20,6 +20,7 @@ import { Loader } from '../Loader';
 import { MPLink } from '../ui/MPLink';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
 import { useGetChainListItems } from '../../hooks/buyer/useGetChainListItems';
+import DefaultImage from '../ui/default-image';
 
 const PAGE_SIZE = 12;
 
@@ -70,10 +71,7 @@ const PurchaseList = ({ address }: IProps) => {
                 >
                   <Image
                     src={chainGroupsInfo?.urls?.[index] || ''}
-                    fallbackSrc={`https://picsum.photos/seed/${item.name.replaceAll(
-                      ' ',
-                      '',
-                    )}/400/400`}
+                    fallbackSrc={DefaultImage}
                   />
 
                   <VStack className="layer" justifyContent="center">

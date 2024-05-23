@@ -33,6 +33,7 @@ import {
   roundFun,
   trimLongStr,
 } from '../utils';
+import DefaultImage from '../components/ui/default-image';
 
 /**
  * Have been listed page
@@ -98,10 +99,7 @@ const Resource = () => {
     <Container>
       <ResourceInfo>
         <ImageContainer>
-          <Image
-            src={chainItemInfo?.urls?.[0]}
-            fallbackSrc={`https://picsum.photos/seed/${itemInfo.id}/400/600`}
-          />
+          <Image src={chainItemInfo?.urls?.[0]} fallbackSrc={DefaultImage} />
         </ImageContainer>
 
         <Info>

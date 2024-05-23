@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { BackIcon } from '@totejs/icons';
-import { Box, Flex } from '@totejs/uikit';
+import { Box, Flex, Image } from '@totejs/uikit';
 import { isEmpty } from 'lodash';
 import { useSearchParams } from 'react-router-dom';
 import { NoData } from '../../components/NoData';
@@ -12,6 +12,7 @@ import { THUMB } from '../../utils/space';
 import { ListForm } from '../form/ListForm';
 import { MPLink } from '../ui/MPLink';
 import { Loader } from '../Loader';
+import DefaultImage from '../ui/default-image';
 
 /**
  * Have not been listed
@@ -99,7 +100,7 @@ export const Object = () => {
       </Box>
       <ResourceInfo gap="20px">
         <ImgCon>
-          <img src={imageUrl} alt="" />
+          <Image src={imageUrl} alt="" fallbackSrc={DefaultImage} />
         </ImgCon>
 
         <Flex flex="1" gap={24} flexDir="column" justifyContent={'start'}>

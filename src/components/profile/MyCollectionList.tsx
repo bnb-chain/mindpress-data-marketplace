@@ -18,6 +18,7 @@ import { UploadImage } from '../svgIcon/UploadImage';
 import { MPLink } from '../ui/MPLink';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
 import { YellowButton } from '../ui/buttons/YellowButton';
+import DefaultImage from '../ui/default-image';
 
 export const UPLOAD_LIST_PAGE_SIZE = 10;
 
@@ -65,10 +66,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                 <ImageBox>
                   <Image
                     src={`${endpoint}/view/${bucketName}/${THUMB}/${item.ObjectInfo.ObjectName}`}
-                    fallbackSrc={`https://picsum.photos/seed/${item.ObjectInfo.ObjectName.replaceAll(
-                      ' ',
-                      '',
-                    )}/400/400`}
+                    fallbackSrc={DefaultImage}
                     alt={`${endpoint}/view/${bucketName}/${THUMB}/${item.ObjectInfo.ObjectName}`}
                   />
 
