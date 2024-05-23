@@ -4,11 +4,13 @@ import { Box, Center, Flex, Text } from '@totejs/uikit';
 import { DelistIcon } from '../../components/svgIcon/DelistIcon';
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { MarketplaceAbi } from '../../base/contract/marketplace.abi';
-import { NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
+import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 
 export const useDelist = () => {
   const { address } = useAccount();
-  const publicClient = usePublicClient();
+  const publicClient = usePublicClient({
+    chainId: BSC_CHAIN.id,
+  });
   const { data: walletClient } = useWalletClient();
 
   const doDeist = async (groupId: bigint) => {

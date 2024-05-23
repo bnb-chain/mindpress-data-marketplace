@@ -1,10 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { usePublicClient } from 'wagmi';
 import { MarketplaceAbi } from '../../base/contract/marketplace.abi';
-import { NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
+import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 
 export const useGetChainListItems = (groupIds?: bigint[]) => {
-  const publicClient = usePublicClient();
+  const publicClient = usePublicClient({
+    chainId: BSC_CHAIN.id,
+  });
   const strGroupIds = groupIds?.map((id) => id.toString());
 
   return useQuery({

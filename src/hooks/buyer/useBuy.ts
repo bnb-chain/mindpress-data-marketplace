@@ -4,7 +4,7 @@ import { parseEther } from 'viem';
 import { useAccount, usePublicClient, useWalletClient } from 'wagmi';
 import { buyAtom } from '../../atoms/buyAtom';
 import { MarketplaceAbi } from '../../base/contract/marketplace.abi';
-import { NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
+import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 import { sleep } from '../../utils/space';
 import { useChainBalance } from '../price/useChainBalance';
 import { useRelayFee } from '../price/useRelayFee';
@@ -22,7 +22,9 @@ export const useBuy = (
   const { address } = useAccount();
   const { BscBalanceVal } = useChainBalance();
   const { status } = useStatus(groupName, groupOwner, address as string);
-  const publicClient = usePublicClient();
+  const publicClient = usePublicClient({
+    chainId: BSC_CHAIN.id,
+  });
   const { data: walletClient } = useWalletClient();
 
   const { relayFee } = useRelayFee();

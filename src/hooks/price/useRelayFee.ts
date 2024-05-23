@@ -5,7 +5,9 @@ import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 
 export const useRelayFee = () => {
   const [relayFee, setRelayFee] = useState(BigInt(0));
-  const publicClient = usePublicClient();
+  const publicClient = usePublicClient({
+    chainId: BSC_CHAIN.id,
+  });
   const { chain } = useNetwork();
 
   useEffect(() => {

@@ -85,7 +85,7 @@ const Resource = () => {
   const { onOpen } = useWalletKitModal();
 
   // console.log('itemInfo', storageInfo, itemInfo, bucketData, objectData);
-  // console.log('chainItemInfo', groupId, chainItemInfo);
+  console.log('chainItemInfo', groupId, chainItemInfo);
 
   if (itemInfoLoading || isChainItemInfo) {
     return <Loader />;

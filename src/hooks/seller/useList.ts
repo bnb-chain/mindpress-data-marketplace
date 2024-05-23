@@ -50,7 +50,9 @@ export const useList = ({
   const { chain } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
   const isBSCChain = chain?.id === BSC_CHAIN.id;
-  const publicClient = usePublicClient();
+  const publicClient = usePublicClient({
+    chainId: BSC_CHAIN.id,
+  });
   const { data: walletClient } = useWalletClient();
 
   const { data: contracts, isLoading: loadingContract } =

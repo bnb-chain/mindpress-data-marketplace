@@ -45,7 +45,9 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
   const { chain } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
   const isBSCChain = chain?.id === BSC_CHAIN.id;
-  const publicClient = usePublicClient();
+  const publicClient = usePublicClient({
+    chainId: BSC_CHAIN.id,
+  });
   const { data: walletClient } = useWalletClient();
   const [spaceExist, setSpaceExist] = useState<boolean>(false);
 
