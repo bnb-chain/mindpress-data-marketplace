@@ -57,7 +57,7 @@ const Header = styled(ModalHeader)`
 `;
 
 const CustomBody = styled(ModalBody)`
-  height: 200px;
+  /* height: 200px; */
   font-size: 20px;
   color: #000000;
   text-align: center;
