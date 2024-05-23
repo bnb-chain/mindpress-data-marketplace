@@ -1,14 +1,16 @@
 import { OnProgressEvent, VisibilityType } from '@bnb-chain/greenfield-js-sdk';
 import NiceModal from '@ebay/nice-modal-react';
+import { ColoredErrorIcon } from '@totejs/icons';
 import { Box, Center, Flex, Text } from '@totejs/uikit';
 import Compressor from 'compressorjs';
 import { useAtom } from 'jotai';
 import { useImmerAtom } from 'jotai-immer';
 import { useState } from 'react';
+import { parseEther } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
 import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
-import { useChainBalance } from '../../hooks/price/useChainBalance';
+import { GREENFIELD_CHAIN, UPLOAD_OBJECT_FEE } from '../../env';
 import { useCreateSpace } from '../../hooks/seller/useCreateSpace';
 import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
 import { client } from '../../utils/gfSDK';
@@ -21,9 +23,6 @@ import { BlackSolidButton } from '../ui/buttons/BlackButton';
 import { DragBox } from './DragArea';
 import { UploadArea } from './UploadArea';
 import { UploadAtom } from './atoms/uploadAtom';
-import { GREENFIELD_CHAIN, UPLOAD_OBJECT_FEE } from '../../env';
-import { parseEther } from 'viem';
-import { ColoredErrorIcon } from '@totejs/icons';
 
 export const Uploader = () => {
   const { address, connector } = useAccount();
@@ -55,7 +54,6 @@ export const Uploader = () => {
 
   const { refetch: refetchList } = useGetObjInBucketListStatus(
     getSpaceName(address),
-    0,
     UPLOAD_LIST_PAGE_SIZE,
   );
 

@@ -1,17 +1,20 @@
 import { useEffect, useState } from 'react';
 import { parseAbi } from 'viem';
-import { usePublicClient } from 'wagmi';
-import { NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
+import { useNetwork, usePublicClient } from 'wagmi';
+import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 
 export const useRelayFee = () => {
   const [relayFee, setRelayFee] = useState(BigInt(0));
   const publicClient = usePublicClient();
+  const { chain } = useNetwork();
 
   useEffect(() => {
     getFee();
+
     async function getFee() {
+      if (chain?.id !== BSC_CHAIN.id) return;
+
       const tmp = await publicClient.readContract({
-        // abi: MarketplaceAbi,
         abi: parseAbi([
           'function getMinRelayFee() external view returns (uint256 amount)',
         ]),
@@ -20,13 +23,7 @@ export const useRelayFee = () => {
       });
       setRelayFee(tmp);
     }
-    // MarketPlaceContract(false)
-    //   .methods.getMinRelayFee()
-    //   .call()
-    //   .then((result: any) => {
-    //     setRelayFee(result);
-    //   });
-  }, [publicClient]);
+  }, [chain?.id, publicClient]);
 
   return { relayFee };
 };

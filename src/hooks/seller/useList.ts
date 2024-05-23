@@ -83,6 +83,7 @@ export const useList = ({
     const checkApproved = async () => {
       if (!address) return;
       if (loadingContract || !contracts) return;
+      if (chain?.id !== BSC_CHAIN.id) return;
 
       const isApprovedRes = await getApprovedResult(
         contracts.GroupTokenAddress,
@@ -92,7 +93,14 @@ export const useList = ({
     };
 
     checkApproved();
-  }, [address, contracts, getApprovedResult, loadingContract, publicClient]);
+  }, [
+    address,
+    chain?.id,
+    contracts,
+    getApprovedResult,
+    loadingContract,
+    publicClient,
+  ]);
 
   // approve group nft
   const doApprove = async () => {
@@ -128,6 +136,8 @@ export const useList = ({
 
     async function calcuteFee() {
       if (!contracts) return;
+      if (chain?.id !== BSC_CHAIN.id) return;
+
       const [realyFee, ackRelayFee] = await publicClient.readContract({
         abi: CrossChainAbi,
         address: contracts.CrossChainAddress,
@@ -148,7 +158,7 @@ export const useList = ({
 
       setTotalFee(values);
     }
-  }, [contracts, publicClient]);
+  }, [chain?.id, contracts, publicClient]);
 
   const doList = async () => {
     if (!address) return;

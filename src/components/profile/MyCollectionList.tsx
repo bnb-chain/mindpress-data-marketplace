@@ -1,17 +1,7 @@
 import styled from '@emotion/styled';
 import { LinkArrowIcon } from '@totejs/icons';
-import {
-  Box,
-  Flex,
-  Grid,
-  Image,
-  Pagination,
-  Stack,
-  Text,
-  VStack,
-} from '@totejs/uikit';
+import { Box, Flex, Grid, Image, Stack, Text, VStack } from '@totejs/uikit';
 import { useSetAtom } from 'jotai';
-import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Address } from 'wagmi';
 import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
@@ -19,7 +9,6 @@ import { GF_EXPLORER_URL } from '../../env';
 import { useSelectEndpoint } from '../../hooks/apis/useSelectEndpoint';
 import { useDelist } from '../../hooks/seller/useDelist';
 import { useGetBucketByName } from '../../hooks/useGetBucketOrObj';
-import { useGetItemList } from '../../hooks/useGetItemList';
 import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
 import { contentTypeToExtension } from '../../utils';
 import { getItemByObjectId } from '../../utils/apis';
@@ -36,33 +25,15 @@ interface ICollectionList {
   address: Address;
 }
 const MyCollectionList = ({ address }: ICollectionList) => {
-  const [page, setPage] = useState(1);
   const navigator = useNavigate();
-
   const { data: endpoint } = useSelectEndpoint();
-
-  const { data, isLoading, error } = useGetItemList(
-    {
-      filter: {
-        address: address,
-        keyword: '',
-      },
-      offset: (page - 1) * UPLOAD_LIST_PAGE_SIZE,
-      limit: UPLOAD_LIST_PAGE_SIZE,
-      sort: 'CREATION_DESC',
-    },
-    page,
-    UPLOAD_LIST_PAGE_SIZE,
-  );
-
-  const BUCKET_NAME = getSpaceName(address);
-
+  const bucketName = getSpaceName(address);
   const { confirmDelist } = useDelist();
 
-  const { data: listData, isLoading: listLoading } =
-    useGetObjInBucketListStatus(BUCKET_NAME, page, UPLOAD_LIST_PAGE_SIZE);
+  const { data: listData, isLoading: isListDataLoading } =
+    useGetObjInBucketListStatus(bucketName, UPLOAD_LIST_PAGE_SIZE);
 
-  const { data: bucketInfo } = useGetBucketByName(BUCKET_NAME);
+  const { data: bucketInfo } = useGetBucketByName(bucketName);
 
   const setUpobjs = useSetAtom(uploadObjcetAtom);
 
@@ -72,7 +43,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
     });
   };
 
-  if (isLoading || listLoading) {
+  if (isListDataLoading) {
     return <Loader />;
   }
 
@@ -87,25 +58,18 @@ const MyCollectionList = ({ address }: ICollectionList) => {
         </UploadImageCard>
 
         {listData?.objsData &&
+          listData?.listIndex &&
           listData?.objsData.map((item) => {
             return (
-              <Card
-                key={item.ObjectInfo.Id}
-                onClick={() => {
-                  // console.log('item', item);
-                  navigator(
-                    `/detail?bid=${bucketInfo?.bucketInfo?.id}&oid=${item.ObjectInfo.Id}&path=/`,
-                  );
-                }}
-              >
+              <Card key={item.ObjectInfo.Id}>
                 <ImageBox>
                   <Image
-                    src={`${endpoint}/view/${BUCKET_NAME}/${THUMB}/${item.ObjectInfo.ObjectName}`}
+                    src={`${endpoint}/view/${bucketName}/${THUMB}/${item.ObjectInfo.ObjectName}`}
                     fallbackSrc={`https://picsum.photos/seed/${item.ObjectInfo.ObjectName.replaceAll(
                       ' ',
                       '',
                     )}/400/400`}
-                    alt={`${endpoint}/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`}
+                    alt={`${endpoint}/view/${bucketName}/${THUMB}/${item.ObjectInfo.ObjectName}`}
                   />
 
                   <VStack className="layer" justifyContent="center">
@@ -118,7 +82,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                         e.stopPropagation();
                         // TODO: bucket name
                         window.open(
-                          `${endpoint}/view/${BUCKET_NAME}/${item.ObjectInfo.ObjectName}`,
+                          `${endpoint}/view/${bucketName}/${item.ObjectInfo.ObjectName}`,
                         );
                       }}
                     >
@@ -198,17 +162,17 @@ const MyCollectionList = ({ address }: ICollectionList) => {
           })}
       </Grid>
 
-      <Flex justifyContent="center" mt="40px" mb="40px">
-        <StyledPagination
-          current={page}
-          pageSize={UPLOAD_LIST_PAGE_SIZE}
-          total={data?.total}
-          showQuickJumper={false}
-          onChange={(p) => {
-            setPage(p);
+      {/* <LoadMoreContainer>
+        <LoadMore
+          // disabled={!loadMore}
+          onClick={() => {
+            // loadMore?.();
+            // setNextToken(listData?.nextPageToken || '');
           }}
-        />
-      </Flex>
+        >
+          Load More
+        </LoadMore>
+      </LoadMoreContainer> */}
     </Container>
   );
 };
@@ -217,6 +181,8 @@ export default MyCollectionList;
 
 const Container = styled.div`
   width: 1200px;
+  position: relative;
+  padding-bottom: 150px;
 `;
 
 const Card = styled(Stack)`
@@ -291,23 +257,26 @@ const ImageBox = styled(Box)`
   }
 `;
 
-const StyledPagination = styled(Pagination)`
-  .ui-button {
-    background: #373943;
-    color: #f7f7f8;
-    font-size: 14px;
-    width: 32px;
-    height: 32px;
-  }
-  .current[data-selected] {
-    background: #1e2026;
-    color: #8c8f9b;
-    cursor: not-allowed;
-  }
+// const LoadMoreContainer = styled(VStack)`
+//   background: linear-gradient(
+//     180deg,
+//     rgba(20, 21, 26, 0) 0%,
+//     rgba(20, 21, 26, 0.63) 39.06%,
+//     #14151a 100%
+//   );
 
-  .ui-icon-button {
-    width: 32px;
-    height: 32px;
-    color: #f7f7f8;
-  }
-`;
+//   position: absolute;
+//   bottom: 0px;
+//   left: 0;
+//   right: 0;
+//   padding: 100px 0 40px 0;
+// `;
+
+// const LoadMore = styled(DefaultButton)`
+//   background: #f1f2f3;
+//   color: #181a1e;
+//   font-size: 16px;
+//   font-weight: 600;
+//   height: 64px;
+//   padding: 20px 24px;
+// `;
