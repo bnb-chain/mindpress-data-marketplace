@@ -15,7 +15,7 @@ import {
 import { useImmerAtom } from 'jotai-immer';
 import { useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { formatEther } from 'viem';
+import { Address, formatEther } from 'viem';
 import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
 import { listAtom } from '../../atoms/listAtom';
 import { BSC_CHAIN, BSC_EXPLORER_URL } from '../../env';
@@ -49,15 +49,74 @@ export const ListModal = () => {
     UPLOAD_LIST_PAGE_SIZE,
   );
 
-  const { refetch: refetchListStatus } = useGetItemByObjId(
-    String(listInfo.data.objectId),
-  );
+  // const { refetch: refetchListStatus } = useGetItemByObjId(
+  //   String(listInfo.data.objectId),
+  // );
 
   const reset = useCallback(() => {
     setListInfo((draft) => {
       draft.open = false;
     });
   }, [setListInfo]);
+
+  const onSuccessModal = async (listHash?: Address) => {
+    NiceModal.show(Tips, {
+      title: ``,
+      content: (
+        <Box>
+          <img
+            style={{
+              height: '100px',
+              width: '100%',
+              objectFit: 'contain',
+              cursor: 'pointer',
+            }}
+            src={listInfo.data.imageUrl}
+            onClick={() => {
+              window.open(listInfo.data.imageUrl);
+            }}
+          />
+          <Text
+            as="h2"
+            fontSize="24px"
+            mt="20px"
+            mb="8px"
+            color="#181A1E"
+            fontWeight={900}
+          >
+            Your item has been listed!
+          </Text>
+          <Text fontSize="14px" color="#76808F">
+            <Box as="span" color="#1184EE">
+              {listInfo.data.name}
+            </Box>{' '}
+            has been listed on MindPress. You can click the button below to
+            check the listing or check on{' '}
+            <a
+              href={`${BSC_EXPLORER_URL}tx/${listHash}`}
+              target="_blank"
+              style={{
+                color: '#1184EE',
+              }}
+            >
+              explorer
+            </a>
+            .
+          </Text>
+        </Box>
+      ),
+      buttonText: 'View Listing',
+      buttonClick: async () => {
+        // refetch listed list
+        await refetchList();
+
+        // refetch object status
+        // await refetchListStatus();
+
+        navigator(`/profile?tab=uploaded`);
+      },
+    });
+  };
 
   const {
     // isApproved,
@@ -74,57 +133,7 @@ export const ListModal = () => {
       imageUrl: listInfo.data.imageUrl,
     },
     onSuccess: async (listHash) => {
-      NiceModal.show(Tips, {
-        title: ``,
-        content: (
-          <Box>
-            <img
-              style={{
-                height: '100px',
-                width: '100%',
-                objectFit: 'contain',
-              }}
-              src={listInfo.data.imageUrl}
-            />
-            <Text
-              as="h2"
-              fontSize="24px"
-              mt="20px"
-              color="#181A1E"
-              fontWeight={700}
-            >
-              Your item has been listed!
-            </Text>
-            <Text fontSize="14px" color="#76808F">
-              <Box as="span" color="#1184EE">
-                {listInfo.data.name}
-              </Box>{' '}
-              has been listed on MindPress. You can click the button below to
-              check the listing or check on{' '}
-              <a
-                href={`${BSC_EXPLORER_URL}tx/${listHash}`}
-                target="_blank"
-                style={{
-                  color: '#1184EE',
-                }}
-              >
-                explorer
-              </a>
-              .
-            </Text>
-          </Box>
-        ),
-        buttonText: 'View Listing',
-        buttonClick: async () => {
-          // refetch listed list
-          await refetchList();
-
-          // refetch object status
-          // await refetchListStatus();
-
-          navigator(`/profile?tab=uploaded`);
-        },
-      });
+      await onSuccessModal(listHash);
     },
   });
 

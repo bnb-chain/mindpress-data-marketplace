@@ -24,6 +24,7 @@ export const Tips = NiceModal.create<{
       <CustomBody>{content}</CustomBody>
       <ModalFooter>
         <BlackSolidButton
+          fontWeight={900}
           onClick={async () => {
             await buttonClick?.();
             modal.resolve();
