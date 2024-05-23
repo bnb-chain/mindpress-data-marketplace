@@ -3,6 +3,7 @@ import { atomWithImmer } from 'jotai-immer';
 interface IListAtom {
   open: boolean;
   data: {
+    name: string;
     bucketId: bigint;
     objectId: bigint;
     price: bigint;
@@ -15,6 +16,7 @@ interface IListAtom {
 export const listAtom = atomWithImmer<IListAtom>({
   open: false,
   data: {
+    name: '',
     bucketId: BigInt(0),
     objectId: BigInt(0),
     price: BigInt(0),

@@ -140,6 +140,14 @@ export const ListModal = () => {
           <ImgCon>
             <img src={listInfo.data.imageUrl} alt="" />
           </ImgCon>
+          <Box
+            fontSize="16px"
+            lineHeight="24px"
+            fontWeight={600}
+            color="#F7F7F8"
+          >
+            {listInfo.data.name}
+          </Box>
           <Box fontSize="14px" color="#C4C5CB">
             {listInfo.data.desc}
           </Box>

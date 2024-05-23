@@ -69,6 +69,7 @@ export const ListForm: React.FC<IProps> = ({
       setListInfo((draft) => {
         draft.open = true;
         draft.data = {
+          name: v.name,
           bucketId: BigInt(bucketId),
           objectId: BigInt(objectId),
           price: parseEther(v.price),
