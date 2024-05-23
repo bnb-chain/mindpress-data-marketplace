@@ -3,7 +3,7 @@ import { LinkArrowIcon } from '@totejs/icons';
 import { Box, Flex, Grid, Image, Stack, Text, VStack } from '@totejs/uikit';
 import { useSetAtom } from 'jotai';
 import { useNavigate } from 'react-router-dom';
-import { Address } from 'wagmi';
+import { Address, useAccount } from 'wagmi';
 import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
 import { GF_EXPLORER_URL } from '../../env';
 import { useSelectEndpoint } from '../../hooks/apis/useSelectEndpoint';
@@ -19,6 +19,7 @@ import { MPLink } from '../ui/MPLink';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import DefaultImage from '../ui/default-image';
+import { useMemo } from 'react';
 
 export const UPLOAD_LIST_PAGE_SIZE = 10;
 
@@ -30,6 +31,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
   const { data: endpoint } = useSelectEndpoint();
   const bucketName = getSpaceName(address);
   const { confirmDelist } = useDelist();
+  const { address: loginAddress } = useAccount();
 
   const { data: listData, isLoading: isListDataLoading } =
     useGetObjInBucketListStatus(bucketName, UPLOAD_LIST_PAGE_SIZE);
@@ -43,6 +45,10 @@ const MyCollectionList = ({ address }: ICollectionList) => {
       draft.openModal = true;
     });
   };
+
+  const isOwner = useMemo(() => {
+    return address === loginAddress;
+  }, [address, loginAddress]);
 
   if (isListDataLoading) {
     return <Loader />;
@@ -70,23 +76,25 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                     alt={`${endpoint}/view/${bucketName}/${THUMB}/${item.ObjectInfo.ObjectName}`}
                   />
 
-                  <VStack className="layer" justifyContent="center">
-                    <DefaultButton
-                      h="48px"
-                      bg="#F1F2F3"
-                      color="#181A1E"
-                      fontWeight="800"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // TODO: bucket name
-                        window.open(
-                          `${endpoint}/view/${bucketName}/${item.ObjectInfo.ObjectName}`,
-                        );
-                      }}
-                    >
-                      Download
-                    </DefaultButton>
-                  </VStack>
+                  {isOwner && (
+                    <VStack className="layer" justifyContent="center">
+                      <DefaultButton
+                        h="48px"
+                        bg="#F1F2F3"
+                        color="#181A1E"
+                        fontWeight="800"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // TODO: bucket name
+                          window.open(
+                            `${endpoint}/view/${bucketName}/${item.ObjectInfo.ObjectName}`,
+                          );
+                        }}
+                      >
+                        Download
+                      </DefaultButton>
+                    </VStack>
+                  )}
                 </ImageBox>
                 <Info>
                   <InfoItem>
@@ -120,41 +128,43 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                   {/* Size: {parseFileSize(item.)} */}
                 </Info>
 
-                <Box px="20px" my="24px">
-                  {listData.listIndex.includes(item.ObjectInfo.Id) ? (
-                    <YellowButton
-                      background="#5C5F6A"
-                      h="48px"
-                      w="100%"
-                      onClick={async (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
+                {isOwner && (
+                  <Box px="20px" my="24px">
+                    {listData.listIndex.includes(item.ObjectInfo.Id) ? (
+                      <YellowButton
+                        background="#5C5F6A"
+                        h="48px"
+                        w="100%"
+                        onClick={async (e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
 
-                        const { groupId } = await getItemByObjectId(
-                          item.ObjectInfo.Id.toString(),
-                        );
+                          const { groupId } = await getItemByObjectId(
+                            item.ObjectInfo.Id.toString(),
+                          );
 
-                        confirmDelist(BigInt(groupId));
-                      }}
-                    >
-                      Delist
-                    </YellowButton>
-                  ) : (
-                    <YellowButton
-                      h="48px"
-                      w="100%"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        navigator(
-                          `/detail?bid=${bucketInfo?.bucketInfo?.id}&oid=${item.ObjectInfo.Id}&path=/`,
-                        );
-                      }}
-                    >
-                      List
-                    </YellowButton>
-                  )}
-                </Box>
+                          confirmDelist(BigInt(groupId));
+                        }}
+                      >
+                        Delist
+                      </YellowButton>
+                    ) : (
+                      <YellowButton
+                        h="48px"
+                        w="100%"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          navigator(
+                            `/detail?bid=${bucketInfo?.bucketInfo?.id}&oid=${item.ObjectInfo.Id}&path=/`,
+                          );
+                        }}
+                      >
+                        List
+                      </YellowButton>
+                    )}
+                  </Box>
+                )}
               </Card>
             );
           })}

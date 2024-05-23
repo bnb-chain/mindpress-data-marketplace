@@ -35,9 +35,12 @@ const ProfileList = (props: IProfileList) => {
   const currentTab = tab ? tab : Type.Purchased;
   const handleTabChange = useCallback(
     (tab: any) => {
-      navigator(`/profile?tab=${tab}`);
+      navigator({
+        pathname: '/profile',
+        search: `?address=${address}&tab=${tab}`,
+      });
     },
-    [navigator],
+    [address, navigator],
   );
 
   return (
