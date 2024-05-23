@@ -1,12 +1,15 @@
 import { Client } from '@bnb-chain/greenfield-js-sdk';
 import { forEach } from '.';
-import { BSC_CHAIN_ID, DAPP_NAME, GF_CHAIN_ID, GF_RPC_URL } from '../env';
+import { DAPP_NAME, GREENFIELD_CHAIN } from '../env';
 
 export const getSingleton = function () {
   let client: Client | null;
   return function () {
     if (!client) {
-      client = Client.create(GF_RPC_URL, String(GF_CHAIN_ID));
+      client = Client.create(
+        GREENFIELD_CHAIN.rpcUrls.default.http[0],
+        String(GREENFIELD_CHAIN.id),
+      );
     }
     return client;
   };
@@ -208,19 +211,6 @@ export const updateGroupInfoWithTx = async (
     gasPrice: simulateInfo?.gasPrice || '5000000000',
     payer: address,
     granter: '',
-  });
-};
-
-export const mirrorGroup = async (
-  groupName: string,
-  id: string,
-  operator: string,
-) => {
-  return await client.crosschain.mirrorGroup({
-    groupName,
-    id,
-    operator,
-    destChainId: BSC_CHAIN_ID,
   });
 };
 

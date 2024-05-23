@@ -2,39 +2,37 @@ import styled from '@emotion/styled';
 import { ColoredWarningIcon } from '@totejs/icons';
 import {
   Box,
+  Button,
   Flex,
   Input,
-  toast,
-  Textarea,
   Menu,
   MenuButton,
-  MenuList,
   MenuItem,
-} from '@totejs/uikit';
-import {
+  MenuList,
   Modal,
-  ModalHeader,
   ModalBody,
-  ModalFooter,
   ModalCloseButton,
-  Button,
+  ModalFooter,
+  ModalHeader,
+  Textarea,
+  toast,
 } from '@totejs/uikit';
+import _ from 'lodash';
 import { ForwardedRef, ReactNode, forwardRef, useMemo, useState } from 'react';
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
-import { GF_CHAIN_ID } from '../../env';
-import { useChainBalance } from '../../hooks/price/useChainBalance';
-import { useEdit } from '../../hooks/useEdit';
-import { Loader } from '../Loader';
-import { roundFun } from '../../utils';
-import { Item } from '../../utils/apis/types';
-import { QueryHeadGroupResponse } from '../../utils/gfSDK';
-import { useGetItemById } from '../../hooks/apis/useGetItemById';
-import { useGetGroupByName } from '../../hooks/useGetBucketOrObj';
+import { GREENFIELD_CHAIN } from '../../env';
 import {
   useGetCategory,
   useGetCatoriesMap,
 } from '../../hooks/apis/useGetCatoriesMap';
-import _ from 'lodash';
+import { useGetItemById } from '../../hooks/apis/useGetItemById';
+import { useChainBalance } from '../../hooks/price/useChainBalance';
+import { useEdit } from '../../hooks/useEdit';
+import { useGetGroupByName } from '../../hooks/useGetBucketOrObj';
+import { roundFun } from '../../utils';
+import { Item } from '../../utils/apis/types';
+import { QueryHeadGroupResponse } from '../../utils/gfSDK';
+import { Loader } from '../Loader';
 
 interface ListModalProps {
   isOpen: boolean;
@@ -238,7 +236,7 @@ export const EditModal = (props: ListModalProps) => {
       </CustomBody>
       <ModalFooter>
         <FooterCon flexDirection={'column'} gap={6}>
-          {chain && chain.id === GF_CHAIN_ID && (
+          {chain && chain.id === GREENFIELD_CHAIN.id && (
             <Button
               width={'100%'}
               onClick={async () => {
@@ -267,11 +265,11 @@ export const EditModal = (props: ListModalProps) => {
               Confirm
             </Button>
           )}
-          {chain && chain.id !== GF_CHAIN_ID ? (
+          {chain && chain.id !== GREENFIELD_CHAIN.id ? (
             <Button
               width={'100%'}
               onClick={async () => {
-                switchNetwork?.(GF_CHAIN_ID);
+                switchNetwork?.(GREENFIELD_CHAIN.id);
               }}
             >
               Switch to Greenfield

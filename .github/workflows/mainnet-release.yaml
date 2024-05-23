@@ -40,8 +40,6 @@ jobs:
 
           REACT_APP_GF_CHAIN_ID: 1017
           REACT_APP_GF_RPC_URL: https://greenfield-chain.bnbchain.org:443
-          REACT_APP_BSC_RPC_URL: https://bsc-dataseed1.binance.org
-          REACT_APP_BSC_CHAIN_ID: 56
           REACT_APP_NETWORK: Mainnet
           REACT_APP_DAPP_NAME: mindv05
           G_TAG: G-VRYHWMVQ50

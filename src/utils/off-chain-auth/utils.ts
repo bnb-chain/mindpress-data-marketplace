@@ -1,11 +1,6 @@
 import { IReturnOffChainAuthKeyPairAndUpload } from '@bnb-chain/greenfield-js-sdk';
-import { GF_CHAIN_ID } from '../../env';
+import { GREENFIELD_CHAIN } from '../../env';
 import { client } from '../gfSDK';
-
-const isEmpty = (obj: object) => {
-  return Object.keys(obj).length === 0;
-};
-const GREENFIELD_CHAIN_ID = GF_CHAIN_ID;
 
 export const getGAOptions = (name: string) => {
   const options: Record<string, string> = {
@@ -14,10 +9,6 @@ export const getGAOptions = (name: string) => {
   };
 
   return options[name];
-};
-
-export const getGNFDChainId = () => {
-  return GREENFIELD_CHAIN_ID;
 };
 
 type Path = {
@@ -78,7 +69,7 @@ export const getOffchainAuthKeys = async (address: string, provider: any) => {
   const allSps = await getAllSps();
   console.log({
     sps: allSps,
-    chainId: GREENFIELD_CHAIN_ID,
+    chainId: GREENFIELD_CHAIN.id,
     expirationMs: 5 * 24 * 60 * 60 * 1000,
     domain: window.location.origin,
     address,
@@ -87,7 +78,7 @@ export const getOffchainAuthKeys = async (address: string, provider: any) => {
     await client.offchainauth.genOffChainAuthKeyPairAndUpload(
       {
         sps: allSps,
-        chainId: GREENFIELD_CHAIN_ID,
+        chainId: GREENFIELD_CHAIN.id,
         expirationMs: 5 * 24 * 60 * 60 * 1000,
         domain: window.location.origin,
         address,

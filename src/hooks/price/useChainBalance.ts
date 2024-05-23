@@ -1,5 +1,5 @@
-import { useEffect, useState, useCallback } from 'react';
-import { useBalance, useAccount } from 'wagmi';
+import { useCallback, useEffect, useState } from 'react';
+import { useAccount, useBalance } from 'wagmi';
 
 import * as env from '../../env';
 import { batchUpdate } from '../../utils';
@@ -16,7 +16,7 @@ export const useChainBalance = () => {
     isLoading: l1Loading,
   } = useBalance({
     address: address,
-    chainId: Number(env.BSC_CHAIN_ID),
+    chainId: Number(env.BSC_CHAIN.id),
   });
   const {
     data: gfBalance,
@@ -24,7 +24,7 @@ export const useChainBalance = () => {
     isLoading: gfLoading,
   } = useBalance({
     address: address,
-    chainId: Number(env.GF_CHAIN_ID),
+    chainId: Number(env.GREENFIELD_CHAIN.id),
   });
 
   useEffect(() => {
