@@ -11,5 +11,5 @@ export const useGetDownloadUrl = ({
 
   if (isLoading) return '';
 
-  return `${endpint}/download/${bucketName}/${name}`;
+  return `${endpint}/view/${bucketName}/${name}`;
 };
