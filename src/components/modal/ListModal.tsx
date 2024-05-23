@@ -10,23 +10,25 @@ import {
   QDrawerCloseButton,
   QDrawerFooter,
   QDrawerHeader,
-  Stack,
   Text,
 } from '@totejs/uikit';
 import { useImmerAtom } from 'jotai-immer';
 import { useCallback, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { formatEther } from 'viem';
 import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
 import { listAtom } from '../../atoms/listAtom';
 import { BSC_CHAIN } from '../../env';
-import { useList } from '../../hooks/seller/useList';
-import { useGetBnbUsdtExchangeRate } from '../../hooks/price/useGetBnbUsdtExchangeRate';
 import { useGetItemByObjId } from '../../hooks/apis/useGetItemByObjId';
+import { useGetBnbUsdtExchangeRate } from '../../hooks/price/useGetBnbUsdtExchangeRate';
+import { useList } from '../../hooks/seller/useList';
+import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
+import { getSpaceName } from '../../utils/space';
 import { Loader } from '../Loader';
+import { UPLOAD_LIST_PAGE_SIZE } from '../profile/MyCollectionList';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { Tips } from './Tips';
-import { useNavigate } from 'react-router-dom';
 
 export const ListModal = () => {
   const navigator = useNavigate();
@@ -41,6 +43,10 @@ export const ListModal = () => {
   // const { data: categories } = useGetCatoriesMap();
 
   const { chain } = useNetwork();
+  const { refetch: refetchList } = useGetObjInBucketListStatus(
+    getSpaceName(address),
+    UPLOAD_LIST_PAGE_SIZE,
+  );
 
   const { refetch: refetchListStatus } = useGetItemByObjId(
     String(listInfo.data.objectId),
@@ -53,7 +59,7 @@ export const ListModal = () => {
   }, [setListInfo]);
 
   const {
-    isApproved,
+    // isApproved,
     doList,
     start: listStart,
     totalFee,
@@ -67,6 +73,12 @@ export const ListModal = () => {
       imageUrl: listInfo.data.imageUrl,
     },
     onSuccess: async () => {
+      // refetch listed list
+      await refetchList();
+
+      // refetch object status
+      await refetchListStatus();
+
       NiceModal.show(Tips, {
         title: ``,
         content: (
@@ -99,9 +111,6 @@ export const ListModal = () => {
           navigator(`/profile?tab=uploaded`);
         },
       });
-
-      // refetch object status
-      await refetchListStatus();
     },
   });
 
@@ -122,8 +131,6 @@ export const ListModal = () => {
     if (!usdExchange) return '0';
     return formatEther(BigInt(parseInt(usdExchange)) * totalFees);
   }, [totalFees, usdExchange]);
-
-  console.log('isApproved', isApproved);
 
   return (
     <QDrawer
@@ -167,54 +174,6 @@ export const ListModal = () => {
 
       <QDrawerFooter>
         <Flex flexDirection={'column'} gap={6} w="100%">
-          <Stack
-            mb="24px"
-            // color="#F7F7F8"
-            pos="relative"
-            sx={{
-              '.line': {
-                w: '1px',
-                h: '30px',
-                bg: '#373943',
-                pos: 'absolute',
-                left: '4px',
-                top: '13px',
-              },
-              '&> .item': {
-                pos: 'relative',
-                pl: '20px',
-                my: '7px',
-                fontSize: '14px',
-                fontWeight: 600,
-                color: isApproved ? '#F7F7F8' : '#8C8F9B',
-              },
-              '&>.item:before': {
-                content: '""',
-                display: 'block',
-                width: '9px',
-                height: '9px',
-                borderRadius: '50%',
-                position: 'absolute',
-                left: 0,
-                top: '5px',
-              },
-              '&>.approve:before': {
-                background: isApproved ? '#F7F7F8' : '#373943',
-              },
-
-              '&>.list': {
-                color: '#8C8F9B',
-              },
-              '&>.list:before': {
-                background: '#373943',
-              },
-            }}
-          >
-            <Box className="line" />
-            <Box className="item approve">Approve</Box>
-            <Box className="item list">List on BSC</Box>
-          </Stack>
-
           {!BSC_FEE_SUFF && (
             <BalanceWarn>
               <ColoredWarningIcon size="sm" color="#ff6058" mr="4px" />{' '}
@@ -252,7 +211,7 @@ export const ListModal = () => {
               loadingText={<Loader size={30} />}
               disabled={!BSC_FEE_SUFF || listStart}
             >
-              {isApproved ? 'List' : 'Approve'}
+              List
             </YellowButton>
           )}
         </Flex>

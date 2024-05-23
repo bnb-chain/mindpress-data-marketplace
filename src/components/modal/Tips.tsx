@@ -25,9 +25,9 @@ export const Tips = NiceModal.create<{
       <ModalFooter>
         <BlackSolidButton
           onClick={async () => {
-            modal.hide();
             await buttonClick?.();
             modal.resolve();
+            modal.hide();
           }}
         >
           {buttonText}

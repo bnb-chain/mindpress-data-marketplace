@@ -134,6 +134,7 @@ export const Uploader = () => {
           await doCreateSpace();
         },
       });
+      return;
     }
 
     if (files) {

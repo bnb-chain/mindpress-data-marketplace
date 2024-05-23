@@ -61,7 +61,6 @@ export const useList = ({
   const isBSCChain = chain?.id === BSC_CHAIN.id;
   const publicClient = usePublicClient();
   const { data: walletClient } = useWalletClient();
-  const [isApproved, setIsApproved] = useState(false);
 
   const { data: contracts, isLoading: loadingContract } =
     useGetContractAddresses();
@@ -77,59 +76,6 @@ export const useList = ({
     },
     [publicClient],
   );
-
-  // 1. check group nft approved
-  useEffect(() => {
-    const checkApproved = async () => {
-      if (!address) return;
-      if (loadingContract || !contracts) return;
-      if (chain?.id !== BSC_CHAIN.id) return;
-
-      const isApprovedRes = await getApprovedResult(
-        contracts.GroupTokenAddress,
-        address,
-      );
-      setIsApproved(isApprovedRes);
-    };
-
-    checkApproved();
-  }, [
-    address,
-    chain?.id,
-    contracts,
-    getApprovedResult,
-    loadingContract,
-    publicClient,
-  ]);
-
-  // approve group nft
-  const doApprove = async () => {
-    if (!address) return;
-    if (loadingContract || !contracts) return;
-
-    const { request } = await publicClient.simulateContract({
-      account: address,
-      address: contracts.GroupTokenAddress,
-      abi: GroupTokenAbi,
-      functionName: 'setApprovalForAll',
-      args: [NEW_MARKETPLACE_CONTRACT_ADDRESS, true],
-    });
-
-    const hash = await walletClient?.writeContract(request);
-    console.log('approve hash', hash);
-    if (hash) {
-      const tx = await publicClient.waitForTransactionReceipt({
-        hash,
-      });
-      console.log('tx', tx);
-    }
-
-    const isApprovedRes = await getApprovedResult(
-      contracts.GroupTokenAddress,
-      address,
-    );
-    setIsApproved(isApprovedRes);
-  };
 
   useEffect(() => {
     calcuteFee();
@@ -172,12 +118,6 @@ export const useList = ({
     }
 
     try {
-      if (!isApproved) {
-        await doApprove();
-        return;
-      }
-
-      // create group
       const [realyFee, ackRelayFee] = await publicClient.readContract({
         abi: CrossChainAbi,
         address: contracts.CrossChainAddress,
@@ -191,7 +131,6 @@ export const useList = ({
       //   functionName: 'callbackGasPrice',
       // });
 
-      // TODO: group name?
       const { bucketInfo } = await client.bucket.headBucketById(
         String(bucketId),
       );
@@ -223,31 +162,6 @@ export const useList = ({
       console.log('callbackGasPrice', callbackGasPrice);
 
       const callbackFee = callbackGasPrice * callbackGasLimit;
-
-      // const callbackDataCreateGroup = solidityPack(
-      //   ['address'],
-      //   [address],
-      // ) as Address;
-
-      // console.log('NEW_MARKETPLACE_CONTRACT_ADDRESS', {
-      //   appAddress: NEW_MARKETPLACE_CONTRACT_ADDRESS,
-      //   refundAddress: address,
-      //   failureHandleStrategy: 2, // SkipOnFail
-      //   callbackData: callbackDataCreateGroup,
-      // });
-
-      // const createGroupData = encodeFunctionData({
-      //   abi: GroupHubAbi,
-      //   functionName: 'prepareCreateGroup',
-      //   args: [address, NEW_MARKETPLACE_CONTRACT_ADDRESS, groupName],
-      // });
-
-      // console.log('createGroupData', createGroupData);
-
-      // console.log(
-      //   'GRNToString(newGroupGRN(address as string, groupName))',
-      //   GRNToString(newGroupGRN(address as string, groupName)),
-      // );
 
       const { request: listRequest } = await publicClient.simulateContract({
         account: address,
@@ -356,7 +270,6 @@ export const useList = ({
   };
 
   return {
-    isApproved,
     start,
     doList,
     totalFee,
