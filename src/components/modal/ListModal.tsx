@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { formatEther } from 'viem';
 import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
 import { listAtom } from '../../atoms/listAtom';
-import { BSC_CHAIN } from '../../env';
+import { BSC_CHAIN, BSC_EXPLORER_URL } from '../../env';
 import { useGetItemByObjId } from '../../hooks/apis/useGetItemByObjId';
 import { useGetBnbUsdtExchangeRate } from '../../hooks/price/useGetBnbUsdtExchangeRate';
 import { useList } from '../../hooks/seller/useList';
@@ -29,6 +29,7 @@ import { UPLOAD_LIST_PAGE_SIZE } from '../profile/MyCollectionList';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { Tips } from './Tips';
+import { MPLink } from '../ui/MPLink';
 
 export const ListModal = () => {
   const navigator = useNavigate();
@@ -72,13 +73,7 @@ export const ListModal = () => {
       desc: listInfo.data.desc,
       imageUrl: listInfo.data.imageUrl,
     },
-    onSuccess: async () => {
-      // refetch listed list
-      await refetchList();
-
-      // refetch object status
-      await refetchListStatus();
-
+    onSuccess: async (listHash) => {
       NiceModal.show(Tips, {
         title: ``,
         content: (
@@ -91,23 +86,42 @@ export const ListModal = () => {
               }}
               src={listInfo.data.imageUrl}
             />
-            <Text as="h2" fontSize="24px" mt="20px">
+            <Text
+              as="h2"
+              fontSize="24px"
+              mt="20px"
+              color="#181A1E"
+              fontWeight={700}
+            >
               Your item has been listed!
             </Text>
-            <Text fontSize="14px">
-              <Box as="span" color="">
-                Cement panel ceiling square block pattern Lighting Architecture
-                details
+            <Text fontSize="14px" color="#76808F">
+              <Box as="span" color="#1184EE">
+                {listInfo.data.name}
               </Box>{' '}
               has been listed on MindPress. You can click the button below to
-              <Box as="a" href="" target="_blank">
-                check the listing or check on explorer.
-              </Box>
+              check the listing or check on{' '}
+              <a
+                href={`${BSC_EXPLORER_URL}tx/${listHash}`}
+                target="_blank"
+                style={{
+                  color: '#1184EE',
+                }}
+              >
+                explorer
+              </a>
+              .
             </Text>
           </Box>
         ),
         buttonText: 'View Listing',
         buttonClick: async () => {
+          // refetch listed list
+          await refetchList();
+
+          // refetch object status
+          // await refetchListStatus();
+
           navigator(`/profile?tab=uploaded`);
         },
       });

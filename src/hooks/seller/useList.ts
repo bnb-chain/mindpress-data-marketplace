@@ -5,14 +5,8 @@ import {
 } from '@bnb-chain/greenfield-cosmos-types/greenfield/permission/common';
 import { Policy } from '@bnb-chain/greenfield-cosmos-types/greenfield/permission/types';
 import { ResourceType } from '@bnb-chain/greenfield-cosmos-types/greenfield/resource/types';
-import {
-  GRNToString,
-  newGroupGRN,
-  newObjectGRN,
-} from '@bnb-chain/greenfield-js-sdk';
-import { solidityPack } from 'ethers/lib/utils';
-import { useCallback, useEffect, useState } from 'react';
-import { Address, encodeFunctionData, parseAbi, toHex } from 'viem';
+import { useEffect, useState } from 'react';
+import { Address, toHex } from 'viem';
 import {
   useAccount,
   useNetwork,
@@ -21,16 +15,13 @@ import {
   useWalletClient,
 } from 'wagmi';
 import { CrossChainAbi } from '../../base/contract/crossChain.abi';
-import { GroupHubAbi } from '../../base/contract/groupHub.abi';
-import { GroupTokenAbi } from '../../base/contract/groupToken.abi';
 import { MarketplaceAbi } from '../../base/contract/marketplace.abi';
-import { MultiMessageAbi } from '../../base/contract/multimessage.abi';
 import { PermissonHubAbi } from '../../base/contract/permissonHub.abi';
 import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 import { generateGroupName } from '../../utils';
-import { useGetContractAddresses } from '../common/useGetContractAddresses';
 import { client } from '../../utils/gfSDK';
 import { sleep } from '../../utils/space';
+import { useGetContractAddresses } from '../common/useGetContractAddresses';
 
 interface Params {
   data: {
@@ -41,7 +32,7 @@ interface Params {
     categoryId: bigint;
     imageUrl: string;
   };
-  onSuccess?: () => Promise<void>;
+  onSuccess?: (listHash?: Address) => Promise<void>;
   onFailure?: () => Promise<void>;
 }
 
@@ -64,18 +55,6 @@ export const useList = ({
 
   const { data: contracts, isLoading: loadingContract } =
     useGetContractAddresses();
-
-  const getApprovedResult = useCallback(
-    async (groupTokenAddress: Address, owner: Address) => {
-      return await publicClient.readContract({
-        abi: GroupTokenAbi,
-        address: groupTokenAddress,
-        functionName: 'isApprovedForAll',
-        args: [owner, NEW_MARKETPLACE_CONTRACT_ADDRESS],
-      });
-    },
-    [publicClient],
-  );
 
   useEffect(() => {
     calcuteFee();
@@ -260,7 +239,7 @@ export const useList = ({
         console.log('tx', tx);
       }
 
-      await onSuccess?.();
+      await onSuccess?.(listHash);
     } catch (err) {
       console.log(err);
       await onFailure?.();
