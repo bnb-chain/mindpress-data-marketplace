@@ -17,7 +17,7 @@ export const useGetItemList = (
   });
 };
 
-const PAGE_SIZE = 10;
+export const TRENDING_PAGE_SIZE = 20;
 
 export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
   const query = useInfiniteQuery({
@@ -26,17 +26,17 @@ export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
       // console.log('pageParam', pageParam);
       return await searchItems({
         ...params,
-        offset: pageParam * PAGE_SIZE,
+        offset: pageParam * TRENDING_PAGE_SIZE,
       });
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
-      // console.log('lastPage', lastPage);
-      // console.log('allPages', allPages);
-      // console.log('lastPageParam', lastPageParam);
-      // console.log('allPageParams', allPageParams);
+      console.log('lastPage', lastPage);
+      console.log('allPages', allPages);
+      console.log('lastPageParam', lastPageParam);
+      console.log('allPageParams', allPageParams);
 
-      if (lastPage.total > (lastPageParam + 1) * PAGE_SIZE) {
+      if (lastPage.total > (lastPageParam + 1) * TRENDING_PAGE_SIZE) {
         return lastPageParam + 1;
       }
       return undefined;

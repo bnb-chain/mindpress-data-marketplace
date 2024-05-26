@@ -1,7 +1,10 @@
 import styled from '@emotion/styled';
 import { Box } from '@totejs/uikit';
 import { useCallback } from 'react';
-import { useInfiniteGetItemList } from '../../hooks/useGetItemList';
+import {
+  TRENDING_PAGE_SIZE,
+  useInfiniteGetItemList,
+} from '../../hooks/useGetItemList';
 import { Loader } from '../Loader';
 import { MindPressMasmonry } from '../ui/masmonry';
 
@@ -17,7 +20,7 @@ export const Trending = () => {
       keyword: '',
     },
     offset: 0,
-    limit: 20,
+    limit: TRENDING_PAGE_SIZE,
     sort: 'CREATION_DESC',
   });
 
@@ -25,7 +28,7 @@ export const Trending = () => {
     fetchNextPage();
   }, [fetchNextPage]);
 
-  console.log('trendingList', trendingList);
+  console.log('trendingList', hasNextPage, trendingList);
 
   if (!trendingList || isLoading) return <Loader />;
 
