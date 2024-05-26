@@ -6,12 +6,12 @@ import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { buyAtom } from '../atoms/buyAtom';
+import { useGetChainListItems } from '../hooks/buyer/useGetChainListItems';
 import { useGetRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
 import { trimLongStr } from '../utils';
 import { Item } from '../utils/apis/types';
 import { DefaultButton } from './ui/buttons/DefaultButton';
 import { YellowButton } from './ui/buttons/YellowButton';
-import { useGetChainListItems } from '../hooks/buyer/useGetChainListItems';
 
 interface IProps {
   item: Item;
@@ -29,6 +29,7 @@ export const HoverStatus = ({ item, className }: IProps) => {
     relation,
     isLoading: relationisLoading,
     downloadUrl,
+    doDownload,
   } = useGetRelationWithAddr(address, item, chainItemInfo?.creators?.[0] || '');
   const { onOpen } = useWalletKitModal();
   const [, setBuy] = useImmerAtom(buyAtom);
@@ -56,9 +57,9 @@ export const HoverStatus = ({ item, className }: IProps) => {
               bg="#F1F2F3"
               color="#181A1E"
               fontWeight="800"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.stopPropagation();
-                window.open(downloadUrl);
+                await doDownload();
               }}
             >
               Download

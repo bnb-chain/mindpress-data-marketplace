@@ -135,18 +135,18 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                         background="#5C5F6A"
                         h="48px"
                         w="100%"
+                        disabled
                         onClick={async (e) => {
                           e.preventDefault();
                           e.stopPropagation();
 
-                          const { groupId } = await getItemByObjectId(
-                            item.ObjectInfo.Id.toString(),
-                          );
-
-                          confirmDelist(BigInt(groupId));
+                          // const { groupId } = await getItemByObjectId(
+                          //   item.ObjectInfo.Id.toString(),
+                          // );
+                          // confirmDelist(BigInt(groupId));
                         }}
                       >
-                        Delist
+                        Delist(Coming Soon)
                       </YellowButton>
                     ) : (
                       <YellowButton

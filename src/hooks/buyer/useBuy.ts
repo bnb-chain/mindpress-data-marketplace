@@ -88,6 +88,7 @@ export const useBuy = (
                 args: [BigInt(groupId), address],
               });
 
+              console.log('res check', res);
               if (res[0]) {
                 success = true;
                 break;

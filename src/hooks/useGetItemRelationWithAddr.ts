@@ -5,6 +5,7 @@ import { Item, SearchPurchaseRequest } from '../utils/apis/types';
 import { useGetBOInfoFromGroup } from './useGetBucketOrObj';
 import { useGetDownloadUrl } from './apis/useGetDownloadUrl';
 import { useGetPurchaseList } from './apis/useGetPurchaseList';
+import { useDownload } from './apis/useDownload';
 
 export type ITEM_RELATION_ADDR =
   | 'PURCHASED'
@@ -86,6 +87,11 @@ export const useGetRelationWithAddr = (
     name: item?.name || '',
   });
 
+  const doDownload = useDownload({
+    bucketName: storageInfo?.bucketName,
+    name: item?.name || '',
+  });
+
   useEffect(() => {
     if (!addr || !data) return;
 
@@ -107,5 +113,6 @@ export const useGetRelationWithAddr = (
     relation,
     isLoading,
     downloadUrl,
+    doDownload,
   };
 };

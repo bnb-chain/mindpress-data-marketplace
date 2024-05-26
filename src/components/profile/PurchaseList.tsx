@@ -11,15 +11,15 @@ import {
 } from '@totejs/uikit';
 import { useState } from 'react';
 import { GF_EXPLORER_URL } from '../../env';
+import { useDownload } from '../../hooks/apis/useDownload';
+import { useGetChainListItems } from '../../hooks/buyer/useGetChainListItems';
 import { useGetBOInfoFromGroup } from '../../hooks/useGetBucketOrObj';
-import { useGetDownloadUrl } from '../../hooks/apis/useGetDownloadUrl';
 import { useGetUserPurchasedList } from '../../hooks/useUserPurchased';
 import { contentTypeToExtension } from '../../utils';
 import { Item } from '../../utils/apis/types';
 import { Loader } from '../Loader';
 import { MPLink } from '../ui/MPLink';
 import { DefaultButton } from '../ui/buttons/DefaultButton';
-import { useGetChainListItems } from '../../hooks/buyer/useGetChainListItems';
 import DefaultImage from '../ui/default-image';
 
 const PAGE_SIZE = 12;
@@ -46,7 +46,8 @@ const PurchaseList = ({ address }: IProps) => {
 
   const [activeItem, setActiveItem] = useState<Item | null>(null);
   const storageInfo = useGetBOInfoFromGroup(activeItem?.groupName);
-  const downloadUrl = useGetDownloadUrl({
+
+  const doDownload = useDownload({
     bucketName: storageInfo?.bucketName,
     name: activeItem?.name || '',
   });
@@ -80,9 +81,9 @@ const PurchaseList = ({ address }: IProps) => {
                       bg="#F1F2F3"
                       color="#181A1E"
                       fontWeight="800"
-                      onClick={(e) => {
+                      onClick={async (e) => {
                         e.stopPropagation();
-                        window.open(downloadUrl);
+                        await doDownload();
                       }}
                     >
                       Download

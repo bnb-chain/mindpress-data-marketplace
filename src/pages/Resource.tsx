@@ -14,16 +14,17 @@ import BSCIcon from '../components/svgIcon/BSCIcon';
 import { MPLink } from '../components/ui/MPLink';
 import { DefaultButton } from '../components/ui/buttons/DefaultButton';
 import { YellowButton } from '../components/ui/buttons/YellowButton';
+import DefaultImage from '../components/ui/default-image';
 import { GF_EXPLORER_URL } from '../env';
+import { useDownload } from '../hooks/apis/useDownload';
+import { useGetCategory } from '../hooks/apis/useGetCatoriesMap';
+import { useGetItemById } from '../hooks/apis/useGetItemById';
 import { useGetChainListItems } from '../hooks/buyer/useGetChainListItems';
 import { useBNBPrice } from '../hooks/price/useBNBPrice';
 import {
   useGetBOInfoFromGroup,
   useGetObject,
 } from '../hooks/useGetBucketOrObj';
-import { useGetCategory } from '../hooks/apis/useGetCatoriesMap';
-import { useGetDownloadUrl } from '../hooks/apis/useGetDownloadUrl';
-import { useGetItemById } from '../hooks/apis/useGetItemById';
 import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
 import { useModal } from '../hooks/useModal';
 import {
@@ -33,7 +34,6 @@ import {
   roundFun,
   trimLongStr,
 } from '../utils';
-import DefaultImage from '../components/ui/default-image';
 
 /**
  * Have been listed page
@@ -76,7 +76,7 @@ const Resource = () => {
     storageInfo?.objectName,
   );
 
-  const downloadUrl = useGetDownloadUrl({
+  const doDownload = useDownload({
     bucketName: storageInfo?.bucketName,
     name: itemInfo?.name || '',
   });
@@ -240,8 +240,9 @@ const Resource = () => {
                 h="48px"
                 bg="#F1F2F3"
                 color="#181A1E"
-                onClick={() => {
-                  window.open(downloadUrl);
+                onClick={async () => {
+                  // window.open(downloadUrl);
+                  await doDownload();
                 }}
               >
                 Download

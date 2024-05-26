@@ -10,10 +10,14 @@ import {
   StateModal,
   StateModalVariantType,
 } from '@totejs/uikit';
+import { useAtomValue } from 'jotai';
 import { useNavigate } from 'react-router-dom';
+import { useAccount } from 'wagmi';
+import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
 import { useGetRandomSp } from '../../hooks/apis/useGetRandomSp';
 import { parseGroupName } from '../../utils';
 import { getItemByGroupId } from '../../utils/apis';
+import { client } from '../../utils/gfSDK';
 import { SuccessIcon } from '../svgIcon/SuccessIcon';
 import { BigYellowButton } from '../ui/buttons/YellowButton';
 
@@ -46,7 +50,9 @@ export const ActionResult = (props: IActionResult) => {
   const { type, isOpen, groupId, handleOpen, variant, description, callBack } =
     props;
 
+  const { address } = useAccount();
   const { data: endpoint, isLoading } = useGetRandomSp();
+  const offchainData = useAtomValue(offchainDataAtom);
 
   const navigator = useNavigate();
 
@@ -86,11 +92,26 @@ export const ActionResult = (props: IActionResult) => {
                 onClick={async () => {
                   // handleOpen();
                   if (!groupId) return;
+                  if (!address) return;
+
                   const res = await getItemByGroupId(groupId);
                   const { bucketName, name } = parseGroupName(res.groupName);
 
-                  const downloadUrl = `${endpoint}/download/${bucketName}/${name}`;
-                  window.open(downloadUrl);
+                  await client.object.downloadFile(
+                    {
+                      bucketName,
+                      objectName: name,
+                    },
+                    {
+                      type: 'EDDSA',
+                      address,
+                      domain: window.location.origin,
+                      seed: offchainData?.seed || '',
+                    },
+                  );
+
+                  // const downloadUrl = `${endpoint}/download/${bucketName}/${name}`;
+                  // window.open(downloadUrl);
                 }}
               >
                 Download

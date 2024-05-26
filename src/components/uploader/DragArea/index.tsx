@@ -85,6 +85,9 @@ export const DragBox: React.FC<IProps> = ({
               browse files
             </Box>
           </Text>
+          <Text as="p" fontSize="14px" color="#C4C5CB">
+            Supports jpg. and png. format only
+          </Text>
         </Center>
       </Box>
       <Input

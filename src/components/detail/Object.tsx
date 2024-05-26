@@ -124,6 +124,7 @@ export const Object = () => {
               owner={objectData.objectInfo?.owner}
               bucketId={bucketId}
               objectId={objectId}
+              objectName={objectData.objectInfo?.objectName || ''}
               imageUrl={imageUrl}
             />
           )}

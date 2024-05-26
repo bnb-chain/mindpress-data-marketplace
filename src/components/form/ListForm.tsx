@@ -42,6 +42,7 @@ const ListSchema = Yup.object().shape({
 interface IProps {
   bucketId: string;
   objectId: string;
+  objectName: string;
   imageUrl: string;
   owner?: string;
 }
@@ -51,6 +52,7 @@ export const ListForm: React.FC<IProps> = ({
   bucketId,
   objectId,
   imageUrl,
+  objectName,
 }) => {
   const { address } = useAccount();
   const [_, setListInfo] = useImmerAtom(listAtom);
@@ -58,7 +60,7 @@ export const ListForm: React.FC<IProps> = ({
   // console.log('listInfo', listInfo);
   const formik = useFormik<FormValues>({
     initialValues: {
-      name: '',
+      name: objectName,
       description: '',
       category: '',
       price: '',

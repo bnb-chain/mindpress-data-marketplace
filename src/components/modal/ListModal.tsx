@@ -19,7 +19,6 @@ import { Address, formatEther } from 'viem';
 import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
 import { listAtom } from '../../atoms/listAtom';
 import { BSC_CHAIN, BSC_EXPLORER_URL } from '../../env';
-import { useGetItemByObjId } from '../../hooks/apis/useGetItemByObjId';
 import { useGetBnbUsdtExchangeRate } from '../../hooks/price/useGetBnbUsdtExchangeRate';
 import { useList } from '../../hooks/seller/useList';
 import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
@@ -29,7 +28,6 @@ import { UPLOAD_LIST_PAGE_SIZE } from '../profile/MyCollectionList';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { Tips } from './Tips';
-import { MPLink } from '../ui/MPLink';
 
 export const ListModal = () => {
   const navigator = useNavigate();
@@ -150,10 +148,15 @@ export const ListModal = () => {
     return BscBalanceVal.value >= totalFees;
   }, [BscBalanceVal, totalFees]);
 
-  const usd = useMemo(() => {
+  // const totalFeesUsd = useMemo(() => {
+  //   if (!usdExchange) return '0';
+  //   return formatEther(BigInt(parseInt(usdExchange)) * totalFees);
+  // }, [totalFees, usdExchange]);
+
+  const priceUsd = useMemo(() => {
     if (!usdExchange) return '0';
-    return formatEther(BigInt(parseInt(usdExchange)) * totalFees);
-  }, [totalFees, usdExchange]);
+    return formatEther(BigInt(parseInt(usdExchange)) * listInfo.data.price);
+  }, [listInfo.data.price, usdExchange]);
 
   return (
     <QDrawer
@@ -166,7 +169,7 @@ export const ListModal = () => {
       closeOnOverlayClick={false}
     >
       <QDrawerCloseButton />
-      <Header>Approve Listing</Header>
+      <Header>List Photo</Header>
       <CustomBody>
         <InfoCon gap={26} direction="column">
           <ImgCon>
@@ -184,12 +187,19 @@ export const ListModal = () => {
             {listInfo.data.desc}
           </Box>
           <Flex alignItems={'center'} color="#F7F7F8" fontSize="16px" gap="8px">
-            <Flex gap="4px" alignItems="center">
+            {/* <Flex gap="4px" alignItems="center">
               <BSCIcon />
               <Box>{formatEther(totalFees)} BNB</Box>
+            </Flex> */}
+            {/* <Box fontSize="14px" color="#C4C5CB">
+              $ {usdExchangeIsLoading ? '0' : usd}
+            </Box> */}
+            <Flex gap="4px" alignItems="center">
+              <BSCIcon />
+              <Box>{formatEther(listInfo.data.price)} BNB</Box>
             </Flex>
             <Box fontSize="14px" color="#C4C5CB">
-              $ {usdExchangeIsLoading ? '0' : usd}
+              $ {usdExchangeIsLoading ? '0' : priceUsd}
             </Box>
           </Flex>
         </InfoCon>
