@@ -115,7 +115,7 @@ const Search = (props: ISearch) => {
     const {
       group: { group_name, id, owner },
     } = item;
-    return `/redirect?gid=${id}`;
+    return `/resource?gid=${id}`;
   };
   const filteredData = useMemo(() => {
     if (searchValue) {

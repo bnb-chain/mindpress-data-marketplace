@@ -16,10 +16,6 @@ const Search = () => {
   const c = (p.get('c') as string) || '-1';
   const category = useGetCategory(Number(c));
 
-  console.log('category', category);
-
-  // console.log('category', category);
-
   const {
     fetchNextPage,
     hasNextPage,
@@ -80,7 +76,7 @@ const Search = () => {
     <Container>
       <Keyword>{kw || category?.name}</Keyword>
       <Desc>
-        {total} phtots found for "{kw || category?.name}".
+        {total} photos found for "{kw || category?.name}".
       </Desc>
 
       <Box mt="40px">

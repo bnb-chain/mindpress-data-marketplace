@@ -31,10 +31,10 @@ export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) => {
-      console.log('lastPage', lastPage);
-      console.log('allPages', allPages);
-      console.log('lastPageParam', lastPageParam);
-      console.log('allPageParams', allPageParams);
+      // console.log('lastPage', lastPage);
+      // console.log('allPages', allPages);
+      // console.log('lastPageParam', lastPageParam);
+      // console.log('allPageParams', allPageParams);
 
       if (lastPage.total > (lastPageParam + 1) * TRENDING_PAGE_SIZE) {
         return lastPageParam + 1;
@@ -55,8 +55,8 @@ export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
   const { data: chainGroupsInfo, isLoading: getChainListItemLoading } =
     useGetChainListItems(groupIds);
 
-  console.log('groupIds', groupIds);
-  console.log('chainGroupsInfo', chainGroupsInfo);
+  // console.log('groupIds', groupIds);
+  // console.log('chainGroupsInfo', chainGroupsInfo);
 
   const total = useMemo(() => {
     return query.data?.pages[0].total || 0;
