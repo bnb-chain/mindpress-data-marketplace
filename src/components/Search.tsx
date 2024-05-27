@@ -213,6 +213,8 @@ const Search = (props: ISearch) => {
             left={0}
             top={'calc(100% + 4px)'}
             width={width}
+            borderRadius="5px"
+            boxShadow="0px 1px 4px rgba(0, 0, 0, 0.8)"
           >
             <ScrollSelect
               searchValue={searchValue}
