@@ -32,7 +32,7 @@ export const MindPressMasmonry = ({
             <Card
               key={item.id}
               onClick={() => {
-                navigator(`/resource?id=${item.id}&gid=${item.groupId}`);
+                navigator(`/resource?gid=${item.groupId}`);
               }}
               onMouseEnter={() => {
                 setActiveItem(item);

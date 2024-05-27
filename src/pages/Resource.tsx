@@ -2,38 +2,34 @@ import styled from '@emotion/styled';
 import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { LinkArrowIcon } from '@totejs/icons';
 import { Box, Flex, Image, Link, Stack } from '@totejs/uikit';
-import BN from 'bn.js';
 import { useImmerAtom } from 'jotai-immer';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useSearchParams } from 'react-router-dom';
+import { formatEther } from 'viem';
 import { useAccount } from 'wagmi';
 import { buyAtom } from '../atoms/buyAtom';
 import { DownloadButton } from '../components/DownloadButton';
 import { Loader } from '../components/Loader';
+import { NoData } from '../components/NoData';
 import { RelatedImage } from '../components/resource/RelatedImage';
 import BSCIcon from '../components/svgIcon/BSCIcon';
 import { MPLink } from '../components/ui/MPLink';
 import { YellowButton } from '../components/ui/buttons/YellowButton';
 import DefaultImage from '../components/ui/default-image';
 import { GF_EXPLORER_URL } from '../env';
-import { useDownload } from '../hooks/apis/useDownload';
 import { useGetCategory } from '../hooks/apis/useGetCatoriesMap';
-import { useGetItemById } from '../hooks/apis/useGetItemById';
 import { useGetChainListItems } from '../hooks/buyer/useGetChainListItems';
-import { useBNBPrice } from '../hooks/price/useBNBPrice';
-import {
-  useGetBOInfoFromGroup,
-  useGetObject,
-} from '../hooks/useGetBucketOrObj';
-import { useGetItemRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
+import { useGetBnbUsdtExchangeRate } from '../hooks/price/useGetBnbUsdtExchangeRate';
+import { useGetObject } from '../hooks/useGetBucketOrObj';
+import { useGetRelationWithGroupId } from '../hooks/useGetItemRelationWithAddr';
 import { useModal } from '../hooks/useModal';
 import {
   contentTypeToExtension,
-  divide10Exp,
   formatDateDot,
-  roundFun,
+  parseGroupName,
   trimLongStr,
 } from '../utils';
+import { getItemByGroupId } from '../utils/apis';
 
 /**
  * Have been listed page
@@ -42,51 +38,50 @@ import {
  */
 const Resource = () => {
   const [p] = useSearchParams();
-  const itemId = p.get('id') as string;
   const groupId = p.get('gid') as string;
 
   const { data: chainItemInfo, isLoading: isChainItemInfo } =
     useGetChainListItems([BigInt(groupId)]);
 
-  const { data: itemInfo, isLoading: itemInfoLoading } = useGetItemById(
-    parseInt(itemId),
-  );
-  const { price: bnbPrice } = useBNBPrice();
   const [, setBuy] = useImmerAtom(buyAtom);
-
   const { address, isConnected, isConnecting } = useAccount();
-  const { relation, refetch: refetchRelation } = useGetItemRelationWithAddr(
-    address,
-    parseInt(itemId),
-    chainItemInfo?.creators?.[0] || '',
-  );
 
-  // console.log('relation', relation);
+  const { data: relationRes, refetch: refetchRelation } =
+    useGetRelationWithGroupId(
+      address,
+      groupId,
+      chainItemInfo?.creators?.[0] || '',
+    );
+
+  const relation = relationRes?.relation || 'UNKNOWN';
 
   const category = useGetCategory(
     Number(chainItemInfo?.categoryIds?.[0] || 100),
   );
 
-  const storageInfo = useGetBOInfoFromGroup(itemInfo?.groupName);
-
-  // const { data: bucketData } = useGetBucketByName(storageInfo?.bucketName);
-
-  const { data: objectData } = useGetObject(
-    storageInfo?.bucketName,
-    storageInfo?.objectName,
-  );
-
   const modalData = useModal();
   const { onOpen } = useWalletKitModal();
 
-  // console.log('itemInfo', storageInfo, itemInfo, bucketData, objectData);
-  console.log('chainItemInfo', groupId, chainItemInfo);
+  // console.log('chainItemInfo', groupId, chainItemInfo);
 
-  if (itemInfoLoading || isChainItemInfo) {
+  const { data: usdExchange } = useGetBnbUsdtExchangeRate();
+
+  const { bucketName, name } = parseGroupName(
+    chainItemInfo?.groupNames?.[0] || '',
+  );
+
+  const { data: object } = useGetObject(bucketName, name);
+
+  const handleGetItemByGroupId = async () => {
+    const itemInfo = await getItemByGroupId(groupId);
+    return itemInfo;
+  };
+
+  if (isChainItemInfo) {
     return <Loader />;
   }
 
-  if (!itemInfo || !chainItemInfo /* || !bucketData || !objectData */) {
+  if (!chainItemInfo?.groupNames?.[0] || !object) {
     return <Loader />;
   }
 
@@ -116,7 +111,7 @@ const Resource = () => {
             </UserNameContainer>
 
             <Box>
-              <ResourceName>{itemInfo.name}</ResourceName>
+              <ResourceName>{name}</ResourceName>
               <Desc>{chainItemInfo?.descriptions?.[0]}</Desc>
             </Box>
 
@@ -132,7 +127,7 @@ const Resource = () => {
                 <Link
                   target="_blank"
                   href={`${GF_EXPLORER_URL}object/0x${Number(
-                    objectData?.objectInfo!.id,
+                    object.objectInfo?.id,
                   )
                     .toString(16)
                     .padStart(64, '0')}`}
@@ -144,7 +139,7 @@ const Resource = () => {
               <Option>
                 <Box className="field">Media type:</Box>
                 <Box className="value">
-                  {contentTypeToExtension(objectData?.objectInfo!.contentType)}
+                  {contentTypeToExtension(object.objectInfo!.contentType)}
                 </Box>
               </Option>
               {/* <Option>
@@ -156,7 +151,7 @@ const Resource = () => {
               <Option>
                 <Box className="field">Publish date:</Box>
                 <Box className="value">
-                  {formatDateDot(itemInfo.createdAt * 1000)}
+                  {formatDateDot(object.objectInfo!.createAt.toNumber() * 1000)}
                 </Box>
               </Option>
             </Stack>
@@ -165,17 +160,11 @@ const Resource = () => {
           <Stack gap="24px">
             <Flex gap="8px" alignItems="center">
               <BSCIcon color="#F0B90B" w={24} h={24} />
-              <BNB>{divide10Exp(new BN(itemInfo.price, 10), 18)} BNB</BNB>
+              <BNB>{formatEther(chainItemInfo?.priceList?.[0])} BNB</BNB>
               <Dollar>
                 $
-                {roundFun(
-                  divide10Exp(
-                    new BN(itemInfo.price, 10).mul(
-                      new BN(Number(bnbPrice), 10),
-                    ),
-                    18,
-                  ).toString(),
-                  8,
+                {formatEther(
+                  BigInt(parseInt(usdExchange)) * chainItemInfo?.priceList?.[0],
                 )}
               </Dollar>
             </Flex>
@@ -184,20 +173,21 @@ const Resource = () => {
               <YellowButton
                 h="48px"
                 borderRadius="8px"
-                onClick={() => {
-                  // console.log('relation', relation, isConnecting, isConnected);
+                onClick={async () => {
                   if (relation === 'UNKNOWN') {
                     if (!isConnected && !isConnecting) {
                       onOpen();
                     }
                   } else {
+                    const itemInfo = await handleGetItemByGroupId();
+
                     setBuy((draft) => {
                       draft.openDrawer = true;
                       draft.buying = false;
                       draft.buyData = itemInfo;
 
-                      draft.callback = () => {
-                        refetchRelation();
+                      draft.callback = async () => {
+                        await refetchRelation();
                       };
                     });
                   }
@@ -210,13 +200,15 @@ const Resource = () => {
             {relation === 'OWNER' && (
               <YellowButton
                 h="48px"
-                onClick={() => {
+                onClick={async () => {
+                  const itemInfo = await handleGetItemByGroupId();
+
                   modalData.modalDispatch({
                     type: 'OPEN_DELIST',
                     delistData: {
                       groupId: itemInfo.groupId,
                       groupName: itemInfo.groupName,
-                      bucket_name: storageInfo?.bucketName,
+                      bucket_name: bucketName,
                       create_at: itemInfo.createdAt,
                       owner: itemInfo.ownerAddress,
                     },
@@ -232,8 +224,8 @@ const Resource = () => {
 
             {relation === 'PURCHASED' && (
               <DownloadButton
-                bucketName={storageInfo?.bucketName || ''}
-                objectName={itemInfo?.name || ''}
+                bucketName={bucketName || ''}
+                objectName={name || ''}
               />
             )}
           </Stack>

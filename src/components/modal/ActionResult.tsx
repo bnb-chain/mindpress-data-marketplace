@@ -154,7 +154,7 @@ export const ActionResult = (props: IActionResult) => {
                   if (!groupId) return;
                   const res = await getItemByGroupId(groupId);
                   handleOpen();
-                  navigator(`/resource?id=${res.id}&gid=${res.groupId}`);
+                  navigator(`/resource?gid=${res.groupId}`);
                 }}
               >
                 View Detail

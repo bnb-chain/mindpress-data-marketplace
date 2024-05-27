@@ -1,11 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { searchPurchase } from '../utils/apis';
+import { getItemByGroupId, searchPurchase } from '../utils/apis';
 import { Item, SearchPurchaseRequest } from '../utils/apis/types';
 import { useGetBOInfoFromGroup } from './useGetBucketOrObj';
 import { useGetDownloadUrl } from './apis/useGetDownloadUrl';
 import { useGetPurchaseList } from './apis/useGetPurchaseList';
 import { useDownload } from './apis/useDownload';
+import { useGetItemByGroupId } from './apis/useGetItemByGroupId';
 
 export type ITEM_RELATION_ADDR =
   | 'PURCHASED'
@@ -115,4 +116,48 @@ export const useGetRelationWithAddr = (
     doDownload,
     isDownloading,
   };
+};
+
+export const useGetRelationWithGroupId = (
+  addr: string | undefined,
+  groupId: string,
+  ownerAddress: string,
+) => {
+  // const [relation, setRelation] = useState<ITEM_RELATION_ADDR>('UNKNOWN');
+
+  // const { data: item, isLoading: xxLoading } = useGetItemByGroupId(groupId);
+
+  return useQuery({
+    enabled: !!addr,
+    queryKey: ['GET_ITEM_RELATION_BY_GROUP_ID', groupId, addr, ownerAddress],
+    queryFn: async () => {
+      let relation: ITEM_RELATION_ADDR = 'UNKNOWN';
+
+      if (addr === ownerAddress) {
+        relation = 'OWNER';
+      } else {
+        const item = await getItemByGroupId(groupId);
+
+        const searchResponse = await searchPurchase({
+          filter: {
+            address: addr,
+            itemId: item.id,
+          },
+          limit: 10,
+          offset: 0,
+          sort: 'CREATION_DESC',
+        });
+
+        if (searchResponse.purchases.length > 0) {
+          relation = 'PURCHASED';
+        } else {
+          relation = 'NOT_PURCHASE';
+        }
+      }
+
+      return {
+        relation,
+      };
+    },
+  });
 };

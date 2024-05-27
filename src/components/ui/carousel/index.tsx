@@ -44,14 +44,11 @@ export const Carousel = ({ list }: IProps) => {
           return (
             <Card
               key={item.id}
-              to={`/resource?id=${item.id}&gid=${item.groupId}`}
+              to={`/resource?gid=${item.groupId}`}
               onMouseEnter={() => {
                 console.log('11', item);
                 setActiveItem(item);
               }}
-              // onClick={() => {
-              //   navigator(`/resource?id=${item.id}&gid=${item.groupId}`);
-              // }}
             >
               <Image src={item.url} fallbackSrc={DefaultImage} />
 
