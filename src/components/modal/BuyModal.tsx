@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { ColoredInfoIcon } from '@totejs/icons';
 import {
   Box,
+  Button,
   Flex,
   Popover,
   PopoverArrow,
@@ -186,14 +187,21 @@ export const BuyModal = () => {
           </BigYellowButton>
         )}
         {chain && chain.id !== BSC_CHAIN.id ? (
-          <BigYellowButton
-            width={'100%'}
+          <Button
+            w="100%"
+            bg="#FFA260"
+            _hover={{
+              bg: '#FF8A38',
+            }}
+            h="48px"
+            color="#181A1E"
+            fontWeight={700}
             onClick={() => {
               switchNetwork?.(BSC_CHAIN.id);
             }}
           >
             Switch to BSC {NETWORK}
-          </BigYellowButton>
+          </Button>
         ) : null}
       </QDrawerFooter>
     </Container>

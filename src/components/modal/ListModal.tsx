@@ -28,6 +28,7 @@ import { UPLOAD_LIST_PAGE_SIZE } from '../profile/MyCollectionList';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { Tips } from './Tips';
+import { useGetCategory } from '../../hooks/apis/useGetCatoriesMap';
 
 export const ListModal = () => {
   const navigator = useNavigate();
@@ -148,6 +149,8 @@ export const ListModal = () => {
     return BscBalanceVal.value >= totalFees;
   }, [BscBalanceVal, totalFees]);
 
+  const category = useGetCategory(Number(listInfo.data.categoryId));
+
   // const totalFeesUsd = useMemo(() => {
   //   if (!usdExchange) return '0';
   //   return formatEther(BigInt(parseInt(usdExchange)) * totalFees);
@@ -183,8 +186,22 @@ export const ListModal = () => {
           >
             {listInfo.data.name}
           </Box>
-          <Box fontSize="14px" color="#C4C5CB">
-            {listInfo.data.desc}
+          {listInfo.data.desc && (
+            <Box fontSize="14px" color="#C4C5CB">
+              {listInfo.data.desc}
+            </Box>
+          )}
+          <Box>
+            <Box
+              as="span"
+              bg="#373943"
+              color="#C4C5CB"
+              padding="4px 8px"
+              fontSize="12px"
+              borderRadius="40px"
+            >
+              {category?.name}
+            </Box>
           </Box>
           <Flex alignItems={'center'} color="#F7F7F8" fontSize="16px" gap="8px">
             {/* <Flex gap="4px" alignItems="center">
@@ -217,6 +234,9 @@ export const ListModal = () => {
           {chain && chain.id !== BSC_CHAIN.id && (
             <Button
               bg="#FFA260"
+              _hover={{
+                bg: '#FF8A38',
+              }}
               h="48px"
               color="#181A1E"
               fontWeight={700}

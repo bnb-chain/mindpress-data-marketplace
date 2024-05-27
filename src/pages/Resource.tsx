@@ -8,11 +8,11 @@ import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useSearchParams } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { buyAtom } from '../atoms/buyAtom';
+import { DownloadButton } from '../components/DownloadButton';
 import { Loader } from '../components/Loader';
 import { RelatedImage } from '../components/resource/RelatedImage';
 import BSCIcon from '../components/svgIcon/BSCIcon';
 import { MPLink } from '../components/ui/MPLink';
-import { DefaultButton } from '../components/ui/buttons/DefaultButton';
 import { YellowButton } from '../components/ui/buttons/YellowButton';
 import DefaultImage from '../components/ui/default-image';
 import { GF_EXPLORER_URL } from '../env';
@@ -75,11 +75,6 @@ const Resource = () => {
     storageInfo?.bucketName,
     storageInfo?.objectName,
   );
-
-  const { doDownload } = useDownload({
-    bucketName: storageInfo?.bucketName,
-    name: itemInfo?.name || '',
-  });
 
   const modalData = useModal();
   const { onOpen } = useWalletKitModal();
@@ -236,17 +231,10 @@ const Resource = () => {
             )}
 
             {relation === 'PURCHASED' && (
-              <DefaultButton
-                h="48px"
-                bg="#F1F2F3"
-                color="#181A1E"
-                onClick={async () => {
-                  // window.open(downloadUrl);
-                  await doDownload();
-                }}
-              >
-                Download
-              </DefaultButton>
+              <DownloadButton
+                bucketName={storageInfo?.bucketName || ''}
+                objectName={itemInfo?.name || ''}
+              />
             )}
           </Stack>
         </Info>
@@ -262,7 +250,7 @@ const Resource = () => {
 export default Resource;
 
 const Container = styled(Box)`
-  width: 1400px;
+  width: 1200px;
   margin-left: auto;
   margin-right: auto;
   margin-top: 40px;

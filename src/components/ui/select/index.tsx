@@ -2,9 +2,6 @@ import { MenuCloseIcon } from '@totejs/icons';
 import {
   Box,
   Flex,
-  Input,
-  InputGroup,
-  InputRightElement,
   Menu,
   MenuItem,
   MenuList,
@@ -49,7 +46,14 @@ export const Select: React.FC<IProps> = ({ options, handleSelectVal }) => {
         <MenuCloseIcon />
       </Flex>
       <Menu isOpen={isOpen} matchWidth strategy="fixed">
-        <MenuList pos="absolute" zIndex={1000} left="0" right="0">
+        <MenuList
+          pos="absolute"
+          zIndex={1000}
+          left="0"
+          right="0"
+          maxH="300px"
+          overflow="scroll"
+        >
           {options?.map((option) => {
             return (
               <MenuItem
