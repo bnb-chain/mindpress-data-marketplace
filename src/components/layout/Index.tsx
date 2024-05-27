@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { Flex } from '@totejs/uikit';
 import { useSetAtom } from 'jotai';
 import { ReactNode, useCallback } from 'react';
-import { Address, useAccount } from 'wagmi';
+import { Address, Connector, ConnectorData, useAccount } from 'wagmi';
 import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
 import { useModal } from '../../hooks/useModal';
 import { getOffchainAuthKeys } from '../../utils/off-chain-auth/utils';
@@ -12,6 +12,7 @@ import { ListModal } from '../modal/ListModal';
 import { UploadObjectModal } from '../modal/UploadObject';
 import Footer from './Footer';
 import Header from './Header';
+import { useSwitchAccount } from '../../hooks/useSwitchAccount';
 
 export default function Layout({ children }: { children: ReactNode }) {
   const modalData = useModal();
@@ -32,20 +33,38 @@ export default function Layout({ children }: { children: ReactNode }) {
 
   const setOffchainData = useSetAtom(offchainDataAtom);
 
-  useAccount({
+  const applyOffchainAuthData = async ({
+    connector,
+    address,
+  }: {
+    connector?: Connector;
+    address?: Address;
+  }) => {
+    const provider = await connector?.getProvider();
+    // console.log('provider', provider);
+    const offChainData = await getOffchainAuthKeys(
+      address as Address,
+      provider,
+    );
+    // console.log('useAccount offChainData', offChainData);
+    setOffchainData({
+      address: address!,
+      seed: offChainData?.seedString,
+    });
+  };
+
+  const { connector } = useAccount({
     onConnect: async ({ connector, address }) => {
-      const provider = await connector?.getProvider();
-      // console.log('provider', provider);
-      const offChainData = await getOffchainAuthKeys(
-        address as Address,
-        provider,
-      );
-      // console.log('useAccount offChainData', offChainData);
-      setOffchainData({
-        address: address!,
-        seed: offChainData?.seedString,
-      });
+      applyOffchainAuthData({ connector, address });
     },
+  });
+
+  useSwitchAccount(connector, ({ account }: ConnectorData) => {
+    // console.log(account);
+    if (account) {
+      // console.log('new account', account);
+      applyOffchainAuthData({ connector, address: account });
+    }
   });
 
   return (
