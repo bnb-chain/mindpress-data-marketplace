@@ -241,8 +241,33 @@ export const ListModal = () => {
                 });
               }}
               isLoading={listStart}
-              loadingText={<Loader size={30} />}
+              loadingText={
+                <Flex
+                  w="100%"
+                  alignItems="center"
+                  justifyContent="center"
+                  gap="5px"
+                >
+                  <Box w="35px">
+                    <Loader
+                      minHeight={43}
+                      size={20}
+                      borderWidth={2}
+                      color="#E6E8EA"
+                      bg="#76808F"
+                    />
+                  </Box>
+                  <Box>Transaction in progress</Box>
+                </Flex>
+              }
               disabled={!BSC_FEE_SUFF || listStart}
+              _disabled={{
+                bg: '#F7F7F873',
+                cursor: 'not-allowed',
+                _hover: {
+                  bg: '#F7F7F873',
+                },
+              }}
             >
               List
             </YellowButton>

@@ -143,7 +143,32 @@ export const BuyModal = () => {
         {chain && chain.id === BSC_CHAIN.id && (
           <BigYellowButton
             isLoading={buys.buying}
-            loadingText={<Loader size={30} />}
+            _disabled={{
+              bg: '#F7F7F873',
+              cursor: 'not-allowed',
+              _hover: {
+                bg: '#F7F7F873',
+              },
+            }}
+            loadingText={
+              <Flex
+                w="100%"
+                alignItems="center"
+                justifyContent="center"
+                gap="5px"
+              >
+                <Box w="35px">
+                  <Loader
+                    minHeight={43}
+                    size={20}
+                    borderWidth={2}
+                    color="#E6E8EA"
+                    bg="#76808F"
+                  />
+                </Box>
+                <Box>Transaction in progress</Box>
+              </Flex>
+            }
             width={'100%'}
             onClick={async () => {
               // await buy(2479);
