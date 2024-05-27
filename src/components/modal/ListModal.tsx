@@ -19,16 +19,13 @@ import { Address, formatEther } from 'viem';
 import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
 import { listAtom } from '../../atoms/listAtom';
 import { BSC_CHAIN, BSC_EXPLORER_URL } from '../../env';
+import { useGetCategory } from '../../hooks/apis/useGetCatoriesMap';
 import { useGetBnbUsdtExchangeRate } from '../../hooks/price/useGetBnbUsdtExchangeRate';
 import { useList } from '../../hooks/seller/useList';
-import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
-import { getSpaceName } from '../../utils/space';
 import { Loader } from '../Loader';
-import { UPLOAD_LIST_PAGE_SIZE } from '../profile/MyCollectionList';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { Tips } from './Tips';
-import { useGetCategory } from '../../hooks/apis/useGetCatoriesMap';
 
 export const ListModal = () => {
   const navigator = useNavigate();
@@ -43,10 +40,10 @@ export const ListModal = () => {
   // const { data: categories } = useGetCatoriesMap();
 
   const { chain } = useNetwork();
-  const { refetch: refetchList } = useGetObjInBucketListStatus(
-    getSpaceName(address),
-    UPLOAD_LIST_PAGE_SIZE,
-  );
+  // const { refetch: refetchList } = useGetObjInBucketListStatus(
+  //   getSpaceName(address),
+  //   UPLOAD_LIST_PAGE_SIZE,
+  // );
 
   // const { refetch: refetchListStatus } = useGetItemByObjId(
   //   String(listInfo.data.objectId),
@@ -58,7 +55,7 @@ export const ListModal = () => {
     });
   }, [setListInfo]);
 
-  const onSuccessModal = async (listHash?: Address) => {
+  const onSuccessModal = async (groupId: string, listHash?: Address) => {
     NiceModal.show(Tips, {
       title: ``,
       content: (
@@ -86,7 +83,15 @@ export const ListModal = () => {
             Your item has been listed!
           </Text>
           <Text fontSize="14px" color="#76808F">
-            <Box as="span" color="#1184EE">
+            <Box
+              cursor="pointer"
+              as="span"
+              color="#1184EE"
+              onClick={() => {
+                NiceModal.hide(Tips);
+                navigator(`/resource?gid=${groupId}`);
+              }}
+            >
               {listInfo.data.name}
             </Box>{' '}
             has been listed on MindPress. You can click the button below to
@@ -107,12 +112,12 @@ export const ListModal = () => {
       buttonText: 'View Listing',
       buttonClick: async () => {
         // refetch listed list
-        await refetchList();
+        // await refetchList();
 
         // refetch object status
         // await refetchListStatus();
 
-        navigator(`/profile?tab=uploaded`);
+        navigator(`/resource?gid=${groupId}`);
       },
     });
   };
@@ -131,8 +136,8 @@ export const ListModal = () => {
       desc: listInfo.data.desc,
       imageUrl: listInfo.data.imageUrl,
     },
-    onSuccess: async (listHash) => {
-      await onSuccessModal(listHash);
+    onSuccess: async (groupId, listHash) => {
+      await onSuccessModal(groupId.toString(), listHash);
     },
   });
 

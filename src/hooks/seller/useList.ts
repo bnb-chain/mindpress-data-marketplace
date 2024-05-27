@@ -32,7 +32,7 @@ interface Params {
     categoryId: bigint;
     imageUrl: string;
   };
-  onSuccess?: (listHash?: Address) => Promise<void>;
+  onSuccess?: (groupId: bigint, listHash?: Address) => Promise<void>;
   onFailure?: () => Promise<void>;
 }
 
@@ -94,7 +94,6 @@ export const useList = ({
     setStart(true);
 
     if (!isBSCChain) {
-      console.log('BSC_CHAIN', BSC_CHAIN);
       await switchNetworkAsync?.(BSC_CHAIN.id);
     }
 
@@ -241,7 +240,7 @@ export const useList = ({
         console.log('tx', tx);
       }
 
-      await onSuccess?.(listHash);
+      await onSuccess?.(groupId, listHash);
     } catch (err) {
       console.log(err);
       await onFailure?.();

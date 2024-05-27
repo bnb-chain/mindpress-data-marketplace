@@ -199,6 +199,14 @@ const Resource = () => {
 
             {relation === 'OWNER' && (
               <YellowButton
+                isDisabled
+                _disabled={{
+                  bg: '#F7F7F873',
+                  cursor: 'not-allowed',
+                  _hover: {
+                    bg: '#F7F7F873',
+                  },
+                }}
                 h="48px"
                 onClick={async () => {
                   const itemInfo = await handleGetItemByGroupId();
@@ -218,7 +226,7 @@ const Resource = () => {
                   });
                 }}
               >
-                Delist
+                Delist (Coming Soon)
               </YellowButton>
             )}
 
