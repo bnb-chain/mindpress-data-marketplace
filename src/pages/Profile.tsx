@@ -79,6 +79,7 @@ const Address = styled(Flex)`
   color: #ffffff;
   border: 1px solid #373943;
   border-radius: 360px;
+  width: fit-content;
 `;
 
 const Username = styled(Box)`
