@@ -48,8 +48,12 @@ export const useGetObjInBucketListStatus = (
       const listedObjList = _.flatMapDeep(res);
       // console.log('listedObjList', listedObjList);
 
+      const objsData = _.reverse(
+        listObjs.body.GfSpListObjectsByBucketNameResponse.Objects,
+      );
+
       return {
-        objsData: listObjs.body.GfSpListObjectsByBucketNameResponse.Objects,
+        objsData,
         listIndex: listedObjList.map((item) => item.resourceId),
       };
     },
