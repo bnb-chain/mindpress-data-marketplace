@@ -21,7 +21,7 @@ export const EmptyUpload: React.FC = () => {
         Upload to earn rewards
       </Box>
       <Box fontSize="16px" color="#8C8F9B">
-        You haven't upload any photos yet.
+        You haven't upload any images yet.
       </Box>
       <Button
         variant="ghost"

@@ -76,7 +76,7 @@ const Search = () => {
     <Container>
       <Keyword>{kw || category?.name}</Keyword>
       <Desc>
-        {total} photos found for "{kw || category?.name}".
+        {total} images found for "{kw || category?.name}".
       </Desc>
 
       <Box mt="40px">

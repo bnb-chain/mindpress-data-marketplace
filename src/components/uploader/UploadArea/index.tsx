@@ -23,7 +23,7 @@ export const UploadArea: React.FC<IProps> = ({ files, removeFile }) => {
         <Flex justifyContent="space-between">
           <Box>Total Upload:</Box>
           <Box color="#1E2026" fontWeight="700">
-            {parseFileSize(totalFileSize)} / {fileList.length} Objects
+            {parseFileSize(totalFileSize)} / {fileList.length} Images
           </Box>
         </Flex>
       )}

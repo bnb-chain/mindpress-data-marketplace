@@ -16,7 +16,7 @@ export const EmptyPurchase: React.FC = () => {
         No Purchased Image
       </Box>
       <Box fontSize="16px" color="#8C8F9B">
-        You haven't buy any photos yet.
+        You haven't buy any images yet.
       </Box>
     </Center>
   );
