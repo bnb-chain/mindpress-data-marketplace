@@ -55,7 +55,7 @@ export const Links = () => {
           </Box>
           <CardItemTitle>Seamless User Experience</CardItemTitle>
           <Box className="desc">
-            Seamless user experience to boost photo trading
+            Seamless user experience to boost image trading
           </Box>
         </CardItem>
       </CardCon>

@@ -24,7 +24,7 @@ export const UploadObjectModal = () => {
   return (
     <Container size={'lg'} isOpen={upobjs.openModal} onClose={handleCloseModal}>
       <ModalCloseButton />
-      <Header>Upload Photos</Header>
+      <Header>Upload Images</Header>
       <ModalBody>
         <Uploader />
       </ModalBody>

@@ -95,7 +95,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                   </ImageBox>
                   <Info>
                     <InfoItem>
-                      <Field>Object ID:</Field>
+                      <Field>Image ID:</Field>
                       <Value>
                         <MPLink
                           color="#C4C5CB"

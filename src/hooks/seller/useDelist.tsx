@@ -47,7 +47,7 @@ export const useDelist = () => {
             Delist
           </Text>
           <Text fontSize="14px" color="#76808F">
-            Are you sure to delist this photo from Marketplace? Users will be
+            Are you sure to delist this image from Marketplace? Users will be
             unable to purchase it after it is delisted.
           </Text>
         </Box>

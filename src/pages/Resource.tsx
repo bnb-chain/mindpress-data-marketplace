@@ -128,7 +128,7 @@ const Resource = () => {
 
             <Stack gap="10px">
               <Option>
-                <Box className="field">Object ID:</Box>
+                <Box className="field">Image ID:</Box>
                 <Link
                   target="_blank"
                   href={`${GF_EXPLORER_URL}object/0x${Number(

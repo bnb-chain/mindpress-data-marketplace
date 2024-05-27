@@ -172,7 +172,7 @@ export const ListModal = () => {
       closeOnOverlayClick={false}
     >
       <QDrawerCloseButton />
-      <Header>List Photo</Header>
+      <Header>List Image</Header>
       <CustomBody>
         <InfoCon gap={26} direction="column">
           <ImgCon>

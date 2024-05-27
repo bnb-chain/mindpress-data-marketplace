@@ -125,7 +125,7 @@ export const Uploader = () => {
               Upload to BNB Greenfield
             </Text>
             <Text fontSize="14px" color="#76808F">
-              We will store your photos on Greenfield blockchain to ensure you
+              We will store your images on Greenfield blockchain to ensure you
               have full ownership. Therefore a small gas fee is required to
               create a storage space for the first upload.
             </Text>
