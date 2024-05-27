@@ -62,7 +62,6 @@ export const useGetRelationWithAddr = (
 ) => {
   const [relation, setRelation] = useState<ITEM_RELATION_ADDR>('UNKNOWN');
 
-  console.log('ownerAddress', ownerAddress);
   const params: SearchPurchaseRequest = {
     filter: {
       address: addr,
@@ -87,7 +86,7 @@ export const useGetRelationWithAddr = (
     name: item?.name || '',
   });
 
-  const doDownload = useDownload({
+  const { doDownload, isLoading: isDownloading } = useDownload({
     bucketName: storageInfo?.bucketName,
     name: item?.name || '',
   });
@@ -114,5 +113,6 @@ export const useGetRelationWithAddr = (
     isLoading,
     downloadUrl,
     doDownload,
+    isDownloading,
   };
 };

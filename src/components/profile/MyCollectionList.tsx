@@ -2,24 +2,23 @@ import styled from '@emotion/styled';
 import { LinkArrowIcon } from '@totejs/icons';
 import { Box, Flex, Grid, Image, Stack, Text, VStack } from '@totejs/uikit';
 import { useSetAtom } from 'jotai';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Address, useAccount } from 'wagmi';
 import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
 import { GF_EXPLORER_URL } from '../../env';
 import { useSelectEndpoint } from '../../hooks/apis/useSelectEndpoint';
-import { useDelist } from '../../hooks/seller/useDelist';
 import { useGetBucketByName } from '../../hooks/useGetBucketOrObj';
 import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
 import { contentTypeToExtension } from '../../utils';
-import { getItemByObjectId } from '../../utils/apis';
 import { THUMB, getSpaceName } from '../../utils/space';
+import { DownloadButton } from '../DownloadButton';
 import { Loader } from '../Loader';
 import { UploadImage } from '../svgIcon/UploadImage';
 import { MPLink } from '../ui/MPLink';
-import { DefaultButton } from '../ui/buttons/DefaultButton';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import DefaultImage from '../ui/default-image';
-import { useMemo } from 'react';
+import { EmptyUpload } from './EmptyUpload';
 
 export const UPLOAD_LIST_PAGE_SIZE = 10;
 
@@ -30,8 +29,9 @@ const MyCollectionList = ({ address }: ICollectionList) => {
   const navigator = useNavigate();
   const { data: endpoint } = useSelectEndpoint();
   const bucketName = getSpaceName(address);
-  const { confirmDelist } = useDelist();
+  // const { confirmDelist } = useDelist();
   const { address: loginAddress } = useAccount();
+  const [activeObjectName, setActiveObjectName] = useState<string | null>(null);
 
   const { data: listData, isLoading: isListDataLoading } =
     useGetObjInBucketListStatus(bucketName, UPLOAD_LIST_PAGE_SIZE);
@@ -54,121 +54,134 @@ const MyCollectionList = ({ address }: ICollectionList) => {
     return <Loader />;
   }
 
+  console.log('listData', listData);
+
   return (
     <Container>
-      <Grid templateColumns="repeat(3, 1fr)" gap="24px">
-        <UploadImageCard onClick={handleOpenUploadModal} as="button">
-          <UploadImage />
-          <Text fontSize="16px" fontWeight="900" color="readable.disabled">
-            Upload Image
-          </Text>
-        </UploadImageCard>
+      {listData && listData?.objsData.length !== 0 ? (
+        <Grid templateColumns="repeat(3, 1fr)" gap="24px">
+          <UploadImageCard onClick={handleOpenUploadModal} as="button">
+            <UploadImage />
+            <Text fontSize="16px" fontWeight="900" color="readable.disabled">
+              Upload Image
+            </Text>
+          </UploadImageCard>
 
-        {listData?.objsData &&
-          listData?.listIndex &&
-          listData?.objsData.map((item) => {
-            return (
-              <Card key={item.ObjectInfo.Id}>
-                <ImageBox>
-                  <Image
-                    src={`${endpoint}/view/${bucketName}/${THUMB}/${item.ObjectInfo.ObjectName}`}
-                    fallbackSrc={DefaultImage}
-                    alt={`${endpoint}/view/${bucketName}/${THUMB}/${item.ObjectInfo.ObjectName}`}
-                  />
+          {listData?.objsData &&
+            listData?.listIndex &&
+            listData?.objsData.map((item) => {
+              return (
+                <Card
+                  key={item.ObjectInfo.Id}
+                  onMouseEnter={() => {
+                    setActiveObjectName(item.ObjectInfo.ObjectName);
+                  }}
+                >
+                  <ImageBox>
+                    <Image
+                      src={`${endpoint}/view/${bucketName}/${THUMB}/${item.ObjectInfo.ObjectName}`}
+                      fallbackSrc={DefaultImage}
+                      alt={`${endpoint}/view/${bucketName}/${THUMB}/${item.ObjectInfo.ObjectName}`}
+                    />
+
+                    {isOwner && (
+                      <VStack className="layer" justifyContent="center">
+                        <DownloadButton
+                          bucketName={bucketName}
+                          objectName={activeObjectName || ''}
+                        />
+                      </VStack>
+                    )}
+                  </ImageBox>
+                  <Info>
+                    <InfoItem>
+                      <Field>Object ID:</Field>
+                      <Value>
+                        <MPLink
+                          color="#C4C5CB"
+                          // _hover={{
+                          //   color: '#C4C5CB',
+                          // }}
+                          textDecoration="underline"
+                          target="_blank"
+                          to={`${GF_EXPLORER_URL}object/0x${Number(
+                            item.ObjectInfo.Id,
+                          )
+                            .toString(16)
+                            .padStart(64, '0')}`}
+                        >
+                          GreenfieldScan
+                          <LinkArrowIcon w="16px" verticalAlign="middle" />
+                        </MPLink>
+                      </Value>
+                    </InfoItem>
+                    <InfoItem>
+                      <Field>Media Type:</Field>
+                      <Value>
+                        {contentTypeToExtension('', item.ObjectInfo.ObjectName)}
+                      </Value>
+                    </InfoItem>
+
+                    {/* Size: {parseFileSize(item.)} */}
+                  </Info>
 
                   {isOwner && (
-                    <VStack className="layer" justifyContent="center">
-                      <DefaultButton
-                        h="48px"
-                        bg="#F1F2F3"
-                        color="#181A1E"
-                        fontWeight="800"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          // TODO: bucket name
-                          window.open(
-                            `${endpoint}/view/${bucketName}/${item.ObjectInfo.ObjectName}`,
-                          );
-                        }}
-                      >
-                        Download
-                      </DefaultButton>
-                    </VStack>
+                    <Box px="20px" my="24px">
+                      {listData.listIndex.includes(item.ObjectInfo.Id) ? (
+                        <YellowButton
+                          background="#5C5F6A"
+                          h="48px"
+                          w="100%"
+                          // disabled
+                          onClick={async (e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            // const { groupId } = await getItemByObjectId(
+                            //   item.ObjectInfo.Id.toString(),
+                            // );
+                            // confirmDelist(BigInt(groupId));
+                          }}
+                          cursor="not-allowed"
+                          _hover={{
+                            bg: '#5C5F6A',
+                          }}
+                          _active={{
+                            bg: '#5C5F6A',
+                          }}
+                        >
+                          <Box as="span" color="#F7F7F8">
+                            Delist
+                          </Box>
+                          &nbsp;
+                          <Box as="span" color="#8C8F9B">
+                            (Coming Soon)
+                          </Box>
+                        </YellowButton>
+                      ) : (
+                        <YellowButton
+                          h="48px"
+                          w="100%"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            navigator(
+                              `/detail?bid=${bucketInfo?.bucketInfo?.id}&oid=${item.ObjectInfo.Id}&path=/`,
+                            );
+                          }}
+                        >
+                          List
+                        </YellowButton>
+                      )}
+                    </Box>
                   )}
-                </ImageBox>
-                <Info>
-                  <InfoItem>
-                    <Field>Object ID:</Field>
-                    <Value>
-                      <MPLink
-                        color="#C4C5CB"
-                        // _hover={{
-                        //   color: '#C4C5CB',
-                        // }}
-                        textDecoration="underline"
-                        target="_blank"
-                        to={`${GF_EXPLORER_URL}object/0x${Number(
-                          item.ObjectInfo.Id,
-                        )
-                          .toString(16)
-                          .padStart(64, '0')}`}
-                      >
-                        GreenfieldScan
-                        <LinkArrowIcon w="16px" verticalAlign="middle" />
-                      </MPLink>
-                    </Value>
-                  </InfoItem>
-                  <InfoItem>
-                    <Field>Media Type:</Field>
-                    <Value>
-                      {contentTypeToExtension('', item.ObjectInfo.ObjectName)}
-                    </Value>
-                  </InfoItem>
-
-                  {/* Size: {parseFileSize(item.)} */}
-                </Info>
-
-                {isOwner && (
-                  <Box px="20px" my="24px">
-                    {listData.listIndex.includes(item.ObjectInfo.Id) ? (
-                      <YellowButton
-                        background="#5C5F6A"
-                        h="48px"
-                        w="100%"
-                        disabled
-                        onClick={async (e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-
-                          // const { groupId } = await getItemByObjectId(
-                          //   item.ObjectInfo.Id.toString(),
-                          // );
-                          // confirmDelist(BigInt(groupId));
-                        }}
-                      >
-                        Delist(Coming Soon)
-                      </YellowButton>
-                    ) : (
-                      <YellowButton
-                        h="48px"
-                        w="100%"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          navigator(
-                            `/detail?bid=${bucketInfo?.bucketInfo?.id}&oid=${item.ObjectInfo.Id}&path=/`,
-                          );
-                        }}
-                      >
-                        List
-                      </YellowButton>
-                    )}
-                  </Box>
-                )}
-              </Card>
-            );
-          })}
-      </Grid>
+                </Card>
+              );
+            })}
+        </Grid>
+      ) : (
+        <EmptyUpload />
+      )}
 
       {/* <LoadMoreContainer>
         <LoadMore

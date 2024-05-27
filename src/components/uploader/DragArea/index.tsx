@@ -94,7 +94,7 @@ export const DragBox: React.FC<IProps> = ({
         multiple
         id="file"
         type="file"
-        accept="image/png, image/gif, image/jpeg"
+        accept="image/png, image/jpeg"
         onChange={fileChange}
         sx={{
           visibility: 'hidden',

@@ -11,16 +11,16 @@ import {
 } from '@totejs/uikit';
 import { useState } from 'react';
 import { GF_EXPLORER_URL } from '../../env';
-import { useDownload } from '../../hooks/apis/useDownload';
 import { useGetChainListItems } from '../../hooks/buyer/useGetChainListItems';
 import { useGetBOInfoFromGroup } from '../../hooks/useGetBucketOrObj';
 import { useGetUserPurchasedList } from '../../hooks/useUserPurchased';
 import { contentTypeToExtension } from '../../utils';
 import { Item } from '../../utils/apis/types';
+import { DownloadButton } from '../DownloadButton';
 import { Loader } from '../Loader';
 import { MPLink } from '../ui/MPLink';
-import { DefaultButton } from '../ui/buttons/DefaultButton';
 import DefaultImage from '../ui/default-image';
+import { EmptyPurchase } from './EmptyPurchase';
 
 const PAGE_SIZE = 12;
 
@@ -47,20 +47,17 @@ const PurchaseList = ({ address }: IProps) => {
   const [activeItem, setActiveItem] = useState<Item | null>(null);
   const storageInfo = useGetBOInfoFromGroup(activeItem?.groupName);
 
-  const doDownload = useDownload({
-    bucketName: storageInfo?.bucketName,
-    name: activeItem?.name || '',
-  });
-
   if (isLoading) {
     return <Loader />;
   }
 
+  console.log('list', list);
+
   return (
     <Container>
-      <Grid templateColumns="repeat(3, 1fr)" gap="24px">
-        {list &&
-          list.purchases.map((purResource, index) => {
+      {list && list.purchases.length !== 0 ? (
+        <Grid templateColumns="repeat(3, 1fr)" gap="24px">
+          {list.purchases.map((purResource, index) => {
             const { item } = purResource;
 
             return (
@@ -76,7 +73,13 @@ const PurchaseList = ({ address }: IProps) => {
                   />
 
                   <VStack className="layer" justifyContent="center">
-                    <DefaultButton
+                    {storageInfo && (
+                      <DownloadButton
+                        bucketName={storageInfo?.bucketName}
+                        objectName={activeItem?.name || ''}
+                      />
+                    )}
+                    {/* <DefaultButton
                       h="48px"
                       bg="#F1F2F3"
                       color="#181A1E"
@@ -87,7 +90,7 @@ const PurchaseList = ({ address }: IProps) => {
                       }}
                     >
                       Download
-                    </DefaultButton>
+                    </DefaultButton> */}
                   </VStack>
                 </ImageBox>
                 <Info>
@@ -122,7 +125,10 @@ const PurchaseList = ({ address }: IProps) => {
               </Card>
             );
           })}
-      </Grid>
+        </Grid>
+      ) : (
+        <EmptyPurchase />
+      )}
 
       <Flex justifyContent="center" mt="40px" mb="40px">
         <StyledPagination

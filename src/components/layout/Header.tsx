@@ -18,6 +18,8 @@ import { Copy } from '../Copy';
 import { MyDataCollectionIcon } from '../svgIcon/MyDataCollectionIcon';
 import { SellIcon } from '../svgIcon/SellIcon';
 import { SignOutIcon } from '../svgIcon/SignOutIcon';
+import { useSetAtom } from 'jotai';
+import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
 
 const BG_COLOR = '#181a1e';
 
@@ -54,10 +56,7 @@ const Header = () => {
     }
   }, [location.pathname, y]);
 
-  // const { onClose, onToggle } = useDisclosure();
-  // const { switchNetwork } = useSwitchNetwork();
-
-  // const { chain } = useNetwork();
+  const setUpobjs = useSetAtom(uploadObjcetAtom);
 
   return (
     <HeaderFlex
@@ -106,10 +105,12 @@ const Header = () => {
                 onOpen();
                 return;
               }
-              navigate('/profile?tab=uploaded');
+
+              setUpobjs((draft) => {
+                draft.openModal = true;
+              });
             }}
           >
-            {/* Upload Images */}
             List Images
           </Button>
         </>

@@ -8,6 +8,7 @@ interface LoadingProps {
   minHeight?: number;
   size?: number;
   style?: React.CSSProperties;
+  borderWidth?: number;
 }
 
 export const Loader = (props: LoadingProps) => {
@@ -17,6 +18,7 @@ export const Loader = (props: LoadingProps) => {
     style,
     color = '#ebd600',
     bg = '#14151a',
+    borderWidth = 4,
   } = props;
   return (
     <Box
@@ -31,7 +33,7 @@ export const Loader = (props: LoadingProps) => {
         style={{
           height: size,
           width: size,
-          border: `4px solid ${color}`,
+          border: `${borderWidth}px solid ${color}`,
           borderBottomColor: bg,
         }}
       />

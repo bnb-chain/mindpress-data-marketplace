@@ -12,6 +12,7 @@ import { trimLongStr } from '../utils';
 import { Item } from '../utils/apis/types';
 import { DefaultButton } from './ui/buttons/DefaultButton';
 import { YellowButton } from './ui/buttons/YellowButton';
+import { Loader } from './Loader';
 
 interface IProps {
   item: Item;
@@ -23,13 +24,13 @@ export const HoverStatus = ({ item, className }: IProps) => {
   const { address, isConnected, isConnecting } = useAccount();
   const { data: chainItemInfo } = useGetChainListItems([BigInt(item.groupId)]);
 
-  console.log('item.groupId', item);
-  console.log('chainItemInfo', chainItemInfo);
+  // console.log('item.groupId', item);
+  // console.log('chainItemInfo', chainItemInfo);
   const {
     relation,
     isLoading: relationisLoading,
-    downloadUrl,
     doDownload,
+    isDownloading,
   } = useGetRelationWithAddr(address, item, chainItemInfo?.creators?.[0] || '');
   const { onOpen } = useWalletKitModal();
   const [, setBuy] = useImmerAtom(buyAtom);
@@ -62,7 +63,19 @@ export const HoverStatus = ({ item, className }: IProps) => {
                 await doDownload();
               }}
             >
-              Download
+              {isDownloading ? (
+                <Flex gap="5px" alignItems="center">
+                  <Loader
+                    minHeight={43}
+                    size={20}
+                    borderWidth={2}
+                    color="#E6E8EA"
+                    bg="#76808F"
+                  />
+                </Flex>
+              ) : (
+                'Download'
+              )}
             </DefaultButton>
           )}
           {(relation === 'NOT_PURCHASE' || relation === 'UNKNOWN') && (

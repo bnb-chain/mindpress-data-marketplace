@@ -23,6 +23,7 @@ import { BlackSolidButton } from '../ui/buttons/BlackButton';
 import { DragBox } from './DragArea';
 import { UploadArea } from './UploadArea';
 import { UploadAtom } from './atoms/uploadAtom';
+import { useNavigate } from 'react-router-dom';
 
 export const Uploader = () => {
   const { address, connector } = useAccount();
@@ -30,6 +31,7 @@ export const Uploader = () => {
   const [files, setFiles] = useState<File[] | null>(null);
   const [uploadInfo, setUploadInfo] = useImmerAtom(UploadAtom);
   const [upobjs, setUpobjs] = useImmerAtom(uploadObjcetAtom);
+  const navigate = useNavigate();
 
   const { data: GnfdBalance } = useBalance({
     address: address,
@@ -259,16 +261,32 @@ export const Uploader = () => {
           fontSize="16px"
           width={'100%'}
           disabled={
-            files === null ||
+            files == null ||
             files.length === 0 ||
             createSpaceStart ||
             uploadInfo.status === 'uploading'
           }
+          _disabled={{
+            bg: '#AEB4BC',
+            cursor: 'not-allowed',
+            _hover: {
+              bg: '#AEB4BC',
+            },
+            _active: {
+              bg: '#AEB4BC',
+            },
+          }}
           isLoading={createSpaceStart || uploadInfo.status === 'uploading'}
           loadingText={
             <Flex alignItems="center" gap="5px">
-              <Loader minHeight={50} size={25} color="#999" bg="#efefef" />
-              Progressing...
+              <Loader
+                minHeight={43}
+                size={20}
+                borderWidth={2}
+                color="#E6E8EA"
+                bg="#76808F"
+              />
+              Progressing
             </Flex>
           }
           onClick={async () => {
@@ -280,13 +298,15 @@ export const Uploader = () => {
               setUploadInfo((draft) => {
                 draft.status = 'init';
               });
+
+              navigate('/profile?tab=uploaded');
             } else {
               // Upload
               handleUpload();
             }
           }}
         >
-          {uploadInfo.status === 'success' ? 'Close' : 'Upload'}
+          {uploadInfo.status === 'success' ? 'Go to List' : 'Upload'}
         </BlackSolidButton>
       </Box>
     </Box>

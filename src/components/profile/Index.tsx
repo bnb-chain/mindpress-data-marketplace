@@ -6,6 +6,7 @@ import { NavBar } from '../NavBar';
 import MyCollectionList from './MyCollectionList';
 import PurchaseList from './PurchaseList';
 import { Address } from 'viem';
+import { searchItems } from '../../utils/apis';
 
 enum Type {
   Purchased = 'purchased',

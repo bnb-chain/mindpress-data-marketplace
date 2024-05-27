@@ -76,7 +76,7 @@ const Resource = () => {
     storageInfo?.objectName,
   );
 
-  const doDownload = useDownload({
+  const { doDownload } = useDownload({
     bucketName: storageInfo?.bucketName,
     name: itemInfo?.name || '',
   });
@@ -152,12 +152,12 @@ const Resource = () => {
                   {contentTypeToExtension(objectData?.objectInfo!.contentType)}
                 </Box>
               </Option>
-              <Option>
+              {/* <Option>
                 <Box className="field">Size</Box>
                 <Box className="value">
-                  {/* {parseFileSize(objectData.objectInfo!.payloadSize.low || 0)} */}
+                  {parseFileSize(objectData.objectInfo!.payloadSize.low || 0)}
                 </Box>
-              </Option>
+              </Option> */}
               <Option>
                 <Box className="field">Publish date:</Box>
                 <Box className="value">
