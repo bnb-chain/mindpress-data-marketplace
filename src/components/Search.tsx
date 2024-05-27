@@ -126,7 +126,8 @@ const Search = (props: ISearch) => {
         link,
       };
       const dataList = {
-        title: 'Data',
+        // title: 'Data',
+        title: '',
         list: [],
         render,
         link,

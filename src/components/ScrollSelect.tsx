@@ -232,7 +232,7 @@ export default function ScrollSelect({
           overflowY="scroll"
           paddingBottom={[160, 0, 0]}
         >
-          <Box top={0} position="sticky" zIndex={2}>
+          {/* <Box top={0} position="sticky" zIndex={2}>
             <Flex
               fontWeight={600}
               fontSize={16}
@@ -249,7 +249,7 @@ export default function ScrollSelect({
               <Box>Back</Box>
             </Flex>
             <Title>{displayCell?.title}</Title>
-          </Box>
+          </Box> */}
           {displayCell?.list.map((d: any, i: number) => {
             const isActive = displayFocusIndex === i;
             return (
