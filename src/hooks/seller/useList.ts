@@ -23,16 +23,10 @@ import { client } from '../../utils/gfSDK';
 import { sleep } from '../../utils/space';
 import { useGetContractAddresses } from '../common/useGetContractAddresses';
 import { GRNToString, newGroupGRN } from '@bnb-chain/greenfield-js-sdk';
+import { IListAtom } from '../../atoms/listAtom';
 
 interface Params {
-  data: {
-    bucketId: bigint;
-    objectId: bigint;
-    objectPrice: bigint;
-    desc: string;
-    categoryId: bigint;
-    imageUrl: string;
-  };
+  data: IListAtom['data'];
   onSuccess?: (groupId: bigint, listHash?: Address) => Promise<void>;
   onFailure?: () => Promise<void>;
 }
@@ -40,7 +34,7 @@ interface Params {
 const callbackGasLimit = BigInt(500000);
 
 export const useList = ({
-  data: { bucketId, objectId, desc, objectPrice, imageUrl, categoryId },
+  data: { bucketId, objectId, desc, price, imageUrl, categoryId, name },
   onFailure,
   onSuccess,
 }: Params) => {
@@ -123,38 +117,30 @@ export const useList = ({
         throw new Error('bucket or object not found');
       }
 
-      const groupName = generateGroupName(
-        bucketInfo.bucketName,
-        objectInfo.objectName,
-      );
+      const groupName = generateGroupName(bucketInfo.bucketName, name);
       console.log('groupName', groupName);
       const callbackGasLimit = await publicClient.readContract({
         abi: MarketplaceAbi,
         address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
         functionName: 'callbackGasLimit',
       });
-      console.log('callbackGasLimit', callbackGasLimit);
+      // console.log('callbackGasLimit', callbackGasLimit);
 
       const callbackGasPrice = await publicClient.readContract({
         abi: CrossChainAbi,
         address: contracts.CrossChainAddress,
         functionName: 'callbackGasPrice',
       });
-      console.log('callbackGasPrice', callbackGasPrice);
+      // console.log('callbackGasPrice', callbackGasPrice);
 
       const callbackFee = callbackGasPrice * callbackGasLimit;
-
-      console.log(
-        'GRNToString(newGroupGRN(address, groupName))',
-        GRNToString(newGroupGRN(NEW_MARKETPLACE_CONTRACT_ADDRESS, groupName)),
-      );
 
       const { request: listRequest } = await publicClient.simulateContract({
         account: address,
         abi: MarketplaceAbi,
         address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
         functionName: 'list',
-        args: [groupName, objectPrice, desc, BigInt(categoryId), imageUrl],
+        args: [groupName, price, desc, BigInt(categoryId), imageUrl, objectId],
         value: realyFee + ackRelayFee + callbackFee,
         gas: BigInt(400000),
       });

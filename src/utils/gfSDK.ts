@@ -176,6 +176,10 @@ export const getObjectInfoByName = async (
   return await client.object.headObject(bucketName, objectName);
 };
 
+export const getObjectInfoById = async (objectId: string) => {
+  return await client.object.headObjectById(objectId);
+};
+
 export const updateGroupInfo = async (
   address: string,
   groupName: string,

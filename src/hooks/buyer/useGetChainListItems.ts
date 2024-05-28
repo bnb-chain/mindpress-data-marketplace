@@ -31,6 +31,7 @@ export const useGetChainListItems = (groupIds?: bigint[]) => {
         creators: data[3],
         priceList: data[4],
         urls: data[5],
+        objectIds: data[6],
       };
     },
     staleTime: 60_000,

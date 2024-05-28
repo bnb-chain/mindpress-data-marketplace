@@ -5,6 +5,7 @@ import {
   getCollectionInfo,
   getCollectionInfoByName,
   getGroupInfoByName,
+  getObjectInfoById,
   getObjectInfoByName,
 } from '../utils/gfSDK';
 import { useEffect, useState } from 'react';
@@ -44,6 +45,20 @@ export const useGetObject = (bucketName?: string, objectName?: string) => {
     queryFn: async () => {
       if (!bucketName || !objectName) return;
       const res = await getObjectInfoByName(bucketName, objectName);
+      return res;
+    },
+    gcTime: Infinity,
+    staleTime: Infinity,
+  });
+};
+
+export const useGetObjectById = (objectId?: string) => {
+  return useQuery({
+    enabled: !!objectId,
+    queryKey: ['GET_OBJECT_ID', objectId],
+    queryFn: async () => {
+      if (!objectId) return;
+      const res = await getObjectInfoById(objectId);
       return res;
     },
     gcTime: Infinity,

@@ -1156,6 +1156,11 @@ export const MarketplaceAbi = [
         type: 'string[]',
         internalType: 'string[]',
       },
+      {
+        name: 'objectIds',
+        type: 'uint256[]',
+        internalType: 'uint256[]',
+      },
     ],
     stateMutability: 'view',
   },
@@ -1430,6 +1435,11 @@ export const MarketplaceAbi = [
         type: 'string',
         internalType: 'string',
       },
+      {
+        name: 'objectId',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
     ],
     outputs: [],
     stateMutability: 'payable',
@@ -1491,6 +1501,25 @@ export const MarketplaceAbi = [
     type: 'function',
     name: 'maxCallbackDataLength',
     inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'objectIdMap',
+    inputs: [
+      {
+        name: '',
+        type: 'uint256',
+        internalType: 'uint256',
+      },
+    ],
     outputs: [
       {
         name: '',

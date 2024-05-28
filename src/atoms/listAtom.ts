@@ -1,6 +1,6 @@
 import { atomWithImmer } from 'jotai-immer';
 
-interface IListAtom {
+export interface IListAtom {
   open: boolean;
   data: {
     name: string;

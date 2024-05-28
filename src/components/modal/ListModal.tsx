@@ -123,19 +123,11 @@ export const ListModal = () => {
   };
 
   const {
-    // isApproved,
     doList,
     start: listStart,
     totalFee,
   } = useList({
-    data: {
-      bucketId: listInfo.data.bucketId,
-      objectId: listInfo.data.objectId,
-      objectPrice: listInfo.data.price,
-      categoryId: BigInt(listInfo.data.categoryId),
-      desc: listInfo.data.desc,
-      imageUrl: listInfo.data.imageUrl,
-    },
+    data: listInfo.data,
     onSuccess: async (groupId, listHash) => {
       await onSuccessModal(groupId.toString(), listHash);
     },

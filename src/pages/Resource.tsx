@@ -10,7 +10,6 @@ import { useAccount } from 'wagmi';
 import { buyAtom } from '../atoms/buyAtom';
 import { DownloadButton } from '../components/DownloadButton';
 import { Loader } from '../components/Loader';
-import { NoData } from '../components/NoData';
 import { RelatedImage } from '../components/resource/RelatedImage';
 import BSCIcon from '../components/svgIcon/BSCIcon';
 import { MPLink } from '../components/ui/MPLink';
@@ -20,7 +19,7 @@ import { GF_EXPLORER_URL } from '../env';
 import { useGetCategory } from '../hooks/apis/useGetCatoriesMap';
 import { useGetChainListItems } from '../hooks/buyer/useGetChainListItems';
 import { useGetBnbUsdtExchangeRate } from '../hooks/price/useGetBnbUsdtExchangeRate';
-import { useGetObject } from '../hooks/useGetBucketOrObj';
+import { useGetObjectById } from '../hooks/useGetBucketOrObj';
 import { useGetRelationWithGroupId } from '../hooks/useGetItemRelationWithAddr';
 import { useModal } from '../hooks/useModal';
 import {
@@ -62,15 +61,15 @@ const Resource = () => {
   const modalData = useModal();
   const { onOpen } = useWalletKitModal();
 
-  // console.log('chainItemInfo', groupId, chainItemInfo);
-
   const { data: usdExchange } = useGetBnbUsdtExchangeRate();
 
   const { bucketName, name } = parseGroupName(
     chainItemInfo?.groupNames?.[0] || '',
   );
 
-  const { data: object } = useGetObject(bucketName, name);
+  const { data: object } = useGetObjectById(
+    String(chainItemInfo?.objectIds?.[0]),
+  );
 
   const handleGetItemByGroupId = async () => {
     const itemInfo = await getItemByGroupId(groupId);
