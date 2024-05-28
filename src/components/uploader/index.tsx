@@ -14,7 +14,7 @@ import { GREENFIELD_CHAIN, UPLOAD_OBJECT_FEE } from '../../env';
 import { useCreateSpace } from '../../hooks/seller/useCreateSpace';
 import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
 import { client } from '../../utils/gfSDK';
-import { THUMB, getSpaceName, shortObjectName } from '../../utils/space';
+import { THUMB, getSpaceName, shortObjectName, sleep } from '../../utils/space';
 import { Loader } from '../Loader';
 import { Tips } from '../modal/Tips';
 import { UPLOAD_LIST_PAGE_SIZE } from '../profile/MyCollectionList';
@@ -226,13 +226,15 @@ export const Uploader = () => {
       try {
         const res = await Promise.all(uploadTasks);
 
+        await refetchList();
+
+        await sleep(1000);
+
         // console.log('res', res);
         setUploadInfo((draft) => {
           draft.status = 'success';
         });
         // resetUploadInfo();
-
-        await refetchList();
       } catch (error) {
         console.error(error);
         setUploadInfo((draft) => {

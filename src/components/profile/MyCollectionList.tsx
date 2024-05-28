@@ -54,7 +54,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
     return <Loader />;
   }
 
-  console.log('listData', listData);
+  // console.log('listData', listData);
 
   return (
     <Container>
@@ -70,6 +70,8 @@ const MyCollectionList = ({ address }: ICollectionList) => {
           {listData?.objsData &&
             listData?.listIndex &&
             listData?.objsData.map((item) => {
+              const imageUrl = `${endpoint}/view/${bucketName}/${THUMB}/${item.ObjectInfo.ObjectName}`;
+
               return (
                 <Card
                   key={item.ObjectInfo.Id}
@@ -79,9 +81,9 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                 >
                   <ImageBox>
                     <Image
-                      src={`${endpoint}/view/${bucketName}/${THUMB}/${item.ObjectInfo.ObjectName}`}
                       fallbackSrc={DefaultImage}
-                      alt={`${endpoint}/view/${bucketName}/${THUMB}/${item.ObjectInfo.ObjectName}`}
+                      src={imageUrl}
+                      alt={imageUrl}
                     />
 
                     {isOwner && (
@@ -95,7 +97,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                   </ImageBox>
                   <Info>
                     <InfoItem>
-                      <Field>Image ID:</Field>
+                      <Field>Image ID: {item.ObjectInfo.Id}</Field>
                       <Value>
                         <MPLink
                           color="#C4C5CB"
