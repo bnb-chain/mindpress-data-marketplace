@@ -3,7 +3,7 @@ import { usePublicClient } from 'wagmi';
 import { MarketplaceAbi } from '../../base/contract/marketplace.abi';
 import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 
-export const useGetChainListItems = (groupIds?: bigint[]) => {
+export const useGetChainListItems = (groupIds?: readonly bigint[]) => {
   const publicClient = usePublicClient({
     chainId: BSC_CHAIN.id,
   });

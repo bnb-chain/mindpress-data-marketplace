@@ -84,6 +84,9 @@ const Resource = () => {
     return <Loader />;
   }
 
+  console.log('chainItemInfo', chainItemInfo);
+  console.log('object', object);
+
   return (
     <Container>
       <ResourceInfo>

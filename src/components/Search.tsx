@@ -50,7 +50,8 @@ const Search = (props: ISearch) => {
         setList([searchValue as never]);
       } else {
         const result: any = await searchKey(searchValue);
-        console.log('search result', result);
+        console.log('search result', searchValue, result);
+
         let { groups } = result;
         groups = groups.filter((item: any) => {
           const {
