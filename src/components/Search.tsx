@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { isAddress } from 'viem';
 import { useDebounce } from '../hooks/common/useDebounce';
 import { parseGroupName } from '../utils';
-import { getItemByGroupId } from '../utils/apis';
+import { getItemByGroupId, searchItems } from '../utils/apis';
 import { searchKey } from '../utils/gfSDK';
 import ScrollSelect from './ScrollSelect';
 import { SearchInput } from './SearchInput';
@@ -50,7 +50,17 @@ const Search = (props: ISearch) => {
         setList([searchValue as never]);
       } else {
         const result: any = await searchKey(searchValue);
+        // const result2 = await searchItems({
+        //   filter: {
+        //     address: '',
+        //     keyword: kw,
+        //   },
+        //   offset: 0,
+        //   limit: 20,
+        //   sort: 'CREATION_DESC',
+        // });
         console.log('search result', searchValue, result);
+        // console.log('result22', result2);
 
         let { groups } = result;
         groups = groups.filter((item: any) => {
