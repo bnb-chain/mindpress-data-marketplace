@@ -22,6 +22,7 @@ import { generateGroupName } from '../../utils';
 import { client } from '../../utils/gfSDK';
 import { sleep } from '../../utils/space';
 import { useGetContractAddresses } from '../common/useGetContractAddresses';
+import { GRNToString, newGroupGRN } from '@bnb-chain/greenfield-js-sdk';
 
 interface Params {
   data: {
@@ -143,6 +144,11 @@ export const useList = ({
 
       const callbackFee = callbackGasPrice * callbackGasLimit;
 
+      console.log(
+        'GRNToString(newGroupGRN(address, groupName))',
+        GRNToString(newGroupGRN(NEW_MARKETPLACE_CONTRACT_ADDRESS, groupName)),
+      );
+
       const { request: listRequest } = await publicClient.simulateContract({
         account: address,
         abi: MarketplaceAbi,
@@ -163,24 +169,6 @@ export const useList = ({
         console.log('list tx', tx);
       }
 
-      let groupId = BigInt(0);
-
-      while (true) {
-        groupId = await publicClient.readContract({
-          abi: MarketplaceAbi,
-          address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
-          functionName: 'getGroupId',
-          args: [groupName],
-        });
-        console.log('groupId', groupId);
-
-        await sleep(5000);
-
-        if (groupId !== BigInt(0)) {
-          break;
-        }
-      }
-
       const policyDataToBindGroupToObject = Policy.encode({
         id: '0',
         resourceId: String(objectId), // object id
@@ -194,7 +182,10 @@ export const useList = ({
         ],
         principal: {
           type: PrincipalType.PRINCIPAL_TYPE_GNFD_GROUP,
-          value: String(groupId),
+          // value: String(groupId),
+          value: GRNToString(
+            newGroupGRN(NEW_MARKETPLACE_CONTRACT_ADDRESS, groupName),
+          ),
         },
       }).finish();
 
@@ -238,6 +229,24 @@ export const useList = ({
           hash: createPolicyHash,
         });
         console.log('tx', tx);
+      }
+
+      let groupId = BigInt(0);
+
+      while (true) {
+        groupId = await publicClient.readContract({
+          abi: MarketplaceAbi,
+          address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
+          functionName: 'getGroupId',
+          args: [groupName],
+        });
+        console.log('groupId', groupId);
+
+        await sleep(5000);
+
+        if (groupId !== BigInt(0)) {
+          break;
+        }
       }
 
       await onSuccess?.(groupId, listHash);

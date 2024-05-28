@@ -1,16 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { SearchInput } from './SearchInput';
-
 import styled from '@emotion/styled';
 import { Box, Flex } from '@totejs/uikit';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { isAddress } from 'viem';
 import { useDebounce } from '../hooks/common/useDebounce';
 import { parseGroupName } from '../utils';
+import { getItemByGroupId } from '../utils/apis';
 import { searchKey } from '../utils/gfSDK';
 import ScrollSelect from './ScrollSelect';
-// import { multiCallFun } from '../base/contract/multiCall';
-// import { MarketPlaceContract } from '../base/contract/marketPlaceContract';
-import Web3 from 'web3';
-import { getItemByGroupId } from '../utils/apis';
+import { SearchInput } from './SearchInput';
 
 const Group = (props: any) => {
   const {
@@ -49,7 +46,7 @@ const Search = (props: ISearch) => {
       setShow(true);
       setList([]);
       setLoading(true);
-      if (Web3.utils.isAddress(searchValue)) {
+      if (isAddress(searchValue)) {
         setList([searchValue as never]);
       } else {
         const result: any = await searchKey(searchValue);
