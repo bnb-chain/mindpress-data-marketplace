@@ -31,7 +31,6 @@ jobs:
       - name: Build React App
         env:
           REACT_APP_NET_ENV: MAINNET
-          REACT_APP_BANNER_IDS: ""
           PUBLIC_URL: https://marketplace.mindpress.io
           GENERATE_SOURCEMAP: false
           REACT_APP_GF_EXPLORER_URL: https://greenfieldscan.com/
@@ -40,10 +39,13 @@ jobs:
 
           REACT_APP_GF_CHAIN_ID: 1017
           REACT_APP_GF_RPC_URL: https://greenfield-chain.bnbchain.org:443
+          REACT_APP_NEW_MARKETPLACE_CONTRACT_ADDRESS: 0xf1a52C24DD202C74fB91fD3F7F2B24748f959b9F
           REACT_APP_NETWORK: Mainnet
-          REACT_APP_DAPP_NAME: mindv05
+          # REACT_APP_DAPP_NAME: mindv05
+          REACT_APP_DAPP_NAME: mindt0527
           G_TAG: G-VRYHWMVQ50
           REACT_APP_API_DOMAIN: https://api-marketplace.mindpress.io/v1/
+          REACT_APP_UPLOAD_OBJECT_FEE: 0.000012
         run: |
           pnpm run build
 
