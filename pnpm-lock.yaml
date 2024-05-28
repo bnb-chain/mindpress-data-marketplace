@@ -20,9 +20,6 @@ importers:
       '@bnb-chain/greenfield-js-sdk':
         specifier: 2.0.0-alpha.9
         version: 2.0.0-alpha.9(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      '@dopex-io/web3-multicall':
-        specifier: ^0.1.9
-        version: 0.1.9(web3@1.10.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))
       '@ebay/nice-modal-react':
         specifier: ^1.2.13
         version: 1.2.13(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -101,9 +98,6 @@ importers:
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
-      camelcase:
-        specifier: ^6.3.0
-        version: 6.3.0
       case-sensitive-paths-webpack-plugin:
         specifier: ^2.4.0
         version: 2.4.0
@@ -149,9 +143,6 @@ importers:
       ethers:
         specifier: ^5.7.2
         version: 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      file-loader:
-        specifier: ^6.2.0
-        version: 6.2.0(webpack@5.87.0)
       formik:
         specifier: ^2.4.6
         version: 2.4.6(react@18.2.0)
@@ -164,9 +155,6 @@ importers:
       html-inline-css-webpack-plugin:
         specifier: ^1.11.1
         version: 1.11.1(html-webpack-plugin@5.5.1(webpack@5.87.0))
-      identicon.js:
-        specifier: ^2.3.3
-        version: 2.3.3
       identity-obj-proxy:
         specifier: ^3.0.0
         version: 3.0.0
@@ -200,9 +188,6 @@ importers:
       prompts:
         specifier: ^2.4.2
         version: 2.4.2
-      rc-upload:
-        specifier: ^4.5.2
-        version: 4.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -245,9 +230,6 @@ importers:
       semver:
         specifier: ^7.5.1
         version: 7.5.1
-      sha256:
-        specifier: ^0.2.0
-        version: 0.2.0
       slick-carousel:
         specifier: ^1.8.1
         version: 1.8.1(jquery@3.7.1)
@@ -309,9 +291,6 @@ importers:
       '@types/bn.js':
         specifier: ^5.1.1
         version: 5.1.1
-      '@types/identicon.js':
-        specifier: ^2.3.1
-        version: 2.3.1
       '@types/jest':
         specifier: ^29.5.12
         version: 29.5.12
@@ -324,9 +303,6 @@ importers:
       '@types/react-slick':
         specifier: ^0.23.13
         version: 0.23.13
-      '@types/sha256':
-        specifier: ^0.2.0
-        version: 0.2.0
       customize-cra:
         specifier: ^1.0.0
         version: 1.0.0
@@ -1555,11 +1531,6 @@ packages:
     resolution: {integrity: sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==}
     engines: {node: '>=10.0.0'}
 
-  '@dopex-io/web3-multicall@0.1.9':
-    resolution: {integrity: sha512-oLs2x0bdBTvrY83ZzO4v1PXf1If475qoctS5mMSxDtuBwwSd7N8kv/BR+liZF++5r/f+TAfbNJbqsH8NrtQh0w==}
-    peerDependencies:
-      web3: ^1.0.0
-
   '@ebay/nice-modal-react@1.2.13':
     resolution: {integrity: sha512-jx8xIWe/Up4tpNuM02M+rbnLoxdngTGk3Y8LjJsLGXXcSoKd/+eZStZcAlIO/jwxyz/bhPZnpqPJZWAmhOofuA==}
     peerDependencies:
@@ -2614,9 +2585,6 @@ packages:
   '@types/http-proxy@1.17.11':
     resolution: {integrity: sha512-HC8G7c1WmaF2ekqpnFq626xd3Zz0uvaqFmBJNRZCGEZCXkvSdJoNFn/8Ygbd9fKNQj8UzLdCETaI0UWPAjK7IA==}
 
-  '@types/identicon.js@2.3.1':
-    resolution: {integrity: sha512-QyPIfllzfVTHVJ/xX5+cOKpWuX7Zv0EKQbzTCbIn6QjMOg4bn1j73Av1LIIvRqkDV+TErJuonwZg/IOl4tbPDQ==}
-
   '@types/istanbul-lib-coverage@2.0.4':
     resolution: {integrity: sha512-z/QT1XN4K4KYuslS23k62yDIDLwLFkzxOuMplDtObz0+y7VqJCaO2o+SPwHCvLFZh7xazvvoor2tA/hPz9ee7g==}
 
@@ -2733,9 +2701,6 @@ packages:
 
   '@types/serve-static@1.15.1':
     resolution: {integrity: sha512-NUo5XNiAdULrJENtJXZZ3fHtfMolzZwczzBbnAeBbqBwG+LaG6YaJtuwzwGSQZ2wsCrxjEhNNjAkKigy3n8teQ==}
-
-  '@types/sha256@0.2.0':
-    resolution: {integrity: sha512-QYMr6HuxTQunFWRLZpGopbkgQFoFWOmKTBGgNSYiWMqU/CWnQSTo3edyHvgsRXsOWtOSOG/cmDptPzgCeOsQGw==}
 
   '@types/sockjs@0.3.33':
     resolution: {integrity: sha512-f0KEEe05NvUnat+boPTZ0dgaLZ4SfSouXUgv5noUiefG2ajgKjmETo9ZJyuqsl7dfl2aHlLJUiki6B4ZYldiiw==}
@@ -3806,17 +3771,11 @@ packages:
     resolution: {integrity: sha512-nTjqfcBFEipKdXCv4YDQWCfmcLZKm81ldF0pAopTvyrFGVbcR6P/VAAd5G7N+0tTr8QqiU0tFadD6FK4NtJwOA==}
     engines: {node: '>= 0.6'}
 
-  convert-hex@0.1.0:
-    resolution: {integrity: sha512-w20BOb1PiR/sEJdS6wNrUjF5CSfscZFUp7R9NSlXH8h2wynzXVEPFPJECAnkNylZ+cvf3p7TyRUHggDmrwXT9A==}
-
   convert-source-map@1.9.0:
     resolution: {integrity: sha512-ASFBup0Mz1uyiIjANan1jzLQami9z1PoYSZCiiYW2FczPbenXc45FZdBZLzOT+r6+iciuEModtmCti+hjaAk0A==}
 
   convert-source-map@2.0.0:
     resolution: {integrity: sha512-Kvp459HrV2FEJ1CAsi1Ku+MY3kasH19TFykTz2xWmMeq6bk2NU3XXvfJ+Q61m0xktWwt+1HSYf3JZsTms3aRJg==}
-
-  convert-string@0.1.0:
-    resolution: {integrity: sha512-1KX9ESmtl8xpT2LN2tFnKSbV4NiarbVi8DVb39ZriijvtTklyrT+4dT1wsGMHKD3CJUjXgvJzstm9qL9ICojGA==}
 
   cookie-es@1.0.0:
     resolution: {integrity: sha512-mWYvfOLrfEc996hlKcdABeIiPHUPC6DM2QYZdGGOvhOTbA3tjm2eBwqlJpoFdjC89NI4Qt6h0Pu06Mp+1Pj5OQ==}
@@ -5346,9 +5305,6 @@ packages:
 
   idb@7.1.1:
     resolution: {integrity: sha512-gchesWBzyvGHRO9W8tzUWFDycow5gwjvFKfyV9FF32Y7F50yZMp7mP+T2mJIWFx49zicqyC4uefHM17o6xKIVQ==}
-
-  identicon.js@2.3.3:
-    resolution: {integrity: sha512-/qgOkXKZ7YbeCYbawJ9uQQ3XJ3uBg9VDpvHjabCAPp6aRMhjLaFAxG90+1TxzrhKaj6AYpVGrx6UXQfQA41UEA==}
 
   identity-obj-proxy@3.0.0:
     resolution: {integrity: sha512-00n6YnVHKrinT9t0d9+5yZC6UBNJANpYEQvL2LlX6Ab9lnmxzIRcEmTPuyGScvl1+jKuCICX1Z0Ab1pPKKdikA==}
@@ -7556,18 +7512,6 @@ packages:
     resolution: {integrity: sha512-qqJBtEyVgS0ZmPGdCFPWJ3FreoqvG4MVQln/kCgF7Olq95IbOp0/BWyMwbdtn4VTvkM8Y7khCQ2Xgk/tcrCXig==}
     engines: {node: '>= 0.8'}
 
-  rc-upload@4.5.2:
-    resolution: {integrity: sha512-QO3ne77DwnAPKFn0bA5qJM81QBjQi0e0NHdkvpFyY73Bea2NfITiotqJqVjHgeYPOJu5lLVR32TNGP084aSoXA==}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-
-  rc-util@5.39.1:
-    resolution: {integrity: sha512-OW/ERynNDgNr4y0oiFmtes3rbEamXw7GHGbkbNd9iRr7kgT03T6fT0b9WpJ3mbxKhyOcAHnGcIoh5u/cjrC2OQ==}
-    peerDependencies:
-      react: '>=16.9.0'
-      react-dom: '>=16.9.0'
-
   react-app-polyfill@3.0.0:
     resolution: {integrity: sha512-sZ41cxiU5llIB003yxxQBYrARBqe0repqPTTYBTmMqTz9szeBbE37BehCE891NZsmdZqqP+xWKdT3eo3vOzN8w==}
     engines: {node: '>=14'}
@@ -8029,9 +7973,6 @@ packages:
   sha.js@2.4.11:
     resolution: {integrity: sha512-QMEp5B7cftE7APOjk5Y6xgrbWu+WkLVQwk8JNjZ8nKRciZaByEW6MubieAiToS7+dwvrjGhH8jRXz3MVd0AYqQ==}
     hasBin: true
-
-  sha256@0.2.0:
-    resolution: {integrity: sha512-kTWMJUaez5iiT9CcMv8jSq6kMhw3ST0uRdcIWl3D77s6AsLXNXRp3heeqqfu5+Dyfu4hwpQnMzhqHh8iNQxw0w==}
 
   shebang-command@2.0.0:
     resolution: {integrity: sha512-kHxr2zZpYtdmrN1qDjrrX/Z1rR1kG8Dx+gkpK1G4eXmvXswmcE1hTWBWYUzlraYw1/yZp6YuDY77YtvbN0dmDA==}
@@ -11026,10 +10967,6 @@ snapshots:
 
   '@discoveryjs/json-ext@0.5.7': {}
 
-  '@dopex-io/web3-multicall@0.1.9(web3@1.10.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))':
-    dependencies:
-      web3: 1.10.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-
   '@ebay/nice-modal-react@1.2.13(react-dom@18.2.0(react@18.2.0))(react@18.2.0)':
     dependencies:
       react: 18.2.0
@@ -12623,8 +12560,6 @@ snapshots:
     dependencies:
       '@types/node': 16.18.34
 
-  '@types/identicon.js@2.3.1': {}
-
   '@types/istanbul-lib-coverage@2.0.4': {}
 
   '@types/istanbul-lib-report@3.0.0':
@@ -12742,10 +12677,6 @@ snapshots:
   '@types/serve-static@1.15.1':
     dependencies:
       '@types/mime': 3.0.1
-      '@types/node': 16.18.34
-
-  '@types/sha256@0.2.0':
-    dependencies:
       '@types/node': 16.18.34
 
   '@types/sockjs@0.3.33':
@@ -14332,13 +14263,9 @@ snapshots:
 
   content-type@1.0.5: {}
 
-  convert-hex@0.1.0: {}
-
   convert-source-map@1.9.0: {}
 
   convert-source-map@2.0.0: {}
-
-  convert-string@0.1.0: {}
 
   cookie-es@1.0.0: {}
 
@@ -14836,7 +14763,7 @@ snapshots:
   dom-helpers@5.2.1:
     dependencies:
       '@babel/runtime': 7.24.4
-      csstype: 3.1.2
+      csstype: 3.1.3
 
   dom-serializer@0.2.2:
     dependencies:
@@ -15674,7 +15601,7 @@ snapshots:
   file-loader@6.2.0(webpack@5.87.0):
     dependencies:
       loader-utils: 2.0.4
-      schema-utils: 3.1.2
+      schema-utils: 3.3.0
       webpack: 5.87.0
 
   file-uri-to-path@1.0.0: {}
@@ -16270,8 +16197,6 @@ snapshots:
   idb-keyval@6.2.1: {}
 
   idb@7.1.1: {}
-
-  identicon.js@2.3.3: {}
 
   identity-obj-proxy@3.0.0:
     dependencies:
@@ -19054,21 +18979,6 @@ snapshots:
       iconv-lite: 0.4.24
       unpipe: 1.0.0
 
-  rc-upload@4.5.2(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
-    dependencies:
-      '@babel/runtime': 7.23.8
-      classnames: 2.5.1
-      rc-util: 5.39.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-
-  rc-util@5.39.1(react-dom@18.2.0(react@18.2.0))(react@18.2.0):
-    dependencies:
-      '@babel/runtime': 7.23.8
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      react-is: 18.2.0
-
   react-app-polyfill@3.0.0:
     dependencies:
       core-js: 3.30.2
@@ -19715,11 +19625,6 @@ snapshots:
     dependencies:
       inherits: 2.0.4
       safe-buffer: 5.2.1
-
-  sha256@0.2.0:
-    dependencies:
-      convert-hex: 0.1.0
-      convert-string: 0.1.0
 
   shebang-command@2.0.0:
     dependencies:

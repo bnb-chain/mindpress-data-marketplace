@@ -1,9 +1,7 @@
 import { toast } from '@totejs/uikit';
 import BN from 'bn.js';
 import { format, utcToZonedTime } from 'date-fns-tz';
-import Identicon from 'identicon.js';
 import ReactDOM from 'react-dom';
-import sha265 from 'sha256';
 
 import { IReturnOffChainAuthKeyPairAndUpload } from '@bnb-chain/greenfield-js-sdk';
 import { AxiosResponse } from 'axios';
@@ -128,13 +126,6 @@ export const parseGroupName = (groupName: string) => {
     name,
     bucketName,
   };
-};
-
-export const defaultImg = (name: string, width: number) => {
-  if (!name) return '';
-  const sha = sha265(name);
-  const dataBase = new Identicon(sha, width).toString();
-  return `data:image/png;base64,${dataBase}`;
 };
 
 export const parseFileSize = (size: number) => {

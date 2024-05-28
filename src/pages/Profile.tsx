@@ -3,11 +3,11 @@ import { Box, Flex, Stack } from '@totejs/uikit';
 import { useEffect, useMemo } from 'react';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { isAddress } from 'viem';
 import { useAccount } from 'wagmi';
-import Web3 from 'web3';
+import ProfileList from '../components/profile/Index';
 import BSCIcon from '../components/svgIcon/BSCIcon';
 import { trimLongStr } from '../utils';
-import ProfileList from '../components/profile/Index';
 
 const Profile = () => {
   const { address } = useAccount();
@@ -16,9 +16,7 @@ const Profile = () => {
   const otherAddress = p.get('address') as string;
 
   const realAddress = useMemo(() => {
-    return otherAddress && Web3.utils.isAddress(otherAddress)
-      ? otherAddress
-      : address;
+    return otherAddress && isAddress(otherAddress) ? otherAddress : address;
   }, [address, otherAddress]);
 
   useEffect(() => {
