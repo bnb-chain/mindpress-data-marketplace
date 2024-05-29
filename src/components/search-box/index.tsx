@@ -54,7 +54,6 @@ const Search: React.FC<IProps> = ({
   const eventListener = useCallback(
     (e: any) => {
       const { target } = e;
-      console.log('target', target.getAttribute('datatype'));
       const root = document.getElementById('searchRoot');
       if (!root?.contains(target)) {
         onClose();
