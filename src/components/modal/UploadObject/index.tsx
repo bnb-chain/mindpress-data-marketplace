@@ -4,12 +4,13 @@ import { useImmerAtom } from 'jotai-immer';
 import { uploadObjcetAtom } from '../../../atoms/uploadObjectAtom';
 import { Uploader } from '../../uploader';
 import { UploadAtom } from '../../uploader/atoms/uploadAtom';
+import { useCallback } from 'react';
 
 export const UploadObjectModal = () => {
   const [upobjs, setUpobjs] = useImmerAtom(uploadObjcetAtom);
   const [uploadInfo, setUploadInfo] = useImmerAtom(UploadAtom);
 
-  const handleCloseModal = () => {
+  const handleCloseModal = useCallback(() => {
     setUpobjs((draft) => {
       draft.openModal = false;
     });
@@ -17,16 +18,23 @@ export const UploadObjectModal = () => {
     // reset upload info
     setUploadInfo((draft) => {
       draft.filesProgress = [];
+      draft.thumbProgress = [];
       draft.status = 'init';
     });
-  };
+  }, [setUploadInfo, setUpobjs]);
 
   return (
-    <Container size={'lg'} isOpen={upobjs.openModal} onClose={handleCloseModal}>
-      <ModalCloseButton />
+    <Container
+      size={'lg'}
+      isOpen={upobjs.openModal}
+      onClose={handleCloseModal}
+      closeOnEsc={false}
+      closeOnOverlayClick={false}
+    >
+      {/* <ModalCloseButton /> */}
       <Header>Upload Images</Header>
       <ModalBody>
-        <Uploader />
+        <Uploader onClose={handleCloseModal} />
       </ModalBody>
     </Container>
   );

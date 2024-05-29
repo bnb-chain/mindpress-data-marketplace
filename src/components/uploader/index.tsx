@@ -25,7 +25,11 @@ import { DragBox } from './DragArea';
 import { UploadArea } from './UploadArea';
 import { UploadAtom } from './atoms/uploadAtom';
 
-export const Uploader = () => {
+interface Props {
+  onClose: () => void;
+}
+
+export const Uploader: React.FC<Props> = ({ onClose }) => {
   const { address, connector } = useAccount();
   const [offchainData, setOffchainData] = useAtom(offchainDataAtom);
   const [files, setFiles] = useState<File[] | null>(null);
@@ -161,6 +165,7 @@ export const Uploader = () => {
                 },
                 onProgress: (e: OnProgressEvent) => {
                   console.log('thumb progress: ', e.percent);
+                  if (!e.percent) return;
 
                   setUploadInfo((draft) => {
                     draft.thumbProgress[index] = {
@@ -189,7 +194,9 @@ export const Uploader = () => {
               visibility: VisibilityType.VISIBILITY_TYPE_PRIVATE,
             },
             onProgress: (e: OnProgressEvent) => {
-              console.log('progress: ', e.percent);
+              console.log('source progress: ', e.percent);
+
+              if (!e.percent) return;
 
               setUploadInfo((draft) => {
                 draft.filesProgress[index] = {
@@ -278,12 +285,7 @@ export const Uploader = () => {
           onClick={async () => {
             if (uploadInfo.status === 'success') {
               // Close
-              setUpobjs((draft) => {
-                draft.openModal = false;
-              });
-              setUploadInfo((draft) => {
-                draft.status = 'init';
-              });
+              onClose();
 
               navigate('/profile?tab=uploaded');
             } else {
