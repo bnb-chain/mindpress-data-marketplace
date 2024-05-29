@@ -36,6 +36,8 @@ export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
       // console.log('lastPageParam', lastPageParam);
       // console.log('allPageParams', allPageParams);
 
+      if (!lastPage) return undefined;
+
       if (lastPage.total > (lastPageParam + 1) * TRENDING_PAGE_SIZE) {
         return lastPageParam + 1;
       }
@@ -45,8 +47,14 @@ export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
   });
 
   const flatData = useMemo(() => {
+    if (!query.data?.pages[0]) return [];
     return query.data?.pages?.flatMap((page) => page.items);
   }, [query.data]);
+
+  const total = useMemo(() => {
+    if (!query.data?.pages[0]) return 0;
+    return query.data?.pages[0].total || 0;
+  }, [query.data?.pages]);
 
   // console.log('flatData', flatData);
 
@@ -57,10 +65,6 @@ export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
 
   // console.log('groupIds', groupIds);
   // console.log('chainGroupsInfo', chainGroupsInfo);
-
-  const total = useMemo(() => {
-    return query.data?.pages[0].total || 0;
-  }, [query.data?.pages]);
 
   const flatDataWithUrls = flatData?.map((item, index) => {
     return {

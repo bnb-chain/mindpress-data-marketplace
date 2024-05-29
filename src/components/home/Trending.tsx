@@ -32,6 +32,8 @@ export const Trending = () => {
 
   if (!trendingList || isLoading) return <Loader />;
 
+  // console.log('trendingList', trendingList);
+
   return (
     <Container>
       <Title as="h2">Trending Images</Title>

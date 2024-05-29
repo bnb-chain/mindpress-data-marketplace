@@ -13,8 +13,8 @@ export const Kw: React.FC<Props> = ({ kw }) => {
   const {
     fetchNextPage,
     hasNextPage,
-    total,
-    flatData: searchList,
+    total = 0,
+    flatData: searchList = [],
   } = useInfiniteGetItemList({
     filter: {
       address: '',
@@ -25,7 +25,8 @@ export const Kw: React.FC<Props> = ({ kw }) => {
     sort: 'CREATION_DESC',
   });
 
-  // console.log('searchList', searchList);
+  console.log('total', total);
+  console.log('searchList', searchList);
 
   const handleNextPage = useCallback(() => {
     fetchNextPage();

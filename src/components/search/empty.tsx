@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Box, Center } from '@totejs/uikit';
+import { Box, Center, Flex } from '@totejs/uikit';
 
 interface Props {
   text: string;
@@ -8,7 +8,7 @@ interface Props {
 export const Empty: React.FC<Props> = ({ text }) => {
   return (
     <Container>
-      <Box flexDirection="column" mt="40px" gap="40px">
+      <Flex flexDirection="column" mt="40px" gap="40px">
         <Box color="#F7F7F8" fontSize="32px" fontWeight="800">
           {`We couldn\'t find anything for "`}
           <Box as="span" color="#FFE900">
@@ -17,8 +17,8 @@ export const Empty: React.FC<Props> = ({ text }) => {
           </Box>
           {`".`}
         </Box>
+
         <Center flexDirection="column" gap="24px">
-          import NoData from '../images/NoData.svg';
           <Box
             color="#C4C5CB"
             fontSize="16px"
@@ -28,7 +28,7 @@ export const Empty: React.FC<Props> = ({ text }) => {
             Try adjusting your search to find what you are looking for.
           </Box>
         </Center>
-      </Box>
+      </Flex>
 
       {/* <Box mt="40px">
     <RelatedImage
