@@ -17,7 +17,7 @@ export const Links = () => {
       mb="20px"
     >
       <TitleCon mb="30px">
-        <CardTitle>What Makes Us Different?</CardTitle>
+        <CardTitle>Decentralized Storage</CardTitle>
       </TitleCon>
       <CardCon gap={24}>
         <CardItem gap={16} flexDirection={'column'}>
@@ -26,18 +26,18 @@ export const Links = () => {
           </Box>
           <CardItemTitle>Decentralized Storage</CardItemTitle>
           <Box className="desc">
-            All your files are storage on BNB Greenfield decentralized storage
-            network Ownership on Blockchain
+            All your images are stored on BNB Greenfield decentralized storage
+            network.
           </Box>
         </CardItem>
         <CardItem gap={16} flexDirection={'column'}>
           <Box className="icon">
             <CopyrightIcon w={32} h={32} />
           </Box>
-          <CardItemTitle>Copyright on Blockchain</CardItemTitle>
+          <CardItemTitle>Fully Ownership</CardItemTitle>
           <Box className="desc">
-            Fully ownership and permission control managed by decentralized
-            blockchain Data Security
+            You’ll have fully ownership and permission control of your images by
+            blockchain.
           </Box>
         </CardItem>
         <CardItem gap={16} flexDirection={'column'}>
@@ -46,7 +46,8 @@ export const Links = () => {
           </Box>
           <CardItemTitle>Data Security</CardItemTitle>
           <Box className="desc">
-            Data is stored in a decentralized way with backups User Experience
+            Images are stored in a decentralized way with multiple backups
+            ensure the security.
           </Box>
         </CardItem>
         <CardItem gap={16} flexDirection={'column'}>
@@ -55,7 +56,8 @@ export const Links = () => {
           </Box>
           <CardItemTitle>Seamless User Experience</CardItemTitle>
           <Box className="desc">
-            Seamless user experience to boost image trading
+            A Web2-like user experience that lowers the learning costs of the
+            Web3 marketplace.
           </Box>
         </CardItem>
       </CardCon>
