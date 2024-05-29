@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Box, Flex } from '@totejs/uikit';
-import Search from '../Search';
+import Search from '../search-box';
 import { useGetCatoriesMap } from '../../hooks/apis/useGetCatoriesMap';
 import { MPLink } from '../ui/MPLink';
 import { SearchIcon } from '@totejs/icons';

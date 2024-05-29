@@ -1,11 +1,11 @@
-import { PickVGFStrategy } from '@bnb-chain/greenfield-cosmos-types/greenfield/virtualgroup/common';
 import {
   BucketVisibilityType,
   ExecutorMsg,
 } from '@bnb-chain/bsc-cross-greenfield-sdk';
+import { PickVGFStrategy } from '@bnb-chain/greenfield-cosmos-types/greenfield/virtualgroup/common';
 import * as ethers from 'ethers';
-import { useEffect, useMemo, useState } from 'react';
-import { Address, formatEther, parseEther, parseGwei } from 'viem';
+import { useEffect, useState } from 'react';
+import { Address, formatEther } from 'viem';
 import {
   useAccount,
   useNetwork,
@@ -17,9 +17,9 @@ import { BucketHubAbi } from '../../base/contract/bucketHub.abi';
 import { CrossChainAbi } from '../../base/contract/crossChain.abi';
 import { MarketplaceAbi } from '../../base/contract/marketplace.abi';
 import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
+import { client, selectSp } from '../../utils/gfSDK';
 import { getSpaceName, sleep } from '../../utils/space';
 import { useGetContractAddresses } from '../common/useGetContractAddresses';
-import { client, selectSp } from '../../utils/gfSDK';
 
 export type CreateBucketSynPackage = {
   creator: Address;

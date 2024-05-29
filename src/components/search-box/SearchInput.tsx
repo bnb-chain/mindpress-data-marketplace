@@ -2,7 +2,7 @@ import { Input } from '@totejs/uikit';
 import { ColoredErrorIcon, SearchIcon } from '@totejs/icons';
 import { BaseSyntheticEvent, useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
-import { mobileMedia } from '../hooks/common/useResponsive';
+import { mobileMedia } from '../../hooks/common/useResponsive';
 import { useNavigate } from 'react-router-dom';
 
 export interface SearchInputProps {

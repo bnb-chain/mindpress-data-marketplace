@@ -9,7 +9,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAccount, useDisconnect } from 'wagmi';
-import Search from '../../components/Search';
+import Search from '../search-box';
 import { NET_ENV } from '../../env';
 import TestNetLogo from '../../images/logo-testnet.svg';
 import MainNetLogo from '../../images/logo.svg';
@@ -24,8 +24,6 @@ import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
 const BG_COLOR = '#181a1e';
 
 const Header = () => {
-  const [p] = useSearchParams();
-  const kw = p.get('kw') as string;
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const { address, isConnecting, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
@@ -76,9 +74,7 @@ const Header = () => {
           src={NET_ENV === 'TESTNET' ? TestNetLogo : MainNetLogo}
           alt="logo"
         />
-        {location.pathname !== '/' && (
-          <Search width="380px" height="40px" kw={kw} />
-        )}
+        {location.pathname !== '/' && <Search width="380px" height="40px" />}
       </LeftCon>
 
       <RightFunCon

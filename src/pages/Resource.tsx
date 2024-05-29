@@ -84,14 +84,18 @@ const Resource = () => {
     return <Loader />;
   }
 
-  console.log('chainItemInfo', chainItemInfo);
-  console.log('object', object);
+  // console.log('chainItemInfo', chainItemInfo);
+  // console.log('object', object);
 
   return (
     <Container>
       <ResourceInfo>
         <ImageContainer>
-          <Image src={chainItemInfo?.urls?.[0]} fallbackSrc={DefaultImage} />
+          <Image
+            src={chainItemInfo?.urls?.[0]}
+            fallbackSrc={DefaultImage}
+            alt={chainItemInfo?.urls?.[0]}
+          />
         </ImageContainer>
 
         <Info>
