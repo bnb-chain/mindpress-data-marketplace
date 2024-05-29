@@ -54,8 +54,12 @@ const Search: React.FC<IProps> = ({
   const eventListener = useCallback(
     (e: any) => {
       const { target } = e;
+      console.log('target', target.getAttribute('datatype'));
       const root = document.getElementById('searchRoot');
       if (!root?.contains(target)) {
+        onClose();
+      }
+      if (target.getAttribute('datatype') == 'option') {
         onClose();
       }
     },
@@ -143,6 +147,7 @@ const Search: React.FC<IProps> = ({
                         onClick={() => {
                           handleClickOption(option.value);
                         }}
+                        datatype="option"
                       >
                         {option.label}
                       </MenuItem>
