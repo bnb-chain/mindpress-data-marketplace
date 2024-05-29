@@ -1,6 +1,6 @@
 # MindPress Data Marketplace Frontend
 
-MindPress Data Marketplace is a data exchange platform where users can freely create, list, trade, and sell images.
+MindPress Data Marketplace is a data exchange platform where users can freely upload, list, sell and buy images.
 
 <!-- ### Demo link
 
