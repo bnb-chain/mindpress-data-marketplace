@@ -1,6 +1,6 @@
-# Mindpress Data Marketplace
+# MindPress Data Marketplace Frontend
 
-Greenfield Data marketplace is a data exchange platform where users can freely create, list, trade, and sell data assets, including digital publications, scientific experimental data, and specific domain data, or even NFT can be treated as a kind of data.
+MindPress Data Marketplace is a data exchange platform where users can freely create, list, trade, and sell images.
 
 <!-- ### Demo link
 
@@ -56,13 +56,13 @@ then build example:
 > pnpm run build
 ```
 
-If you want to output all the files to index.html so that they can be deployed on decentralized storage platforms, such as [dCellar](https://dcellar.io/):
+If you want to output all the files to index.html so that they can be deployed on decentralized storage platforms, such as [DCellar](https://dcellar.io/):
 
 ```bash
 > pnpm run build:gf
 ```
 
-finally, you can see the output resources in the build directory
+Finally, you can see the output resources in the build directory.
 
 ## Documentation
 
@@ -86,5 +86,4 @@ Look over [DISCLAIMER](./DISCLAIMER.md)
 ## License
 
 The library is licensed under the
-[GNU Lesser General Public License v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html),
-also included in our repository in the [LICENSE](./LICENSE) file.
+[GNU Lesser General Public License v3.0](https://www.gnu.org/licenses/lgpl-3.0.en.html),also included in our repository in the [LICENSE](./LICENSE) file.
