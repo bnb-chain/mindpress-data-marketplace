@@ -89,12 +89,16 @@ export const useGetCategoryList = (categoryId: string) => {
       // console.log('groupIds', groupIds);
       // console.log('chainGroupsInfo', chainGroupsInfo);
 
-      const filterCategorList = _.orderBy(list, ['groupId'], 'asc')
+      const filterCategorList = list
         ?.filter((item) => {
           return groupIds.includes(BigInt(item.groupId));
         })
-        .map((item, index) => {
-          console.log('utem', item);
+        .map((item) => {
+          const index = _.findIndex(
+            chainGroupsInfo?.groupNames,
+            (c) => c === item.groupName,
+          );
+
           return {
             ...item,
             url: chainGroupsInfo?.urls?.[index] || '',
