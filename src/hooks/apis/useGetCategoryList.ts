@@ -5,6 +5,7 @@ import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 import { searchItems } from '../../utils/apis';
 import { SearchItemsResponse } from '../../utils/apis/types';
 import { useGetChainListItems } from '../buyer/useGetChainListItems';
+import _ from 'lodash';
 
 export const useGetCategoryGroupIds = (categoryId: string) => {
   const publicClient = usePublicClient({
@@ -86,20 +87,24 @@ export const useGetCategoryList = (categoryId: string) => {
 
       // console.log('flatData', list);
       // console.log('groupIds', groupIds);
+      // console.log('chainGroupsInfo', chainGroupsInfo);
 
-      const flatDataWithUrls = list.map((item, index) => {
-        return {
-          ...item,
-          url: chainGroupsInfo?.urls?.[index] || '',
-          ownerAddress: chainGroupsInfo?.creators?.[index] || '',
-        };
-      });
+      const filterCategorList = _.orderBy(list, ['groupId'], 'asc')
+        ?.filter((item) => {
+          return groupIds.includes(BigInt(item.groupId));
+        })
+        .map((item, index) => {
+          console.log('utem', item);
+          return {
+            ...item,
+            url: chainGroupsInfo?.urls?.[index] || '',
+            ownerAddress: chainGroupsInfo?.creators?.[index] || '',
+          };
+        });
 
-      // console.log('flatDataWithUrls', flatDataWithUrls);
+      console.log('flatDataWithUrls', filterCategorList);
 
-      const filterCategorList = flatDataWithUrls.filter((item) => {
-        return groupIds.includes(BigInt(item.groupId));
-      });
+      // const filterCategorList = flatDataWithUrls
 
       // console.log('filterCategorList', filterCategorList);
       return {

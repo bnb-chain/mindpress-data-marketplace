@@ -41,7 +41,7 @@ export const MindPressMasmonry = ({
               {activeItem && (
                 <HoverStatus className="hover-layer" item={activeItem} />
               )}
-              <Image src={item.url} fallbackSrc={DefaultImage} />
+              <Image src={item.url} fallbackSrc={DefaultImage} alt={item.url} />
             </Card>
           );
         })}
