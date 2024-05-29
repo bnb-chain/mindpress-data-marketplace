@@ -218,7 +218,7 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
         const res = await Promise.all(uploadTasks);
 
         // sleep for waiting uploaded image to be sealed
-        await sleep(3000);
+        await sleep(3000 * files.length);
         await refetchList();
 
         // console.log('res', res);
