@@ -6,6 +6,7 @@ import Compressor from 'compressorjs';
 import { useAtom } from 'jotai';
 import { useImmerAtom } from 'jotai-immer';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { parseEther } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
@@ -23,7 +24,6 @@ import { BlackSolidButton } from '../ui/buttons/BlackButton';
 import { DragBox } from './DragArea';
 import { UploadArea } from './UploadArea';
 import { UploadAtom } from './atoms/uploadAtom';
-import { useNavigate } from 'react-router-dom';
 
 export const Uploader = () => {
   const { address, connector } = useAccount();
@@ -52,8 +52,6 @@ export const Uploader = () => {
     },
   });
 
-  // const { doDelete } = useDeleteSpace({});
-
   const { refetch: refetchList } = useGetObjInBucketListStatus(
     getSpaceName(address),
     UPLOAD_LIST_PAGE_SIZE,
@@ -72,9 +70,8 @@ export const Uploader = () => {
     e.preventDefault();
     e.stopPropagation();
 
-    console.log('e: ', e.dataTransfer?.files);
-
-    console.log('files   :', Array.from(e.dataTransfer?.files || []));
+    // console.log('e: ', e.dataTransfer?.files);
+    // console.log('files   :', Array.from(e.dataTransfer?.files || []));
 
     const dropFiles = Array.from(e.dataTransfer?.files || []).filter((x) =>
       x.type.match(/^image\//),
@@ -144,20 +141,7 @@ export const Uploader = () => {
         draft.status = 'uploading';
       });
 
-      // const provider = await connector?.getProvider();
-      // const data = await getOffchainAuthKeys(address, provider);
-
-      // console.log('data', data);
-
-      // setOffchainData({
-      //   address: address,
-      //   seed: data?.seedString,
-      // });
-
       const now = Date.now().toString();
-
-      console.log('offchainData', offchainData);
-
       const uploadTasks = files.map((file, index) => {
         new Compressor(file, {
           quality: 0.6,
@@ -226,9 +210,9 @@ export const Uploader = () => {
       try {
         const res = await Promise.all(uploadTasks);
 
+        // sleep for waiting uploaded image to be sealed
+        await sleep(3000);
         await refetchList();
-
-        await sleep(1000);
 
         // console.log('res', res);
         setUploadInfo((draft) => {
