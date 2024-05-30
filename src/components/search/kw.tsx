@@ -4,6 +4,7 @@ import { Empty } from './empty';
 import { Box } from '@totejs/uikit';
 import { MindPressMasmonry } from '../ui/masmonry';
 import { Desc } from './desc';
+import { Loader } from '../Loader';
 
 interface Props {
   kw: string;
@@ -15,6 +16,7 @@ export const Kw: React.FC<Props> = ({ kw }) => {
     hasNextPage,
     total = 0,
     flatData: searchList = [],
+    isPending,
   } = useInfiniteGetItemList({
     filter: {
       address: '',
@@ -25,12 +27,16 @@ export const Kw: React.FC<Props> = ({ kw }) => {
     sort: 'CREATION_DESC',
   });
 
-  console.log('total', total);
-  console.log('searchList', searchList);
+  // console.log('total', total);
+  // console.log('searchList', searchList);
 
   const handleNextPage = useCallback(() => {
     fetchNextPage();
   }, [fetchNextPage]);
+
+  if (isPending) {
+    return <Loader />;
+  }
 
   if (total === 0) {
     return <Empty text={kw} />;
