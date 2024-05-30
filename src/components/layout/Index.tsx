@@ -1,14 +1,18 @@
 import styled from '@emotion/styled';
 import { Flex } from '@totejs/uikit';
+import { useSetAtom } from 'jotai';
 import { ReactNode, useCallback } from 'react';
+import { Address, Connector, ConnectorData, useAccount } from 'wagmi';
+import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
 import { useModal } from '../../hooks/useModal';
+import { getOffchainAuthKeys } from '../../utils/off-chain-auth/utils';
 import { ActionResult } from '../modal/ActionResult';
-import { DelistModal } from '../modal/DelistModal';
-import { ListModal } from '../modal/ListModal';
-import { ListProcess } from '../modal/ListProcess';
 import { BuyModal } from '../modal/BuyModal';
+import { ListModal } from '../modal/ListModal';
+import { UploadObjectModal } from '../modal/UploadObject';
 import Footer from './Footer';
 import Header from './Header';
+import { useSwitchAccount } from '../../hooks/useSwitchAccount';
 
 export default function Layout({ children }: { children: ReactNode }) {
   const modalData = useModal();
@@ -23,21 +27,45 @@ export default function Layout({ children }: { children: ReactNode }) {
     callBack,
   } = modalData.modalState;
 
-  const handleListOpen = useCallback(() => {
-    modalData.modalDispatch({ type: 'CLOSE_LIST' });
-  }, [modalData]);
-
-  const handleListProcessOpen = useCallback(() => {
-    modalData.modalDispatch({ type: 'CLOSE_LIST_PROCESS' });
-  }, [modalData]);
-
-  const handleDelistOpen = useCallback(() => {
-    modalData.modalDispatch({ type: 'CLOSE_DELIST' });
-  }, [modalData]);
-
   const handleResultOpen = useCallback(() => {
     modalData.modalDispatch({ type: 'CLOSE_RESULT' });
   }, [modalData]);
+
+  const setOffchainData = useSetAtom(offchainDataAtom);
+
+  const applyOffchainAuthData = async ({
+    connector,
+    address,
+  }: {
+    connector?: Connector;
+    address?: Address;
+  }) => {
+    const provider = await connector?.getProvider();
+    // console.log('provider', provider);
+    const offChainData = await getOffchainAuthKeys(
+      address as Address,
+      provider,
+    );
+    // console.log('useAccount offChainData', offChainData);
+    setOffchainData({
+      address: address!,
+      seed: offChainData?.seedString,
+    });
+  };
+
+  const { connector } = useAccount({
+    onConnect: async ({ connector, address }) => {
+      applyOffchainAuthData({ connector, address });
+    },
+  });
+
+  useSwitchAccount(connector, ({ account }: ConnectorData) => {
+    // console.log(account);
+    if (account) {
+      // console.log('new account', account);
+      applyOffchainAuthData({ connector, address: account });
+    }
+  });
 
   return (
     <>
@@ -47,33 +75,9 @@ export default function Layout({ children }: { children: ReactNode }) {
         <Footer />
       </Container>
 
-      {openList && (
-        <ListModal
-          isOpen={openList}
-          handleOpen={() => {
-            handleListOpen();
-          }}
-          detail={initInfo}
-        ></ListModal>
-      )}
-
-      {openListProcess && (
-        <ListProcess
-          isOpen={openListProcess}
-          handleOpen={() => {
-            handleListProcessOpen();
-          }}
-        ></ListProcess>
-      )}
+      <ListModal />
 
       <BuyModal />
-
-      <DelistModal
-        isOpen={openDelist}
-        handleOpen={() => {
-          handleDelistOpen();
-        }}
-      ></DelistModal>
 
       <ActionResult
         isOpen={openResult}
@@ -83,6 +87,8 @@ export default function Layout({ children }: { children: ReactNode }) {
         callBack={callBack}
         {...result}
       ></ActionResult>
+
+      <UploadObjectModal />
     </>
   );
 }

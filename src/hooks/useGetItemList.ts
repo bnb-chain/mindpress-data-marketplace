@@ -2,6 +2,7 @@ import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import { searchItems } from '../utils/apis';
 import { SearchItemsRequest } from '../utils/apis/types';
 import { useMemo } from 'react';
+import { useGetChainListItems } from './buyer/useGetChainListItems';
 
 export const useGetItemList = (
   params: SearchItemsRequest,
@@ -16,7 +17,7 @@ export const useGetItemList = (
   });
 };
 
-const PAGE_SIZE = 10;
+export const TRENDING_PAGE_SIZE = 20;
 
 export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
   const query = useInfiniteQuery({
@@ -25,7 +26,7 @@ export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
       // console.log('pageParam', pageParam);
       return await searchItems({
         ...params,
-        offset: pageParam * PAGE_SIZE,
+        offset: pageParam * TRENDING_PAGE_SIZE,
       });
     },
     initialPageParam: 0,
@@ -35,7 +36,9 @@ export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
       // console.log('lastPageParam', lastPageParam);
       // console.log('allPageParams', allPageParams);
 
-      if (lastPage.total > (lastPageParam + 1) * PAGE_SIZE) {
+      if (!lastPage) return undefined;
+
+      if (lastPage.total > (lastPageParam + 1) * TRENDING_PAGE_SIZE) {
         return lastPageParam + 1;
       }
       return undefined;
@@ -44,16 +47,37 @@ export const useInfiniteGetItemList = (params: SearchItemsRequest) => {
   });
 
   const flatData = useMemo(() => {
+    if (!query.data?.pages[0]) return [];
     return query.data?.pages?.flatMap((page) => page.items);
   }, [query.data]);
 
   const total = useMemo(() => {
+    if (!query.data?.pages[0]) return 0;
     return query.data?.pages[0].total || 0;
   }, [query.data?.pages]);
 
+  // console.log('flatData', flatData);
+
+  const groupIds = flatData?.map((item) => BigInt(item.groupId));
+
+  const { data: chainGroupsInfo, isLoading: getChainListItemLoading } =
+    useGetChainListItems(groupIds);
+
+  // console.log('groupIds', groupIds);
+  // console.log('chainGroupsInfo', chainGroupsInfo);
+
+  const flatDataWithUrls = flatData?.map((item, index) => {
+    return {
+      ...item,
+      url: chainGroupsInfo?.urls?.[index] || '',
+      ownerAddress: chainGroupsInfo?.creators?.[index] || '',
+    };
+  });
+
   return {
     ...query,
-    flatData,
+    flatData: flatDataWithUrls,
     total,
+    isLoading: getChainListItemLoading,
   };
 };

@@ -5,6 +5,7 @@ import {
   getCollectionInfo,
   getCollectionInfoByName,
   getGroupInfoByName,
+  getObjectInfoById,
   getObjectInfoByName,
 } from '../utils/gfSDK';
 import { useEffect, useState } from 'react';
@@ -44,6 +45,20 @@ export const useGetObject = (bucketName?: string, objectName?: string) => {
     queryFn: async () => {
       if (!bucketName || !objectName) return;
       const res = await getObjectInfoByName(bucketName, objectName);
+      return res;
+    },
+    gcTime: Infinity,
+    staleTime: Infinity,
+  });
+};
+
+export const useGetObjectById = (objectId?: string) => {
+  return useQuery({
+    enabled: !!objectId,
+    queryKey: ['GET_OBJECT_ID', objectId],
+    queryFn: async () => {
+      if (!objectId) return;
+      const res = await getObjectInfoById(objectId);
       return res;
     },
     gcTime: Infinity,
@@ -102,46 +117,3 @@ export const useGetBOInfoFromGroup = (groupName?: string) => {
 
   return boInfo;
 };
-
-// export type StorageInfoResponse = Awaited<
-//   ReturnType<typeof getChainInfoByGroupName>
-// >;
-// const getChainInfoByGroupName = async (groupName?: string) => {
-//   console.log('groupName: ', groupName);
-//   if (!groupName) return;
-//   const { bucketName: _, name, type } = parseGroupName(groupName);
-//   let objectName = '';
-//   let bucketName = '';
-//   let rType: Item['type'] = 'COLLECTION';
-//   if (type === 'Data') {
-//     rType = 'OBJECT';
-//     objectName = name;
-//     bucketName = _;
-//   }
-
-//   console.log('bucketName: ', bucketName);
-//   const bucket = await getCollectionInfoByName(bucketName);
-//   const bucketInfo = bucket.bucketInfo;
-//   console.log('bucketInfo: ', bucketInfo);
-
-//   let objectInfo;
-//   if (objectName) {
-//     objectInfo = (await getObjectInfoByName(bucketName, objectName)).objectInfo;
-//   }
-
-//   return {
-//     type: rType,
-//     bucketInfo,
-//     objectInfo,
-//   };
-// };
-
-// export const useGetStorageInfoByGroupName = (groupName: string | undefined) => {
-//   return useQuery({
-//     enabled: !!groupName,
-//     queryKey: ['GET_CHAIN_INFO_BY_GROUP_NAME', groupName],
-//     queryFn: () => getChainInfoByGroupName(groupName),
-//     gcTime: Infinity,
-//     staleTime: Infinity,
-//   });
-// };

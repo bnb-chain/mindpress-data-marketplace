@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Item } from '../../../utils/apis/types';
 import { HoverStatus } from '../../HoverStatus';
 import { DefaultButton } from '../buttons/DefaultButton';
+import DefaultImage from '../default-image';
 
 interface IProps {
   list?: Item[];
@@ -31,7 +32,7 @@ export const MindPressMasmonry = ({
             <Card
               key={item.id}
               onClick={() => {
-                navigator(`/resource?id=${item.id}&path=/`);
+                navigator(`/resource?gid=${item.groupId}`);
               }}
               onMouseEnter={() => {
                 setActiveItem(item);
@@ -40,10 +41,7 @@ export const MindPressMasmonry = ({
               {activeItem && (
                 <HoverStatus className="hover-layer" item={activeItem} />
               )}
-              <Image
-                src={item.url}
-                fallbackSrc={`https://picsum.photos/seed/${item.groupName}/400/600`}
-              />
+              <Image src={item.url} fallbackSrc={DefaultImage} alt={item.url} />
             </Card>
           );
         })}

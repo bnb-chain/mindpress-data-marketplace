@@ -71,5 +71,6 @@
     "tracemove",
     "verfiy",
     "vout"
-  ]
+  ],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

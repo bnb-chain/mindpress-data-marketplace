@@ -1,7 +1,6 @@
-import React from 'react';
+import { Buffer } from 'buffer';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { Buffer } from 'buffer';
 
 window.Buffer = Buffer;
 const root = ReactDOM.createRoot(

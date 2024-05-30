@@ -83,7 +83,7 @@ const NavContainer = styled.div`
     left: 0;
     width: 100%;
     height: 4px;
-    /* background: #373943; */
+    background: #373943;
     z-index: 1;
   }
 `;

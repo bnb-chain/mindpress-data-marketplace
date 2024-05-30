@@ -1,12 +1,15 @@
 import { Client } from '@bnb-chain/greenfield-js-sdk';
 import { forEach } from '.';
-import { BSC_CHAIN_ID, DAPP_NAME, GF_CHAIN_ID, GF_RPC_URL } from '../env';
+import { DAPP_NAME, GREENFIELD_CHAIN } from '../env';
 
 export const getSingleton = function () {
   let client: Client | null;
   return function () {
     if (!client) {
-      client = Client.create(GF_RPC_URL, String(GF_CHAIN_ID));
+      client = Client.create(
+        GREENFIELD_CHAIN.rpcUrls.default.http[0],
+        String(GREENFIELD_CHAIN.id),
+      );
     }
     return client;
   };
@@ -18,8 +21,12 @@ export const client = getClient();
 
 export const getSps = async () => {
   const sps = await client.sp.getStorageProviders();
+  console.log('sps', sps);
   const finalSps = (sps ?? []).filter(
-    (v: any) => v?.description?.moniker !== 'QATest',
+    (v: any) =>
+      v?.description?.moniker !== 'QATest' &&
+      (v.endpoint.indexOf('bnbchain.org') > 0 ||
+        v.endpoint.indexOf('nodereal.io') > 0),
   );
 
   return finalSps;
@@ -33,6 +40,7 @@ export const selectSp = async () => {
     ...finalSps.slice(selectIndex + 1),
   ].map((item) => item.operatorAddress);
   const selectSpInfo = {
+    id: finalSps[selectIndex].id,
     endpoint: finalSps[selectIndex].endpoint,
     primarySpAddress: finalSps[selectIndex]?.operatorAddress,
     sealAddress: finalSps[selectIndex].sealAddress,
@@ -168,6 +176,10 @@ export const getObjectInfoByName = async (
   return await client.object.headObject(bucketName, objectName);
 };
 
+export const getObjectInfoById = async (objectId: string) => {
+  return await client.object.headObjectById(objectId);
+};
+
 export const updateGroupInfo = async (
   address: string,
   groupName: string,
@@ -203,19 +215,6 @@ export const updateGroupInfoWithTx = async (
     gasPrice: simulateInfo?.gasPrice || '5000000000',
     payer: address,
     granter: '',
-  });
-};
-
-export const mirrorGroup = async (
-  groupName: string,
-  id: string,
-  operator: string,
-) => {
-  return await client.crosschain.mirrorGroup({
-    groupName,
-    id,
-    operator,
-    destChainId: BSC_CHAIN_ID,
   });
 };
 

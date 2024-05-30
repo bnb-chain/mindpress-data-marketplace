@@ -21,3 +21,33 @@ export const BlackButton = (props: ButtonProps) => {
     />
   );
 };
+
+export const BlackSolidButton = (props: ButtonProps) => {
+  return (
+    <Button
+      height="48px"
+      bg="rgba(30, 32, 38, 1)"
+      fontSize="16px"
+      width={'100%'}
+      _hover={{
+        color: '#E1E2E5',
+        bg: 'rgba(30, 32, 38, 0.98)',
+      }}
+      _disabled={{
+        // bg: 'rgba(30, 32, 38, 0.98)',
+        color: '#FFF',
+        bg: '#E1E2E5',
+        cursor: 'not-allowed',
+        _hover: {
+          bg: '#E1E2E5',
+          color: '#FFF',
+        },
+      }}
+      _active={{
+        color: '#FFFFFF',
+        bg: 'rgba(30, 32, 38, 0.95)',
+      }}
+      {...props}
+    />
+  );
+};

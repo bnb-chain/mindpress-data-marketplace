@@ -786,6 +786,9 @@ module.exports = function (webpackEnv) {
             },
           },
         }),
+      shouldInlineRuntimeChunk && new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1
+      })
     ].filter(Boolean),
     // Turn off performance processing because we utilize
     // our own hints via the FileSizeReporter

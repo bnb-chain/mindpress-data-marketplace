@@ -10,10 +10,15 @@ import {
   StateModal,
   StateModalVariantType,
 } from '@totejs/uikit';
+import { useAtomValue } from 'jotai';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useGetRandomSp } from '../../hooks/useGetRandomSp';
+import { useAccount } from 'wagmi';
+import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
 import { parseGroupName } from '../../utils';
 import { getItemByGroupId } from '../../utils/apis';
+import { client } from '../../utils/gfSDK';
+import { Loader } from '../Loader';
 import { SuccessIcon } from '../svgIcon/SuccessIcon';
 import { BigYellowButton } from '../ui/buttons/YellowButton';
 
@@ -46,7 +51,9 @@ export const ActionResult = (props: IActionResult) => {
   const { type, isOpen, groupId, handleOpen, variant, description, callBack } =
     props;
 
-  const { data: endpoint, isLoading } = useGetRandomSp();
+  const { address } = useAccount();
+  const offchainData = useAtomValue(offchainDataAtom);
+  const [downloading, setDownloadLoading] = useState(false);
 
   const navigator = useNavigate();
 
@@ -79,18 +86,54 @@ export const ActionResult = (props: IActionResult) => {
                 p="12px 16px"
                 color="#FFF"
                 fontSize="16px"
+                _disabled={{
+                  bg: '#14151A',
+                  color: '#FFF',
+                  cursor: 'not-allowed',
+                }}
                 _hover={{
                   bg: '#14151A',
                   color: '#FFF',
                 }}
+                _active={{
+                  bg: '#14151A',
+                  color: '#FFF',
+                }}
+                isLoading={downloading}
+                loadingText={
+                  <Flex gap="5px" alignItems="center">
+                    <Loader
+                      minHeight={43}
+                      size={20}
+                      borderWidth={2}
+                      color="#E1E2E5"
+                      bg="#181A1E"
+                    />
+                    <Box>Download</Box>
+                  </Flex>
+                }
                 onClick={async () => {
                   // handleOpen();
                   if (!groupId) return;
+                  if (!address) return;
+
                   const res = await getItemByGroupId(groupId);
                   const { bucketName, name } = parseGroupName(res.groupName);
 
-                  const downloadUrl = `${endpoint}/download/${bucketName}/${name}`;
-                  window.open(downloadUrl);
+                  setDownloadLoading(true);
+                  await client.object.downloadFile(
+                    {
+                      bucketName,
+                      objectName: name,
+                    },
+                    {
+                      type: 'EDDSA',
+                      address,
+                      domain: window.location.origin,
+                      seed: offchainData?.seed || '',
+                    },
+                  );
+                  setDownloadLoading(false);
                 }}
               >
                 Download
@@ -111,7 +154,7 @@ export const ActionResult = (props: IActionResult) => {
                   if (!groupId) return;
                   const res = await getItemByGroupId(groupId);
                   handleOpen();
-                  navigator(`/resource?id=${res.id}`);
+                  navigator(`/resource?gid=${res.groupId}`);
                 }}
               >
                 View Detail

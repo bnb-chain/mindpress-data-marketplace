@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import { ColoredInfoIcon } from '@totejs/icons';
 import {
   Box,
+  Button,
   Flex,
   Popover,
   PopoverArrow,
@@ -17,14 +18,13 @@ import {
 import { BN } from 'bn.js';
 import { useImmerAtom } from 'jotai-immer';
 import { useMemo } from 'react';
-import { formatUnits, parseUnits } from 'viem';
+import { formatEther, formatUnits, parseUnits } from 'viem';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { buyAtom } from '../../atoms/buyAtom';
-import { OPBNB } from '../../config/wallet';
-import { BSC_CHAIN_ID, NETWORK } from '../../env';
-import { useBNBPrice } from '../../hooks/useBNBPrice';
-import { useBuy } from '../../hooks/useBuy';
-import { useChainBalance } from '../../hooks/useChainBalance';
+import { BSC_CHAIN, NETWORK } from '../../env';
+import { useBuy } from '../../hooks/buyer/useBuy';
+import { useBNBPrice } from '../../hooks/price/useBNBPrice';
+import { useChainBalance } from '../../hooks/price/useChainBalance';
 import { divide10Exp, roundFun } from '../../utils';
 import { Loader } from '../Loader';
 import { BigYellowButton } from '../ui/buttons/YellowButton';
@@ -33,6 +33,8 @@ export const BuyModal = () => {
   const [buys, setBuys] = useImmerAtom(buyAtom);
 
   const { groupId, price, groupName, ownerAddress } = buys.buyData;
+
+  // console.log('buys', buys.buyData);
 
   const { buy, relayFee } = useBuy(groupName, ownerAddress, price);
 
@@ -53,8 +55,10 @@ export const BuyModal = () => {
   }, [price]);
 
   const relayFeeBNB = useMemo(() => {
-    const balance = divide10Exp(new BN(relayFee, 10), 18);
-    return balance;
+    // return relayFee;
+    // const balance = divide10Exp(new BN(relayFee, 10), 18);
+    // return balance;
+    return formatEther(relayFee);
   }, [relayFee]);
 
   const TotalPrice = useMemo(() => {
@@ -137,13 +141,41 @@ export const BuyModal = () => {
       </CustomBody>
       {!BSC_FEE_SUFF && <BalanceWarn>Insufficient Balance</BalanceWarn>}
       <QDrawerFooter>
-        {chain && chain.id === BSC_CHAIN_ID && (
+        {chain && chain.id === BSC_CHAIN.id && (
           <BigYellowButton
             isLoading={buys.buying}
-            loadingText={<Loader size={30} />}
+            _disabled={{
+              bg: '#F7F7F873',
+              cursor: 'not-allowed',
+              _hover: {
+                bg: '#F7F7F873',
+              },
+            }}
+            loadingText={
+              <Flex
+                w="100%"
+                alignItems="center"
+                justifyContent="center"
+                gap="5px"
+              >
+                <Box w="35px">
+                  <Loader
+                    minHeight={43}
+                    size={20}
+                    borderWidth={2}
+                    color="#E6E8EA"
+                    bg="#76808F"
+                  />
+                </Box>
+                <Box>Transaction in progress</Box>
+              </Flex>
+            }
             width={'100%'}
-            onClick={() => {
+            onClick={async () => {
+              // await buy(2479);
+              console.log('groupId', groupId);
               buy(groupId);
+
               setBuys((draft) => {
                 draft.openDrawer = true;
                 draft.buying = true;
@@ -154,15 +186,22 @@ export const BuyModal = () => {
             Buy
           </BigYellowButton>
         )}
-        {chain && chain.id !== BSC_CHAIN_ID ? (
-          <BigYellowButton
-            width={'100%'}
+        {chain && chain.id !== BSC_CHAIN.id ? (
+          <Button
+            w="100%"
+            bg="#FFA260"
+            _hover={{
+              bg: '#FF8A38',
+            }}
+            h="48px"
+            color="#181A1E"
+            fontWeight={700}
             onClick={() => {
-              switchNetwork?.(BSC_CHAIN_ID);
+              switchNetwork?.(BSC_CHAIN.id);
             }}
           >
-            Switch to {OPBNB.name} {NETWORK}
-          </BigYellowButton>
+            Switch to BSC {NETWORK}
+          </Button>
         ) : null}
       </QDrawerFooter>
     </Container>

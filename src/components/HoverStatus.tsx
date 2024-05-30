@@ -6,11 +6,13 @@ import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { buyAtom } from '../atoms/buyAtom';
+import { useGetChainListItems } from '../hooks/buyer/useGetChainListItems';
 import { useGetRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
 import { trimLongStr } from '../utils';
 import { Item } from '../utils/apis/types';
 import { DefaultButton } from './ui/buttons/DefaultButton';
 import { YellowButton } from './ui/buttons/YellowButton';
+import { Loader } from './Loader';
 
 interface IProps {
   item: Item;
@@ -20,11 +22,16 @@ interface IProps {
 export const HoverStatus = ({ item, className }: IProps) => {
   const navigator = useNavigate();
   const { address, isConnected, isConnecting } = useAccount();
+  const { data: chainItemInfo } = useGetChainListItems([BigInt(item.groupId)]);
+
+  // console.log('item.groupId', item);
+  // console.log('chainItemInfo', chainItemInfo);
   const {
     relation,
     isLoading: relationisLoading,
-    downloadUrl,
-  } = useGetRelationWithAddr(address, item);
+    doDownload,
+    isDownloading,
+  } = useGetRelationWithAddr(address, item, chainItemInfo?.creators?.[0] || '');
   const { onOpen } = useWalletKitModal();
   const [, setBuy] = useImmerAtom(buyAtom);
 
@@ -51,12 +58,24 @@ export const HoverStatus = ({ item, className }: IProps) => {
               bg="#F1F2F3"
               color="#181A1E"
               fontWeight="800"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.stopPropagation();
-                window.open(downloadUrl);
+                await doDownload();
               }}
             >
-              Download
+              {isDownloading ? (
+                <Flex gap="5px" alignItems="center">
+                  <Loader
+                    minHeight={43}
+                    size={20}
+                    borderWidth={2}
+                    color="#E6E8EA"
+                    bg="#76808F"
+                  />
+                </Flex>
+              ) : (
+                'Download'
+              )}
             </DefaultButton>
           )}
           {(relation === 'NOT_PURCHASE' || relation === 'UNKNOWN') && (

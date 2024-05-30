@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Loader } from '../components/Loader';
 import { NoData } from '../components/NoData';
-import { useGetItemByGroupId } from '../hooks/useGetItemByGroupId';
+import { useGetItemByGroupId } from '../hooks/apis/useGetItemByGroupId';
 
 export const Redirect = () => {
   const [p] = useSearchParams();

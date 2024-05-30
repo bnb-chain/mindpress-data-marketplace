@@ -1,61 +1,48 @@
 import styled from '@emotion/styled';
-import { Box, Button, Flex } from '@totejs/uikit';
-import { useCallback, useEffect, useState } from 'react';
+import { Flex } from '@totejs/uikit';
+import { useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { DCELLAR_URL } from '../../env';
 import { NavBar } from '../NavBar';
 import MyCollectionList from './MyCollectionList';
-import OtherListedList from './OtherListedList';
 import PurchaseList from './PurchaseList';
+import { Address } from 'viem';
+import { searchItems } from '../../utils/apis';
 
 enum Type {
-  Collections = 'uploaded',
-  Purchase = 'purchased',
+  Purchased = 'purchased',
+  Uploaded = 'uploaded',
 }
-const _navItems = [
+const navItems = [
   {
-    name: 'My Uploaded',
-    key: Type.Collections,
+    name: 'Purchased Images',
+    key: Type.Purchased,
   },
   {
-    name: 'My Purchases',
-    key: Type.Purchase,
+    name: 'Uploaded Images',
+    key: Type.Uploaded,
   },
 ];
 
 interface IProfileList {
-  realAddress: string;
-  self: boolean;
+  address: Address;
 }
 const ProfileList = (props: IProfileList) => {
   const [p] = useSearchParams();
   const tab = p.getAll('tab')[0];
 
   const navigator = useNavigate();
-  const { realAddress, self } = props;
+  const { address } = props;
 
-  const [navItems, setNavItems] = useState(_navItems);
-
-  useEffect(() => {
-    if (!self) {
-      const cp = JSON.parse(JSON.stringify(_navItems));
-      cp.splice(1, 1);
-      cp[0].name = 'Data List';
-      setNavItems(cp);
-    } else {
-      setNavItems(_navItems);
-    }
-  }, [realAddress, self]);
-
-  const currentTab = tab ? tab : Type.Collections;
+  const currentTab = tab ? tab : Type.Purchased;
   const handleTabChange = useCallback(
     (tab: any) => {
-      navigator(`/profile?tab=${tab}`);
+      navigator({
+        pathname: '/profile',
+        search: `?address=${address}&tab=${tab}`,
+      });
     },
-    [navigator],
+    [address, navigator],
   );
-
-  const [showButton, setShowButton] = useState(false);
 
   return (
     <Container>
@@ -65,38 +52,12 @@ const ProfileList = (props: IProfileList) => {
           onChange={handleTabChange}
           items={navItems}
         />
-        {self && showButton && (
-          <MyButton
-            onClick={() => {
-              window.open(`${DCELLAR_URL}`);
-            }}
-            size={'sm'}
-            style={{ marginLeft: '6px' }}
-            bg="#FFE900"
-            color="#181A1E"
-            fontWeight="800"
-            _hover={{
-              bg: '#EBD600',
-              color: '#181A1E',
-            }}
-          >
-            Upload Data in DCellar
-          </MyButton>
-        )}
       </NavCon>
 
-      <Box h={20} />
-      {self ? (
-        currentTab === Type.Collections ? (
-          <MyCollectionList setShowButton={setShowButton}></MyCollectionList>
-        ) : (
-          <PurchaseList></PurchaseList>
-        )
+      {currentTab === Type.Purchased ? (
+        <PurchaseList address={address} />
       ) : (
-        <OtherListedList
-          realAddress={realAddress}
-          self={self}
-        ></OtherListedList>
+        <MyCollectionList address={address} />
       )}
     </Container>
   );
@@ -105,15 +66,10 @@ const ProfileList = (props: IProfileList) => {
 export default ProfileList;
 
 const Container = styled.div`
-  margin-top: 30px;
-  margin-left: auto;
-  margin-right: auto;
-  width: 1200px;
+  /* width: 1000px; */
 `;
 
-const NavCon = styled(Flex)``;
-const MyButton = styled(Button)`
-  width: 200px;
-  height: 40px;
-  border-radius: 8px;
+const NavCon = styled(Flex)`
+  margin-top: 40px;
+  margin-bottom: 40px;
 `;

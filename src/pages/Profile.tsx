@@ -1,50 +1,46 @@
 import styled from '@emotion/styled';
-import { Copy } from '../components/Copy';
+import { Box, Flex, Stack } from '@totejs/uikit';
+import { useEffect, useMemo } from 'react';
+import { MetaMaskAvatar } from 'react-metamask-avatar';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { isAddress } from 'viem';
 import { useAccount } from 'wagmi';
-import { Flex } from '@totejs/uikit';
 import ProfileList from '../components/profile/Index';
-import Identicon from 'identicon.js';
-import sha265 from 'sha256';
-import Logo from '../images/logo.png';
+import BSCIcon from '../components/svgIcon/BSCIcon';
 import { trimLongStr } from '../utils';
-import { useSearchParams } from 'react-router-dom';
-import Web3 from 'web3';
-import { useMemo } from 'react';
 
 const Profile = () => {
   const { address } = useAccount();
-
-  const sha = sha265((address as string) || 'default');
-  const dataBase = new Identicon(sha, 120).toString();
-  const url = `data:image/png;base64,${dataBase}`;
-
   const [p] = useSearchParams();
-  const otherAddress = p.getAll('address')[0];
+  const navigator = useNavigate();
+  const otherAddress = p.get('address') as string;
 
   const realAddress = useMemo(() => {
-    return otherAddress && Web3.utils.isAddress(otherAddress)
-      ? otherAddress
-      : address;
+    return otherAddress && isAddress(otherAddress) ? otherAddress : address;
   }, [address, otherAddress]);
+
+  useEffect(() => {
+    if (!realAddress) {
+      navigator(`/`);
+    }
+  }, [navigator, realAddress]);
 
   return (
     <Container>
-      <PersonInfo gap={32} alignItems={'flex-start'}>
+      <PersonInfo gap={32}>
         <ImgCon>
-          <img src={url} alt="" />
+          {realAddress && <MetaMaskAvatar size={120} address={realAddress} />}
         </ImgCon>
-        <Info gap={16} alignItems={'center'} justifyContent={'center'}>
-          <Icon src={Logo} alt="" />
-          <Address>{trimLongStr(realAddress as string)}</Address>
-          <Copy value={realAddress} />
+        <Info gap={16} justifyContent="flex-end">
+          <Username>{trimLongStr(realAddress as string)}</Username>
+          <Address>
+            <BSCIcon color="#F0B90B" w={24} h={24} />
+            {trimLongStr(realAddress as string)}
+          </Address>
         </Info>
       </PersonInfo>
-      {realAddress && (
-        <ProfileList
-          self={realAddress === address}
-          realAddress={realAddress}
-        ></ProfileList>
-      )}
+
+      {realAddress && <ProfileList address={realAddress as `0x${string}`} />}
     </Container>
   );
 };
@@ -52,10 +48,10 @@ const Profile = () => {
 export default Profile;
 
 const Container = styled.div`
-  margin-top: 60px;
+  width: 1200px;
   margin-left: auto;
   margin-right: auto;
-  width: 1200px;
+  margin-top: 40px;
 `;
 const PersonInfo = styled(Flex)``;
 
@@ -69,17 +65,22 @@ const ImgCon = styled.div`
   }
 `;
 
-const Info = styled(Flex)``;
+const Info = styled(Stack)``;
 
-const Address = styled.span`
-  font-style: normal;
+const Address = styled(Flex)`
+  gap: 4px;
+  padding: 12px 16px;
   font-weight: 700;
-  font-size: 24px;
+  font-size: 16px;
   line-height: 24px;
-
+  background-color: #1e2026;
   color: #ffffff;
+  border: 1px solid #373943;
+  border-radius: 360px;
+  width: fit-content;
 `;
-const Icon = styled.img`
-  width: 36px;
-  height: 36px;
+
+const Username = styled(Box)`
+  font-size: 32px;
+  color: #f7f7f8;
 `;

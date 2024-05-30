@@ -11,8 +11,8 @@ MindPress Data Marketplace is a data exchange platform where users can freely up
 Clone the project and install dependencies:
 
 ```bash
-> git clone https://github.com/bnb-chain/greenfield-data-marketplace-frontend.git
-> cd greenfield-data-marketplace-frontend
+> git clone git@github.com:bnb-chain/mindpress-marketplace.git
+> cd mindpress-marketplace
 > pnpm install
 > cp .env.example .env.development.local
 ```
@@ -27,12 +27,6 @@ abd then run example:
 
 ```bash
 > pnpm run start
-```
-
-if you want to add dependency:
-
-```bash
-> pnpm i react
 ```
 
 ### Publish the project

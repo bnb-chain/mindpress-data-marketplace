@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 import { Flex } from '@totejs/uikit';
-import { useGetCatoriesMap } from '../../hooks/useGetCatoriesMap';
+import { useGetCatoriesMap } from '../../hooks/apis/useGetCatoriesMap';
 import { Loader } from '../Loader';
 import { MPLink } from '../ui/MPLink';
 
@@ -42,11 +42,15 @@ const CateItem = styled(MPLink)`
   color: #f7f7f8;
   width: 180px;
   height: 180px;
-  line-height: 180px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 16px;
   font-weight: 800;
   text-align: center;
   border-radius: 8px;
+  word-break: keep-all;
 
   &:hover {
     color: rgba(247, 247, 248, 0.8);
