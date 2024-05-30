@@ -17,8 +17,6 @@ export const UploadArea: React.FC<IProps> = ({ files, removeFile }) => {
   const fileList = files ? [...files] : [];
   const totalFileSize = fileList.reduce((a, b) => a + b.size, 0);
 
-  console.log('uploadInfo', uploadInfo);
-
   return (
     <>
       {files && uploadInfo.status == 'uploading' && (

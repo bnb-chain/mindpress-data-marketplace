@@ -1,5 +1,11 @@
 import styled from '@emotion/styled';
-import { Modal, ModalBody, ModalCloseButton, ModalHeader } from '@totejs/uikit';
+import {
+  CloseButton,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalHeader,
+} from '@totejs/uikit';
 import { useImmerAtom } from 'jotai-immer';
 import { uploadObjcetAtom } from '../../../atoms/uploadObjectAtom';
 import { Uploader } from '../../uploader';
@@ -31,7 +37,16 @@ export const UploadObjectModal = () => {
       closeOnEsc={false}
       closeOnOverlayClick={false}
     >
-      {/* <ModalCloseButton /> */}
+      <ModalCloseButton
+        sx={{
+          cursor: uploadInfo.status === 'uploading' ? 'not-allowed' : 'pointer',
+        }}
+        onClick={() => {
+          if (uploadInfo.status !== 'uploading') {
+            handleCloseModal();
+          }
+        }}
+      />
       <Header>Upload Images</Header>
       <ModalBody>
         <Uploader onClose={handleCloseModal} />
