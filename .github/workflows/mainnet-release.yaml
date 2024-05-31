@@ -45,7 +45,7 @@ jobs:
           REACT_APP_DAPP_NAME: mindt0527
           G_TAG: G-VRYHWMVQ50
           REACT_APP_API_DOMAIN: https://api-marketplace.mindpress.io/v1/
-          REACT_APP_UPLOAD_OBJECT_FEE: 0.000012
+          REACT_APP_UPLOAD_OBJECT_FEE: "0.000012"
         run: |
           pnpm run build
 
