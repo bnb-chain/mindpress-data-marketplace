@@ -13,30 +13,28 @@ export const InsufficientBSC = () => {
       color="#ff6058"
     >
       <ColoredWarningIcon size="sm" color="#ff6058" mr="4px" />
-      <BalanceWarn>Insufficient Balance on BSC.</BalanceWarn>
-      {NET_ENV === 'TESTNET' && (
-        <Box>
-          Get test token from{' '}
-          <a
-            style={{
-              textDecoration: 'underline',
-            }}
-            href="https://www.bnbchain.org/en/testnet-faucet"
-          >
-            faucet
-          </a>
-          .
-        </Box>
-      )}
+      <BalanceWarn>
+        <Box as="span">Insufficient Balance on BSC. </Box>
+        {NET_ENV === 'TESTNET' && (
+          <Box as="span">
+            Get test token from{' '}
+            <a
+              style={{
+                textDecoration: 'underline',
+              }}
+              href="https://www.bnbchain.org/en/testnet-faucet"
+            >
+              faucet
+            </a>
+            .
+          </Box>
+        )}
+      </BalanceWarn>
     </Flex>
   );
 };
 
-const BalanceWarn = styled(Flex)`
-  font-style: normal;
-
+const BalanceWarn = styled(Box)`
   font-size: 12px;
   line-height: 18px;
-  /* identical to box height, or 180% */
-  bottom: 90px;
 `;

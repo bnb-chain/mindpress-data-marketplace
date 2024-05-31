@@ -1,6 +1,6 @@
 import NiceModal from '@ebay/nice-modal-react';
 import styled from '@emotion/styled';
-import { ColoredWarningIcon, ReverseVIcon } from '@totejs/icons';
+import { ReverseVIcon } from '@totejs/icons';
 import {
   Box,
   Button,
@@ -10,6 +10,7 @@ import {
   QDrawerCloseButton,
   QDrawerFooter,
   QDrawerHeader,
+  Stack,
   Text,
 } from '@totejs/uikit';
 import { useImmerAtom } from 'jotai-immer';
@@ -18,15 +19,15 @@ import { useNavigate } from 'react-router-dom';
 import { Address, formatEther } from 'viem';
 import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
 import { listAtom } from '../../atoms/listAtom';
-import { BSC_CHAIN, BSC_EXPLORER_URL, NET_ENV } from '../../env';
+import { BSC_CHAIN, BSC_EXPLORER_URL } from '../../env';
 import { useGetCategory } from '../../hooks/apis/useGetCatoriesMap';
 import { useGetBnbUsdtExchangeRate } from '../../hooks/price/useGetBnbUsdtExchangeRate';
 import { useList } from '../../hooks/seller/useList';
 import { Loader } from '../Loader';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';
-import { Tips } from './Tips';
 import { InsufficientBSC } from './InsufficientBSC';
+import { Tips } from './Tips';
 
 export const ListModal = () => {
   const navigator = useNavigate();
@@ -221,11 +222,12 @@ export const ListModal = () => {
       </CustomBody>
 
       <QDrawerFooter>
-        <Flex flexDirection={'column'} gap={6} w="100%">
+        <Stack gap="10px">
           {!BSC_FEE_SUFF && <InsufficientBSC />}
 
           {chain && chain.id !== BSC_CHAIN.id && (
             <Button
+              w="100%"
               bg="#FFA260"
               _hover={{
                 bg: '#FF8A38',
@@ -244,6 +246,7 @@ export const ListModal = () => {
 
           {chain && chain.id === BSC_CHAIN.id && (
             <YellowButton
+              w="100%"
               borderRadius="8px"
               h="48px"
               onClick={async () => {
@@ -285,7 +288,7 @@ export const ListModal = () => {
               List
             </YellowButton>
           )}
-        </Flex>
+        </Stack>
       </QDrawerFooter>
     </QDrawer>
   );

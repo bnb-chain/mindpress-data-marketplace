@@ -88,7 +88,7 @@ export const BuyModal = () => {
       }}
       background={'#1e2026'}
       color="#FFF"
-      w={395}
+      w="380px"
     >
       <QDrawerCloseButton color="#C4C5CB" w="28px" h="28px" top="31px" />
       <Header>Order Summary</Header>
@@ -140,71 +140,75 @@ export const BuyModal = () => {
           </ItemCon> */}
         </BuyInfo>
       </CustomBody>
-      {!BSC_FEE_SUFF && <InsufficientBSC />}
 
       <QDrawerFooter>
-        {chain && chain.id === BSC_CHAIN.id && (
-          <BigYellowButton
-            isLoading={buys.buying}
-            _disabled={{
-              bg: '#F7F7F873',
-              cursor: 'not-allowed',
-              _hover: {
-                bg: '#F7F7F873',
-              },
-            }}
-            loadingText={
-              <Flex
-                w="100%"
-                alignItems="center"
-                justifyContent="center"
-                gap="5px"
-              >
-                <Box w="35px">
-                  <Loader
-                    minHeight={43}
-                    size={20}
-                    borderWidth={2}
-                    color="#E6E8EA"
-                    bg="#76808F"
-                  />
-                </Box>
-                <Box>Transaction in progress</Box>
-              </Flex>
-            }
-            width={'100%'}
-            onClick={async () => {
-              // await buy(2479);
-              console.log('groupId', groupId);
-              buy(groupId);
+        <Stack gap="10px">
+          {!BSC_FEE_SUFF && <InsufficientBSC />}
 
-              setBuys((draft) => {
-                draft.openDrawer = true;
-                draft.buying = true;
-              });
-            }}
-            disabled={!BSC_FEE_SUFF || buys.buying}
-          >
-            Buy
-          </BigYellowButton>
-        )}
-        {chain && chain.id !== BSC_CHAIN.id ? (
-          <Button
-            w="100%"
-            bg="#FFA260"
-            _hover={{
-              bg: '#FF8A38',
-            }}
-            h="48px"
-            color="#181A1E"
-            fontWeight={700}
-            onClick={() => {
-              switchNetwork?.(BSC_CHAIN.id);
-            }}
-          >
-            Switch to BSC {NETWORK}
-          </Button>
-        ) : null}
+          {chain && chain.id === BSC_CHAIN.id && (
+            <BigYellowButton
+              w="100%"
+              isLoading={buys.buying}
+              _disabled={{
+                bg: '#F7F7F873',
+                cursor: 'not-allowed',
+                _hover: {
+                  bg: '#F7F7F873',
+                },
+              }}
+              loadingText={
+                <Flex
+                  w="100%"
+                  alignItems="center"
+                  justifyContent="center"
+                  gap="5px"
+                >
+                  <Box w="35px">
+                    <Loader
+                      minHeight={43}
+                      size={20}
+                      borderWidth={2}
+                      color="#E6E8EA"
+                      bg="#76808F"
+                    />
+                  </Box>
+                  <Box>Transaction in progress</Box>
+                </Flex>
+              }
+              onClick={async () => {
+                // await buy(2479);
+                console.log('groupId', groupId);
+                buy(groupId);
+
+                setBuys((draft) => {
+                  draft.openDrawer = true;
+                  draft.buying = true;
+                });
+              }}
+              disabled={!BSC_FEE_SUFF || buys.buying}
+            >
+              Buy
+            </BigYellowButton>
+          )}
+
+          {chain && chain.id !== BSC_CHAIN.id ? (
+            <Button
+              w="100%"
+              bg="#FFA260"
+              _hover={{
+                bg: '#FF8A38',
+              }}
+              h="48px"
+              color="#181A1E"
+              fontWeight={700}
+              onClick={() => {
+                switchNetwork?.(BSC_CHAIN.id);
+              }}
+            >
+              Switch to BSC {NETWORK}
+            </Button>
+          ) : null}
+        </Stack>
       </QDrawerFooter>
     </Container>
   );
