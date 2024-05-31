@@ -29,6 +29,7 @@ import {
   trimLongStr,
 } from '../utils';
 import { getItemByGroupId } from '../utils/apis';
+import { NoData } from '../components/NoData';
 
 /**
  * Have been listed page
@@ -78,6 +79,10 @@ const Resource = () => {
 
   if (isChainItemInfo) {
     return <Loader />;
+  }
+
+  if (!chainItemInfo) {
+    return <NoData />;
   }
 
   if (!chainItemInfo?.groupNames?.[0] || !object) {
