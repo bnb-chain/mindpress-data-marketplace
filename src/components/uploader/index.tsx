@@ -3,14 +3,13 @@ import NiceModal from '@ebay/nice-modal-react';
 import { ColoredErrorIcon } from '@totejs/icons';
 import { Box, Center, Flex, Text } from '@totejs/uikit';
 import Compressor from 'compressorjs';
-import { useAtom } from 'jotai';
+import { useAtomValue } from 'jotai';
 import { useImmerAtom } from 'jotai-immer';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { parseEther } from 'viem';
 import { useAccount, useBalance } from 'wagmi';
 import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
-import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
 import { GREENFIELD_CHAIN, UPLOAD_OBJECT_FEE } from '../../env';
 import { useCreateSpace } from '../../hooks/seller/useCreateSpace';
 import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
@@ -30,17 +29,18 @@ interface Props {
 }
 
 export const Uploader: React.FC<Props> = ({ onClose }) => {
-  const { address, connector } = useAccount();
-  const [offchainData, setOffchainData] = useAtom(offchainDataAtom);
+  const { address } = useAccount();
+  const offchainData = useAtomValue(offchainDataAtom);
   const [files, setFiles] = useState<File[] | null>(null);
   const [uploadInfo, setUploadInfo] = useImmerAtom(UploadAtom);
-  const [upobjs, setUpobjs] = useImmerAtom(uploadObjcetAtom);
   const navigate = useNavigate();
 
   const { data: GnfdBalance } = useBalance({
     address: address,
     chainId: GREENFIELD_CHAIN.id,
   });
+
+  console.log('GnfdBalance', GnfdBalance);
 
   const {
     start: createSpaceStart,
@@ -96,6 +96,7 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
     if (!address) return;
 
     console.log('GNfd', GnfdBalance, UPLOAD_OBJECT_FEE);
+
     if (!GnfdBalance || !UPLOAD_OBJECT_FEE) return;
     if (GnfdBalance.value < parseEther(UPLOAD_OBJECT_FEE)) {
       NiceModal.show(Tips, {
