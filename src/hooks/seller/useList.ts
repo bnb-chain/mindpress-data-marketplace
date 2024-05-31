@@ -203,6 +203,7 @@ export const useList = ({
           functionName: 'createPolicy',
           args: [toHex(policyDataToBindGroupToObject)],
           value: realyFee + ackRelayFee,
+          gas: BigInt(400000),
         });
 
       const createPolicyHash = await walletClient?.writeContract(
