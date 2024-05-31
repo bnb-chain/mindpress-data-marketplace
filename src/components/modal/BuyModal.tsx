@@ -21,13 +21,14 @@ import { useMemo } from 'react';
 import { formatEther, formatUnits, parseUnits } from 'viem';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { buyAtom } from '../../atoms/buyAtom';
-import { BSC_CHAIN, NETWORK } from '../../env';
+import { BSC_CHAIN, NETWORK, NET_ENV } from '../../env';
 import { useBuy } from '../../hooks/buyer/useBuy';
 import { useBNBPrice } from '../../hooks/price/useBNBPrice';
 import { useChainBalance } from '../../hooks/price/useChainBalance';
 import { divide10Exp, roundFun } from '../../utils';
 import { Loader } from '../Loader';
 import { BigYellowButton } from '../ui/buttons/YellowButton';
+import { InsufficientBSC } from './InsufficientBSC';
 
 export const BuyModal = () => {
   const [buys, setBuys] = useImmerAtom(buyAtom);
@@ -139,7 +140,8 @@ export const BuyModal = () => {
           </ItemCon> */}
         </BuyInfo>
       </CustomBody>
-      {!BSC_FEE_SUFF && <BalanceWarn>Insufficient Balance</BalanceWarn>}
+      {!BSC_FEE_SUFF && <InsufficientBSC />}
+
       <QDrawerFooter>
         {chain && chain.id === BSC_CHAIN.id && (
           <BigYellowButton
@@ -253,16 +255,4 @@ const ItemVal = styled.div`
   font-weight: 700;
   line-height: 18px;
   color: #f7f7f8;
-`;
-
-const BalanceWarn = styled(Flex)`
-  position: absolute;
-
-  font-style: normal;
-  font-weight: 700;
-  font-size: 10px;
-  line-height: 18px;
-  /* identical to box height, or 180% */
-  bottom: 90px;
-  color: #ff6058;
 `;

@@ -18,7 +18,7 @@ import { useNavigate } from 'react-router-dom';
 import { Address, formatEther } from 'viem';
 import { useAccount, useBalance, useNetwork, useSwitchNetwork } from 'wagmi';
 import { listAtom } from '../../atoms/listAtom';
-import { BSC_CHAIN, BSC_EXPLORER_URL } from '../../env';
+import { BSC_CHAIN, BSC_EXPLORER_URL, NET_ENV } from '../../env';
 import { useGetCategory } from '../../hooks/apis/useGetCatoriesMap';
 import { useGetBnbUsdtExchangeRate } from '../../hooks/price/useGetBnbUsdtExchangeRate';
 import { useList } from '../../hooks/seller/useList';
@@ -26,6 +26,7 @@ import { Loader } from '../Loader';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { Tips } from './Tips';
+import { InsufficientBSC } from './InsufficientBSC';
 
 export const ListModal = () => {
   const navigator = useNavigate();
@@ -221,12 +222,7 @@ export const ListModal = () => {
 
       <QDrawerFooter>
         <Flex flexDirection={'column'} gap={6} w="100%">
-          {!BSC_FEE_SUFF && (
-            <BalanceWarn>
-              <ColoredWarningIcon size="sm" color="#ff6058" mr="4px" />{' '}
-              Insufficient BSC Balance
-            </BalanceWarn>
-          )}
+          {!BSC_FEE_SUFF && <InsufficientBSC />}
 
           {chain && chain.id !== BSC_CHAIN.id && (
             <Button
@@ -322,14 +318,4 @@ const ImgCon = styled.div`
     background: #d9d9d9;
     border-radius: 8px;
   }
-`;
-
-const BalanceWarn = styled(Flex)`
-  font-style: normal;
-  font-weight: 700;
-  font-size: 10px;
-  line-height: 18px;
-  /* identical to box height, or 180% */
-
-  color: #ff6058;
 `;

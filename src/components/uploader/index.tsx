@@ -95,16 +95,26 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
   const handleUpload = async () => {
     if (!address) return;
 
+    console.log('GNfd', GnfdBalance, UPLOAD_OBJECT_FEE);
     if (!GnfdBalance || !UPLOAD_OBJECT_FEE) return;
     if (GnfdBalance.value < parseEther(UPLOAD_OBJECT_FEE)) {
       NiceModal.show(Tips, {
-        title: 'insufficient gas',
+        title: 'Insufficient Gas',
         content: (
           <Box>
             <ColoredErrorIcon size="xl" />
+            <Box fontSize="14px" color="#76808F" mt="30px">
+              To upload your images to BNB Greenfield, transfer at least 0.005
+              BNB to the Greenfield network.
+            </Box>
           </Box>
         ),
-        buttonText: 'Got it',
+        buttonText: 'Transfer In Now',
+        buttonClick: async () => {
+          window.open(
+            `https://greenfield.bnbchain.org/en/bridge?type=transfer-in`,
+          );
+        },
       });
       return;
     }
