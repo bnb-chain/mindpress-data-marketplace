@@ -222,7 +222,7 @@ export const ListModal = () => {
       </CustomBody>
 
       <QDrawerFooter>
-        <Stack gap="10px">
+        <Stack gap="10px" w="100%">
           {!BSC_FEE_SUFF && <InsufficientBSC />}
 
           {chain && chain.id !== BSC_CHAIN.id && (
