@@ -4,27 +4,25 @@ import { useAccount } from 'wagmi';
 import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
 import { client } from '../../utils/gfSDK';
 
-export const useDownload = ({
-  bucketName,
-  name,
-}: {
-  bucketName?: string;
-  name: string;
-}) => {
+export const useDownload = ({ objectId }: { objectId: string }) => {
   const { address } = useAccount();
 
   const offchainData = useAtomValue(offchainDataAtom);
   const [isLoading, setIsLoading] = useState(false);
 
   const doDownload = useCallback(async () => {
-    if (!address || !bucketName) return;
+    if (!address) return;
 
     setIsLoading(true);
 
+    const { objectInfo } = await client.object.headObjectById(objectId);
+
+    if (!objectInfo?.bucketName) return;
+
     await client.object.downloadFile(
       {
-        bucketName,
-        objectName: name,
+        bucketName: objectInfo.bucketName,
+        objectName: objectInfo.objectName,
       },
       {
         type: 'EDDSA',
@@ -35,7 +33,7 @@ export const useDownload = ({
     );
 
     setIsLoading(false);
-  }, [address, bucketName, name, offchainData?.seed]);
+  }, [address, objectId, offchainData?.seed]);
 
   return {
     doDownload,

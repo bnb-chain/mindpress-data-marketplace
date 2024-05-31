@@ -72,6 +72,9 @@ const Resource = () => {
     String(chainItemInfo?.objectIds?.[0]),
   );
 
+  console.log('chainItemInfo', chainItemInfo);
+  console.log('object', object, name);
+
   const handleGetItemByGroupId = async () => {
     const itemInfo = await getItemByGroupId(groupId);
     return itemInfo;
@@ -241,10 +244,11 @@ const Resource = () => {
               </YellowButton>
             )}
 
-            {relation === 'PURCHASED' && (
+            {relation === 'PURCHASED' && object.objectInfo?.id && (
               <DownloadButton
-                bucketName={bucketName || ''}
-                objectName={name || ''}
+                objectId={object.objectInfo.id}
+                // bucketName={bucketName || ''}
+                // objectName={object.objectInfo?.objectName || ''}
               />
             )}
           </Stack>

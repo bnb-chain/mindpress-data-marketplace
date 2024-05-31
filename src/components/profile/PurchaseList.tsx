@@ -51,7 +51,7 @@ const PurchaseList = ({ address }: IProps) => {
     return <Loader />;
   }
 
-  console.log('list', list);
+  console.log('list', list, storageInfo);
 
   return (
     <Container>
@@ -74,23 +74,8 @@ const PurchaseList = ({ address }: IProps) => {
 
                   <VStack className="layer" justifyContent="center">
                     {storageInfo && (
-                      <DownloadButton
-                        bucketName={storageInfo?.bucketName}
-                        objectName={activeItem?.name || ''}
-                      />
+                      <DownloadButton objectId={String(item.resourceId)} />
                     )}
-                    {/* <DefaultButton
-                      h="48px"
-                      bg="#F1F2F3"
-                      color="#181A1E"
-                      fontWeight="800"
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        await doDownload();
-                      }}
-                    >
-                      Download
-                    </DefaultButton> */}
                   </VStack>
                 </ImageBox>
                 <Info>

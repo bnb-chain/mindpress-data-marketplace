@@ -89,8 +89,9 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                     {isOwner && (
                       <VStack className="layer" justifyContent="center">
                         <DownloadButton
-                          bucketName={bucketName}
-                          objectName={activeObjectName || ''}
+                          objectId={String(item.ObjectInfo.Id)}
+                          // bucketName={bucketName}
+                          // objectName={activeObjectName || ''}
                         />
                       </VStack>
                     )}

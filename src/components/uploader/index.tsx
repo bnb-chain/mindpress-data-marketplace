@@ -40,7 +40,7 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
     chainId: GREENFIELD_CHAIN.id,
   });
 
-  console.log('GnfdBalance', GnfdBalance);
+  // console.log('GnfdBalance', GnfdBalance);
 
   const {
     start: createSpaceStart,

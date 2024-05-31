@@ -1,23 +1,20 @@
+import { Flex } from '@totejs/uikit';
 import React from 'react';
 import { useDownload } from '../hooks/apis/useDownload';
-import { DefaultButton } from './ui/buttons/DefaultButton';
 import { Loader } from './Loader';
-import { Box, Flex } from '@totejs/uikit';
+import { DefaultButton } from './ui/buttons/DefaultButton';
 
 interface IProps {
-  bucketName: string;
-  objectName: string;
   buttonText?: string;
+  objectId: string;
 }
 
 export const DownloadButton: React.FC<IProps> = ({
-  bucketName,
-  objectName,
+  objectId,
   buttonText = 'Download',
 }) => {
   const { doDownload, isLoading } = useDownload({
-    bucketName,
-    name: objectName,
+    objectId,
   });
 
   return (

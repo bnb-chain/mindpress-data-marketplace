@@ -2,11 +2,10 @@ import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 import { getItemByGroupId, searchPurchase } from '../utils/apis';
 import { Item, SearchPurchaseRequest } from '../utils/apis/types';
-import { useGetBOInfoFromGroup } from './useGetBucketOrObj';
+import { useDownload } from './apis/useDownload';
 import { useGetDownloadUrl } from './apis/useGetDownloadUrl';
 import { useGetPurchaseList } from './apis/useGetPurchaseList';
-import { useDownload } from './apis/useDownload';
-import { useGetItemByGroupId } from './apis/useGetItemByGroupId';
+import { useGetBOInfoFromGroup } from './useGetBucketOrObj';
 
 export type ITEM_RELATION_ADDR =
   | 'PURCHASED'
@@ -88,12 +87,13 @@ export const useGetRelationWithAddr = (
   });
 
   const { doDownload, isLoading: isDownloading } = useDownload({
-    bucketName: storageInfo?.bucketName,
-    name: item?.name || '',
+    objectId: String(item?.resourceId) || '',
   });
 
   useEffect(() => {
     if (!addr || !data) return;
+
+    // console.log('storageInfo', storageInfo);
 
     // console.log('addr', addr, ownerAddress);
 
