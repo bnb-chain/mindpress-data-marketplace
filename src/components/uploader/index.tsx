@@ -145,11 +145,11 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
         ),
         buttonText: 'Continue',
         buttonClick: async () => {
-          NiceModal.hide(Tips);
+          // NiceModal.hide(Tips);
           await doCreateSpace();
         },
       });
-      // return;
+      return;
     }
 
     if (files) {
