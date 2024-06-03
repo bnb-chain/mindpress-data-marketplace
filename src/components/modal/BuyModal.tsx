@@ -21,14 +21,14 @@ import { useMemo } from 'react';
 import { formatEther, formatUnits, parseUnits } from 'viem';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { buyAtom } from '../../atoms/buyAtom';
-import { BSC_CHAIN, NETWORK, NET_ENV } from '../../env';
+import { BSC_CHAIN, NETWORK } from '../../env';
 import { useBuy } from '../../hooks/buyer/useBuy';
-import { useBNBPrice } from '../../hooks/price/useBNBPrice';
 import { useChainBalance } from '../../hooks/price/useChainBalance';
 import { divide10Exp, roundFun } from '../../utils';
 import { Loader } from '../Loader';
 import { BigYellowButton } from '../ui/buttons/YellowButton';
 import { InsufficientBSC } from './InsufficientBSC';
+import { useGetBnbUsdtExchangeRate } from '../../hooks/price/useGetBnbUsdtExchangeRate';
 
 export const BuyModal = () => {
   const [buys, setBuys] = useImmerAtom(buyAtom);
@@ -40,7 +40,7 @@ export const BuyModal = () => {
   const { buy, relayFee } = useBuy(groupName, ownerAddress, price);
 
   const { BscBalanceVal } = useChainBalance();
-  const { price: bnbPrice } = useBNBPrice();
+  const { data: bnbPrice } = useGetBnbUsdtExchangeRate();
 
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
@@ -72,7 +72,7 @@ export const BuyModal = () => {
 
   const totalDollar = useMemo(() => {
     const fee =
-      parseUnits(String(TotalPrice), 9) * parseUnits(String(bnbPrice), 9);
+      parseUnits(String(TotalPrice), 9) * parseUnits(String(bnbPrice || 0), 9);
 
     return formatUnits(fee, 18);
   }, [TotalPrice, bnbPrice]);

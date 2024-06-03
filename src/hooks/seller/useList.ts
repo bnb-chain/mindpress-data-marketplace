@@ -124,14 +124,14 @@ export const useList = ({
         address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
         functionName: 'callbackGasLimit',
       });
-      // console.log('callbackGasLimit', callbackGasLimit);
+      console.log('callbackGasLimit', callbackGasLimit);
 
       const callbackGasPrice = await publicClient.readContract({
         abi: CrossChainAbi,
         address: contracts.CrossChainAddress,
         functionName: 'callbackGasPrice',
       });
-      // console.log('callbackGasPrice', callbackGasPrice);
+      console.log('callbackGasPrice', callbackGasPrice);
 
       const callbackFee = callbackGasPrice * callbackGasLimit;
 

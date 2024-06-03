@@ -37,7 +37,7 @@ const ListSchema = Yup.object().shape({
       'Strings cannot contain symbols such as spaces or slashes',
     )
     // .matches(/^[a-z]+$/, '只能包含小写字母 a-z')
-    .max(15),
+    .max(24),
   price: Yup.number()
     .positive()
     .required('Price is required')

@@ -62,7 +62,8 @@ const Resource = () => {
   const modalData = useModal();
   const { onOpen } = useWalletKitModal();
 
-  const { data: usdExchange } = useGetBnbUsdtExchangeRate();
+  const { data: usdExchange, isPending: isPendingUsdPrice } =
+    useGetBnbUsdtExchangeRate();
 
   const { bucketName, name } = parseGroupName(
     chainItemInfo?.groupNames?.[0] || '',
@@ -175,12 +176,15 @@ const Resource = () => {
             <Flex gap="8px" alignItems="center">
               <BSCIcon color="#F0B90B" w={24} h={24} />
               <BNB>{formatEther(chainItemInfo?.priceList?.[0])} BNB</BNB>
-              <Dollar>
-                $
-                {formatEther(
-                  BigInt(parseInt(usdExchange)) * chainItemInfo?.priceList?.[0],
-                )}
-              </Dollar>
+              {!isPendingUsdPrice && (
+                <Dollar>
+                  $
+                  {formatEther(
+                    BigInt(parseInt(usdExchange || 0)) *
+                      chainItemInfo?.priceList?.[0],
+                  )}
+                </Dollar>
+              )}
             </Flex>
 
             {(relation === 'NOT_PURCHASE' || relation === 'UNKNOWN') && (

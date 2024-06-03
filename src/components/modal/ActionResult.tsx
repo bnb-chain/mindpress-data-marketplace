@@ -21,6 +21,8 @@ import { client } from '../../utils/gfSDK';
 import { Loader } from '../Loader';
 import { SuccessIcon } from '../svgIcon/SuccessIcon';
 import { BigYellowButton } from '../ui/buttons/YellowButton';
+import { useGetChainListItems } from '../../hooks/buyer/useGetChainListItems';
+import { sleep } from '../../utils/space';
 
 const CustomSuccessIcon = () => (
   <Flex
@@ -56,6 +58,8 @@ export const ActionResult = (props: IActionResult) => {
   const [downloading, setDownloadLoading] = useState(false);
 
   const navigator = useNavigate();
+
+  const { data: items, isPending } = useGetChainListItems([BigInt(2697)]);
 
   if (type === 'BUY') {
     return (
@@ -117,14 +121,28 @@ export const ActionResult = (props: IActionResult) => {
                   if (!groupId) return;
                   if (!address) return;
 
-                  const res = await getItemByGroupId(groupId);
-                  const { bucketName, name } = parseGroupName(res.groupName);
-
                   setDownloadLoading(true);
+
+                  const objectId = items?.objectIds?.[0];
+                  console.log('objectId', objectId);
+
+                  let headObjectResponse;
+                  while (true) {
+                    headObjectResponse = await client.object.headObjectById(
+                      String(objectId),
+                    );
+                    if (headObjectResponse) {
+                      break;
+                    }
+                    await sleep(5000);
+                  }
+
                   await client.object.downloadFile(
                     {
-                      bucketName,
-                      objectName: name,
+                      bucketName:
+                        headObjectResponse.objectInfo?.bucketName || '',
+                      objectName:
+                        headObjectResponse.objectInfo?.objectName || '',
                     },
                     {
                       type: 'EDDSA',

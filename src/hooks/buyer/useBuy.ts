@@ -39,19 +39,7 @@ export const useBuy = (
   const buy = useCallback(
     async (groupId: number) => {
       if (status === 1) {
-        // ethers.BigNumber.from(relayFee);
-
-        // const totalFee = new BN(price, 10).add(new BN(relayFee, 10));
-        // const nes = Number(divide10Exp(totalFee, 18));
-
         const totalFee = BigInt(price) + relayFee;
-
-        // console.log(';------');
-        // console.log('relayFee', relayFee);
-        // // console.log('price', price, parseEther(price));
-        // console.log('BscBalanceVal', parseEther(BscBalanceVal.toString()));
-        // console.log('totalFee', totalFee);
-
         if (!address) return;
 
         // const count = 180;
