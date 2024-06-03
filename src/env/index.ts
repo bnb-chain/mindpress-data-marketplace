@@ -35,7 +35,24 @@ export const API_DOMAIN = REACT_APP_API_DOMAIN;
 
 export const UPLOAD_OBJECT_FEE = REACT_APP_UPLOAD_OBJECT_FEE;
 
-export const BSC_CHAIN = NET_ENV === 'TESTNET' ? bscTestnet : bsc;
+// https://data-seed-prebsc-1-s1.bnbchain.org:8545
+export const OFFICAL_BSC_CHAIN = NET_ENV === 'TESTNET' ? bscTestnet : bsc;
+const BACKUP_BSC_CHAIN_RPC =
+  NET_ENV === 'TESTNET'
+    ? 'https://bsc-testnet.public.blastapi.io'
+    : 'https://bsc-mainnet.public.blastapi.io';
+
+export const BSC_CHAIN: Chain = {
+  ...OFFICAL_BSC_CHAIN,
+  rpcUrls: {
+    default: {
+      http: [OFFICAL_BSC_CHAIN.rpcUrls.default.http[0], BACKUP_BSC_CHAIN_RPC],
+    },
+    public: {
+      http: [OFFICAL_BSC_CHAIN.rpcUrls.default.http[0], BACKUP_BSC_CHAIN_RPC],
+    },
+  },
+};
 
 export const GREENFIELD_CHAIN: Chain = {
   id: GF_CHAIN_ID,
