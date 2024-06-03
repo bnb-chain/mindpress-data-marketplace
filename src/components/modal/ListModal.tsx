@@ -156,7 +156,8 @@ export const ListModal = () => {
   // }, [totalFees, usdExchange]);
 
   const priceUsd = useMemo(() => {
-    if (!usdExchange) return '0';
+    if (!usdExchange) return '--';
+
     return formatEther(BigInt(parseInt(usdExchange)) * listInfo.data.price);
   }, [listInfo.data.price, usdExchange]);
 

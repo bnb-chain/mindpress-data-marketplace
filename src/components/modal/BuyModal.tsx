@@ -71,6 +71,8 @@ export const BuyModal = () => {
   }, [BscBalanceVal, TotalPrice]);
 
   const totalDollar = useMemo(() => {
+    if (!bnbPrice) return '--';
+
     const fee =
       parseUnits(String(TotalPrice), 9) * parseUnits(String(bnbPrice || 0), 9);
 

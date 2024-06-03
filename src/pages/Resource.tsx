@@ -176,15 +176,21 @@ const Resource = () => {
             <Flex gap="8px" alignItems="center">
               <BSCIcon color="#F0B90B" w={24} h={24} />
               <BNB>{formatEther(chainItemInfo?.priceList?.[0])} BNB</BNB>
-              {!isPendingUsdPrice && (
-                <Dollar>
-                  $
-                  {formatEther(
-                    BigInt(parseInt(usdExchange || 0)) *
-                      chainItemInfo?.priceList?.[0],
-                  )}
-                </Dollar>
-              )}
+
+              <Dollar>
+                $
+                {usdExchange ? (
+                  <Box as="span">
+                    {' '}
+                    {formatEther(
+                      BigInt(parseInt(usdExchange || 0)) *
+                        chainItemInfo?.priceList?.[0],
+                    )}
+                  </Box>
+                ) : (
+                  '--'
+                )}
+              </Dollar>
             </Flex>
 
             {(relation === 'NOT_PURCHASE' || relation === 'UNKNOWN') && (
@@ -249,19 +255,15 @@ const Resource = () => {
             )}
 
             {relation === 'PURCHASED' && object.objectInfo?.id && (
-              <DownloadButton
-                objectId={object.objectInfo.id}
-                // bucketName={bucketName || ''}
-                // objectName={object.objectInfo?.objectName || ''}
-              />
+              <DownloadButton objectId={object.objectInfo.id} />
             )}
           </Stack>
         </Info>
       </ResourceInfo>
 
-      <Box mt="40px">
+      {/* <Box mt="40px">
         <RelatedImage title="Related images" categoryId={category?.id || 100} />
-      </Box>
+      </Box> */}
     </Container>
   );
 };

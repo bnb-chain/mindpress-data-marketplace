@@ -294,7 +294,7 @@ const StyledButton = styled(Button)`
   background: #f1f2f3;
   color: #181a1e;
   width: 100%;
-  max-width: 158px;
+  // max-width: 158px;
   font-size: 14px;
   font-weight: 700;
   line-height: 24px;
