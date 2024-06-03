@@ -131,7 +131,7 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
         primarySpAddress: sp.primarySpAddress as Address,
         primarySpApprovalExpiredHeight: BigInt(0),
         primarySpSignature: '0x', // TODO if the owner of the bucket is a smart contract, we are not able to get the primarySpSignature
-        chargedReadQuota: BigInt(0),
+        chargedReadQuota: BigInt(10000 * 1024 * 1024 * 1024),
         extraData: '0x',
         // globalVirtualGroupFamilyId: 1,
         globalVirtualGroupFamilyId,
