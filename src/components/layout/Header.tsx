@@ -5,21 +5,21 @@ import { useWindowScroll } from '@uidotdev/usehooks';
 import { Box, Button, Flex, useOutsideClick } from '@totejs/uikit';
 
 import { WalletKitButton, useModal } from '@node-real/walletkit';
+import { useSetAtom } from 'jotai';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useAccount, useDisconnect } from 'wagmi';
-import Search from '../search-box';
+import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
 import { NET_ENV } from '../../env';
 import TestNetLogo from '../../images/logo-testnet.svg';
 import MainNetLogo from '../../images/logo.svg';
 import { trimLongStr } from '../../utils';
 import { Copy } from '../Copy';
+import Search from '../search-box';
 import { MyDataCollectionIcon } from '../svgIcon/MyDataCollectionIcon';
 import { SellIcon } from '../svgIcon/SellIcon';
 import { SignOutIcon } from '../svgIcon/SignOutIcon';
-import { useSetAtom } from 'jotai';
-import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
 
 const BG_COLOR = '#181a1e';
 

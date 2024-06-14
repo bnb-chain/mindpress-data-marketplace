@@ -15,14 +15,13 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
-import { parseGroupName } from '../../utils';
+import { useGetChainListItems } from '../../hooks/buyer/useGetChainListItems';
 import { getItemByGroupId } from '../../utils/apis';
 import { client } from '../../utils/gfSDK';
+import { sleep } from '../../utils/space';
 import { Loader } from '../Loader';
 import { SuccessIcon } from '../svgIcon/SuccessIcon';
 import { BigYellowButton } from '../ui/buttons/YellowButton';
-import { useGetChainListItems } from '../../hooks/buyer/useGetChainListItems';
-import { sleep } from '../../utils/space';
 
 const CustomSuccessIcon = () => (
   <Flex

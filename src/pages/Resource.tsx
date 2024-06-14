@@ -10,7 +10,7 @@ import { useAccount } from 'wagmi';
 import { buyAtom } from '../atoms/buyAtom';
 import { DownloadButton } from '../components/DownloadButton';
 import { Loader } from '../components/Loader';
-import { RelatedImage } from '../components/resource/RelatedImage';
+import { NoData } from '../components/NoData';
 import BSCIcon from '../components/svgIcon/BSCIcon';
 import { MPLink } from '../components/ui/MPLink';
 import { YellowButton } from '../components/ui/buttons/YellowButton';
@@ -29,7 +29,6 @@ import {
   trimLongStr,
 } from '../utils';
 import { getItemByGroupId } from '../utils/apis';
-import { NoData } from '../components/NoData';
 
 /**
  * Have been listed page
