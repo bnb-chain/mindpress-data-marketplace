@@ -5,8 +5,9 @@ import {
 } from '@bnb-chain/greenfield-cosmos-types/greenfield/permission/common';
 import { Policy } from '@bnb-chain/greenfield-cosmos-types/greenfield/permission/types';
 import { ResourceType } from '@bnb-chain/greenfield-cosmos-types/greenfield/resource/types';
+import { GRNToString, newGroupGRN } from '@bnb-chain/greenfield-js-sdk';
 import { useEffect, useState } from 'react';
-import { Address, toHex } from 'viem';
+import { Address, Hex, encodeFunctionData, toHex } from 'viem';
 import {
   useAccount,
   useNetwork,
@@ -14,7 +15,9 @@ import {
   useSwitchNetwork,
   useWalletClient,
 } from 'wagmi';
+import { IListAtom } from '../../atoms/listAtom';
 import { CrossChainAbi } from '../../base/contract/crossChain.abi';
+import { ForwarderAbi } from '../../base/contract/forwarder.abi';
 import { MarketplaceAbi } from '../../base/contract/marketplace.abi';
 import { PermissonHubAbi } from '../../base/contract/permissonHub.abi';
 import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
@@ -22,13 +25,18 @@ import { generateGroupName } from '../../utils';
 import { client } from '../../utils/gfSDK';
 import { sleep } from '../../utils/space';
 import { useGetContractAddresses } from '../common/useGetContractAddresses';
-import { GRNToString, newGroupGRN } from '@bnb-chain/greenfield-js-sdk';
-import { IListAtom } from '../../atoms/listAtom';
 
 interface Params {
   data: IListAtom['data'];
   onSuccess?: (groupId: bigint, listHash?: Address) => Promise<void>;
   onFailure?: () => Promise<void>;
+}
+
+interface Call {
+  target: Address;
+  allowFailure: boolean;
+  value: bigint;
+  callData: Hex;
 }
 
 const callbackGasLimit = BigInt(500000);
@@ -101,13 +109,6 @@ export const useList = ({
         functionName: 'getRelayFees',
       });
 
-      // const totalRelayFee = realyFee * BigInt(2) + ackRelayFee;
-      // const callbackGasPrice = await publicClient.readContract({
-      //   abi: CrossChainAbi,
-      //   address: contracts.CrossChainAddress,
-      //   functionName: 'callbackGasPrice',
-      // });
-
       const { bucketInfo } = await client.bucket.headBucketById(
         String(bucketId),
       );
@@ -135,28 +136,6 @@ export const useList = ({
       });
       console.log('callbackGasPrice', callbackGasPrice);
 
-      const callbackFee = callbackGasPrice * callbackGasLimit;
-
-      const { request: listRequest } = await publicClient.simulateContract({
-        account: address,
-        abi: MarketplaceAbi,
-        address: NEW_MARKETPLACE_CONTRACT_ADDRESS,
-        functionName: 'list',
-        args: [groupName, price, desc, BigInt(categoryId), imageUrl, objectId],
-        value: realyFee + ackRelayFee + callbackFee,
-        gas: BigInt(400000),
-      });
-
-      const listHash = await walletClient?.writeContract(listRequest);
-      console.log('listHash', listHash);
-
-      if (listHash) {
-        const tx = await publicClient.waitForTransactionReceipt({
-          hash: listHash,
-        });
-        console.log('list tx', tx);
-      }
-
       const policyDataToBindGroupToObject = Policy.encode({
         id: '0',
         resourceId: String(objectId), // object id
@@ -177,47 +156,64 @@ export const useList = ({
         },
       }).finish();
 
-      // const callbackDataCreatePolicy = solidityPack(
-      //   ['address', 'uint256', 'uint256', 'uint256', 'uint256'],
-      //   [address, groupId, bucketId, objectId, objectPrice],
-      // ) as Address;
+      const callbackFee = callbackGasPrice * callbackGasLimit;
 
-      // const createPolicyData = encodeFunctionData({
-      //   abi: PermissonHubAbi,
-      //   functionName: 'prepareCreatePolicy',
-      //   args: [address, toHex(policyDataToBindGroupToObject)],
-      // });
-
-      // console.log('createPolicyData', createPolicyData);
-      // const data = [createPolicyData];
-
-      // const values = [totalRelayFee + callbackFee, totalRelayFee + callbackFee];
-      // const totalValue = values.reduce((a, b) => a + b);
-
-      const totalValue = totalFee.reduce((a, b) => a + b);
-      console.log('totalValue', totalValue);
-
-      const { request: permissonCreatePolicyRequest } =
-        await publicClient.simulateContract({
-          account: address,
-          abi: PermissonHubAbi,
-          address: contracts.PermissionHubAddress,
-          functionName: 'createPolicy',
-          args: [toHex(policyDataToBindGroupToObject)],
+      const calls: Call[] = [
+        {
+          target: NEW_MARKETPLACE_CONTRACT_ADDRESS,
+          allowFailure: false,
+          value: realyFee + ackRelayFee + callbackFee,
+          callData: encodeFunctionData({
+            abi: MarketplaceAbi,
+            functionName: 'list',
+            args: [
+              groupName,
+              price,
+              desc,
+              BigInt(categoryId),
+              imageUrl,
+              objectId,
+            ],
+          }),
+        },
+        {
+          target: contracts.PermissionHubAddress,
+          allowFailure: false,
           value: realyFee + ackRelayFee,
-          gas: BigInt(400000),
-        });
+          callData: encodeFunctionData({
+            abi: PermissonHubAbi,
+            functionName: 'createPolicy',
+            args: [toHex(policyDataToBindGroupToObject)],
+          }),
+        },
+      ];
 
-      const createPolicyHash = await walletClient?.writeContract(
-        permissonCreatePolicyRequest,
-      );
-      console.log('hash', createPolicyHash);
+      console.log('calls', calls);
 
-      if (createPolicyHash) {
+      let totalValue = BigInt(0);
+      for (let i = 0; i < calls.length; i++) {
+        totalValue += calls[i].value;
+      }
+
+      console.log('contracts.ForwarderAddress', contracts.ForwarderAddress);
+
+      const { request } = await publicClient.simulateContract({
+        account: address,
+        abi: ForwarderAbi,
+        address: contracts.ForwarderAddress,
+        functionName: 'aggregate3Value',
+        args: [calls],
+        value: totalValue,
+        gas: BigInt(400000),
+      });
+      const listHash = await walletClient?.writeContract(request);
+      console.log('listHash', listHash);
+
+      if (listHash) {
         const tx = await publicClient.waitForTransactionReceipt({
-          hash: createPolicyHash,
+          hash: listHash,
         });
-        console.log('tx', tx);
+        console.log('list tx', tx);
       }
 
       let groupId = BigInt(0);

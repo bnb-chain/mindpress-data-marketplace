@@ -47,6 +47,10 @@ export const useGetContractAddresses = () => {
             ...contract,
             functionName: '_MEMBER_TOKEN',
           },
+          {
+            ...contract,
+            functionName: 'ERC2771_FORWARDER',
+          },
         ],
       });
 
@@ -59,6 +63,7 @@ export const useGetContractAddresses = () => {
         GroupHubAddress: (contractAddresses[4].result || '0x') as Address,
         MultiMessageAddress: (contractAddresses[5].result || '0x') as Address,
         MemberTokenAddress: (contractAddresses[6].result || '0x') as Address,
+        ForwarderAddress: (contractAddresses[7].result || '0x') as Address,
       };
     },
     staleTime: Infinity,

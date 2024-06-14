@@ -131,6 +131,19 @@ export const MarketplaceAbi = [
   },
   {
     type: 'function',
+    name: 'ERC2771_FORWARDER',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
     name: 'ERC721Token',
     inputs: [],
     outputs: [
@@ -891,29 +904,6 @@ export const MarketplaceAbi = [
   },
   {
     type: 'function',
-    name: 'createListGroupIds',
-    inputs: [
-      {
-        name: 'groupNames',
-        type: 'string[]',
-        internalType: 'string[]',
-      },
-      {
-        name: 'callbackGasLimit',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'createGroupRelayFee',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'payable',
-  },
-  {
-    type: 'function',
     name: 'createSpace',
     inputs: [
       {
@@ -1037,6 +1027,19 @@ export const MarketplaceAbi = [
   {
     type: 'function',
     name: 'fundWallet',
+    inputs: [],
+    outputs: [
+      {
+        name: '',
+        type: 'address',
+        internalType: 'address',
+      },
+    ],
+    stateMutability: 'view',
+  },
+  {
+    type: 'function',
+    name: 'getErc2771Sender',
     inputs: [],
     outputs: [
       {
@@ -1408,6 +1411,25 @@ export const MarketplaceAbi = [
   },
   {
     type: 'function',
+    name: 'isTrustedForwarder',
+    inputs: [
+      {
+        name: 'forwarder',
+        type: 'address',
+        internalType: 'address',
+      },
+    ],
+    outputs: [
+      {
+        name: '',
+        type: 'bool',
+        internalType: 'bool',
+      },
+    ],
+    stateMutability: 'pure',
+  },
+  {
+    type: 'function',
     name: 'list',
     inputs: [
       {
@@ -1744,24 +1766,6 @@ export const MarketplaceAbi = [
         name: '_fundWallet',
         type: 'address',
         internalType: 'address',
-      },
-    ],
-    outputs: [],
-    stateMutability: 'nonpayable',
-  },
-  {
-    type: 'function',
-    name: 'setPrice',
-    inputs: [
-      {
-        name: 'groupId',
-        type: 'uint256',
-        internalType: 'uint256',
-      },
-      {
-        name: 'newPrice',
-        type: 'uint256',
-        internalType: 'uint256',
       },
     ],
     outputs: [],
