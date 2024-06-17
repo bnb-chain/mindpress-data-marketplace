@@ -68,7 +68,6 @@ export const useList = ({
       if (!contracts) return;
       if (chain?.id !== BSC_CHAIN.id) return;
 
-      console.log('hi, getRelayFees');
       const [realyFee, ackRelayFee] = await publicClient.readContract({
         abi: CrossChainAbi,
         address: contracts.CrossChainAddress,

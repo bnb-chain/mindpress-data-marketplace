@@ -5,7 +5,7 @@ import {
 import { PickVGFStrategy } from '@bnb-chain/greenfield-cosmos-types/greenfield/virtualgroup/common';
 import * as ethers from 'ethers';
 import { useEffect, useState } from 'react';
-import { Address, formatEther } from 'viem';
+import { Address, formatEther, parseEther } from 'viem';
 import {
   useAccount,
   useNetwork,
@@ -131,7 +131,7 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
         primarySpAddress: sp.primarySpAddress as Address,
         primarySpApprovalExpiredHeight: BigInt(0),
         primarySpSignature: '0x', // TODO if the owner of the bucket is a smart contract, we are not able to get the primarySpSignature
-        chargedReadQuota: BigInt(10000 * 1024 * 1024 * 1024),
+        chargedReadQuota: BigInt(10000 * 1024 * 1024),
         extraData: '0x',
         // globalVirtualGroupFamilyId: 1,
         globalVirtualGroupFamilyId,
@@ -156,9 +156,11 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
         functionName: 'getRelayFees',
       });
 
-      const value = realyFee * BigInt(2) + ackRelayFee;
+      const value =
+        realyFee * BigInt(3) + ackRelayFee * BigInt(2) + parseEther('0.1');
       console.log('fees', realyFee, ackRelayFee);
       console.log('value', value, formatEther(value));
+
       const { request, result } = await publicClient.simulateContract({
         account: address,
         address: NEW_MARKETPLACE_CONTRACT_ADDRESS,

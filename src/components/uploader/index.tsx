@@ -1,18 +1,16 @@
 import { OnProgressEvent, VisibilityType } from '@bnb-chain/greenfield-js-sdk';
 import NiceModal from '@ebay/nice-modal-react';
-import { ColoredErrorIcon } from '@totejs/icons';
 import { Box, Center, Flex, Text } from '@totejs/uikit';
 import Compressor from 'compressorjs';
 import { useAtomValue } from 'jotai';
 import { useImmerAtom } from 'jotai-immer';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { parseEther } from 'viem';
-import { useAccount, useBalance } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
-import { GREENFIELD_CHAIN, UPLOAD_OBJECT_FEE } from '../../env';
 import { useCreateSpace } from '../../hooks/seller/useCreateSpace';
 import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
+import { useOffchainAuth } from '../../hooks/useOffchainAuth';
 import { client } from '../../utils/gfSDK';
 import { THUMB, getSpaceName, shortObjectName, sleep } from '../../utils/space';
 import { Loader } from '../Loader';
@@ -30,16 +28,16 @@ interface Props {
 
 export const Uploader: React.FC<Props> = ({ onClose }) => {
   const { address } = useAccount();
+  const { applyOffchainAuthData } = useOffchainAuth();
   const offchainData = useAtomValue(offchainDataAtom);
   const [files, setFiles] = useState<File[] | null>(null);
   const [uploadInfo, setUploadInfo] = useImmerAtom(UploadAtom);
   const navigate = useNavigate();
 
-  const { data: GnfdBalance } = useBalance({
-    address: address,
-    chainId: GREENFIELD_CHAIN.id,
-  });
-
+  // const { data: GnfdBalance } = useBalance({
+  //   address: address,
+  //   chainId: GREENFIELD_CHAIN.id,
+  // });
   // console.log('GnfdBalance', GnfdBalance);
 
   const {
@@ -95,30 +93,8 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
   const handleUpload = async () => {
     if (!address) return;
 
-    console.log('GNfd', GnfdBalance, UPLOAD_OBJECT_FEE);
-
-    if (!GnfdBalance || !UPLOAD_OBJECT_FEE) return;
-    if (GnfdBalance.value < parseEther(UPLOAD_OBJECT_FEE)) {
-      NiceModal.show(Tips, {
-        title: 'Insufficient Gas',
-        content: (
-          <Box>
-            <ColoredErrorIcon size="xl" />
-            <Box fontSize="14px" color="#76808F" mt="30px">
-              To upload your images to BNB Greenfield, transfer at least 0.005
-              BNB to the Greenfield network.
-            </Box>
-          </Box>
-        ),
-        buttonText: 'Transfer In Now',
-        buttonClick: async () => {
-          window.open(
-            `https://greenfield.bnbchain.org/en/bridge?type=transfer-in`,
-          );
-        },
-      });
-      return;
-    }
+    // apply offchain auth if not exists
+    await applyOffchainAuthData({});
 
     const bucketName = getSpaceName(address);
 
@@ -145,12 +121,36 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
         ),
         buttonText: 'Continue',
         buttonClick: async () => {
-          // NiceModal.hide(Tips);
+          NiceModal.hide(Tips);
           await doCreateSpace();
         },
+        // isLoading: createSpaceStart,
       });
       return;
     }
+
+    /* if (!GnfdBalance || !UPLOAD_OBJECT_FEE) return;
+    if (GnfdBalance.value < parseEther(UPLOAD_OBJECT_FEE)) {
+      NiceModal.show(Tips, {
+        title: 'Insufficient Gas',
+        content: (
+          <Box>
+            <ColoredErrorIcon size="xl" />
+            <Box fontSize="14px" color="#76808F" mt="30px">
+              To upload your images to BNB Greenfield, transfer at least 0.005
+              BNB to the Greenfield network.
+            </Box>
+          </Box>
+        ),
+        buttonText: 'Transfer In Now',
+        buttonClick: async () => {
+          window.open(
+            `https://greenfield.bnbchain.org/en/bridge?type=transfer-in`,
+          );
+        },
+      });
+      return;
+    } */
 
     if (files) {
       setUploadInfo((draft) => {
@@ -291,7 +291,7 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
                 color="#E6E8EA"
                 bg="#76808F"
               />
-              Progressing
+              {createSpaceStart ? 'Creating' : 'Progressing'}
             </Flex>
           }
           onClick={async () => {

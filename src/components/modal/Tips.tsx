@@ -14,7 +14,8 @@ export const Tips = NiceModal.create<{
   content: React.ReactNode;
   buttonText: string;
   buttonClick?: () => Promise<void>;
-}>(({ title, content, buttonText, buttonClick }) => {
+  isLoading?: boolean;
+}>(({ title, content, buttonText, buttonClick, isLoading = false }) => {
   const modal = useModal();
 
   return (
@@ -24,6 +25,7 @@ export const Tips = NiceModal.create<{
       <CustomBody>{content}</CustomBody>
       <ModalFooter>
         <BlackSolidButton
+          isLoading={isLoading}
           fontWeight={900}
           onClick={async () => {
             await buttonClick?.();

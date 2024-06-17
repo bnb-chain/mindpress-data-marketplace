@@ -1,6 +1,4 @@
 import { WagmiConfig } from 'wagmi';
-// import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
-// import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import NiceModal from '@ebay/nice-modal-react';
 import { ThemeProvider } from '@totejs/uikit';
 import { HashRouter, Route, Routes } from 'react-router-dom';
@@ -80,71 +78,9 @@ const ReactQueryDevtoolsProduction = React.lazy(() =>
   ),
 );
 
-// const { chains, provider } = configureChains(
-//   [env.NETWORK === 'Mainnet' ? bsc : bscTestnet, gfChain],
-//   [publicProvider()],
-// );
-
 const queryClient = new QueryClient();
 
 function App() {
-  // const client = createClient({
-  //   autoConnect: true,
-  //   connectors: [
-  //     new MetaMaskConnector({ chains }),
-  //     new InjectedConnector({
-  //       chains,
-  //       options: {
-  //         name: 'Trust Wallet',
-  //         shimDisconnect: true,
-  //         getProvider: () => {
-  //           try {
-  //             if (
-  //               typeof window !== 'undefined' &&
-  //               typeof window?.trustWallet !== 'undefined'
-  //             ) {
-  //               // window.ethereum = window?.trustWallet;
-  //               // eslint-disable-next-line
-  //               Object.defineProperty(window.trustWallet, 'removeListener', {
-  //                 value: window.trustWallet.off,
-  //               });
-  //               return window?.trustWallet;
-  //             } else {
-  //               return null;
-  //             }
-  //           } catch (e) {
-  //             // eslint-disable-next-line no-console
-  //             console.log(e);
-  //           }
-  //         },
-  //       },
-  //     }),
-  //     // new CoinbaseWalletConnector({
-  //     //   chains,
-  //     //   options: {
-  //     //     appName: 'ComboScan',
-  //     //   },
-  //     // }),
-  //     // new WalletConnectConnector({
-  //     //   chains,
-  //     //   options: {
-  //     //     projectId: '...',
-  //     //   },
-  //     // }),
-  //     // new InjectedConnector({
-  //     //   chains,
-  //     //   options: {
-  //     //     name: 'Injected',
-  //     //     shimDisconnect: true,
-  //     //   },
-  //     // }),
-  //   ],
-  //   provider,
-  //   logger: {
-  //     warn: (message: string) => console.log(message),
-  //   },
-  // });
-
   const [showDevtools, setShowDevtools] = React.useState(false);
 
   React.useEffect(() => {
