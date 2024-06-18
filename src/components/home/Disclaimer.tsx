@@ -29,4 +29,5 @@ const Content = styled(Box)`
   font-size: 16px;
   color: rgba(255, 255, 255, 0.65);
   line-height: 24px;
+  font-weight: 600;
 `;
