@@ -2,11 +2,10 @@ import styled from '@emotion/styled';
 import { Flex } from '@totejs/uikit';
 import { useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Address } from 'viem';
 import { NavBar } from '../NavBar';
 import MyCollectionList from './MyCollectionList';
 import PurchaseList from './PurchaseList';
-import { Address } from 'viem';
-import { searchItems } from '../../utils/apis';
 
 enum Type {
   Purchased = 'purchased',

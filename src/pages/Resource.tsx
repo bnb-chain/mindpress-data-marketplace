@@ -305,7 +305,7 @@ const Info = styled(Flex)`
 const UserNameContainer = styled(Flex)``;
 
 const UserName = styled.div`
-  font-weight: 600;
+  font-weight: 500;
   font-size: 16px;
   line-height: 38px;
   color: #f7f7f8;
@@ -314,7 +314,7 @@ const UserName = styled.div`
 const ResourceName = styled(Box)`
   color: #f7f7f8;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 20px;
 `;
 
@@ -338,7 +338,7 @@ const Option = styled(Flex)`
 
   .field {
     color: var(--field-color);
-    font-weight: 700;
+    font-weight: 500;
   }
 
   .value {

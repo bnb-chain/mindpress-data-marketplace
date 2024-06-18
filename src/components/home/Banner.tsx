@@ -30,7 +30,7 @@ export const Banner = () => {
               mt="24px"
               color="#FFF"
               fontSize="14px"
-              fontWeight="800"
+              fontWeight="700"
               gap="12px"
               alignItems="center"
               justifyContent="center"
@@ -50,7 +50,7 @@ export const Banner = () => {
                     }}
                   >
                     <SearchIcon w="16px" h="16px" verticalAlign="sub" />
-                    <Box as="span" ml="4px">
+                    <Box as="span" ml="4px" fontWeight={500}>
                       {category.name}
                     </Box>
                   </MPLink>
@@ -79,7 +79,7 @@ const BigImageBg = styled(Box)``;
 
 const Title = styled(Box)`
   font-size: 48px;
-  font-weight: 900;
+  font-weight: 500;
   line-height: 56px;
   padding-top: 80px;
   color: #f7f7f8;
@@ -88,7 +88,7 @@ const Title = styled(Box)`
 
 const Desc = styled(Box)`
   font-size: 20px;
-  font-weight: 500;
+  font-weight: 400;
   color: #fff;
   text-align: center;
   margin-top: 12px;

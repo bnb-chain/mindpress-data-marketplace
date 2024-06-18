@@ -55,7 +55,7 @@ const Header = () => {
     if (!ref.current) return;
     // if (location.pathname !== '/') return;
 
-    if (y && y > 30) {
+    if (y && y > 10) {
       ref.current.style.backgroundColor = BG_COLOR;
     } else {
       ref.current.style.backgroundColor = 'transparent';
@@ -78,7 +78,7 @@ const Header = () => {
         zIndex={1001}
       >
         <Center gap="8px">
-          <Box as="p" fontSize="14px" fontWeight={600}>
+          <Box as="p" fontSize="14px" fontWeight={500}>
             🚀 This website serves as a demo dApp on BNB Greenfield, and is only
             live on Testnet for feature demonstration purposes.
           </Box>
@@ -130,7 +130,7 @@ const Header = () => {
               color="#F1F2F3"
               borderColor="#F1F2F3"
               borderRadius="8px"
-              fontWeight={600}
+              fontWeight={500}
               h="40px"
               _hover={{
                 background: 'rgba(241, 242, 243, 0.9)',
@@ -157,11 +157,11 @@ const Header = () => {
               <WalletKitButton.Custom>
                 {({
                   show,
-                  hide,
-                  isConnecting,
-                  isConnected,
-                  address,
-                  truncatedAddress,
+                  // hide,
+                  // isConnecting,
+                  // isConnected,
+                  // address,
+                  // truncatedAddress,
                 }) => {
                   // if (isConnected) {
                   //   return <div>{address}</div>;
@@ -207,7 +207,9 @@ const Header = () => {
                 <Flex alignItems="center" pl="24px" pr="24px">
                   <Flex gap="12px" flex={1} alignItems="center">
                     <ImageWrapper>
-                      <MetaMaskAvatar address={address!} size={40} />
+                      {address && (
+                        <MetaMaskAvatar address={address} size={40} />
+                      )}
                     </ImageWrapper>
                     <Address>
                       {address ? trimLongStr(address, 10, 6, 4) : ''}
@@ -310,6 +312,7 @@ const StyledButton = styled(Button)`
 
 const ButtonWrapper = styled.div`
   position: relative;
+  font-weight: 500;
 `;
 
 const DropDown = styled.div`

@@ -54,5 +54,5 @@ const Title = styled(Box)`
   color: #f7f7f8;
   text-align: center;
   font-size: 32px;
-  font-weight: 700;
+  font-weight: 500;
 `;

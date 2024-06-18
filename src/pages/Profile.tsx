@@ -70,7 +70,7 @@ const Info = styled(Stack)``;
 const Address = styled(Flex)`
   gap: 4px;
   padding: 12px 16px;
-  font-weight: 700;
+  font-weight: 400;
   font-size: 16px;
   line-height: 24px;
   background-color: #1e2026;
@@ -83,4 +83,5 @@ const Address = styled(Flex)`
 const Username = styled(Box)`
   font-size: 32px;
   color: #f7f7f8;
+  font-weight: 500;
 `;

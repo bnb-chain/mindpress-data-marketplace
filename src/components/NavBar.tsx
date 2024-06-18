@@ -63,7 +63,6 @@ const NavContainer = styled.div`
   display: flex;
   font-size: 16px;
   color: ${(props: any) => props.theme.colors.readable?.normal};
-  font-weight: 600;
   height: 52px;
   line-height: 52px;
   white-space: nowrap;
@@ -89,7 +88,7 @@ const NavContainer = styled.div`
 `;
 
 const Nav = styled.nav<INavProps>`
-  font-weight: 700;
+  font-weight: 400;
   font-size: 24px;
 
   margin-right: 24px;

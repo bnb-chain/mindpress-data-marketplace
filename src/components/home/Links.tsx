@@ -97,6 +97,7 @@ const CardItem = styled(Flex)`
     justify-content: center;
   }
   .desc {
+    font-weight: 400;
   }
   /* &:hover {
     background-color: #373943;
@@ -106,7 +107,6 @@ const CardItem = styled(Flex)`
 
 const CardItemTitle = styled(Box)`
   font-size: 16px;
-  font-weight: 500;
+  font-weight: 700;
   color: #f7f7f8;
-  -webkit-text-stroke: 1px #f7f7f8;
 `;

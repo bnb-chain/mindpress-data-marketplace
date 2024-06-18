@@ -181,13 +181,13 @@ export const ListModal = () => {
           <Box
             fontSize="16px"
             lineHeight="24px"
-            fontWeight={600}
+            fontWeight={500}
             color="#F7F7F8"
           >
             {listInfo.data.name}
           </Box>
           {listInfo.data.desc && (
-            <Box fontSize="14px" color="#C4C5CB">
+            <Box fontSize="14px" color="#C4C5CB" fontWeight={400}>
               {listInfo.data.desc}
             </Box>
           )}
@@ -199,6 +199,7 @@ export const ListModal = () => {
               padding="4px 8px"
               fontSize="12px"
               borderRadius="40px"
+              fontWeight={500}
             >
               {category?.name}
             </Box>
@@ -213,9 +214,9 @@ export const ListModal = () => {
             </Box> */}
             <Flex gap="4px" alignItems="center">
               <BSCIcon />
-              <Box>{formatEther(listInfo.data.price)} BNB</Box>
+              <Box fontWeight={700}>{formatEther(listInfo.data.price)} BNB</Box>
             </Flex>
-            <Box fontSize="14px" color="#C4C5CB">
+            <Box fontSize="14px" color="#C4C5CB" fontWeight={400}>
               $ {usdExchangeIsLoading ? '0' : priceUsd}
             </Box>
           </Flex>
@@ -297,7 +298,7 @@ export const ListModal = () => {
 
 const Header = styled(QDrawerHeader)`
   font-style: normal;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 20px;
   line-height: 28px;
 

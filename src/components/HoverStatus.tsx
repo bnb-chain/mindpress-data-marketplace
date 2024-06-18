@@ -126,6 +126,6 @@ const CardHover = styled(Stack)`
 const UserInfo = styled(Flex)`
   align-items: center;
   gap: 8px;
-  font-weight: 800;
+  font-weight: 500;
   color: #f7f7f8;
 `;

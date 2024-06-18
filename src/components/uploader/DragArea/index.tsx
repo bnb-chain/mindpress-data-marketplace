@@ -81,11 +81,11 @@ export const DragBox: React.FC<IProps> = ({
 
           <Text fontSize="14px" color="#76808F">
             or{' '}
-            <Box as="span" color="#1184EE">
+            <Box as="span" color="#1184EE" fontWeight={500}>
               browse files
             </Box>
           </Text>
-          <Text as="p" fontSize="14px" color="#C4C5CB">
+          <Text as="p" fontSize="14px" color="#C4C5CB" fontWeight={500}>
             Supports jpg. and png. format only
           </Text>
         </Center>

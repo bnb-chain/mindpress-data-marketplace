@@ -107,7 +107,7 @@ const LoadMore = styled(DefaultButton)`
   background: #f1f2f3;
   color: #181a1e;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   height: 64px;
   padding: 20px 24px;
 `;

@@ -47,7 +47,7 @@ const CateItem = styled(MPLink)`
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  font-weight: 800;
+  font-weight: 700;
   text-align: center;
   border-radius: 8px;
   word-break: keep-all;

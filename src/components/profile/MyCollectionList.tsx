@@ -62,7 +62,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
         <Grid templateColumns="repeat(3, 1fr)" gap="24px">
           <UploadImageCard onClick={handleOpenUploadModal} as="button">
             <UploadImage />
-            <Text fontSize="16px" fontWeight="900" color="readable.disabled">
+            <Text fontSize="16px" fontWeight="700" color="readable.disabled">
               Upload Image
             </Text>
           </UploadImageCard>
@@ -240,7 +240,7 @@ const InfoItem = styled(Flex)`
 
 const Field = styled(Box)`
   color: #8c8f9b;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 14px;
   line-height: 16px;
 `;

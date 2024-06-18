@@ -99,7 +99,7 @@ export const Object = () => {
           fontSize="32px"
           to="/profile?tab=uploaded"
           color="#F7F7F8"
-          fontWeight="800"
+          fontWeight="500"
         >
           <BackIcon w={40} h={40} verticalAlign="-8px" />
           List for sale

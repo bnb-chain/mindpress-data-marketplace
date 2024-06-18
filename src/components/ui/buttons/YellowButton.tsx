@@ -35,7 +35,7 @@ export const YellowButton = (props: ButtonProps) => {
       h="32px"
       fontSize="14px"
       p="8px 16px"
-      fontWeight={600}
+      fontWeight={500}
       {...YellowProps}
       {...props}
     />
