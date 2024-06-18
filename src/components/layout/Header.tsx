@@ -78,7 +78,7 @@ const Header = () => {
         zIndex={1001}
       >
         <Center gap="8px">
-          <Box as="p" fontSize="14px" fontWeight={500}>
+          <Box as="p" fontSize="14px" fontWeight={400}>
             🚀 This website serves as a demo dApp on BNB Greenfield, and is only
             live on Testnet for feature demonstration purposes.
           </Box>
@@ -86,7 +86,7 @@ const Header = () => {
             color="#181A1E"
             href="https://docs.bnbchain.org/bnb-greenfield/for-developers/tutorials/app/data-marketplace/?h=marke"
             target="_blank"
-            fontWeight={700}
+            fontWeight={500}
             textDecoration="underline"
             _hover={{
               color: '#181A1E',
