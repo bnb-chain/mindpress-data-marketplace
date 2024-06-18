@@ -17,7 +17,7 @@ export const Links = () => {
       mb="20px"
     >
       <TitleCon mb="30px">
-        <CardTitle>Decentralized Storage</CardTitle>
+        <CardTitle>What Makes Us Different?</CardTitle>
       </TitleCon>
       <CardCon gap={24}>
         <CardItem gap={16} flexDirection={'column'}>
@@ -84,8 +84,9 @@ const CardItem = styled(Flex)`
   font-size: 14px;
   border: 1px solid #373943;
   background-color: #181a1e;
-  line-height: 28px;
+  line-height: 20px;
   padding: 24px;
+  font-weight: 600;
   .icon {
     width: 64px;
     height: 64px;

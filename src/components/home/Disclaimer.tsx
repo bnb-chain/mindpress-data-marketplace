@@ -4,7 +4,7 @@ import { Box } from '@totejs/uikit';
 export const Disclaimer = () => {
   return (
     <Box w="1200px" my="20px" mx="auto" pb="80px">
-      <Box fontSize="20px" fontWeight={700} color="#F7F7F8" as="h3" mb="8px">
+      <Box fontSize="20px" fontWeight={900} color="#F7F7F8" as="h3" mb="8px">
         Disclaimer
       </Box>
       <Content as="p">
