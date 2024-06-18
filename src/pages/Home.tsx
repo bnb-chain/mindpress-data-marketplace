@@ -3,6 +3,7 @@ import { Box, Flex } from '@totejs/uikit';
 
 import { Banner } from '../components/home/Banner';
 import { CateList } from '../components/home/CateList';
+import { Disclaimer } from '../components/home/Disclaimer';
 import { Links } from '../components/home/Links';
 import { Trending } from '../components/home/Trending';
 
@@ -20,6 +21,8 @@ const Home = () => {
       </Box>
 
       <Links />
+
+      <Disclaimer />
     </Container>
   );
 };

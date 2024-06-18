@@ -2,7 +2,14 @@ import styled from '@emotion/styled';
 import '@node-real/walletkit/styles.css';
 import { useWindowScroll } from '@uidotdev/usehooks';
 
-import { Box, Button, Flex, useOutsideClick } from '@totejs/uikit';
+import {
+  Box,
+  Button,
+  Center,
+  Flex,
+  Link,
+  useOutsideClick,
+} from '@totejs/uikit';
 
 import { WalletKitButton, useModal } from '@node-real/walletkit';
 import { useSetAtom } from 'jotai';
@@ -22,6 +29,7 @@ import { SellIcon } from '../svgIcon/SellIcon';
 import { SignOutIcon } from '../svgIcon/SignOutIcon';
 
 const BG_COLOR = '#181a1e';
+const INFO_BAR_HEIGHT = '40px';
 
 const Header = () => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
@@ -57,218 +65,201 @@ const Header = () => {
   const setUpobjs = useSetAtom(uploadObjcetAtom);
 
   return (
-    <HeaderFlex
-      justifyContent={'space-between'}
-      alignItems={'center'}
-      padding={'0px 24px 0'}
-      height={80}
-      bg={location.pathname !== '/' ? BG_COLOR : 'transparent'}
-      ref={ref}
-    >
-      <LeftCon h="50px" gap={40} alignItems={'center'}>
-        <img
-          title="market place"
-          onClick={() => {
-            navigate('/');
-          }}
-          src={NET_ENV === 'TESTNET' ? TestNetLogo : MainNetLogo}
-          alt="logo"
-        />
-        {location.pathname !== '/' && <Search width="380px" height="40px" />}
-      </LeftCon>
-
-      <RightFunCon
-        alignItems={'center'}
-        justifyContent={'center'}
-        gap={18}
-        ref={ref2}
+    <>
+      <Box
+        bg="#53EAA1"
+        h={INFO_BAR_HEIGHT}
+        lineHeight="40px"
+        color="#181A1E"
+        pos="fixed"
+        top="0"
+        left="0"
+        right="0"
+        zIndex={1001}
       >
-        <>
-          <Button
-            variant="ghost"
-            bg="transparent"
-            color="#F1F2F3"
-            borderColor="#F1F2F3"
-            borderRadius="8px"
+        <Center gap="8px">
+          <Box as="p" fontSize="14px">
+            This website serves as a demo dApp on BNB Greenfield, and is only
+            live on Testnet for feature demonstration purposes.
+          </Box>
+          <Link
+            color="#181A1E"
+            href="https://docs.bnbchain.org/bnb-greenfield/for-developers/tutorials/app/data-marketplace/?h=marke"
+            target="_blank"
             fontWeight={600}
-            h="40px"
+            textDecoration="underline"
             _hover={{
-              background: 'rgba(241, 242, 243, 0.9)',
-              color: 'rgb(24, 26, 30)',
-            }}
-            onClick={() => {
-              if (!isConnecting && !isConnected) {
-                onOpen();
-                return;
-              }
-
-              setUpobjs((draft) => {
-                draft.openModal = true;
-              });
+              color: '#181A1E',
             }}
           >
-            List Images
-          </Button>
-        </>
+            Learn More
+          </Link>
+        </Center>
+      </Box>
+      <HeaderFlex
+        justifyContent={'space-between'}
+        alignItems={'center'}
+        padding={'0px 24px 0'}
+        height={80}
+        top={INFO_BAR_HEIGHT}
+        bg={location.pathname !== '/' ? BG_COLOR : 'transparent'}
+        ref={ref}
+      >
+        <LeftCon h="50px" gap={40} alignItems={'center'}>
+          <img
+            title="market place"
+            onClick={() => {
+              navigate('/');
+            }}
+            src={NET_ENV === 'TESTNET' ? TestNetLogo : MainNetLogo}
+            alt="logo"
+          />
+          {location.pathname !== '/' && <Search width="380px" height="40px" />}
+        </LeftCon>
 
-        {/* switch chain */}
-        {/* {address && (
-          <Menu placement="bottom-end">
-            <MenuButton
-              onClick={() => {
-                reportEvent({ name: 'dm.main.header.switch_network.click' });
-                onToggle();
+        <RightFunCon
+          alignItems={'center'}
+          justifyContent={'center'}
+          gap={18}
+          ref={ref2}
+        >
+          <>
+            <Button
+              variant="ghost"
+              bg="transparent"
+              color="#F1F2F3"
+              borderColor="#F1F2F3"
+              borderRadius="8px"
+              fontWeight={600}
+              h="40px"
+              _hover={{
+                background: 'rgba(241, 242, 243, 0.9)',
+                color: 'rgb(24, 26, 30)',
               }}
-              as={CustomMenuButton}
-            >
-              {chain && chain.id === BSC_CHAIN_ID
-                ? 'BNB Smart Chain'
-                : 'BNB Greenfield'}
-            </MenuButton>
-            <MenuList w={194}>
-              <MenuItem
-                onClick={() => {
-                  switchNetwork?.(BSC_CHAIN_ID);
-                  onClose();
-                }}
-              >
-                <Flex
-                  w="100%"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Box>BNB Smart Chain</Box>
-                  <Box>
-                    {chain?.id === BSC_CHAIN_ID ? <CheckIcon w={16} /> : null}
-                  </Box>
-                </Flex>
-              </MenuItem>
-              <MenuItem
-                // icon={<BSCLogo />}
-                onClick={() => {
-                  switchNetwork?.(GF_CHAIN_ID);
-                  onClose();
-                }}
-              >
-                <Flex
-                  w="100%"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Box>BNB Greenfield</Box>
-                  <Box>
-                    {chain?.id === GF_CHAIN_ID ? <CheckIcon w={16} /> : null}
-                  </Box>
-                </Flex>
-              </MenuItem>
-            </MenuList>
-          </Menu>
-        )} */}
-
-        <ButtonWrapper>
-          {!isConnected && !isConnecting ? (
-            // <WalletKitButton />
-            <WalletKitButton.Custom>
-              {({
-                show,
-                hide,
-                isConnecting,
-                isConnected,
-                address,
-                truncatedAddress,
-              }) => {
-                // if (isConnected) {
-                //   return <div>{address}</div>;
-                // } else if (isConnecting) {
-                //   return <div>connecting</div>;
-                // } else {
-                return (
-                  <StyledButton h="40px" onClick={show}>
-                    Connect Wallet
-                  </StyledButton>
-                );
-              }}
-            </WalletKitButton.Custom>
-          ) : (
-            <ConnectProfile
               onClick={() => {
-                try {
-                  if (isConnected && !dropDownOpen) handleShowDropDown();
-                } catch (e) {
-                  //eslint-disable-next-line no-console
-                  console.log(e);
+                if (!isConnecting && !isConnected) {
+                  onOpen();
+                  return;
                 }
+
+                setUpobjs((draft) => {
+                  draft.openModal = true;
+                });
               }}
             >
-              <ProfileWrapper
-                ml={3}
-                gap={10}
-                // justifyContent={'flex-start'}
-                // w={158}
-              >
-                <Profile
-                  outline={
-                    dropDownOpen ? '1px solid #FFE900' : '1px solid #373943'
+              List Images
+            </Button>
+          </>
+
+          <ButtonWrapper>
+            {!isConnected && !isConnecting ? (
+              // <WalletKitButton />
+              <WalletKitButton.Custom>
+                {({
+                  show,
+                  hide,
+                  isConnecting,
+                  isConnected,
+                  address,
+                  truncatedAddress,
+                }) => {
+                  // if (isConnected) {
+                  //   return <div>{address}</div>;
+                  // } else if (isConnecting) {
+                  //   return <div>connecting</div>;
+                  // } else {
+                  return (
+                    <StyledButton h="40px" onClick={show}>
+                      Connect Wallet
+                    </StyledButton>
+                  );
+                }}
+              </WalletKitButton.Custom>
+            ) : (
+              <ConnectProfile
+                onClick={() => {
+                  try {
+                    if (isConnected && !dropDownOpen) handleShowDropDown();
+                  } catch (e) {
+                    //eslint-disable-next-line no-console
+                    console.log(e);
                   }
+                }}
+              >
+                <ProfileWrapper
+                  ml={3}
+                  gap={10}
+                  // justifyContent={'flex-start'}
+                  // w={158}
                 >
-                  {address && <MetaMaskAvatar address={address} size={32} />}
-                </Profile>
-              </ProfileWrapper>
-            </ConnectProfile>
-          )}
-          {dropDownOpen && isConnected && !isConnecting && (
-            <DropDown>
-              <Flex alignItems="center" pl="24px" pr="24px">
-                <Flex gap="12px" flex={1} alignItems="center">
-                  <ImageWrapper>
-                    <MetaMaskAvatar address={address!} size={40} />
-                  </ImageWrapper>
-                  <Address>
-                    {address ? trimLongStr(address, 10, 6, 4) : ''}
-                  </Address>
+                  <Profile
+                    outline={
+                      dropDownOpen ? '1px solid #FFE900' : '1px solid #373943'
+                    }
+                  >
+                    {address && <MetaMaskAvatar address={address} size={32} />}
+                  </Profile>
+                </ProfileWrapper>
+              </ConnectProfile>
+            )}
+            {dropDownOpen && isConnected && !isConnecting && (
+              <DropDown>
+                <Flex alignItems="center" pl="24px" pr="24px">
+                  <Flex gap="12px" flex={1} alignItems="center">
+                    <ImageWrapper>
+                      <MetaMaskAvatar address={address!} size={40} />
+                    </ImageWrapper>
+                    <Address>
+                      {address ? trimLongStr(address, 10, 6, 4) : ''}
+                    </Address>
+                  </Flex>
+                  <Copy
+                    color="#C4C5CB"
+                    size={{ w: 26, h: 26 }}
+                    value={address}
+                  />
                 </Flex>
-                <Copy color="#C4C5CB" size={{ w: 26, h: 26 }} value={address} />
-              </Flex>
 
-              <Hr mt="16px" mb="8px" />
+                <Hr mt="16px" mb="8px" />
 
-              <MenuElement
-                onClick={async (e: React.MouseEvent<HTMLElement>) => {
-                  e.preventDefault();
-                  navigate('/profile?tab=uploaded');
-                }}
-              >
-                <MyDataCollectionIcon mr={8} width={24} height={24} />
-                My Uploaded
-              </MenuElement>
-              <MenuElement
-                onClick={async (e: React.MouseEvent<HTMLElement>) => {
-                  e.preventDefault();
-                  navigate('/profile?tab=purchased');
-                }}
-              >
-                <SellIcon mr={8} w={24} height={24} />
-                My Purchases
-              </MenuElement>
-              <MenuElement
-                onClick={async () => {
-                  await disconnect();
-                  navigate('/');
-                }}
-              >
-                <SignOutIcon
-                  mr={8}
-                  width={24}
-                  height={24}
-                  style={{ transform: 'rotate(-90deg)' }}
-                />{' '}
-                Sign Out
-              </MenuElement>
-            </DropDown>
-          )}
-        </ButtonWrapper>
-      </RightFunCon>
-    </HeaderFlex>
+                <MenuElement
+                  onClick={async (e: React.MouseEvent<HTMLElement>) => {
+                    e.preventDefault();
+                    navigate('/profile?tab=uploaded');
+                  }}
+                >
+                  <MyDataCollectionIcon mr={8} width={24} height={24} />
+                  My Uploaded
+                </MenuElement>
+                <MenuElement
+                  onClick={async (e: React.MouseEvent<HTMLElement>) => {
+                    e.preventDefault();
+                    navigate('/profile?tab=purchased');
+                  }}
+                >
+                  <SellIcon mr={8} w={24} height={24} />
+                  My Purchases
+                </MenuElement>
+                <MenuElement
+                  onClick={async () => {
+                    await disconnect();
+                    navigate('/');
+                  }}
+                >
+                  <SignOutIcon
+                    mr={8}
+                    width={24}
+                    height={24}
+                    style={{ transform: 'rotate(-90deg)' }}
+                  />{' '}
+                  Sign Out
+                </MenuElement>
+              </DropDown>
+            )}
+          </ButtonWrapper>
+        </RightFunCon>
+      </HeaderFlex>
+    </>
   );
 };
 
