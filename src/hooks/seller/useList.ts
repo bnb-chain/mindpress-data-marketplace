@@ -73,7 +73,7 @@ export const useList = ({
         address: contracts.CrossChainAddress,
         functionName: 'getRelayFees',
       });
-      console.log('getRelayFees', realyFee);
+      // console.log('getRelayFees', realyFee);
 
       const totalRelayFee = realyFee * BigInt(2) + ackRelayFee;
 

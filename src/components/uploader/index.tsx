@@ -6,7 +6,7 @@ import { useAtomValue } from 'jotai';
 import { useImmerAtom } from 'jotai-immer';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAccount } from 'wagmi';
+import { useAccount, useBalance } from 'wagmi';
 import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
 import { useCreateSpace } from '../../hooks/seller/useCreateSpace';
 import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
@@ -21,6 +21,9 @@ import { BlackSolidButton } from '../ui/buttons/BlackButton';
 import { DragBox } from './DragArea';
 import { UploadArea } from './UploadArea';
 import { UploadAtom } from './atoms/uploadAtom';
+import { BSC_CHAIN } from '../../env';
+import { ColoredErrorIcon } from '@totejs/icons';
+import { formatEther } from 'viem';
 
 interface Props {
   onClose: () => void;
@@ -28,6 +31,10 @@ interface Props {
 
 export const Uploader: React.FC<Props> = ({ onClose }) => {
   const { address } = useAccount();
+  const { data: bscBalance } = useBalance({
+    address,
+    chainId: BSC_CHAIN.id,
+  });
   const { applyOffchainAuthData } = useOffchainAuth();
   const offchainData = useAtomValue(offchainDataAtom);
   const [files, setFiles] = useState<File[] | null>(null);
@@ -44,6 +51,7 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
     start: createSpaceStart,
     doCreateSpace,
     spaceExist,
+    gas,
   } = useCreateSpace({
     onFailure: async () => {
       // ...
@@ -98,6 +106,55 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
 
     const bucketName = getSpaceName(address);
 
+    console.log(
+      'bscBalance.value < gas',
+      bscBalance?.value,
+      gas,
+      // bscBalance?.value < gas,
+    );
+    if (bscBalance && bscBalance.value < gas) {
+      NiceModal.show(Tips, {
+        title: 'Insufficient Gas',
+        content: (
+          <Box>
+            <ColoredErrorIcon size="xl" />
+            <Box fontSize="14px" color="#76808F" mt="30px">
+              To create space on BNB Greenfield, transfer at least{' '}
+              {formatEther(gas)}
+              BNB to the BNB Smart Chain(BSC).
+            </Box>
+          </Box>
+        ),
+        buttonText: 'Got it',
+        buttonClick: async () => {
+          window.open(`https://www.bnbchain.org/en/testnet-faucet`);
+        },
+      });
+      return;
+    }
+    /* if (!GnfdBalance || !UPLOAD_OBJECT_FEE) return;
+    if (GnfdBalance.value < parseEther(UPLOAD_OBJECT_FEE)) {
+      NiceModal.show(Tips, {
+        title: 'Insufficient Gas',
+        content: (
+          <Box>
+            <ColoredErrorIcon size="xl" />
+            <Box fontSize="14px" color="#76808F" mt="30px">
+              To upload your images to BNB Greenfield, transfer at least 0.005
+              BNB to the Greenfield network.
+            </Box>
+          </Box>
+        ),
+        buttonText: 'Transfer In Now',
+        buttonClick: async () => {
+          window.open(
+            `https://greenfield.bnbchain.org/en/bridge?type=transfer-in`,
+          );
+        },
+      });
+      return;
+    } */
+
     if (!spaceExist) {
       await NiceModal.show(Tips, {
         title: ``,
@@ -128,29 +185,6 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
       });
       return;
     }
-
-    /* if (!GnfdBalance || !UPLOAD_OBJECT_FEE) return;
-    if (GnfdBalance.value < parseEther(UPLOAD_OBJECT_FEE)) {
-      NiceModal.show(Tips, {
-        title: 'Insufficient Gas',
-        content: (
-          <Box>
-            <ColoredErrorIcon size="xl" />
-            <Box fontSize="14px" color="#76808F" mt="30px">
-              To upload your images to BNB Greenfield, transfer at least 0.005
-              BNB to the Greenfield network.
-            </Box>
-          </Box>
-        ),
-        buttonText: 'Transfer In Now',
-        buttonClick: async () => {
-          window.open(
-            `https://greenfield.bnbchain.org/en/bridge?type=transfer-in`,
-          );
-        },
-      });
-      return;
-    } */
 
     if (files) {
       setUploadInfo((draft) => {

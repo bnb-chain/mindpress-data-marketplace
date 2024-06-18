@@ -41,6 +41,7 @@ interface Params {
 
 export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
   const [start, setStart] = useState(false);
+  const [gas, setGas] = useState(BigInt(0));
   const { address } = useAccount();
   const { chain } = useNetwork();
   const { switchNetworkAsync } = useSwitchNetwork();
@@ -53,6 +54,27 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
 
   const { data: contracts, isLoading: loadingContract } =
     useGetContractAddresses();
+
+  useEffect(() => {
+    async function calcauteFee() {
+      if (loadingContract || !contracts) return;
+
+      const [realyFee, ackRelayFee] = await publicClient.readContract({
+        abi: CrossChainAbi,
+        address: contracts.CrossChainAddress,
+        functionName: 'getRelayFees',
+      });
+
+      const value =
+        realyFee * BigInt(3) + ackRelayFee * BigInt(2) + parseEther('0.1');
+      console.log('fees', realyFee, ackRelayFee);
+      console.log('value', value, formatEther(value));
+
+      setGas(value);
+    }
+
+    calcauteFee();
+  }, [contracts, loadingContract, publicClient]);
 
   const create = async () => {
     if (!address) return;
@@ -147,19 +169,8 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
           flowRateLimit: '1000000000000000000',
         });
 
-      console.log('flowRateLimitParams', dataSetBucketFlowRateLimit);
-
-      // 3. cross
-      const [realyFee, ackRelayFee] = await publicClient.readContract({
-        abi: CrossChainAbi,
-        address: contracts.CrossChainAddress,
-        functionName: 'getRelayFees',
-      });
-
-      const value =
-        realyFee * BigInt(3) + ackRelayFee * BigInt(2) + parseEther('0.1');
-      console.log('fees', realyFee, ackRelayFee);
-      console.log('value', value, formatEther(value));
+      console.log('dataSetBucketFlowRateLimit', dataSetBucketFlowRateLimit);
+      console.log('gas', gas);
 
       const { request, result } = await publicClient.simulateContract({
         account: address,
@@ -167,7 +178,7 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
         abi: MarketplaceAbi,
         functionName: 'createSpace',
         args: [bucketPkg, dataSetBucketFlowRateLimit[1]],
-        value,
+        value: gas,
       });
       console.log('request', request);
       console.log('result', result);
@@ -246,5 +257,6 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
     start,
     doCreateSpace: create,
     spaceExist,
+    gas,
   };
 };
