@@ -195,7 +195,8 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
       const uploadTasks = files.map((file, index) => {
         new Compressor(file, {
           quality: 0.6,
-          width: 500,
+          width: 1488,
+          // height: 1000,
           success: (result: any) => {
             console.log('result', result);
 
