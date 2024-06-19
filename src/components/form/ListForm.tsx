@@ -32,10 +32,7 @@ interface FormValues {
 const ListSchema = Yup.object().shape({
   name: Yup.string()
     .required('Name is required')
-    .matches(
-      /^[^\\\/'"\s]*$/,
-      'Strings cannot contain symbols such as spaces or slashes',
-    )
+    .matches(/^[^\\\/'"]*$/, 'Strings cannot contain symbols such as slashes')
     // .matches(/^[a-z]+$/, '只能包含小写字母 a-z')
     .max(24),
   price: Yup.number()
