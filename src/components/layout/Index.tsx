@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { Flex } from '@totejs/uikit';
 import { ReactNode, useCallback } from 'react';
-import { useAccount } from 'wagmi';
+import { ConnectorData, useAccount } from 'wagmi';
 import { useModal } from '../../hooks/useModal';
 import { useOffchainAuth } from '../../hooks/useOffchainAuth';
 import { ActionResult } from '../modal/ActionResult';
@@ -10,6 +10,7 @@ import { ListModal } from '../modal/ListModal';
 import { UploadObjectModal } from '../modal/UploadObject';
 import Footer from './Footer';
 import Header from './Header';
+import { useSwitchAccount } from '../../hooks/useSwitchAccount';
 
 export default function Layout({ children }: { children: ReactNode }) {
   const modalData = useModal();
@@ -29,19 +30,19 @@ export default function Layout({ children }: { children: ReactNode }) {
     modalData.modalDispatch({ type: 'CLOSE_RESULT' });
   }, [modalData]);
 
-  useAccount({
+  const { connector } = useAccount({
     onConnect: async ({ connector, address }) => {
       applyOffchainAuthData({ connector, address });
     },
   });
 
-  // useSwitchAccount(connector, ({ account }: ConnectorData) => {
-  //   // console.log(account);
-  //   if (account) {
-  //     // console.log('new account', account);
-  //     applyOffchainAuthData({ connector, address: account });
-  //   }
-  // });
+  useSwitchAccount(connector, ({ account }: ConnectorData) => {
+    // console.log('xx', xx);
+    if (account) {
+      console.log('new account', account);
+      applyOffchainAuthData({ connector, address: account });
+    }
+  });
 
   return (
     <>
