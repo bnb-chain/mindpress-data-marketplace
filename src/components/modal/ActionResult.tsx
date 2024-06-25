@@ -58,7 +58,9 @@ export const ActionResult = (props: IActionResult) => {
 
   const navigator = useNavigate();
 
-  const { data: items, isPending } = useGetChainListItems([BigInt(2697)]);
+  const { data: items, isPending } = useGetChainListItems([
+    BigInt(groupId || 0),
+  ]);
 
   if (type === 'BUY') {
     return (
