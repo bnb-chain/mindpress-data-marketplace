@@ -1,7 +1,6 @@
 import styled from '@emotion/styled';
+import { WalletKitButton } from '@node-real/walletkit';
 import '@node-real/walletkit/styles.css';
-import { useWindowScroll } from '@uidotdev/usehooks';
-
 import {
   Box,
   Button,
@@ -10,14 +9,11 @@ import {
   Link,
   useOutsideClick,
 } from '@totejs/uikit';
-
-import { WalletKitButton, useModal } from '@node-real/walletkit';
-import { useSetAtom } from 'jotai';
+import { useWindowScroll } from '@uidotdev/usehooks';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAccount, useDisconnect } from 'wagmi';
-import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
 import { NET_ENV } from '../../env';
 import TestNetLogo from '../../images/logo-testnet.svg';
 import MainNetLogo from '../../images/logo.svg';
@@ -35,7 +31,6 @@ const Header = () => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const { address, isConnecting, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
-  const { onOpen } = useModal();
   const handleShowDropDown = useCallback(() => {
     setDropDownOpen((preState) => !preState);
   }, []);
@@ -61,8 +56,6 @@ const Header = () => {
       ref.current.style.backgroundColor = 'transparent';
     }
   }, [location.pathname, y]);
-
-  const setUpobjs = useSetAtom(uploadObjcetAtom);
 
   return (
     <>
@@ -137,14 +130,18 @@ const Header = () => {
                 color: 'rgb(24, 26, 30)',
               }}
               onClick={() => {
-                if (!isConnecting && !isConnected) {
-                  onOpen();
-                  return;
+                console.log('location', location);
+                if (
+                  location.pathname === '/profile' &&
+                  location.search === '?tab=uploaded'
+                ) {
+                  window.scrollTo({
+                    top: 150,
+                    behavior: 'smooth',
+                  });
+                } else {
+                  navigate('/profile?tab=uploaded');
                 }
-
-                setUpobjs((draft) => {
-                  draft.openModal = true;
-                });
               }}
             >
               List Images
@@ -155,19 +152,7 @@ const Header = () => {
             {!isConnected && !isConnecting ? (
               // <WalletKitButton />
               <WalletKitButton.Custom>
-                {({
-                  show,
-                  // hide,
-                  // isConnecting,
-                  // isConnected,
-                  // address,
-                  // truncatedAddress,
-                }) => {
-                  // if (isConnected) {
-                  //   return <div>{address}</div>;
-                  // } else if (isConnecting) {
-                  //   return <div>connecting</div>;
-                  // } else {
+                {({ show }) => {
                   return (
                     <StyledButton h="40px" onClick={show}>
                       Connect Wallet
@@ -186,12 +171,7 @@ const Header = () => {
                   }
                 }}
               >
-                <ProfileWrapper
-                  ml={3}
-                  gap={10}
-                  // justifyContent={'flex-start'}
-                  // w={158}
-                >
+                <ProfileWrapper ml={3} gap={10}>
                   <Profile
                     outline={
                       dropDownOpen ? '1px solid #FFE900' : '1px solid #373943'
