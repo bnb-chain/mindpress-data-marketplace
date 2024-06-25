@@ -84,7 +84,7 @@ const Header = () => {
           </Box>
           <Link
             color="#181A1E"
-            href="https://docs.bnbchain.org/bnb-greenfield/for-developers/tutorials/app/data-marketplace/?h=marke"
+            href="https://docs.bnbchain.org/bnb-greenfield/for-developers/tutorials/app/data-marketplace/"
             target="_blank"
             fontWeight={500}
             textDecoration="underline"
