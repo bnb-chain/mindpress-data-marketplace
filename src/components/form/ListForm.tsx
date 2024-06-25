@@ -13,14 +13,17 @@ import {
 } from '@totejs/uikit';
 import { useFormik } from 'formik';
 import { useImmerAtom } from 'jotai-immer';
+import { parseEther } from 'viem';
 import { useAccount } from 'wagmi';
 import * as Yup from 'yup';
 import { listAtom } from '../../atoms/listAtom';
+import { NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 import { useGetCatoriesMap } from '../../hooks/apis/useGetCatoriesMap';
+import { generateGroupName } from '../../utils';
+import { client, getGroupInfoByName } from '../../utils/gfSDK';
 import BSCIcon from '../svgIcon/BSCIcon';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import { Option, Select } from '../ui/select';
-import { parseEther } from 'viem';
 
 interface FormValues {
   name: string;
@@ -29,19 +32,40 @@ interface FormValues {
   price: string;
 }
 
-const ListSchema = Yup.object().shape({
-  name: Yup.string()
-    .required('Name is required')
-    .matches(/^[^\\\/'"]*$/, 'Strings cannot contain symbols such as slashes')
-    // .matches(/^[a-z]+$/, '只能包含小写字母 a-z')
-    .max(24),
-  price: Yup.number()
-    .positive()
-    .required('Price is required')
-    .typeError('Price must be a number'),
-  category: Yup.string().required('Category is required'),
-  description: Yup.string().max(120),
-});
+const ListSchema = (params: IProps) =>
+  Yup.object().shape({
+    name: Yup.string()
+      .required('Name is required')
+      .matches(/^[^\\\/'"]*$/, 'Strings cannot contain symbols such as slashes')
+      .max(24)
+      .test(
+        'check existed name',
+        'This name is already occupied, please change it to another one.',
+        async (value) => {
+          const { bucketId } = params;
+          const { bucketInfo } = await client.bucket.headBucketById(bucketId);
+          if (!bucketInfo) {
+            throw new Error('bucket not found');
+          }
+          const groupName = generateGroupName(bucketInfo.bucketName, value);
+          const { groupInfo } = await getGroupInfoByName(
+            groupName,
+            NEW_MARKETPLACE_CONTRACT_ADDRESS,
+          );
+
+          if (groupInfo) {
+            return false;
+          }
+          return true;
+        },
+      ),
+    price: Yup.number()
+      .positive()
+      .required('Price is required')
+      .typeError('Price must be a number'),
+    category: Yup.string().required('Category is required'),
+    description: Yup.string().max(120),
+  });
 
 interface IProps {
   bucketId: string;
@@ -51,13 +75,8 @@ interface IProps {
   owner?: string;
 }
 
-export const ListForm: React.FC<IProps> = ({
-  owner,
-  bucketId,
-  objectId,
-  imageUrl,
-  objectName,
-}) => {
+export const ListForm: React.FC<IProps> = (props: IProps) => {
+  const { owner, bucketId, objectId, imageUrl, objectName } = props;
   const { address } = useAccount();
   const [_, setListInfo] = useImmerAtom(listAtom);
 
@@ -85,7 +104,8 @@ export const ListForm: React.FC<IProps> = ({
         };
       });
     },
-    validationSchema: ListSchema,
+    validationSchema: ListSchema(props),
+    validateOnChange: false,
   });
 
   const { data: cates } = useGetCatoriesMap();
@@ -170,7 +190,7 @@ export const ListForm: React.FC<IProps> = ({
               h="48px"
               borderRadius="8px"
               type="submit"
-              // onClick={openListModal}
+              isLoading={formik.isValidating}
             >
               List
             </YellowButton>
