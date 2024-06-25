@@ -114,46 +114,23 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
     );
     if (bscBalance && bscBalance.value < gas) {
       NiceModal.show(Tips, {
-        title: 'Insufficient Gas',
+        title: 'Insufficient Balance',
         content: (
           <Box>
             <ColoredErrorIcon size="xl" />
             <Box fontSize="14px" color="#76808F" mt="30px">
-              To create space on BNB Greenfield, transfer at least{' '}
-              {formatEther(gas)}
-              BNB to the BNB Smart Chain(BSC).
+              You don't have enough balance on BNB Smart Chain. You can get some
+              test token from the Faucet.
             </Box>
           </Box>
         ),
-        buttonText: 'Got it',
+        buttonText: 'Go to Faucet',
         buttonClick: async () => {
           window.open(`https://www.bnbchain.org/en/testnet-faucet`);
         },
       });
       return;
     }
-    /* if (!GnfdBalance || !UPLOAD_OBJECT_FEE) return;
-    if (GnfdBalance.value < parseEther(UPLOAD_OBJECT_FEE)) {
-      NiceModal.show(Tips, {
-        title: 'Insufficient Gas',
-        content: (
-          <Box>
-            <ColoredErrorIcon size="xl" />
-            <Box fontSize="14px" color="#76808F" mt="30px">
-              To upload your images to BNB Greenfield, transfer at least 0.005
-              BNB to the Greenfield network.
-            </Box>
-          </Box>
-        ),
-        buttonText: 'Transfer In Now',
-        buttonClick: async () => {
-          window.open(
-            `https://greenfield.bnbchain.org/en/bridge?type=transfer-in`,
-          );
-        },
-      });
-      return;
-    } */
 
     if (!spaceExist) {
       await NiceModal.show(Tips, {
