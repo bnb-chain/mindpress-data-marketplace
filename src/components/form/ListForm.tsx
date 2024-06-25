@@ -64,7 +64,7 @@ const ListSchema = (params: IProps) =>
       .required('Price is required')
       .typeError('Price must be a number'),
     category: Yup.string().required('Category is required'),
-    description: Yup.string().max(120),
+    description: Yup.string().max(200),
   });
 
 interface IProps {
