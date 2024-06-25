@@ -4,12 +4,30 @@ import Search from '../search-box';
 import { useGetCatoriesMap } from '../../hooks/apis/useGetCatoriesMap';
 import { MPLink } from '../ui/MPLink';
 import { SearchIcon } from '@totejs/icons';
+import _ from 'lodash';
+
+const BANNER_IMAGES = [
+  'https://nodereal.io/static/ihs/test/f35b965b-8114-459c-aa5b-d1f5a3327cf2.png',
+  'https://nodereal.io/static/ihs/test/5c5772af-4e28-4a21-b165-4dc63cbcc4e2.jpeg',
+  'https://nodereal.io/static/ihs/test/af5567b5-7634-401f-ae23-93c4ebe6cf73.jpg',
+  'https://nodereal.io/static/ihs/test/722fa237-9ed7-4441-a977-3c587a227c6f.jpg',
+  'https://nodereal.io/static/ihs/test/d98d4db3-7a91-4f3f-9c6d-ebe4a405a5a3.jpg',
+  'https://nodereal.io/static/ihs/test/45d8705a-1d1e-4d55-ae19-8acfccdaa01c.jpeg',
+  'https://nodereal.io/static/ihs/test/646bd949-1aef-48a6-bb1e-180ffa00112f.jpeg',
+  'https://nodereal.io/static/ihs/test/9f1d517a-9b86-454e-9d5f-a2d5fe55fed7.jpeg',
+];
 
 export const Banner = () => {
   const { data: cates } = useGetCatoriesMap();
 
+  const bgImage = BANNER_IMAGES[_.random(0, BANNER_IMAGES.length - 1)];
+
   return (
-    <Container>
+    <Container
+      bg={`linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
+    url('${bgImage}')
+      no-repeat center center`}
+    >
       <BigImageBg>
         <Title>
           Unleash your creativity on{' '}
@@ -70,8 +88,8 @@ const Container = styled(Box)`
   width: 100vw;
   height: 510px;
   padding: 80px 0 130px 0;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
-    url(https://picsum.photos/1800/600) no-repeat center center;
+  /* 1800 * 600 */
+  background: ${(props) => props.bg};
   background-size: cover;
 `;
 

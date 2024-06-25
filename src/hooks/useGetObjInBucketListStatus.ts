@@ -52,17 +52,9 @@ export const useGetObjInBucketListStatus = (
         listObjs.body.GfSpListObjectsByBucketNameResponse.Objects,
       );
 
-      console.log('listedObjList', listedObjList);
-
       return {
         objsData,
         listIndex: listedObjList.map((item) => item.resourceId),
-        // listDataxxx: listedObjList.map((item) => {
-        //   return {
-        //     index: item.resourceId,
-        //     groupId: item.groupId,
-        //   };
-        // }),
       };
     },
     staleTime: 10_000,

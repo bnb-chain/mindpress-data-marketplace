@@ -1,8 +1,19 @@
 import styled from '@emotion/styled';
 import { Flex } from '@totejs/uikit';
+import _ from 'lodash';
 import { useGetCatoriesMap } from '../../hooks/apis/useGetCatoriesMap';
 import { Loader } from '../Loader';
 import { MPLink } from '../ui/MPLink';
+
+const CATE_INDEX = [0, 1, 2, 3, 4, 9];
+const CATE_IMAGE = [
+  'https://nodereal.io/static/ihs/test/7db05d49-509f-42b0-ae13-8af79fe744e5.png',
+  'https://nodereal.io/static/ihs/test/ce2dfbe3-a26e-41ab-b0fd-278879de3bca.png',
+  'https://nodereal.io/static/ihs/test/3faf283d-98c4-41ff-bc01-28abc97abb68.png',
+  'https://nodereal.io/static/ihs/test/8e4f1bbb-59c8-4b1d-ae5f-3d7ee176ce90.png',
+  'https://nodereal.io/static/ihs/test/6dc69fc9-a227-450a-a3e1-fda468c0afc9.png',
+  'https://nodereal.io/static/ihs/test/7280eafc-7e07-4c9e-8b6f-96355e89bb45.png',
+];
 
 export const CateList = () => {
   const { data: cates, isLoading } = useGetCatoriesMap();
@@ -13,11 +24,8 @@ export const CateList = () => {
 
   return (
     <CateContainer>
-      {cates.slice(0, 6).map((category) => {
-        const imageUrl = `https://picsum.photos/seed/${category.name.replaceAll(
-          ' ',
-          '',
-        )}/200/200`;
+      {_.pullAt(cates, CATE_INDEX).map((category, index) => {
+        const imageUrl = CATE_IMAGE[index];
         return (
           <CateItem
             key={category.id}
