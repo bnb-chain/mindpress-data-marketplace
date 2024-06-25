@@ -147,8 +147,10 @@ const ImgCon = styled.div`
     height: 459px; */
 
     width: 100%;
+    height: 490px;
+    /* height: 100%; */
     object-fit: contain;
-    background-color: #d9d9d9;
+    /* background-color: #d9d9d9; */
     /* background-color: #d9d9d9;
     border-radius: 8px; */
   }

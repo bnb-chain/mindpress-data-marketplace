@@ -23,3 +23,24 @@ export const shortObjectName = (fileName: string, extra: string) => {
 export const sleep = (time: number) => {
   return new Promise((resolve) => setTimeout(resolve, time));
 };
+
+export const getCompressImageSize = (width: number, height: number) => {
+  const MAX_WIDTH = 1488;
+  const MAX_HEIGHT = 1000;
+  const ratio = MAX_WIDTH / MAX_HEIGHT;
+  let w = width;
+  let h = height;
+
+  if (width / height > ratio) {
+    w = MAX_WIDTH;
+    h = width / ratio;
+  } else {
+    w = height * ratio;
+    h = MAX_HEIGHT;
+  }
+
+  return {
+    w: Math.floor(w),
+    h: Math.floor(h),
+  };
+};

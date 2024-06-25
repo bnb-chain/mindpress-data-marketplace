@@ -67,8 +67,8 @@ export const useCreateSpace = ({ onFailure, onSuccess }: Params) => {
 
       const value =
         realyFee * BigInt(3) + ackRelayFee * BigInt(2) + parseEther('0.1');
-      console.log('fees', realyFee, ackRelayFee);
-      console.log('value', value, formatEther(value));
+      // console.log('fees', realyFee, ackRelayFee);
+      // console.log('value', value, formatEther(value));
 
       setGas(value);
     }

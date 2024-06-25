@@ -1,5 +1,6 @@
 import { OnProgressEvent, VisibilityType } from '@bnb-chain/greenfield-js-sdk';
 import NiceModal from '@ebay/nice-modal-react';
+import { ColoredErrorIcon } from '@totejs/icons';
 import { Box, Center, Flex, Text } from '@totejs/uikit';
 import Compressor from 'compressorjs';
 import { useAtomValue } from 'jotai';
@@ -8,11 +9,18 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAccount, useBalance } from 'wagmi';
 import { offchainDataAtom } from '../../atoms/offchainDataAtomAtom';
+import { BSC_CHAIN } from '../../env';
 import { useCreateSpace } from '../../hooks/seller/useCreateSpace';
 import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
 import { useOffchainAuth } from '../../hooks/useOffchainAuth';
 import { client } from '../../utils/gfSDK';
-import { THUMB, getSpaceName, shortObjectName, sleep } from '../../utils/space';
+import {
+  THUMB,
+  getCompressImageSize,
+  getSpaceName,
+  shortObjectName,
+  sleep,
+} from '../../utils/space';
 import { Loader } from '../Loader';
 import { Tips } from '../modal/Tips';
 import { UPLOAD_LIST_PAGE_SIZE } from '../profile/MyCollectionList';
@@ -21,9 +29,6 @@ import { BlackSolidButton } from '../ui/buttons/BlackButton';
 import { DragBox } from './DragArea';
 import { UploadArea } from './UploadArea';
 import { UploadAtom } from './atoms/uploadAtom';
-import { BSC_CHAIN } from '../../env';
-import { ColoredErrorIcon } from '@totejs/icons';
-import { formatEther } from 'viem';
 
 interface Props {
   onClose: () => void;
@@ -40,12 +45,6 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
   const [files, setFiles] = useState<File[] | null>(null);
   const [uploadInfo, setUploadInfo] = useImmerAtom(UploadAtom);
   const navigate = useNavigate();
-
-  // const { data: GnfdBalance } = useBalance({
-  //   address: address,
-  //   chainId: GREENFIELD_CHAIN.id,
-  // });
-  // console.log('GnfdBalance', GnfdBalance);
 
   const {
     start: createSpaceStart,
@@ -72,6 +71,26 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
       setUploadInfo((draft) => {
         draft.status = 'init';
       });
+
+      for (let i = 0; i < e.target.files.length; i++) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const img = new Image();
+          img.onload = () => {
+            console.log('img', i, img.width, img.height);
+            setUploadInfo((draft) => {
+              draft.files[i] = {
+                width: img.width,
+                height: img.height,
+              };
+            });
+          };
+
+          img.src = e.target?.result as string;
+        };
+        reader.readAsDataURL(e.target.files[i]);
+      }
+
       setFiles(Array.from(e.target.files));
     }
   };
@@ -170,10 +189,23 @@ export const Uploader: React.FC<Props> = ({ onClose }) => {
 
       const now = Date.now().toString();
       const uploadTasks = files.map((file, index) => {
+        const { w, h } = getCompressImageSize(
+          uploadInfo.files[index].width,
+          uploadInfo.files[index].height,
+        );
+
+        // console.log(
+        //   'source ',
+        //   uploadInfo.files[index].width,
+        //   uploadInfo.files[index].height,
+        // );
+
+        // console.log('compress ', w, h);
+
         new Compressor(file, {
-          quality: 0.6,
-          width: 1488,
-          // height: 1000,
+          quality: 0.7,
+          width: w,
+          height: h,
           success: (result: any) => {
             console.log('result', result);
 

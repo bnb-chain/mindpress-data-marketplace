@@ -4,6 +4,10 @@ import { atomWithReset } from 'jotai/utils';
 export type Status = 'init' | 'uploading' | 'success' | 'fail';
 
 type UploadAtomType = {
+  files: {
+    width: number;
+    height: number;
+  }[];
   filesProgress: {
     progress: number;
   }[];
@@ -14,6 +18,7 @@ type UploadAtomType = {
 };
 
 export const UploadAtom = atomWithImmer<UploadAtomType>({
+  files: [],
   filesProgress: [],
   thumbProgress: [],
   status: 'init',
