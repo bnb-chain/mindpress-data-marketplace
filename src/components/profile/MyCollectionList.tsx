@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import { LinkArrowIcon } from '@totejs/icons';
 import { Box, Flex, Grid, Image, Stack, Text, VStack } from '@totejs/uikit';
 import { useSetAtom } from 'jotai';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Address, useAccount } from 'wagmi';
 import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
@@ -19,6 +19,7 @@ import { MPLink } from '../ui/MPLink';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import DefaultImage from '../ui/default-image';
 import { EmptyUpload } from './EmptyUpload';
+import { getItemByObjectId } from '../../utils/apis';
 
 export const UPLOAD_LIST_PAGE_SIZE = 10;
 
@@ -31,7 +32,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
   const bucketName = getSpaceName(address);
   // const { confirmDelist } = useDelist();
   const { address: loginAddress } = useAccount();
-  const [activeObjectName, setActiveObjectName] = useState<string | null>(null);
+  // const [activeObjectName, setActiveObjectName] = useState<string | null>(null);
 
   const { data: listData, isLoading: isListDataLoading } =
     useGetObjInBucketListStatus(bucketName, UPLOAD_LIST_PAGE_SIZE);
@@ -54,7 +55,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
     return <Loader />;
   }
 
-  // console.log('listData', listData);
+  console.log('listData', listData);
 
   return (
     <Container>
@@ -71,15 +72,26 @@ const MyCollectionList = ({ address }: ICollectionList) => {
             listData?.listIndex &&
             listData?.objsData.map((item) => {
               const imageUrl = `${endpoint}/view/${bucketName}/${THUMB}/${item.ObjectInfo.ObjectName}`;
+              const listed = listData.listIndex.includes(item.ObjectInfo.Id);
 
               return (
                 <Card
                   key={item.ObjectInfo.Id}
                   onMouseEnter={() => {
-                    setActiveObjectName(item.ObjectInfo.ObjectName);
+                    // setActiveObjectName(item.ObjectInfo.ObjectName);
                   }}
                 >
-                  <ImageBox>
+                  <ImageBox
+                    cursor={listed ? 'pointer' : 'default'}
+                    onClick={async () => {
+                      if (!listed) return;
+
+                      const { groupId } = await getItemByObjectId(
+                        item.ObjectInfo.Id.toString(),
+                      );
+                      navigator(`/resource?gid=${groupId}`);
+                    }}
+                  >
                     <Image
                       fallbackSrc={DefaultImage}
                       src={imageUrl}
@@ -130,7 +142,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
 
                   {isOwner && (
                     <Box px="20px" my="24px">
-                      {listData.listIndex.includes(item.ObjectInfo.Id) ? (
+                      {listed ? (
                         <YellowButton
                           background="#5C5F6A"
                           h="48px"
@@ -143,6 +155,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                             // const { groupId } = await getItemByObjectId(
                             //   item.ObjectInfo.Id.toString(),
                             // );
+                            // console.log('groupId', groupId);
                             // confirmDelist(BigInt(groupId));
                           }}
                           cursor="not-allowed"
@@ -215,7 +228,7 @@ const Card = styled(Stack)`
   overflow: hidden;
   gap: 24px;
   padding-bottom: 16px;
-  cursor: pointer;
+  /* cursor: pointer; */
 `;
 
 const UploadImageCard = styled(Stack)`
