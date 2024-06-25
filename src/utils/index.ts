@@ -3,10 +3,8 @@ import BN from 'bn.js';
 import { format, utcToZonedTime } from 'date-fns-tz';
 import ReactDOM from 'react-dom';
 
-import { IReturnOffChainAuthKeyPairAndUpload } from '@bnb-chain/greenfield-js-sdk';
 import { AxiosResponse } from 'axios';
 import { DAPP_NAME } from '../env';
-import { getUtcZeroTimestamp } from './time';
 
 export const trimLongStr = (
   str: string,
@@ -238,17 +236,6 @@ export const saveFileByAxiosResponse = (
   } catch (error) {
     console.error('save file error', error);
   }
-};
-
-export const checkSpOffChainDataAvailable = (
-  spOffChainData: IReturnOffChainAuthKeyPairAndUpload,
-) => {
-  const curTime = getUtcZeroTimestamp();
-
-  return (
-    Object.keys(spOffChainData).length &&
-    spOffChainData.expirationTime > curTime
-  );
 };
 
 export const getRandomStr = (len: number) => {
