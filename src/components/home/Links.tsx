@@ -12,9 +12,10 @@ export const Links = () => {
       justifyContent={'center'}
       flexDirection={'column'}
       gap={16}
-      p="60px"
+      py="60px"
       mt="20px"
       mb="20px"
+      mx="auto"
     >
       <TitleCon mb="30px">
         <CardTitle>What Makes Us Different?</CardTitle>
