@@ -82,15 +82,18 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                   }}
                 >
                   <ImageBox
-                    cursor={listed ? 'pointer' : 'default'}
+                    cursor={'pointer'}
                     onClick={async () => {
-                      // console.log('listed', listed);
-                      if (!listed) return;
-
-                      const { groupId } = await getItemByObjectId(
-                        item.ObjectInfo.Id.toString(),
-                      );
-                      navigator(`/resource?gid=${groupId}`);
+                      if (listed) {
+                        const { groupId } = await getItemByObjectId(
+                          item.ObjectInfo.Id.toString(),
+                        );
+                        navigator(`/resource?gid=${groupId}`);
+                      } else {
+                        navigator(
+                          `/detail?bid=${bucketInfo?.bucketInfo?.id}&oid=${item.ObjectInfo.Id}`,
+                        );
+                      }
                     }}
                   >
                     <Image
@@ -183,7 +186,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                             e.preventDefault();
                             e.stopPropagation();
                             navigator(
-                              `/detail?bid=${bucketInfo?.bucketInfo?.id}&oid=${item.ObjectInfo.Id}&path=/`,
+                              `/detail?bid=${bucketInfo?.bucketInfo?.id}&oid=${item.ObjectInfo.Id}`,
                             );
                           }}
                         >
