@@ -112,7 +112,7 @@ export const Object = () => {
           ) : (
             <Image
               src={sourceImageUrl || imageUrl}
-              alt=""
+              alt={sourceImageUrl}
               fallbackSrc={DefaultImage}
             />
           )}
@@ -141,6 +141,7 @@ const ResourceInfo = styled(Flex)`
 const ImgCon = styled.div`
   /* position: relative; */
   width: 688px;
+  background-color: rgba(0, 0, 0, 0.8);
 
   img {
     /* width: 688px;
