@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { WalletKitButton } from '@node-real/walletkit';
+import { WalletKitButton, useModal } from '@node-real/walletkit';
 import '@node-real/walletkit/styles.css';
 import {
   Box,
@@ -37,6 +37,7 @@ const Header = () => {
   const ref = useRef<HTMLDivElement>(null);
   const ref2 = useRef<HTMLDivElement>(null);
   const [{ y }] = useWindowScroll();
+  const { onOpen } = useModal();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -130,7 +131,10 @@ const Header = () => {
                 color: 'rgb(24, 26, 30)',
               }}
               onClick={() => {
-                console.log('location', location);
+                if (!address) {
+                  onOpen();
+                  return;
+                }
                 if (
                   location.pathname === '/profile' &&
                   location.search === '?tab=uploaded'

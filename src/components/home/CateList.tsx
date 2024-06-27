@@ -22,14 +22,11 @@ export const CateList = () => {
     return <Loader />;
   }
 
-  console.log('cates', cates);
-
   return (
     <CateContainer>
       {cates
         .filter((c) => CATE_ID.includes(c.id))
         .map((category, index) => {
-          console.log('cate', category);
           const imageUrl = CATE_IMAGE[index];
           return (
             <CateItem
