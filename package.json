@@ -98,6 +98,7 @@
     "babel-loader": "^8.3.0",
     "babel-plugin-named-asset-import": "^0.3.8",
     "babel-preset-react-app": "^10.0.1",
+    "bfj": "^8.0.0",
     "browserslist": "^4.21.7",
     "buffer": "^6.0.3",
     "case-sensitive-paths-webpack-plugin": "^2.4.0",
