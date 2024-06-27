@@ -16,7 +16,7 @@ const Home = () => {
         <CateList />
       </Box>
 
-      <Box w="1440px" ml="auto" mr="auto">
+      <Box w="1200px" ml="auto" mr="auto">
         <Trending />
       </Box>
 

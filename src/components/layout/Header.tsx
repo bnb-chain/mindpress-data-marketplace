@@ -30,10 +30,13 @@ const INFO_BAR_HEIGHT = '40px';
 const Header = () => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
   const { address, isConnecting, isConnected } = useAccount({
-    onConnect: () => {
-      navigate('/profile?tab=uploaded');
+    onConnect: ({ isReconnected }) => {
+      if (!isReconnected) {
+        navigate('/profile?tab=uploaded');
+      }
     },
   });
+
   const { disconnect } = useDisconnect();
   const handleShowDropDown = useCallback(() => {
     setDropDownOpen((preState) => !preState);

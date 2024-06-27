@@ -55,7 +55,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
     return <Loader />;
   }
 
-  console.log('listData', listData);
+  // console.log('listData', listData);
 
   return (
     <Container>
@@ -84,6 +84,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                   <ImageBox
                     cursor={listed ? 'pointer' : 'default'}
                     onClick={async () => {
+                      // console.log('listed', listed);
                       if (!listed) return;
 
                       const { groupId } = await getItemByObjectId(
