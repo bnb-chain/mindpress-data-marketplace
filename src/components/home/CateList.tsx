@@ -5,7 +5,7 @@ import { useGetCatoriesMap } from '../../hooks/apis/useGetCatoriesMap';
 import { Loader } from '../Loader';
 import { MPLink } from '../ui/MPLink';
 
-const CATE_INDEX = [0, 1, 2, 3, 4, 9];
+const CATE_ID = [1, 2, 3, 4, 5, 10];
 const CATE_IMAGE = [
   'https://nodereal.io/static/ihs/test/7db05d49-509f-42b0-ae13-8af79fe744e5.png',
   'https://nodereal.io/static/ihs/test/ce2dfbe3-a26e-41ab-b0fd-278879de3bca.png',
@@ -22,21 +22,26 @@ export const CateList = () => {
     return <Loader />;
   }
 
+  console.log('cates', cates);
+
   return (
     <CateContainer>
-      {_.pullAt(cates, CATE_INDEX).map((category, index) => {
-        const imageUrl = CATE_IMAGE[index];
-        return (
-          <CateItem
-            key={category.id}
-            bg={`linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${imageUrl}) center center`}
-            bgSize="cover"
-            to={`/search?c=${category.id}`}
-          >
-            {category.name}
-          </CateItem>
-        );
-      })}
+      {cates
+        .filter((c) => CATE_ID.includes(c.id))
+        .map((category, index) => {
+          console.log('cate', category);
+          const imageUrl = CATE_IMAGE[index];
+          return (
+            <CateItem
+              key={category.id}
+              bg={`linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${imageUrl}) center center`}
+              bgSize="cover"
+              to={`/search?c=${category.id}`}
+            >
+              {category.name}
+            </CateItem>
+          );
+        })}
     </CateContainer>
   );
 };
