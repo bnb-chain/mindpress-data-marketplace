@@ -9,24 +9,31 @@ import { Tips } from '../../components/modal/Tips';
 import { BSC_CHAIN, NEW_MARKETPLACE_CONTRACT_ADDRESS } from '../../env';
 
 interface Params {
-  onSuccess?: () => Promise<void>;
+  onSuccess?: (objectId: bigint) => Promise<void>;
 }
 
-export const useDelist = ({ onSuccess }: Params = {}) => {
-  const [, setDelistInfo] = useImmerAtom(delistAtom);
+export const useDelist = () => {
+  // const { onSuccess } = params;
+  // console.log('init onSuccess', onSuccess);
+  const [delistInfo, setDelistInfo] = useImmerAtom(delistAtom);
   const { address } = useAccount();
   const publicClient = usePublicClient({
     chainId: BSC_CHAIN.id,
   });
   const { data: walletClient } = useWalletClient();
 
-  const doDelist = async (groupId: bigint) => {
+  const doDelist = async ({
+    groupId,
+    onSuccess,
+  }: {
+    groupId: bigint;
+    onSuccess?: (objectId: bigint) => Promise<void>;
+  }) => {
     setDelistInfo((draft) => {
       draft.starting = true;
     });
 
     try {
-      // await delisting(groupId, true);
       const { request } = await publicClient.simulateContract({
         account: address,
         abi: MarketplaceAbi,
@@ -44,8 +51,9 @@ export const useDelist = ({ onSuccess }: Params = {}) => {
       }
 
       await succDelist();
-      await onSuccess?.();
+      await onSuccess?.(delistInfo.params.objectId);
     } catch (err) {
+      console.log('err', err);
     } finally {
       setDelistInfo((draft) => {
         draft.starting = false;
@@ -54,10 +62,11 @@ export const useDelist = ({ onSuccess }: Params = {}) => {
     }
   };
 
-  const confirmDelist = (groupId: bigint) => {
+  const confirmDelist = (groupId: bigint, objectId: bigint) => {
     setDelistInfo((draft) => {
       draft.openDelist = true;
       draft.params.groupId = groupId;
+      draft.params.objectId = objectId;
     });
   };
 
@@ -80,6 +89,9 @@ export const useDelist = ({ onSuccess }: Params = {}) => {
         </Stack>
       ),
       buttonText: 'Got it',
+      buttonClick: async () => {
+        // ...
+      },
     });
   };
 

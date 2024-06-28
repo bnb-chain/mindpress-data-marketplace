@@ -15,8 +15,11 @@ import { useDelist } from '../../hooks/seller/useDelist';
 import { Loader } from '../Loader';
 import { DelistIcon } from '../svgIcon/DelistIcon';
 import { BlackSolidButton } from '../ui/buttons/BlackButton';
+import { client } from '../../utils/gfSDK';
+import { useNavigate } from 'react-router-dom';
 
 export const DelistModal = () => {
+  const navigator = useNavigate();
   const [delistInfo, setDelistInfo] = useImmerAtom(delistAtom);
   const { doDelist } = useDelist();
 
@@ -26,6 +29,7 @@ export const DelistModal = () => {
       onClose={() => {
         setDelistInfo((draft) => {
           draft.openDelist = false;
+          draft.starting = false;
         });
       }}
     >
@@ -51,7 +55,23 @@ export const DelistModal = () => {
           isLoading={delistInfo.starting}
           fontWeight={900}
           onClick={async () => {
-            await doDelist(delistInfo.params.groupId);
+            await doDelist({
+              groupId: delistInfo.params.groupId,
+              onSuccess: async (objectId) => {
+                const objRes = await client.object.headObjectById(
+                  String(objectId),
+                );
+                console.log('objRes', objRes);
+                const oid = objRes.objectInfo?.id;
+                if (!objRes.objectInfo?.bucketName) return;
+                const bucketRes = await client.bucket.headBucket(
+                  objRes.objectInfo.bucketName,
+                );
+                console.log('bucketRes', bucketRes);
+                const bid = bucketRes.bucketInfo?.id;
+                navigator(`detail?bid=${bid}&oid=${oid}`);
+              },
+            });
           }}
           _disabled={{
             bg: '#AEB4BC',

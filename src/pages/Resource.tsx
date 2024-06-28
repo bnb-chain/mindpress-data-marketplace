@@ -4,7 +4,7 @@ import { LinkArrowIcon } from '@totejs/icons';
 import { Box, Button, Flex, Image, Link, Stack } from '@totejs/uikit';
 import { useImmerAtom } from 'jotai-immer';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { formatEther } from 'viem';
 import { useAccount } from 'wagmi';
 import { buyAtom } from '../atoms/buyAtom';
@@ -37,7 +37,6 @@ import { getItemByGroupId, getItemByObjectId } from '../utils/apis';
  * Can be queryed in API
  */
 const Resource = () => {
-  const navigator = useNavigate();
   const [p] = useSearchParams();
   const groupId = p.get('gid') as string;
 
@@ -63,13 +62,50 @@ const Resource = () => {
     Number(chainItemInfo?.categoryIds?.[0] || 100),
   );
 
-  const { confirmDelist } = useDelist({
-    onSuccess: async () => {
-      navigator(`profile?tab=uploaded`);
-      // await refetchRelation();
-      // await refetchItem();
-    },
-  });
+  // useEffect(() => {
+  //   async function xx() {
+  //     console.log(
+  //       'chainItemInfo?.objectIds?.[0]',
+  //       chainItemInfo?.objectIds?.[0],
+  //     );
+  //     if (!chainItemInfo?.objectIds?.[0]) return;
+
+  //     const objRes = await client.object.headObjectById(
+  //       String(chainItemInfo?.objectIds?.[0]) || '0',
+  //     );
+  //     console.log('objRes', objRes);
+
+  //     const oid = objRes.objectInfo?.id;
+
+  //     if (!objRes.objectInfo?.bucketName) return;
+
+  //     const bucketRes = await client.bucket.headBucket(
+  //       objRes.objectInfo.bucketName,
+  //     );
+  //     console.log('bucketRes', bucketRes);
+
+  //     const bid = bucketRes.bucketInfo?.id;
+  //   }
+
+  //   xx();
+  // }, [chainItemInfo?.objectIds]);
+
+  const { confirmDelist } = useDelist();
+  // onSuccess: async (objectId) => {
+  //   debugger;
+  //   console.log('objectId', objectId);
+  //   const objRes = await client.object.headObjectById(String(objectId));
+  //   console.log('objRes', objRes);
+  //   const oid = objRes.objectInfo?.id;
+  //   if (!objRes.objectInfo?.bucketName) return;
+  //   const bucketRes = await client.bucket.headBucket(
+  //     objRes.objectInfo.bucketName,
+  //   );
+  //   console.log('bucketRes', bucketRes);
+  //   const bid = bucketRes.bucketInfo?.id;
+  //   navigator(`detail?bid=${bid}&oid=${oid}`);
+  // },
+
   const { onOpen } = useWalletKitModal();
 
   const { data: usdExchange } = useGetBnbUsdtExchangeRate();
@@ -250,7 +286,7 @@ const Resource = () => {
                     String(chainItemInfo.objectIds?.[0]),
                   );
                   console.log('groupId', groupId);
-                  confirmDelist(BigInt(groupId));
+                  confirmDelist(BigInt(groupId), chainItemInfo.objectIds?.[0]);
                 }}
               >
                 Delist

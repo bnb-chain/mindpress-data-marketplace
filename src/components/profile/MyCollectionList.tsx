@@ -40,11 +40,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
   const navigator = useNavigate();
   const { data: endpoint } = useSelectEndpoint();
   const bucketName = getSpaceName(address);
-  const { confirmDelist } = useDelist({
-    onSuccess: async () => {
-      await refetchList();
-    },
-  });
+  const { confirmDelist } = useDelist();
 
   const { address: loginAddress } = useAccount();
 
@@ -181,7 +177,10 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                               item.ObjectInfo.Id.toString(),
                             );
                             console.log('groupId', groupId);
-                            confirmDelist(BigInt(groupId));
+                            confirmDelist(
+                              BigInt(groupId),
+                              BigInt(item.ObjectInfo.Id),
+                            );
                           }}
                         >
                           Delist
