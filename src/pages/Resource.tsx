@@ -4,7 +4,7 @@ import { LinkArrowIcon } from '@totejs/icons';
 import { Box, Flex, Image, Link, Stack } from '@totejs/uikit';
 import { useImmerAtom } from 'jotai-immer';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { formatEther } from 'viem';
 import { useAccount } from 'wagmi';
 import { buyAtom } from '../atoms/buyAtom';
@@ -17,18 +17,19 @@ import { YellowButton } from '../components/ui/buttons/YellowButton';
 import DefaultImage from '../components/ui/default-image';
 import { GF_EXPLORER_URL } from '../env';
 import { useGetCategory } from '../hooks/apis/useGetCatoriesMap';
+import { useGetItemByObjectIds } from '../hooks/apis/useGetItemByObjectIds';
 import { useGetChainListItems } from '../hooks/buyer/useGetChainListItems';
 import { useGetBnbUsdtExchangeRate } from '../hooks/price/useGetBnbUsdtExchangeRate';
+import { useDelist } from '../hooks/seller/useDelist';
 import { useGetObjectById } from '../hooks/useGetBucketOrObj';
 import { useGetRelationWithGroupId } from '../hooks/useGetItemRelationWithAddr';
-import { useModal } from '../hooks/useModal';
 import {
   contentTypeToExtension,
   formatDateDot,
   parseGroupName,
   trimLongStr,
 } from '../utils';
-import { getItemByGroupId } from '../utils/apis';
+import { getItemByGroupId, getItemByObjectId } from '../utils/apis';
 
 /**
  * Have been listed page
@@ -36,6 +37,7 @@ import { getItemByGroupId } from '../utils/apis';
  * Can be queryed in API
  */
 const Resource = () => {
+  const navigator = useNavigate();
   const [p] = useSearchParams();
   const groupId = p.get('gid') as string;
 
@@ -52,28 +54,34 @@ const Resource = () => {
       chainItemInfo?.creators?.[0] || '',
     );
 
+  const { data: itemInfo, refetch: refetchItem } = useGetItemByObjectIds({
+    ids: [Number(chainItemInfo?.objectIds?.[0])],
+  });
   const relation = relationRes?.relation || 'UNKNOWN';
 
   const category = useGetCategory(
     Number(chainItemInfo?.categoryIds?.[0] || 100),
   );
 
-  const modalData = useModal();
+  const { confirmDelist } = useDelist({
+    onSuccess: async () => {
+      navigator(`profile?tab=uploaded`);
+      // await refetchRelation();
+      // await refetchItem();
+    },
+  });
   const { onOpen } = useWalletKitModal();
 
-  const { data: usdExchange, isPending: isPendingUsdPrice } =
-    useGetBnbUsdtExchangeRate();
+  const { data: usdExchange } = useGetBnbUsdtExchangeRate();
 
-  const { bucketName, name } = parseGroupName(
-    chainItemInfo?.groupNames?.[0] || '',
-  );
+  const { name } = parseGroupName(chainItemInfo?.groupNames?.[0] || '');
 
   const { data: object } = useGetObjectById(
     String(chainItemInfo?.objectIds?.[0]),
   );
 
-  console.log('chainItemInfo', chainItemInfo);
-  console.log('object', object, name);
+  // console.log('chainItemInfo', chainItemInfo);
+  // console.log('object', object, name);
 
   const handleGetItemByGroupId = async () => {
     const itemInfo = await getItemByGroupId(groupId);
@@ -220,36 +228,27 @@ const Resource = () => {
               </YellowButton>
             )}
 
-            {relation === 'OWNER' && (
+            {relation === 'OWNER' && itemInfo?.length !== 0 && (
               <YellowButton
-                isDisabled
-                _disabled={{
-                  bg: '#F7F7F873',
-                  cursor: 'not-allowed',
-                  _hover: {
-                    bg: '#F7F7F873',
-                  },
-                }}
                 h="48px"
                 onClick={async () => {
-                  const itemInfo = await handleGetItemByGroupId();
+                  if (
+                    !chainItemInfo ||
+                    !chainItemInfo.objectIds ||
+                    !chainItemInfo.objectIds?.[0]
+                  ) {
+                    return;
+                  }
 
-                  modalData.modalDispatch({
-                    type: 'OPEN_DELIST',
-                    delistData: {
-                      groupId: itemInfo.groupId,
-                      groupName: itemInfo.groupName,
-                      bucket_name: bucketName,
-                      create_at: itemInfo.createdAt,
-                      owner: itemInfo.ownerAddress,
-                    },
-                    callBack: () => {
-                      // navigator(`/detail?bid=${bucketData.bucketInfo!.id}`);
-                    },
-                  });
+                  const { groupId } = await getItemByObjectId(
+                    String(chainItemInfo.objectIds?.[0]),
+                  );
+                  console.log('groupId', groupId);
+
+                  confirmDelist(BigInt(groupId));
                 }}
               >
-                Delist (Coming Soon)
+                Delist
               </YellowButton>
             )}
 

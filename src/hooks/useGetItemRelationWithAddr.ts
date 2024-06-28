@@ -123,10 +123,6 @@ export const useGetRelationWithGroupId = (
   groupId: string,
   ownerAddress: string,
 ) => {
-  // const [relation, setRelation] = useState<ITEM_RELATION_ADDR>('UNKNOWN');
-
-  // const { data: item, isLoading: xxLoading } = useGetItemByGroupId(groupId);
-
   return useQuery({
     enabled: !!addr,
     queryKey: ['GET_ITEM_RELATION_BY_GROUP_ID', groupId, addr, ownerAddress],

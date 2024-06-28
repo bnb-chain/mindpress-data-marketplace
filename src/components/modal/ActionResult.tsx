@@ -23,7 +23,7 @@ import { Loader } from '../Loader';
 import { SuccessIcon } from '../svgIcon/SuccessIcon';
 import { BigYellowButton } from '../ui/buttons/YellowButton';
 
-const CustomSuccessIcon = () => (
+export const CustomSuccessIcon = () => (
   <Flex
     w="56px"
     h="56px"

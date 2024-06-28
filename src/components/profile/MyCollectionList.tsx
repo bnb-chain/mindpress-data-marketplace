@@ -8,9 +8,11 @@ import { Address, useAccount } from 'wagmi';
 import { uploadObjcetAtom } from '../../atoms/uploadObjectAtom';
 import { GF_EXPLORER_URL } from '../../env';
 import { useSelectEndpoint } from '../../hooks/apis/useSelectEndpoint';
+import { useDelist } from '../../hooks/seller/useDelist';
 import { useGetBucketByName } from '../../hooks/useGetBucketOrObj';
 import { useGetObjInBucketListStatus } from '../../hooks/useGetObjInBucketListStatus';
 import { contentTypeToExtension } from '../../utils';
+import { getItemByObjectId } from '../../utils/apis';
 import { THUMB, getSpaceName } from '../../utils/space';
 import { DownloadButton } from '../DownloadButton';
 import { Loader } from '../Loader';
@@ -19,7 +21,6 @@ import { MPLink } from '../ui/MPLink';
 import { YellowButton } from '../ui/buttons/YellowButton';
 import DefaultImage from '../ui/default-image';
 import { EmptyUpload } from './EmptyUpload';
-import { getItemByObjectId } from '../../utils/apis';
 
 export const UPLOAD_LIST_PAGE_SIZE = 10;
 
@@ -30,12 +31,19 @@ const MyCollectionList = ({ address }: ICollectionList) => {
   const navigator = useNavigate();
   const { data: endpoint } = useSelectEndpoint();
   const bucketName = getSpaceName(address);
-  // const { confirmDelist } = useDelist();
+  const { confirmDelist } = useDelist({
+    onSuccess: async () => {
+      await refetchList();
+    },
+  });
   const { address: loginAddress } = useAccount();
   // const [activeObjectName, setActiveObjectName] = useState<string | null>(null);
 
-  const { data: listData, isLoading: isListDataLoading } =
-    useGetObjInBucketListStatus(bucketName, UPLOAD_LIST_PAGE_SIZE);
+  const {
+    data: listData,
+    isLoading: isListDataLoading,
+    refetch: refetchList,
+  } = useGetObjInBucketListStatus(bucketName, UPLOAD_LIST_PAGE_SIZE);
 
   const { data: bucketInfo } = useGetBucketByName(bucketName);
 
@@ -148,35 +156,20 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                     <Box px="20px" my="24px">
                       {listed ? (
                         <YellowButton
-                          background="#5C5F6A"
                           h="48px"
                           w="100%"
-                          // disabled
                           onClick={async (e) => {
                             e.preventDefault();
                             e.stopPropagation();
 
-                            // const { groupId } = await getItemByObjectId(
-                            //   item.ObjectInfo.Id.toString(),
-                            // );
-                            // console.log('groupId', groupId);
-                            // confirmDelist(BigInt(groupId));
-                          }}
-                          cursor="not-allowed"
-                          _hover={{
-                            bg: '#5C5F6A',
-                          }}
-                          _active={{
-                            bg: '#5C5F6A',
+                            const { groupId } = await getItemByObjectId(
+                              item.ObjectInfo.Id.toString(),
+                            );
+                            console.log('groupId', groupId);
+                            confirmDelist(BigInt(groupId));
                           }}
                         >
-                          <Box as="span" color="#F7F7F8">
-                            Delist
-                          </Box>
-                          &nbsp;
-                          <Box as="span" color="#8C8F9B">
-                            (Coming Soon)
-                          </Box>
+                          Delist
                         </YellowButton>
                       ) : (
                         <YellowButton
@@ -203,6 +196,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
         <EmptyUpload />
       )}
 
+      {/* <ModalHolder modal={Tips} handler={modalHandler} /> */}
       {/* <LoadMoreContainer>
         <LoadMore
           // disabled={!loadMore}
@@ -297,27 +291,3 @@ const ImageBox = styled(Box)`
     );
   }
 `;
-
-// const LoadMoreContainer = styled(VStack)`
-//   background: linear-gradient(
-//     180deg,
-//     rgba(20, 21, 26, 0) 0%,
-//     rgba(20, 21, 26, 0.63) 39.06%,
-//     #14151a 100%
-//   );
-
-//   position: absolute;
-//   bottom: 0px;
-//   left: 0;
-//   right: 0;
-//   padding: 100px 0 40px 0;
-// `;
-
-// const LoadMore = styled(DefaultButton)`
-//   background: #f1f2f3;
-//   color: #181a1e;
-//   font-size: 16px;
-//   font-weight: 600;
-//   height: 64px;
-//   padding: 20px 24px;
-// `;

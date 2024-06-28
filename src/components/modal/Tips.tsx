@@ -12,7 +12,7 @@ import { BlackSolidButton } from '../ui/buttons/BlackButton';
 export const Tips = NiceModal.create<{
   title: string;
   content: React.ReactNode;
-  buttonText: string;
+  buttonText: React.ReactNode;
   buttonClick?: () => Promise<void>;
   isLoading?: boolean;
 }>(({ title, content, buttonText, buttonClick, isLoading = false }) => {
