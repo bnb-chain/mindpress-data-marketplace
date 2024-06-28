@@ -1,6 +1,15 @@
 import styled from '@emotion/styled';
 import { LinkArrowIcon } from '@totejs/icons';
-import { Box, Flex, Grid, Image, Stack, Text, VStack } from '@totejs/uikit';
+import {
+  Box,
+  Button,
+  Flex,
+  Grid,
+  Image,
+  Stack,
+  Text,
+  VStack,
+} from '@totejs/uikit';
 import { useSetAtom } from 'jotai';
 import { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -155,7 +164,12 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                   {isOwner && (
                     <Box px="20px" my="24px">
                       {listed ? (
-                        <YellowButton
+                        <Button
+                          bg="#5C5F6A"
+                          _hover={{
+                            bg: 'rgba(92, 95, 106, 0.8)',
+                          }}
+                          color="#F7F7F8"
                           h="48px"
                           w="100%"
                           onClick={async (e) => {
@@ -170,7 +184,7 @@ const MyCollectionList = ({ address }: ICollectionList) => {
                           }}
                         >
                           Delist
-                        </YellowButton>
+                        </Button>
                       ) : (
                         <YellowButton
                           h="48px"

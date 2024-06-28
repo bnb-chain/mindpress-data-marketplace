@@ -1,7 +1,7 @@
 import styled from '@emotion/styled';
 import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { LinkArrowIcon } from '@totejs/icons';
-import { Box, Flex, Image, Link, Stack } from '@totejs/uikit';
+import { Box, Button, Flex, Image, Link, Stack } from '@totejs/uikit';
 import { useImmerAtom } from 'jotai-immer';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useNavigate, useSearchParams } from 'react-router-dom';
@@ -30,6 +30,7 @@ import {
   trimLongStr,
 } from '../utils';
 import { getItemByGroupId, getItemByObjectId } from '../utils/apis';
+import { DefaultButton } from '../components/ui/buttons/DefaultButton';
 
 /**
  * Have been listed page
@@ -229,7 +230,12 @@ const Resource = () => {
             )}
 
             {relation === 'OWNER' && itemInfo?.length !== 0 && (
-              <YellowButton
+              <Button
+                bg="#5C5F6A"
+                _hover={{
+                  bg: 'rgba(92, 95, 106, 0.8)',
+                }}
+                color="#F7F7F8"
                 h="48px"
                 onClick={async () => {
                   if (
@@ -249,7 +255,7 @@ const Resource = () => {
                 }}
               >
                 Delist
-              </YellowButton>
+              </Button>
             )}
 
             {relation === 'PURCHASED' && object.objectInfo?.id && (
