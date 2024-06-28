@@ -30,7 +30,6 @@ import {
   trimLongStr,
 } from '../utils';
 import { getItemByGroupId, getItemByObjectId } from '../utils/apis';
-import { DefaultButton } from '../components/ui/buttons/DefaultButton';
 
 /**
  * Have been listed page
@@ -251,7 +250,6 @@ const Resource = () => {
                     String(chainItemInfo.objectIds?.[0]),
                   );
                   console.log('groupId', groupId);
-
                   confirmDelist(BigInt(groupId));
                 }}
               >

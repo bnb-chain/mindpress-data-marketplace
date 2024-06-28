@@ -11,6 +11,7 @@ import { UploadObjectModal } from '../modal/UploadObject';
 import Footer from './Footer';
 import Header from './Header';
 import { useSwitchAccount } from '../../hooks/useSwitchAccount';
+import { DelistModal } from '../modal/DelistModal';
 
 export default function Layout({ children }: { children: ReactNode }) {
   const modalData = useModal();
@@ -66,6 +67,8 @@ export default function Layout({ children }: { children: ReactNode }) {
       ></ActionResult>
 
       <UploadObjectModal />
+
+      <DelistModal />
     </>
   );
 }

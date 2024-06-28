@@ -1,12 +1,17 @@
 import { atomWithImmer } from 'jotai-immer';
-import { Item } from '../utils/apis/types';
 
 interface IDelistAtom {
   openDelist: boolean;
-  delistData: Item;
+  starting: boolean;
+  params: {
+    groupId: bigint;
+  };
 }
 
 export const delistAtom = atomWithImmer<IDelistAtom>({
   openDelist: false,
-  delistData: {} as Item,
+  starting: false,
+  params: {
+    groupId: BigInt(0),
+  },
 });

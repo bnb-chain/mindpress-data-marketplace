@@ -178,7 +178,6 @@ export const BuyModal = () => {
                 </Flex>
               }
               onClick={async () => {
-                // await buy(2479);
                 console.log('groupId', groupId);
                 buy(groupId);
 

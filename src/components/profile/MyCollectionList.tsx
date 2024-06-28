@@ -45,8 +45,8 @@ const MyCollectionList = ({ address }: ICollectionList) => {
       await refetchList();
     },
   });
+
   const { address: loginAddress } = useAccount();
-  // const [activeObjectName, setActiveObjectName] = useState<string | null>(null);
 
   const {
     data: listData,
