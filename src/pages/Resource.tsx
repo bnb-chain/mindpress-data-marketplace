@@ -232,10 +232,11 @@ const Resource = () => {
             {relation === 'OWNER' && itemInfo?.length !== 0 && (
               <Button
                 bg="#5C5F6A"
-                _hover={{
-                  bg: 'rgba(92, 95, 106, 0.8)',
-                }}
                 color="#F7F7F8"
+                _hover={{
+                  bg: '#E1E2E5',
+                  color: '#181A1E',
+                }}
                 h="48px"
                 onClick={async () => {
                   if (
