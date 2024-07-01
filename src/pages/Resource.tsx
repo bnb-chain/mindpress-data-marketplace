@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { LinkArrowIcon } from '@totejs/icons';
 import { Box, Button, Flex, Image, Link, Stack } from '@totejs/uikit';
 import { useImmerAtom } from 'jotai-immer';
@@ -21,6 +20,7 @@ import { useGetItemByObjectIds } from '../hooks/apis/useGetItemByObjectIds';
 import { useGetChainListItems } from '../hooks/buyer/useGetChainListItems';
 import { useGetBnbUsdtExchangeRate } from '../hooks/price/useGetBnbUsdtExchangeRate';
 import { useDelist } from '../hooks/seller/useDelist';
+import { useAppWallet } from '../hooks/useAppWallet';
 import { useGetObjectById } from '../hooks/useGetBucketOrObj';
 import { useGetRelationWithGroupId } from '../hooks/useGetItemRelationWithAddr';
 import {
@@ -106,7 +106,7 @@ const Resource = () => {
   //   navigator(`detail?bid=${bid}&oid=${oid}`);
   // },
 
-  const { onOpen } = useWalletKitModal();
+  const { onOpen } = useAppWallet();
 
   const { data: usdExchange } = useGetBnbUsdtExchangeRate();
 

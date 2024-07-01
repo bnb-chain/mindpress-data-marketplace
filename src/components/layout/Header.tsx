@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { WalletKitButton, useModal } from '@node-real/walletkit';
+import { WalletKitButton } from '@node-real/walletkit';
 import '@node-real/walletkit/styles.css';
 import {
   Box,
@@ -15,6 +15,7 @@ import { MetaMaskAvatar } from 'react-metamask-avatar';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAccount, useDisconnect } from 'wagmi';
 import { NET_ENV } from '../../env';
+import { useAppWallet } from '../../hooks/useAppWallet';
 import TestNetLogo from '../../images/logo-testnet.svg';
 import MainNetLogo from '../../images/logo.svg';
 import { trimLongStr } from '../../utils';
@@ -29,13 +30,8 @@ const INFO_BAR_HEIGHT = '40px';
 
 const Header = () => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
-  const { address, isConnecting, isConnected } = useAccount({
-    onConnect: ({ isReconnected }) => {
-      if (!isReconnected) {
-        navigate('/profile?tab=uploaded');
-      }
-    },
-  });
+  const { onOpen } = useAppWallet();
+  const { address, isConnecting, isConnected } = useAccount();
 
   const { disconnect } = useDisconnect();
   const handleShowDropDown = useCallback(() => {
@@ -44,7 +40,6 @@ const Header = () => {
   const ref = useRef<HTMLDivElement>(null);
   const ref2 = useRef<HTMLDivElement>(null);
   const [{ y }] = useWindowScroll();
-  const { onOpen } = useModal();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -56,7 +51,6 @@ const Header = () => {
 
   useEffect(() => {
     if (!ref.current) return;
-    // if (location.pathname !== '/') return;
 
     if (y && y > 10) {
       ref.current.style.backgroundColor = BG_COLOR;
@@ -139,7 +133,7 @@ const Header = () => {
               }}
               onClick={() => {
                 if (!address) {
-                  onOpen();
+                  onOpen('GO_TO_PROFILE');
                   return;
                 }
                 if (
@@ -163,9 +157,14 @@ const Header = () => {
             {!isConnected && !isConnecting ? (
               // <WalletKitButton />
               <WalletKitButton.Custom>
-                {({ show }) => {
+                {() => {
                   return (
-                    <StyledButton h="40px" onClick={show}>
+                    <StyledButton
+                      h="40px"
+                      onClick={() => {
+                        onOpen();
+                      }}
+                    >
                       Connect Wallet
                     </StyledButton>
                   );

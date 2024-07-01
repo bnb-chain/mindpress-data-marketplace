@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import { useModal as useWalletKitModal } from '@node-real/walletkit';
 import { Box, Flex, Stack } from '@totejs/uikit';
 import { useImmerAtom } from 'jotai-immer';
 import { MetaMaskAvatar } from 'react-metamask-avatar';
@@ -7,12 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { buyAtom } from '../atoms/buyAtom';
 import { useGetChainListItems } from '../hooks/buyer/useGetChainListItems';
+import { useAppWallet } from '../hooks/useAppWallet';
 import { useGetRelationWithAddr } from '../hooks/useGetItemRelationWithAddr';
 import { trimLongStr } from '../utils';
 import { Item } from '../utils/apis/types';
+import { Loader } from './Loader';
 import { DefaultButton } from './ui/buttons/DefaultButton';
 import { YellowButton } from './ui/buttons/YellowButton';
-import { Loader } from './Loader';
 
 interface IProps {
   item: Item;
@@ -32,7 +32,7 @@ export const HoverStatus = ({ item, className }: IProps) => {
     doDownload,
     isDownloading,
   } = useGetRelationWithAddr(address, item, chainItemInfo?.creators?.[0] || '');
-  const { onOpen } = useWalletKitModal();
+  const { onOpen } = useAppWallet();
   const [, setBuy] = useImmerAtom(buyAtom);
 
   return (

@@ -91,7 +91,10 @@ export const useGetRelationWithAddr = (
   });
 
   useEffect(() => {
-    if (!addr || !data) return;
+    if (!addr || !data) {
+      setRelation('UNKNOWN');
+      return;
+    }
 
     // console.log('storageInfo', storageInfo);
 

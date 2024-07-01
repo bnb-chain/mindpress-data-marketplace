@@ -1,14 +1,14 @@
+import NiceModal from '@ebay/nice-modal-react';
+import styled from '@emotion/styled';
 import { Box } from '@totejs/uikit';
 import _ from 'lodash';
 import { useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Loader } from '../components/Loader';
-import { useRedirectFromExternal } from '../hooks/useRedirectFromExternal';
-import NiceModal from '@ebay/nice-modal-react';
-import { useModal } from '@node-real/walletkit';
 import { Tips } from '../components/modal/Tips';
+import { useAppWallet } from '../hooks/useAppWallet';
+import { useRedirectFromExternal } from '../hooks/useRedirectFromExternal';
 import { trimLongStr } from '../utils';
-import styled from '@emotion/styled';
 
 export const R = () => {
   const navigator = useNavigate();
@@ -21,7 +21,7 @@ export const R = () => {
     detailOid,
   } = useRedirectFromExternal();
 
-  const { onOpen } = useModal();
+  const { onOpen } = useAppWallet();
 
   // console.log(
   //   'status',
