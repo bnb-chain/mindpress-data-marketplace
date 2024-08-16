@@ -1,7 +1,7 @@
 import { WagmiConfig } from 'wagmi';
 import NiceModal from '@ebay/nice-modal-react';
 import { ThemeProvider } from '@totejs/uikit';
-import { HashRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from './components/layout/Index';
 import { ModalProvider } from './context/modal';
 import Home from './pages/Home';
@@ -96,7 +96,7 @@ function App() {
           <QueryClientProvider client={queryClient}>
             <NiceModal.Provider>
               <ModalProvider>
-                <HashRouter>
+                <BrowserRouter>
                   <Layout>
                     <Routes>
                       {routes.map((item: IRoute) => {
@@ -110,7 +110,7 @@ function App() {
                       })}
                     </Routes>
                   </Layout>
-                </HashRouter>
+                </BrowserRouter>
               </ModalProvider>
             </NiceModal.Provider>
 
