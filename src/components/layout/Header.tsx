@@ -71,6 +71,8 @@ const Header = () => {
         left="0"
         right="0"
         zIndex={1001}
+        as="header"
+        minW="1200px"
       >
         <Center gap="8px">
           <Box as="p" fontSize="14px" fontWeight={400}>
@@ -99,6 +101,7 @@ const Header = () => {
         top={INFO_BAR_HEIGHT}
         bg={location.pathname !== '/' ? BG_COLOR : 'transparent'}
         ref={ref}
+        minW="1200px"
       >
         <LeftCon h="50px" gap={40} alignItems={'center'}>
           <img
