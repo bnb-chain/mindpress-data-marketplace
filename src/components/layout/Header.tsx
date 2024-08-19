@@ -26,7 +26,6 @@ import { SellIcon } from '../svgIcon/SellIcon';
 import { SignOutIcon } from '../svgIcon/SignOutIcon';
 
 const BG_COLOR = '#181a1e';
-const INFO_BAR_HEIGHT = '40px';
 
 const Header = () => {
   const [dropDownOpen, setDropDownOpen] = useState(false);
@@ -60,25 +59,11 @@ const Header = () => {
   }, [location.pathname, y]);
 
   return (
-    <>
-      <Box
-        bg="#53EAA1"
-        h={INFO_BAR_HEIGHT}
-        lineHeight="40px"
-        color="#181A1E"
-        pos="fixed"
-        top="0"
-        left="0"
-        right="0"
-        zIndex={1001}
-        as="header"
-        minW="1200px"
-      >
-        <Center gap="8px">
-          <Box as="p" fontSize="14px" fontWeight={400}>
-            🚀 This website serves as a demo dApp on BNB Greenfield, and is only
-            live on Testnet for feature demonstration purposes.
-          </Box>
+    <Box as="header" pos="fixed" top="0" zIndex={1001} w="100%">
+      <Box bg="#53EAA1" lineHeight="2.6" color="#181A1E">
+        <Box as="p" fontSize="14px" fontWeight={400} textAlign="center">
+          🚀 This website serves as a demo dApp on BNB Greenfield, and is only
+          live on Testnet for feature demonstration purposes.
           <Link
             color="#181A1E"
             href="https://docs.bnbchain.org/bnb-greenfield/for-developers/tutorials/app/data-marketplace/"
@@ -88,20 +73,22 @@ const Header = () => {
             _hover={{
               color: '#181A1E',
             }}
+            ml="4px"
           >
             Learn More
           </Link>
-        </Center>
+        </Box>
       </Box>
-      <HeaderFlex
+      <Flex
         justifyContent={'space-between'}
+        flexWrap={['wrap', 'wrap', 'nowrap']}
         alignItems={'center'}
-        padding={'0px 24px 0'}
+        padding={'0px 24px'}
         height={80}
-        top={INFO_BAR_HEIGHT}
         bg={location.pathname !== '/' ? BG_COLOR : 'transparent'}
         ref={ref}
-        minW="1200px"
+        transition="background 0.3s ease-in-out"
+        w="100%"
       >
         <LeftCon h="50px" gap={40} alignItems={'center'}>
           <img
@@ -253,21 +240,13 @@ const Header = () => {
             )}
           </ButtonWrapper>
         </RightFunCon>
-      </HeaderFlex>
-    </>
+      </Flex>
+    </Box>
   );
 };
 
 export default Header;
 
-const HeaderFlex = styled(Flex)`
-  position: fixed;
-  left: 0;
-  right: 0;
-  z-index: 10;
-  padding: 0 40px;
-  transition: background 0.3s ease-in-out;
-`;
 const LeftCon = styled(Flex)`
   img {
     width: 224px;
