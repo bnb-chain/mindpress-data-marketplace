@@ -1,5 +1,5 @@
 import styled from '@emotion/styled';
-import { Box, Flex } from '@totejs/uikit';
+import { Box, Flex, theme } from '@totejs/uikit';
 import CopyrightIcon from '../svgIcon/CopyrightIcon';
 import { LockIcon } from '../svgIcon/LockIcon';
 import StorageIcon from '../svgIcon/StorageIcon';
@@ -13,14 +13,21 @@ export const Links = () => {
       flexDirection={'column'}
       gap={16}
       py="60px"
+      px="30px"
       mt="20px"
       mb="20px"
       mx="auto"
+      maxW="1200px"
     >
       <TitleCon mb="30px">
         <CardTitle>What Makes Us Different?</CardTitle>
       </TitleCon>
-      <CardCon gap={24}>
+
+      <Flex
+        gap={24}
+        flexWrap={['wrap', 'wrap', 'nowrap']}
+        justifyContent="space-between"
+      >
         <CardItem gap={16} flexDirection={'column'}>
           <Box className="icon">
             <StorageIcon w={32} h={32} />
@@ -61,7 +68,7 @@ export const Links = () => {
             Web3 marketplace.
           </Box>
         </CardItem>
-      </CardCon>
+      </Flex>
     </Flex>
   );
 };
@@ -74,12 +81,15 @@ const CardTitle = styled.div`
   color: #ffffff;
 `;
 
-const CardCon = styled(Flex)`
-  /* align-items: stretch; */
-`;
-
 const CardItem = styled(Flex)`
-  width: 282px;
+  flex: 1 0 calc(50% - 10px);
+  @media (min-width: 768px) {
+    flex: 1 0 calc(24% - 10px);
+  }
+  @media (min-width: 1200px) {
+    flex: 1;
+  }
+  min-width: 0;
   border-radius: 8px;
   color: #c4c5cb;
   font-size: 14px;

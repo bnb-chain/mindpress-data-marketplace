@@ -14,7 +14,7 @@ const Search = () => {
   const category = useGetCategory(Number(c));
 
   return (
-    <Container>
+    <Box px="30px" maxW="1200px" mt="40px">
       <Keyword>{kw || category?.name}</Keyword>
 
       {kw && <Kw kw={kw} />}
@@ -28,18 +28,11 @@ const Search = () => {
           />
         </Box>
       )} */}
-    </Container>
+    </Box>
   );
 };
 
 export default Search;
-
-const Container = styled(Box)`
-  width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 40px;
-`;
 
 const Keyword = styled(Flex)`
   color: #f7f7f8;

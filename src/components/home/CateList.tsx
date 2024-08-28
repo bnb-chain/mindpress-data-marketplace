@@ -23,7 +23,13 @@ export const CateList = () => {
   }
 
   return (
-    <CateContainer>
+    <Flex
+      my={['20px', null, '40px']}
+      px={['30px', null, '0px']}
+      justifyContent={['space-evenly', null, 'space-between']}
+      gap={['12px', null, '24px']}
+      flexWrap={['wrap', 'wrap', 'nowrap']}
+    >
       {cates
         .filter((c) => CATE_ID.includes(c.id))
         .map((category, index) => {
@@ -31,22 +37,23 @@ export const CateList = () => {
           return (
             <CateItem
               key={category.id}
+              minWidth="0"
               bg={`linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url(${imageUrl}) center center`}
               bgSize="cover"
               to={`/search?c=${category.id}`}
+              flex={[
+                '1 0 calc(49% - 10px)',
+                '1 0 calc(33.33% - 30px)',
+                '1 1 calc(100% / 6 - 10px)',
+              ]}
             >
               {category.name}
             </CateItem>
           );
         })}
-    </CateContainer>
+    </Flex>
   );
 };
-
-const CateContainer = styled(Flex)`
-  justify-content: space-between;
-  gap: 24px;
-`;
 
 const CateItem = styled(MPLink)`
   color: #f7f7f8;

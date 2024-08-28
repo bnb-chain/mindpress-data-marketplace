@@ -26,7 +26,8 @@ export const Banner = () => {
     <Container
       bg={`linear-gradient(to bottom, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
     url('${bgImage}')
-      no-repeat center center`}
+      no-repeat`}
+      bgSize="cover"
     >
       <BigImageBg>
         <Title>
@@ -40,8 +41,8 @@ export const Banner = () => {
           The leading decentralized marketplace for borderless creativity.
         </Desc>
 
-        <Box w="800px" mt="40px" ml="auto" mr="auto">
-          <Search width="800px" />
+        <Box w={['70%', '600px', '800px']} mt="40px" ml="auto" mr="auto">
+          <Search width="100%" />
 
           {cates && (
             <Flex
@@ -52,6 +53,7 @@ export const Banner = () => {
               gap="12px"
               alignItems="center"
               justifyContent="center"
+              flexWrap={['wrap', null, 'nowrap']}
             >
               <Box>Trending:</Box>
               {cates.slice(0, 4).map((category) => {

@@ -35,7 +35,7 @@ export const Trending = () => {
   // console.log('trendingList', trendingList);
 
   return (
-    <Container>
+    <Box w="100%" px={['30px', null, '0px']} maxW="1200px">
       <Title as="h2">Trending Images</Title>
 
       <MindPressMasmonry
@@ -43,11 +43,9 @@ export const Trending = () => {
         list={trendingList}
         handleLoadMore={handleNextPage}
       />
-    </Container>
+    </Box>
   );
 };
-
-const Container = styled(Box)``;
 
 const Title = styled(Box)`
   margin-bottom: 40px;

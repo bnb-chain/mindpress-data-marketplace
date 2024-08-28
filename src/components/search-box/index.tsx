@@ -97,6 +97,7 @@ const Search: React.FC<IProps> = ({
         bg="#35363C"
         boxShadow="0px 4px 24px rgba(0, 0, 0, 0.08)"
         minWidth={[0, 230, 230]}
+        w="100%"
       >
         <Box
           borderRadius={8}
@@ -110,7 +111,7 @@ const Search: React.FC<IProps> = ({
             onConfirm={setSearchKw}
             onReset={() => setSearchKw('')}
             hideBg
-            style={{ width, height }}
+            style={{ height }}
           />
         </Box>
 
@@ -203,7 +204,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 420px;
+  /* width: 420px; */
 `;
 
 const NoDataCon = styled(Flex)`

@@ -12,13 +12,9 @@ const Home = () => {
     <Container flexDirection={'column'} alignItems={'center'}>
       <Banner />
 
-      <Box mt="40px" mb="40px">
-        <CateList />
-      </Box>
+      <CateList />
 
-      <Box w="1200px" ml="auto" mr="auto">
-        <Trending />
-      </Box>
+      <Trending />
 
       <Links />
 
