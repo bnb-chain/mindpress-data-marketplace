@@ -88,7 +88,7 @@ const Container = styled(Box)`
   /* margin-top: 112px; */
   padding: 112px;
   width: 100vw;
-  height: 510px;
+  /* height: 510px; */
   padding: 80px 0 130px 0;
   /* 1800 * 600 */
   background: ${(props) => props.bg};
