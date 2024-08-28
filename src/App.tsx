@@ -1,7 +1,7 @@
 import { WagmiConfig } from 'wagmi';
 import NiceModal from '@ebay/nice-modal-react';
 import { ThemeProvider } from '@totejs/uikit';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom';
 import Layout from './components/layout/Index';
 import { ModalProvider } from './context/modal';
 import Home from './pages/Home';
@@ -80,6 +80,9 @@ const ReactQueryDevtoolsProduction = React.lazy(() =>
 
 const queryClient = new QueryClient();
 
+const Router =
+  process.env.NODE_ENV === 'production' ? BrowserRouter : HashRouter;
+
 function App() {
   const [showDevtools, setShowDevtools] = React.useState(false);
 
@@ -96,7 +99,7 @@ function App() {
           <QueryClientProvider client={queryClient}>
             <NiceModal.Provider>
               <ModalProvider>
-                <BrowserRouter>
+                <Router>
                   <Layout>
                     <Routes>
                       {routes.map((item: IRoute) => {
@@ -110,7 +113,7 @@ function App() {
                       })}
                     </Routes>
                   </Layout>
-                </BrowserRouter>
+                </Router>
               </ModalProvider>
             </NiceModal.Provider>
 
