@@ -72,7 +72,7 @@ jobs:
           # Strip "v" prefix from tag name
           # [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           # Use Docker `latest` tag convention
-          # [ "$VERSION" == "master" ] && VERSION=latest
+          # [ "$VERSION" == "master" ] && VERSION=testnet
           echo IMAGE_NAME=$IMAGE_NAME
           echo VERSION=${GITHUB_SHA::8}
           docker tag $IMAGE_NAME testnet-$IMAGE_NAME:${GITHUB_SHA::8}
